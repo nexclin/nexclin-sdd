@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Env / secrets — NUNCA versionar (regra g do CLAUDE.md)
+.env
+.env.*
+!.env.example
+*.pem
+service-role*.json
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+
+# Build / cache
+/build
+/dist
+*.tsbuildinfo
+.turbo
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+supabase/.env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test / coverage
+/coverage
+/playwright-report
+/test-results
