@@ -1,47 +1,34 @@
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-
-# Env / secrets — NUNCA versionar (regra g do CLAUDE.md)
+# === Segredos (constituição, Princípio V — NUNCA versionar) ===
 .env
-.env.*
-!.env.example
+.env.local
+.env.*.local
+*.key
 *.pem
-service-role*.json
 
-# Next.js
-/.next/
-/out/
+# === Node / Next.js ===
+node_modules/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
 next-env.d.ts
 
-# Build / cache
-/build
-/dist
-*.tsbuildinfo
-.turbo
+# === Supabase (CLI local) ===
+supabase/.temp/
+supabase/.branches/
+.supabase/
 
-# Supabase local
-supabase/.branches
-supabase/.temp
-supabase/.env
+# === Testes ===
+coverage/
+playwright-report/
+test-results/
 
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# Editor / OS
-.vscode/*
-!.vscode/extensions.json
-.idea
+# === OS / editor ===
 .DS_Store
 Thumbs.db
-desktop.ini
+*.log
+npm-debug.log*
 
-# Test / coverage
-/coverage
-/playwright-report
-/test-results
+# === Spec Kit — credenciais que o agente possa guardar ===
+.claude/.credentials*
