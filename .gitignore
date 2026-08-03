@@ -32,3 +32,6 @@ npm-debug.log*
 
 # === Spec Kit — credenciais que o agente possa guardar ===
 .claude/.credentials*
+
+# === Agent Skills instaladas (terceiros — como deps) ===
+.agents/
