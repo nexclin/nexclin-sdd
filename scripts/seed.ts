@@ -22,7 +22,11 @@
  */
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import "dotenv/config";
+import { config } from "dotenv";
+
+// Carrega .env.local (convenção do projeto) com fallback para .env.
+config({ path: ".env.local" });
+config();
 
 const MODULE_KEYS = [
   "dashboard", "leads", "pacientes", "anamnese", "consultas", "acompanhamento",
