@@ -1,0 +1,16 @@
+ALTER TABLE public.acquirers
+  ADD COLUMN IF NOT EXISTS plan_name text DEFAULT '',
+  ADD COLUMN IF NOT EXISTS debit_term_days integer DEFAULT 1,
+  ADD COLUMN IF NOT EXISTS credit_term_days integer DEFAULT 30,
+  ADD COLUMN IF NOT EXISTS installment_term_days integer DEFAULT 30,
+  ADD COLUMN IF NOT EXISTS credit_2x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_3x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_4x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_5x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_6x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_7x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_8x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_9x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_10x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_11x_fee numeric DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS credit_12x_fee numeric DEFAULT 0;

@@ -1,0 +1,1 @@
+ALTER TABLE business_rules ADD COLUMN patient_required_fields jsonb DEFAULT '["name"]';

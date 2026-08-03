@@ -1,0 +1,1 @@
+ALTER TABLE public.business_rules ADD COLUMN satisfaction_survey_days integer NOT NULL DEFAULT 1;
