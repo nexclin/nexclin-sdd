@@ -34,7 +34,7 @@ cp .env.example .env.local
 
 ## Banco de dados
 
-Vincule o projeto e aplique as migrações (55 herdadas do MVP validado +
+Vincule o projeto e aplique as migrações (56 herdadas do MVP validado +
 novas):
 
 ```bash
