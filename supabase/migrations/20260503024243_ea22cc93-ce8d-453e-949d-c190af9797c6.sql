@@ -1,0 +1,3 @@
+UPDATE public.payment_methods SET payment_term_days = 0, debit_term_days = 0, default_fee_percent = 0 WHERE lower(name) IN ('dinheiro','pix','transferência','transferencia','cheque') OR lower(type) IN ('dinheiro','pix','transferencia','cheque');
+UPDATE public.payment_methods SET debit_term_days = 0, debit_fee_percent = 0 WHERE lower(name) LIKE '%débito%' OR lower(name) LIKE '%debito%' OR type = 'debito';
+UPDATE public.payment_methods SET payment_term_days = 3, default_fee_percent = 0 WHERE lower(name) LIKE '%boleto%' OR type = 'boleto';
