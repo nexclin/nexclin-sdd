@@ -43,7 +43,10 @@ export default async function SuperAdminPanelLayout({
             <Link href="/superadmin" className="hover:text-white">
               Painel
             </Link>
-            {/* Telas #23 (contas, planos, cupons, ...) entram aqui */}
+            <Link href="/superadmin/contas" className="hover:text-white">
+              Contas
+            </Link>
+            {/* Demais telas #23 (planos, cupons, ...) entram aqui */}
           </nav>
         </div>
       </header>
