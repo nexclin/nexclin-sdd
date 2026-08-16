@@ -231,3 +231,27 @@ registro em superadmin_operators. Rodar 2x sem duplicar.
 A especificação completa da fundação, com fases, pré-requisitos e critérios
 de aceite, vive em **specs/001-fundacao-superadmin.md** (fonte de verdade
 da execução atual).
+
+---
+
+## 7. ESTRUTURA HARNESS (como este repositório dirige o Claude Code)
+
+O desenvolvimento é guiado por uma estrutura de engenharia de harness. Cada
+peça rastreia a uma falha real do projeto (princípio da catraca) — leia
+**docs/harness/README.md** antes de mexer nela.
+
+- **`.claude/hooks/guarda-constituicao.mjs`** — roda a cada escrita; bloqueia
+  RLS ausente, `USING(true)`, caminho que define senha e segredo versionado.
+- **`.claude/rules/{banco,app,marca}.md`** — restrições por área (`paths:`).
+- **`.claude/agents/`** — auditor-multitenant, triador-apontamentos,
+  consultor-vertical, relator-semanal.
+- **`.claude/skills/`** — `nx-modulo` (portar um dos 15 módulos),
+  `nx-ponte` (corrigir bug na plataforma Lovable até a migração).
+- **`docs/dominio/`** — as 15 ModuleKeys × ondas, e os 4 verticais
+  (médico ativo; psicologia/estética na fila; odonto fechado).
+- **`docs/marca/tokens.md`** — paleta e tipografia da identidade.
+- **`docs/seguranca/`** — revisões de segurança datadas.
+
+A regra de bolso: "toda vez que X" → hook; restrição de área → rule;
+procedimento longo → skill; trabalho paralelo → agente. A constituição
+(`.specify/memory/constitution.md`) vence qualquer uma delas.
