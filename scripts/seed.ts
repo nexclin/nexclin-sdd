@@ -139,8 +139,11 @@ async function ensureSuperadmin(): Promise<void> {
 
   if (!userId) {
     // Senha aleatória descartada — nunca logada, nunca persistida.
-    const randomPassword =
-      globalThis.crypto.randomUUID() + globalThis.crypto.randomUUID().toUpperCase() + "!9";
+    // ATENÇÃO ao comprimento: o GoTrue trunca em 72 caracteres (limite do
+    // bcrypt) e, acima disso, responde 500 com corpo vazio — erro que não diz
+    // nada. Um UUID v4 já traz 122 bits de entropia; dois eram desperdício que
+    // estourava o limite. Não volte a concatenar UUIDs aqui.
+    const randomPassword = globalThis.crypto.randomUUID() + "Aa9!";
     const { data, error } = await admin.auth.admin.createUser({
       email: SUPERADMIN_EMAIL,
       password: randomPassword,

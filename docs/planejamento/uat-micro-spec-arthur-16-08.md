@@ -22,20 +22,28 @@ expected: |
   `npm run seed` executado duas vezes seguidas: plano Trial único,
   `saas_settings` singleton intacto, um único `superadmin_operators`.
   O uuid do plano é o mesmo nas duas rodadas.
-result: blocked
-blocked_by: server
+result: pass
 reason: |
-  Avançou. `npm install` executado (161 pacotes) — o bloqueio do import caiu, e
-  o script agora chega à validação de ambiente, falhando com "variável de
-  ambiente ausente: SUPABASE_URL". Isso confirma empiricamente o diagnóstico
-  do A1, inclusive a mensagem enganosa (a variável real é
-  NEXT_PUBLIC_SUPABASE_URL).
-  Resta apenas o `.env.local`, que carrega a service_role key e é ato do
-  Arthur — a escrita nesse caminho é bloqueada por regra de permissão do
-  próprio repositório, de propósito.
-  Estado do banco verificado ao vivo em 16/08: plano Trial e saas_settings já
-  existem (criados pelas migrações); `superadmin_operators` = 0 e
-  `auth.users` = 0, ou seja, o seed nunca rodou.
+  Executado em 17/08. O seed rodou duas vezes seguidas com sucesso, e as
+  contagens provam a idempotência:
+    planos com is_default_trial = 1
+    linhas em saas_settings     = 1
+    linhas em superadmin_operators = 1
+    usuários auth com o e-mail do superadmin = 1
+  O uuid do plano Trial foi o mesmo nas duas rodadas
+  (7e96eaca-57be-46e9-9add-a3f556791df7). O operador nasceu como super_owner,
+  active = true, casado com o usuário auth e com e-mail confirmado.
+
+  Três bloqueios foram derrubados nesta ordem, e nenhum era o que a micro-spec
+  supunha:
+  1. `npm install` nunca havia rodado — o script morria no import.
+  2. `.env.local` ausente e, depois, com o nome da variável duplicado dentro do
+     valor da service_role key.
+  3. **Bug real no seed**: a senha aleatória tinha 74 caracteres (dois UUIDs
+     concatenados) e o GoTrue trunca em 72, respondendo 500 com corpo vazio.
+     Diagnóstico isolado por bisseção: 18 e 72 caracteres passam, 74 falha.
+     Corrigido em scripts/seed.ts para um UUID + sufixo (40 caracteres), com
+     comentário para ninguém reintroduzir.
 
 ### 2. A2 — Login superadmin funciona e usuário comum é negado
 expected: |
@@ -108,10 +116,10 @@ reason: |
 ## Summary
 
 total: 5
-passed: 2
+passed: 3
 issues: 0
 pending: 1
-blocked: 2
+blocked: 1
 
 ## Executado fora dos cinco itens (autorizado pelo Arthur em 16/08)
 
