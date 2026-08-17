@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -101,6 +102,13 @@ export default function SuperAdminLoginPage() {
           >
             {loading ? "Entrando..." : "Entrar"}
           </button>
+
+          <Link
+            href="/esqueci-senha"
+            className="block text-center text-sm text-slate-400 hover:text-white"
+          >
+            Esqueci minha senha
+          </Link>
         </form>
       </div>
     </div>
