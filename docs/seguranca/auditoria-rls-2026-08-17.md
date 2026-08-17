@@ -62,12 +62,41 @@ Se alguém desabilitar esse trigger, a policy não segura. Vale endurecer a poli
 com um `WITH CHECK` explícito na janela de 22–23/08 — defesa em profundidade,
 não urgência.
 
+## Ações tomadas em 17/08
+
+| Ação | Lovable (produção) | Stack nova |
+|---|---|---|
+| Remover `teste_restore` | **feita** — 44 tabelas, paridade | n/a |
+| `WITH CHECK` na policy de UPDATE de `profiles` | **PENDENTE** | **aplicada** |
+
+O endurecimento da policy está escrito na migração
+`20260817021500_endurece_update_profiles_with_check.sql` e já vale para a stack
+nova. Em produção **não foi aplicado**: a janela do editor do Lovable colapsou
+durante a digitação e o comando não chegou ao console. Não foi reintentado às
+cegas — o risco de digitar DDL sem enxergar o console de produção supera o
+ganho, já que o trigger continua barrando o ataque.
+
+SQL a rodar em produção, quando houver console estável (janela de 22-23/08 ou
+antes, se preferir):
+
+```sql
+DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
+CREATE POLICY "Users can update their own profile"
+  ON public.profiles FOR UPDATE TO authenticated
+  USING (user_id = auth.uid())
+  WITH CHECK (
+    user_id = auth.uid()
+    AND clinic_id IS NOT DISTINCT FROM public.get_my_clinic_id()
+  );
+```
+
 ## Higiene: tabela de teste esquecida em produção
 
 `teste_restore` existe no banco do Lovable. É resíduo do exercício de segurança
 de 02/08 (testes de restauração e forense feitos no chat da plataforma). Tem RLS
 ligado e 1 policy, não tem `clinic_id`, e está vazia — **não é falha de
-segurança**, é lixo em produção. Remover antes de 01/09.
+segurança**, é lixo em produção. **Removida em 17/08** — o schema do Lovable passou de 45
+para 44 tabelas, o mesmo número da stack nova.
 
 ## O que continua NÃO entregável
 
