@@ -21,16 +21,31 @@ crédito (ver `verificacoes-tecnicas-16-08.md`). Portanto **os prompts abaixo
 não devem ser usados**; valem como especificação da tarefa para quem for
 escrever o código.
 
+**Preço anual definido: 1 mês grátis (8,3%).**
+
+| Faixa | Mensal | Anual | Equivale a |
+|---|---|---|---|
+| Essencial · 3 | R$ 249 | **R$ 2.739** | 11 meses |
+| Clínica · 5 | R$ 399 | **R$ 4.389** | 11 meses |
+| Corpo Clínico · 8 | R$ 599 | **R$ 6.589** | 11 meses |
+
+Por que 1 mês e não 2: a faixa pedida foi de 5 a 10%, e "pague 11, leve 12" cai
+dentro dela (8,3%), tem conta redonda e se explica numa frase. O mercado
+próximo pratica 10% (Simples Dental) e 15% (Shosp), então não fica fora do
+padrão. E principalmente: **desconto é fácil de dar e quase impossível de
+tirar.** Guardando o segundo mês, sobra uma alavanca de fechamento para a
+clínica que empacar no preço, em vez de queimá-la na tabela com todo mundo.
+
+Se a conversão anual vier fraca depois dos primeiros clientes, subir para 2
+meses (16,7%, a recomendação original da pesquisa) é um `update` de uma linha.
+
 **O que continua com você:**
 1. **Publicar os planos** — trocar `visibility` de `hidden` para `public`
    quando a tabela for aprovada (prazo 18/08 no documento de precificação).
-2. **Confirmar o preço anual** com o Erick. Usei R$ 2.490 / 3.990 / 5.990,
-   derivado da recomendação "anual com 2 meses de desconto" da própria
-   pesquisa — é dedução, não número aprovado.
-3. **Decidir a duração do trial.** `saas_settings` segue em **14 dias**; o
+2. **Decidir a duração do trial.** `saas_settings` segue em **14 dias**; o
    plano de lançamento prevê 30. Não mudei porque isso afeta todo cadastro
    novo, inclusive a clínica que o Vinícius cria amanhã.
-4. **Preencher o e-mail de suporte** em `/superadmin/configuracoes` (Etapa 0.1),
+3. **Preencher o e-mail de suporte** em `/superadmin/configuracoes` (Etapa 0.1),
    que continua vazio.
 
 ---
