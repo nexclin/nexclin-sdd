@@ -169,12 +169,17 @@ Database (45 tabelas), Users, Edge functions (4), SQL editor, Logs, e
 **"Export project data" habilitado** (confirmado sem clicar). Correção de
 banco e backup prévio, portanto, **não dependem de crédito**.
 
-**Verificação A: pendente.** Exige o push de teste ao repositório
-`nexclin/nexclin`. Enquanto não for feita, o canal de correção de **código**
-segue indefinido. Dado relevante levantado na mesma sessão: o workspace
-("Erick's Lovable") está no **plano Free, com 5 créditos restantes** e reset
-diário — se a Verificação A falhar, a fase de correção de bugs esbarra nesse
-teto quase imediatamente.
+**Verificação A: passa.** Executada na mesma sessão (ver
+`docs/planejamento/verificacoes-tecnicas-16-08.md`). O commit `f8b8578`
+enviado ao GitHub chegou íntegro ao editor, publicou no site após um clique
+manual em *Publish → Update*, e o saldo de crédito ficou em **5 antes e 5
+depois** — zero consumo. O canal de correção de **código** é o repositório.
+
+**Resumo do canal:** código por commit+push (grátis, com clique manual de
+publicação); banco por SQL editor do Cloud (grátis), com Export antes de
+qualquer escrita. O chat do Lovable, que consome crédito, vira último recurso
+— o que importa porque o workspace está no **plano Free, com 5 créditos
+diários**.
 
 ### Conclusão da Fase 0
 

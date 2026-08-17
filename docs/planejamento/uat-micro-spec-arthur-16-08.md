@@ -57,22 +57,27 @@ expected: |
   (A) bump v2.4.1 → v2.4.2 chega ao editor E ao site publicado, com saldo de
   crédito idêntico antes e depois. (B) O projeto aparece no painel do provedor
   que hospeda o banco, com exportação possível.
-result: partial
+result: pass
 reason: |
-  **B: PASSA.** Verificado ao vivo em 16/08. O banco é Lovable Cloud
-  gerenciado — não aparece no dashboard pessoal do supabase.com (que tem
-  apenas o projeto da stack nova, `bfkghwkhzkimzyiovotj`). Aparece em
+  Ambas executadas ao vivo em 16/08 — registro completo em
+  docs/planejamento/verificacoes-tecnicas-16-08.md.
+  **A: PASSA** pelas três condições. Commit f8b8578 chegou íntegro ao editor
+  (diff conferido no próprio editor: BrandPanel.tsx:77, v2.4.1 → v2.4.2), o
+  site publicado passou a exibir V2.4.2 após clique manual em Publish → Update,
+  e o crédito ficou em 5 antes e 5 depois — zero consumo.
+  **B: PASSA.** O banco é Lovable Cloud gerenciado — não aparece no dashboard
+  do supabase.com (que só tem o projeto da stack nova). Aparece em
   lovable.dev → More → Cloud, com Database (45 tabelas), Users (17 signups),
-  Edge functions (4), SQL editor, Logs e Usage. **"Export project data" existe
-  e está habilitado** (confirmado sem clicar). Backup prévio à janela de
-  correção é viável e não custa crédito.
-  **A: PENDENTE.** Exige push de teste em `nexclin/nexclin@main`, que altera o
-  produto ao vivo — aguarda decisão do Arthur. Instrumento pronto: diff
-  conferido (BrandPanel.tsx:77), baseline main@3b8fc94, permissão de push
-  confirmada.
-  **Dado novo que aumenta o peso de A:** o workspace da Lovable ("Erick's
-  Lovable") está no plano **Free com 5 créditos restantes**, reset diário. Se A
-  falhar, a fase de correção de bugs esbarra nesse teto quase imediatamente.
+  Edge functions (4), SQL editor e **"Export project data" habilitado**
+  (confirmado sem clicar).
+  **Canal de correção decidido:** código por commit+push, banco por SQL editor
+  do Cloud. Os dois de graça. O chat da Lovable vira último recurso — o que
+  importa porque o workspace está no plano Free com 5 créditos diários.
+  **Duas ressalvas registradas:** a publicação não é automática (exige o clique
+  de Update, que precisa entrar no procedimento de correção); e o editor marcou
+  o commit como "Build unsuccessful / Preview is out of date" apesar de o diff
+  ter chegado íntegro e o site publicado estar correto e funcional. Não
+  determinei se é só o sandbox de preview. Reconferir antes de 22/08.
 
 ### 4. A4 — Registro em docs/seguranca/ com Achado 1 e 2 vivo/corrigido
 expected: |
@@ -103,11 +108,26 @@ reason: |
 ## Summary
 
 total: 5
-passed: 1
-partial: 1
+passed: 2
 issues: 0
 pending: 1
 blocked: 2
+
+## Executado fora dos cinco itens (autorizado pelo Arthur em 16/08)
+
+- **Preços viraram configuração** (tarefa de 14/08 do cronograma). Três planos
+  criados no banco ao vivo com `visibility='hidden'`, via SQL editor do Cloud:
+  Essencial 3 usuários (R$ 249 / R$ 2.490), Clínica 5 usuários (R$ 399 /
+  R$ 3.990), Corpo Clínico 8 usuários (R$ 599 / R$ 5.990) — todos com
+  trial_days=30, os 15 módulos ligados e max_users 3/5/8. O `Trial Padrão`
+  original não foi tocado.
+  **Dois pontos que dependem de decisão de sócio:** o preço anual foi derivado
+  da recomendação da pesquisa ("anual com 2 meses de desconto" = mensal × 10) e
+  não de aprovação formal; e os planos seguem ocultos porque a tabela tem
+  aprovação marcada para 18/08. Publicar é trocar `visibility` para `public`.
+  **Não alterado:** a duração padrão de trial em saas_settings segue em 14 dias.
+  Mudar para 30 afeta todo cadastro novo — inclusive a clínica que o Vinícius
+  vai criar amanhã — então ficou para decisão explícita.
 
 ## Gaps
 

@@ -8,6 +8,33 @@
 
 ---
 
+## ESTADO — atualizado em 16/08/2026, ~23h
+
+**Etapa 0.2 está feita.** Os três planos foram criados no banco ao vivo pelo
+SQL editor do Cloud, com `visibility='hidden'`, `trial_days=30`, os 15 módulos
+ligados e `max_users` 3/5/8. O `Trial Padrão` original não foi tocado. Custo:
+zero crédito.
+
+**A rota das etapas seguintes está decidida: repositório, não prompt.** A
+Verificação A passou — commit no GitHub chega ao editor e publica sem consumir
+crédito (ver `verificacoes-tecnicas-16-08.md`). Portanto **os prompts abaixo
+não devem ser usados**; valem como especificação da tarefa para quem for
+escrever o código.
+
+**O que continua com você:**
+1. **Publicar os planos** — trocar `visibility` de `hidden` para `public`
+   quando a tabela for aprovada (prazo 18/08 no documento de precificação).
+2. **Confirmar o preço anual** com o Erick. Usei R$ 2.490 / 3.990 / 5.990,
+   derivado da recomendação "anual com 2 meses de desconto" da própria
+   pesquisa — é dedução, não número aprovado.
+3. **Decidir a duração do trial.** `saas_settings` segue em **14 dias**; o
+   plano de lançamento prevê 30. Não mudei porque isso afeta todo cadastro
+   novo, inclusive a clínica que o Vinícius cria amanhã.
+4. **Preencher o e-mail de suporte** em `/superadmin/configuracoes` (Etapa 0.1),
+   que continua vazio.
+
+---
+
 ## A descoberta que muda o custo desta tarefa
 
 **A tela de planos já existe no painel superadmin, e o formulário de trial
