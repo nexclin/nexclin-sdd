@@ -17,24 +17,81 @@ tudo o que a atual faz.
   Classificação é trabalho do agente `triador-apontamentos`.
 - **Nada de refatorar.** Código que vai ser substituído não merece
   investimento. Conserto mínimo, cirúrgico.
-- **Correção via repositório, não pelo editor da plataforma** — a
-  sincronização é de mão dupla e escrever pelo git evita consumir crédito de
-  alteração. Se o envio não aparecer publicado, pare e avise: isso muda o
-  custo da fase de correções e precisa ser reapresentado aos sócios.
+- **Correção via repositório, não pelo chat da plataforma.** Validado em
+  17/08 (ver `docs/planejamento/verificacoes-tecnicas-16-08.md`): o envio pelo
+  git chega ao editor e publica **sem consumir crédito**. O chat é o último
+  recurso, não o caminho.
 - **Alteração de banco pelo lado antigo desatualiza os tipos gerados.**
   Regenerar e enviar faz parte da correção, não é passo opcional.
 
-## Roteiro de uma correção
+## A ponte inversa — o caminho sem crédito, passo a passo
 
-1. Ler o apontamento já triado (tipo, severidade, reprodução).
-2. Reproduzir no ambiente publicado antes de tocar em qualquer arquivo. Bug
-   que você não reproduziu, você não corrigiu — apenas mexeu.
-3. Localizar no código da plataforma atual. `INVENTARIO.md` §3 mapeia rota →
-   arquivo.
-4. Conserto mínimo. Se a correção exigir mudar regra de negócio, ela deixou de
-   ser bug: devolva para decisão.
-5. Enviar pelo repositório, conferir no site publicado, marcar na planilha.
-6. Se tocou banco: regenerar tipos e enviar junto.
+O sentido que a plataforma faz sozinha é **Lovable → GitHub**: o bot dela
+commita cada alteração feita pelo chat. A ponte inversa é o oposto —
+**GitHub → Lovable** — e é ela que torna a fase de correção gratuita.
+
+### Preparação, uma vez só
+
+```bash
+cd C:/Users/ahifr/Downloads
+gh repo clone nexclin/nexclin nexclin-lovable
+```
+
+Este clone é o `../nexclin-lovable` que o `CLAUDE.md` regra (i) trata como
+somente leitura **para agentes**. Arthur escreve nele; agentes não.
+
+### A cada correção
+
+1. **Anote o crédito antes.** No editor, clique no nome do projeto (canto
+   superior esquerdo) → o painel mostra `Credits · N left`. Anote o N.
+2. **Atualize o clone.** `git pull origin main` — **obrigatório**. O bot da
+   Lovable também commita em `main` por conta própria (varreduras de segurança
+   fizeram isso em 02/08 e 16/08). Pular esse passo gera push rejeitado.
+3. **Conserto mínimo**, no seu editor, local.
+4. **Envie:**
+   ```bash
+   git add <arquivos>
+   git commit -m "fix: <o que corrige>"
+   git push origin main
+   ```
+   Só `main` sincroniza — é a branch ativa, e só uma sincroniza por vez.
+   **Nunca use `--force`:** reescrever o histórico de `main` confunde o lado da
+   plataforma.
+5. **Confirme no editor.** Abra o projeto. O commit aparece no histórico como
+   entrada **"Pushed from GitHub"**, com o diff. Se não aparecer em ~2 minutos
+   mesmo após recarregar, **pare e avise** — a ponte caiu e o custo da fase
+   muda.
+6. **Publique.** Isto **não é automático** — este é o passo que todo mundo
+   esquece. Botão **Publish** (canto superior direito) → **Update**. Quando
+   terminar, o botão passa a ler *Up to date*.
+7. **Confira no site publicado**, em janela anônima:
+   `https://nexclin.lovable.app`. A janela anônima elimina cache e sessão.
+   > Cuidado: `/login` e `/signup` rebatem para `/` se você tiver sessão
+   > ativa. Para conferir a tela de acesso sem deslogar, use
+   > `/request-access`, que renderiza com sessão e usa o mesmo painel de marca.
+8. **Anote o crédito depois.** Tem de ser o mesmo N do passo 1. Qualquer
+   consumo maior que zero reprova a ponte e precisa ser reportado.
+9. **Marque na planilha** o apontamento como corrigido.
+
+### Correção de banco
+
+Não passa pelo repositório: vai pelo **SQL editor do Lovable Cloud**
+(`More → Cloud → SQL editor`), que também não consome crédito.
+
+**Antes de qualquer escrita**, exporte: `More → Cloud → Overview → Advanced
+settings → Export project data`. O tier atual **não tem recuperação no tempo** —
+um `DELETE` ou `UPDATE` errado é irreversível. O export é a única rede.
+
+O editor pede confirmação em operações destrutivas ("Confirm destructive
+operation" → *Run anyway*). Leia a query antes de confirmar; é a última
+barreira que existe.
+
+### O que torna isso possível — e frágil
+
+O workspace está no **plano Free, com 5 créditos por dia**. Se a ponte inversa
+falhar, a fase de correção não fica cara: ela fica **inviável**, porque uma
+funcionalidade real consome de 30 a 60 créditos. Por isso o passo 8 não é
+burocracia.
 
 ## A trava de lançamento
 
