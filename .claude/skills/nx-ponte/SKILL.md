@@ -24,74 +24,30 @@ tudo o que a atual faz.
 - **Alteração de banco pelo lado antigo desatualiza os tipos gerados.**
   Regenerar e enviar faz parte da correção, não é passo opcional.
 
-## A ponte inversa — o caminho sem crédito, passo a passo
+## A ponte inversa — o caminho sem crédito
 
-O sentido que a plataforma faz sozinha é **Lovable → GitHub**: o bot dela
-commita cada alteração feita pelo chat. A ponte inversa é o oposto —
-**GitHub → Lovable** — e é ela que torna a fase de correção gratuita.
+**O procedimento completo vive em `docs/ponte/ponte-inversa.md`. Leia esse
+arquivo antes de executar qualquer correção — ele é a fonte de verdade, e o
+que estiver aqui em conflito com ele está errado.**
 
-### Preparação, uma vez só
+O resumo, para saber o que esperar:
 
-```bash
-cd C:/Users/ahifr/Downloads
-gh repo clone nexclin/nexclin nexclin-lovable
-```
+| Etapa | Comando | Precisa de navegador? |
+|---|---|---|
+| Clonar / atualizar | `bash scripts/ponte.sh preparar` | não |
+| Corrigir | seu editor, no clone | não |
+| Enviar | `bash scripts/ponte.sh enviar "fix: msg"` | não |
+| **Publicar** | **Publish → Update, na Lovable** | **sim** |
+| Provar que saiu | `bash scripts/ponte.sh conferir` | não |
 
-Este clone é o `../nexclin-lovable` que o `CLAUDE.md` regra (i) trata como
-somente leitura **para agentes**. Arthur escreve nele; agentes não.
+**O Publish não tem CLI nem API pública** — confirmado na documentação da
+Lovable e por teste próprio em 17/08: o site não republica sozinho após o push.
+Toda correção termina num clique humano, e é o passo que mais se esquece. Se
+esquecer, a correção fica no editor e o cliente continua vendo o bug.
 
-### A cada correção
-
-1. **Anote o crédito antes.** No editor, clique no nome do projeto (canto
-   superior esquerdo) → o painel mostra `Credits · N left`. Anote o N.
-2. **Atualize o clone.** `git pull origin main` — **obrigatório**. O bot da
-   Lovable também commita em `main` por conta própria (varreduras de segurança
-   fizeram isso em 02/08 e 16/08). Pular esse passo gera push rejeitado.
-3. **Conserto mínimo**, no seu editor, local.
-4. **Envie:**
-   ```bash
-   git add <arquivos>
-   git commit -m "fix: <o que corrige>"
-   git push origin main
-   ```
-   Só `main` sincroniza — é a branch ativa, e só uma sincroniza por vez.
-   **Nunca use `--force`:** reescrever o histórico de `main` confunde o lado da
-   plataforma.
-5. **Confirme no editor.** Abra o projeto. O commit aparece no histórico como
-   entrada **"Pushed from GitHub"**, com o diff. Se não aparecer em ~2 minutos
-   mesmo após recarregar, **pare e avise** — a ponte caiu e o custo da fase
-   muda.
-6. **Publique.** Isto **não é automático** — este é o passo que todo mundo
-   esquece. Botão **Publish** (canto superior direito) → **Update**. Quando
-   terminar, o botão passa a ler *Up to date*.
-7. **Confira no site publicado**, em janela anônima:
-   `https://nexclin.lovable.app`. A janela anônima elimina cache e sessão.
-   > Cuidado: `/login` e `/signup` rebatem para `/` se você tiver sessão
-   > ativa. Para conferir a tela de acesso sem deslogar, use
-   > `/request-access`, que renderiza com sessão e usa o mesmo painel de marca.
-8. **Anote o crédito depois.** Tem de ser o mesmo N do passo 1. Qualquer
-   consumo maior que zero reprova a ponte e precisa ser reportado.
-9. **Marque na planilha** o apontamento como corrigido.
-
-### Correção de banco
-
-Não passa pelo repositório: vai pelo **SQL editor do Lovable Cloud**
-(`More → Cloud → SQL editor`), que também não consome crédito.
-
-**Antes de qualquer escrita**, exporte: `More → Cloud → Overview → Advanced
-settings → Export project data`. O tier atual **não tem recuperação no tempo** —
-um `DELETE` ou `UPDATE` errado é irreversível. O export é a única rede.
-
-O editor pede confirmação em operações destrutivas ("Confirm destructive
-operation" → *Run anyway*). Leia a query antes de confirmar; é a última
-barreira que existe.
-
-### O que torna isso possível — e frágil
-
-O workspace está no **plano Free, com 5 créditos por dia**. Se a ponte inversa
-falhar, a fase de correção não fica cara: ela fica **inviável**, porque uma
-funcionalidade real consome de 30 a 60 créditos. Por isso o passo 8 não é
-burocracia.
+Correção de **banco** não passa pelo repositório: vai pelo SQL editor do Cloud,
+com **Export obrigatório antes de qualquer escrita** — não há recuperação no
+tempo neste tier.
 
 ## A trava de lançamento
 
