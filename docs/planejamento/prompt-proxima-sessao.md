@@ -39,6 +39,18 @@ O que **lança** é o Lovable. A stack nova segue em paralelo, sem pressa.
 - **Seed idempotente funcionando** (`npm run seed`, roda 2x sem duplicar).
 - **Fluxo de recuperação de senha construído** na stack nova:
   `/esqueci-senha`, `/auth/callback`, `/nova-senha`.
+- **`tasks.md` da SPEC 001 sincronizado com a realidade** — 17 feitas, 11
+  abertas, cada uma com evidência ao lado. Duas descobertas: as duas edge
+  functions **estão deployadas** no projeto novo (respondem 401 sem token), e
+  **T021, testes de permissão, está em zero** — é mínimo obrigatório da
+  constituição e virou dívida visível.
+- **`tasks.md` da SPEC 002 escrito**, já refletindo que duas das três fases
+  encolheram. A **Fase 1 está substancialmente resolvida**: além de não haver
+  policies `anon`, a edge function `anamnesis-public` devolve só `id`, `status`
+  e a definição do formulário — **não devolve as respostas do paciente** — e já
+  recusa reenvio com 409. Sobrou dívida de desenho: `public_token` não existe
+  em nenhuma migração da plataforma, então o `id` da resposta serve de
+  credencial. Registrado como **decisão** (T002), não como tarefa presumida.
 - **Três planos criados no banco do Lovable, ainda ocultos**: Essencial 3
   usuários R$ 249 / anual R$ 2.739 · Clínica 5 usuários R$ 399 / R$ 4.389 ·
   Corpo Clínico 8 usuários R$ 599 / R$ 6.589. Trial de 30 dias, `max_users`
@@ -181,9 +193,17 @@ mensagem que explique **por que**, não só o quê. O servidor de dev sobe com
 
 ## 8. Pendências conhecidas — não são desta sessão
 
-- **Achado 2** (rastro em `patients`) — janela de 22–23/08
+- **Achado 2** (rastro em `patients`) — janela de 22–23/08, com a quebra em
+  tarefas já pronta em `specs/002-seguranca-anamnese-auditoria/tasks.md`.
+  **T004 é gate absoluto: exportar o banco antes de qualquer escrita**, porque
+  não há recuperação no tempo nesse tier.
+- **Decisão pendente (T002 da 002):** trocar o `id` da anamnese por um
+  `public_token` dedicado antes de 01/09, ou virar backlog. O risco real é
+  vazamento de link, não adivinhação — chave primária não rotaciona nem expira.
 - **`invite-team-user`** aceita `password` do cliente e cria usuário com ela,
-  contra a regra da constituição, **em produção** — mesma janela
+  contra a regra da constituição, **em produção** — mesma janela (T017 da 002)
+- **T021 da SPEC 001** — testes de permissão em Vitest, mínimo obrigatório da
+  constituição, hoje em zero
 - **`npm audit`**: 1 vulnerabilidade crítica, 5 altas incluindo `next`.
   `--force` sobe versão major; fica para depois de 01/09
 - **"Build unsuccessful"** marcado no editor da Lovable apesar de o deploy
