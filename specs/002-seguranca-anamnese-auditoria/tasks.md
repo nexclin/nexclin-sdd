@@ -66,7 +66,10 @@ servidor, encaminhamento de link, `Referer`. Um token dedicado se revoga sozinho
 
 ## Fase 2 — Rastro em dado de paciente  *(o trabalho da janela de 22–23/08)*
 
-- [ ] T004 **Exportar o banco antes de qualquer escrita** — `Cloud → Overview → Advanced settings → Export project data`. Não há recuperação no tempo neste tier; este é o único ponto de retorno. **Nenhuma tarefa abaixo começa sem isto.**
+- [ ] T004 **Exportar o banco antes de qualquer escrita** — `Cloud → Overview → Advanced settings → Export project data → Export → Start export`. Não há recuperação no tempo neste tier; este é o único ponto de retorno. **Nenhuma tarefa abaixo começa sem isto.**
+  - **O export é assíncrono.** A tela confirma com "Database export started" e o link chega **por e-mail**, depois. *Disparar* o export não é *ter* o dump — o gate só fecha quando o link chega e o arquivo baixa. Observado ao vivo em 18/08/2026.
+  - **Limite de 1 export a cada 24 horas** (texto do próprio modal). Se a janela de 22–23/08 precisar de dois pontos de retorno no mesmo dia, **não haverá**: planeje as escritas para caber num único ponto, ou distribua entre os dois dias.
+  - O arquivo fica no Cloud storage do projeto. Se o Cloud for desabilitado, os exports **deixam de ser baixáveis** — guarde uma cópia fora da Lovable.
 - [ ] T005 Migração: tabela `data_audit_log` — `actor` (`auth.uid()`), `created_at`, `table_name`, `action`, `record_id`, `clinic_id`, `previous_state jsonb`. RLS ligada: leitura só para admin da própria clínica e superadmin; escrita só pelo trigger.
 - [ ] T006 Trigger `AFTER INSERT/UPDATE/DELETE` em `patients` gravando em `data_audit_log`, com o estado anterior completo em jsonb — é ele que permite reconstruir a linha.
 - [ ] T007 [P] Migração: coluna `deleted_at timestamptz` em `patients`.
