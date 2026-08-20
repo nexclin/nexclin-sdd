@@ -38,3 +38,20 @@ npm-debug.log*
 
 # === Clone de referencia (repo de terceiros, nao versionar aqui) ===
 strix/
+
+# === Dumps e exports de banco (dado de saúde — NUNCA versionar) ===
+# Um export do Lovable/Supabase traz paciente, consulta e valor. Fora do git
+# sempre: o histórico não se apaga com `rm`, e um dump commitado vaza para
+# qualquer clone, para sempre. LGPD é arquitetura, não intenção.
+# Atenção: NÃO ignorar `*.sql` em bloco — supabase/migrations/ é versionado
+# por desenho e é a fonte de verdade do schema.
+*.dump
+*.bak
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*-export-*.sql
+dump-*.sql
+backups/
+dumps/
