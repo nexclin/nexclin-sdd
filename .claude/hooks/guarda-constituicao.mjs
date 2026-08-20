@@ -114,6 +114,11 @@ function checarSenha(bruto) {
     /set_password/i,
     /updateUserById\s*\([^)]*\bpassword\b/is,
     /admin\.updateUser[^)]*\bpassword\s*:/is,
+    // Criar já com senha é a mesma violação por outra porta: quem convida
+    // escolhe a senha de quem é convidado. Passou despercebido pelo hook e
+    // foi para produção no `invite-team-user` (T014 da SPEC 001), corrigido
+    // no T017. A catraca fecha aqui para não repetir.
+    /admin\.createUser\s*\([^)]*\bpassword\b/is,
   ];
   for (const padrao of suspeitos) {
     if (padrao.test(conteudo)) {

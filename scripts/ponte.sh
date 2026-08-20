@@ -23,6 +23,9 @@ case "${1:-}" in
       gh repo clone "$REPO" "$CLONE" || exit 1
     fi
     cd "$CLONE" || exit 1
+    # O proprio .ponte-bundle e estado deste script, nao codigo da plataforma.
+    # Sem isto o 'git add -A' do 'enviar' o commitaria em producao.
+    grep -qxF '.ponte-bundle' .git/info/exclude 2>/dev/null       || echo '.ponte-bundle' >> .git/info/exclude
     echo "== atualizando (o bot da Lovable tambem commita em main) =="
     git checkout -q main && git pull --ff-only origin main || {
       echo "!! pull falhou. Resolva antes de editar."; exit 1; }

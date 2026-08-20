@@ -51,7 +51,7 @@ terceiro, contra a regra (e) — correção marcada para 22–23/08.
 ## Fase 3 — Edge functions  (`fase:F3` · `tipo:infra` · `setor:seguranca`)
 
 - [x] T013 Portar `supabase/functions/superadmin-manage-user` (guardas: bearer + `is_superadmin`; `update_email` audita `old→new`; `send_password_reset` via `resetPasswordForEmail`; **nenhuma action define senha**) ✅ `supabase/functions/superadmin-manage-user/` — só `update_email` e `send_password_reset`; `set_password` removida.
-- [x] T014 [P] Portar `supabase/functions/invite-team-user` (cria usuário convidado + vínculo; secrets via env do projeto novo) ⚠️ portada, **com defeito conhecido**: aceita `password` do cliente (`index.ts:47-51,66-75`), contra a regra (e). Correção na janela de 22–23/08.
+- [x] T014 [P] Portar `supabase/functions/invite-team-user` (cria usuário convidado + vínculo; secrets via env do projeto novo) ✅ portada; o defeito herdado do MVP — aceitava `password` do cliente, contra a regra (e) — foi **corrigido em 19/08 pelo T017 da SPEC 002**. Hoje a função convida por `generateLink` e nenhum caminho define senha de terceiro. Falta aplicar o mesmo na plataforma Lovable, que segue com a versão antiga.
 - [x] T015 [P] Registrar `anamnesis-public` e `generate-insights` em `specs/BACKLOG.md` (não portar agora) ✅ as duas registradas em `specs/BACKLOG.md`.
 - [x] T016 Deploy das functions via CLI (`supabase functions deploy`) ✅ **verificado ao vivo 18/08**: as duas respondem no projeto novo.
 - [ ] T017 [aceite] Smoke test de auth: chamada sem token → 401/403; `update_email` grava diff em `superadmin_audit_log` ⏳ **parcial** — sem token → **401 confirmado** nas duas. Falta provar o diff de `update_email` em `superadmin_audit_log`.

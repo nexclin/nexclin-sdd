@@ -10,9 +10,15 @@ O sentido que a plataforma faz sozinha é **Lovable → GitHub**: o bot dela
 commita cada alteração feita pelo chat. A ponte inversa é o oposto —
 **GitHub → Lovable** — e é ela que torna a fase de correção gratuita.
 
-Isso importa porque o workspace está no **plano Free, com 5 créditos por dia**,
-e uma funcionalidade real consome de 30 a 60. Sem a ponte inversa, a fase de
-correção não fica cara: fica inviável.
+Isso importa porque o orçamento de crédito é apertado e uma funcionalidade real
+consome de 30 a 60. Sem a ponte inversa, a fase de correção não fica cara: fica
+inviável.
+
+**Estado do plano em 20/08/2026** (conferido na tela): workspace *Erick's
+Lovable*, plano **Pro**, com **20 créditos mensais** e **5 créditos diários de
+build**. A versão anterior deste documento dizia "plano Free, 5 créditos por
+dia" — estava desatualizada. Reconfira antes de planejar uma janela; é este
+número que decide o que dá para pedir ao agente.
 
 ## De onde dá para executar — testado
 
@@ -107,6 +113,50 @@ use `/request-access`, que renderiza logado e usa o mesmo painel de marca.
 
 Marque o apontamento como corrigido na página de Apontamentos do Notion.
 
+## Correção de edge function — o Publish NÃO cobre
+
+> Descoberto ao vivo em 20/08/2026, corrigindo o `invite-team-user`.
+> Custou um estado inconsistente em produção. Leia antes de mexer em function.
+
+**O Publish sobe só o front.** Uma alteração em `supabase/functions/` chega ao
+repositório e ao workspace do editor — dá para lê-la em `More → Code` — mas a
+**versão em execução continua a antiga**. Confira em
+`More → Cloud → Edge functions`, coluna *Last updated*: se o carimbo é velho,
+a correção não está no ar.
+
+Isso é traiçoeiro porque o front novo **é** publicado. Se o contrato entre os
+dois mudou (campo que deixou de ser enviado, resposta nova), produção fica com
+metade da correção e a funcionalidade quebra — pior do que antes de começar.
+
+**Ordem obrigatória quando a correção toca front e function:** garanta a function
+primeiro, publique o front depois. Nunca o contrário.
+
+**O CLI do Supabase não serve aqui.** O projeto é gerenciado pela Lovable e vive
+numa organização de que a conta do Arthur não participa:
+`supabase functions deploy --project-ref xbnffervqqphgsyeffdz` responde
+**403 — "your account does not have the necessary privileges"**. Testado, não
+suposto.
+
+**O caminho que funciona** é pedir ao agente no chat do editor, com escopo
+travado para ele não reescrever o que acabou de ser enviado pela ponte:
+
+```
+Faca APENAS o deploy da edge function `<nome>`. O codigo dela ja esta correto
+no repositorio e nao deve ser alterado. NAO edite nenhum arquivo, NAO reescreva
+codigo, NAO crie migracao, NAO mexa no frontend. A unica acao pedida e
+redeployar essa function.
+```
+
+**Custo medido:** crédito mensal **não** foi consumido (20 antes, 20 depois);
+saíram **0,4 do crédito diário de build** (5 → 4,6). Ou seja: deploy de function
+é barato, mas não é grátis como o resto da ponte — conte com isso ao planejar
+uma janela com várias functions.
+
+**Confirme depois** recarregando `More → Cloud → Edge functions`: o *Last
+updated* da function tocada tem de virar "1 minute ago" enquanto as outras
+seguem antigas. E confira a resposta do agente: tem de dizer que nenhum arquivo
+foi alterado.
+
 ## Correção de banco
 
 **Não passa pelo repositório.** Vai pelo SQL editor do Lovable Cloud
@@ -127,6 +177,9 @@ enviar faz parte da correção, não é passo opcional.
 
 1. **Esquecer o Publish.** A correção fica no editor e o cliente continua vendo
    o bug. É o erro mais provável de todos.
-2. **Não dar pull antes.** Push rejeitado por causa dos commits do bot.
-3. **Conferir `/login` logado.** Rebate para `/` e você conclui que não publicou.
-4. **Cache do navegador.** Sempre janela anônima, ou use o `conferir`.
+2. **Achar que o Publish sobe edge function.** Não sobe. Publicar o front de uma
+   correção que também muda a function deixa produção pela metade — ver a seção
+   "Correção de edge function" acima.
+3. **Não dar pull antes.** Push rejeitado por causa dos commits do bot.
+4. **Conferir `/login` logado.** Rebate para `/` e você conclui que não publicou.
+5. **Cache do navegador.** Sempre janela anônima, ou use o `conferir`.

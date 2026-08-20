@@ -14,7 +14,7 @@
 
 - `enabled_modules`: padronizar como `Record<ModuleKey, boolean>` (o default `'[]'` do MVP é array — descasa com o uso). 
 - Auditoria de ações administrativas **dentro** da clínica (hoje só ações de superadmin são auditadas) — fechar lacuna da regra (d).
-- Fluxo de convite (`invite-team-user`): preferir convite por e-mail/definição de senha pelo próprio convidado em vez de senha em texto claro pelo admin.
+- ~~Fluxo de convite (`invite-team-user`): preferir convite por e-mail/definição de senha pelo próprio convidado em vez de senha em texto claro pelo admin.~~ **Resolvido em 19/08/2026** (T017 da SPEC 002): a função usa `generateLink({ type: "invite" })` e o convidado define a própria senha. Resta a variante final — quando o Resend entrar (SPEC 003), trocar por `inviteUserByEmail` e parar de devolver `action_link` na resposta; e aplicar a correção na plataforma Lovable, que ainda roda a versão antiga.
 - FKs faltantes e unicidade de catálogos ao escrever o schema limpo (§5.4.9–11).
 - Enforcement de `max_patients`/`max_leads_month` (hoje só `max_users` tem trigger).
 - Páginas órfãs do MVP (`Consultas`, `Funil`, `Funil2`, `Leads`, `Despesas`, `ContasFixas`) — decidir intenção antes de portar.

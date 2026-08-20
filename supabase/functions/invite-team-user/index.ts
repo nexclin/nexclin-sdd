@@ -1,13 +1,23 @@
-// SPEC 001 / Fase 3 (T014) — portada de ../nexclin-lovable.
-// Adaptação mínima: import normalizado para o especificador npm: (mesmo padrão
-// da superadmin-manage-user). Comportamento preservado: cria o usuário
-// convidado com metadata que o trigger handle_new_user usa para vincular à
-// clínica; reforça o vínculo em team_members. Secrets injetados pelo runtime.
+// SPEC 002 / T017 — convite de membro de equipe SEM senha definida por terceiro.
 //
-// RESSALVA (registrada em specs/BACKLOG.md): esta função recebe `password` em
-// texto e o admin define a senha inicial do convidado. O caminho preferido
-// (convite por e-mail, convidado define a própria senha) está no backlog e
-// será re-especificado — mantido aqui como paridade com o MVP validado.
+// Histórico: a versão portada na SPEC 001 (T014) recebia `password` em texto e
+// deixava o admin da clínica escolher a senha inicial do convidado. Isso viola
+// o Princípio II da constituição e a regra (e) do CLAUDE.md — "senha de cliente
+// jamais é definida por admin". Estava em produção; corrigido na janela de
+// 22-23/08/2026, antecipado para não competir com a bateria de correções.
+//
+// Como ficou: a função não aceita, não transporta e não gera senha em lugar
+// nenhum. `generateLink({ type: "invite" })` cria o usuário em estado de convite
+// e devolve o link de acesso; quem digita a senha é o próprio convidado, em
+// /nova-senha, depois de o link autenticá-lo em /auth/callback.
+//
+// Por que o link volta na resposta em vez de ir por e-mail: a entrega
+// transacional ainda não está de pé (o SMTP embutido comprovadamente não
+// entrega — specs/001-fundacao-superadmin/research.md R5) e o Resend só entra
+// na SPEC 003. Até lá o admin repassa o link ao convidado por fora. A fronteira
+// que importa continua respeitada: ninguém além do dono da conta escolhe a
+// senha dela. Quando o Resend entrar, troque `generateLink` por
+// `inviteUserByEmail` e pare de devolver `action_link` — o resto não muda.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -31,8 +41,9 @@ Deno.serve(async (req) => {
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_ROLE = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const SITE_URL = Deno.env.get("SITE_URL") ?? "";
 
-    // Authenticate caller
+    // Autentica o chamador
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
     if (!token) return json({ error: "Não autenticado" }, 401);
@@ -44,15 +55,40 @@ Deno.serve(async (req) => {
     if (userErr || !userData.user) return json({ error: "Token inválido" }, 401);
 
     const body = await req.json();
-    const { email, password, full_name, team_member_id } = body;
+    const { email, full_name, team_member_id } = body;
 
-    if (!email || !password || !full_name) {
-      return json({ error: "Campos obrigatórios: email, password, full_name" }, 400);
+    // Recusa explícita: um front desatualizado que ainda mande senha precisa
+    // falhar alto, não ser ignorado em silêncio. É isto que prova que o
+    // caminho fechou.
+    if ("password" in body) {
+      return json(
+        {
+          error:
+            "Este endpoint não aceita mais senha. O convidado define a própria " +
+            "senha pelo link devolvido em `action_link` (Princípio II).",
+        },
+        400,
+      );
+    }
+
+    if (!email || !full_name) {
+      return json({ error: "Campos obrigatórios: email, full_name" }, 400);
+    }
+
+    // Autorização: convidar é ação do módulo `equipe`. O banco decide, não a
+    // tela — my_permission() roda com a identidade do chamador e já aplica a
+    // cascata (plano é o teto, default deny).
+    const { data: permissao, error: permErr } = await userClient.rpc("my_permission", {
+      _module: "equipe",
+    });
+    if (permErr) return json({ error: permErr.message }, 400);
+    if (permissao !== "full") {
+      return json({ error: "Sem permissão para convidar na equipe" }, 403);
     }
 
     const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE);
 
-    // Get caller clinic_id
+    // Clínica do chamador — é ela que o convidado herda, nunca uma vinda do body
     const { data: profile } = await adminClient
       .from("profiles")
       .select("clinic_id")
@@ -62,29 +98,47 @@ Deno.serve(async (req) => {
       return json({ error: "Clínica não encontrada" }, 400);
     }
 
-    // Create user with auto-confirm; metadata sinaliza ao trigger que é convidado
-    const { data: created, error: createErr } = await adminClient.auth.admin.createUser({
+    // Cria o convidado e gera o link. Nenhuma senha entra, sai ou é gravada.
+    // O metadata é o que o trigger handle_new_user lê para vincular à clínica.
+    const { data: convite, error: conviteErr } = await adminClient.auth.admin.generateLink({
+      type: "invite",
       email,
-      password,
-      email_confirm: true,
-      user_metadata: {
-        full_name,
-        invite_clinic_id: profile.clinic_id,
-        invite_team_member_id: team_member_id || null,
+      options: {
+        data: {
+          full_name,
+          invite_clinic_id: profile.clinic_id,
+          invite_team_member_id: team_member_id || null,
+        },
+        ...(SITE_URL ? { redirectTo: `${SITE_URL}/auth/callback?next=/nova-senha` } : {}),
       },
     });
-    if (createErr) return json({ error: createErr.message }, 400);
+    if (conviteErr) {
+      const jaExiste = /already|registered|exists/i.test(conviteErr.message);
+      return json(
+        {
+          error: jaExiste
+            ? "Já existe conta com este e-mail. Use recuperação de senha em vez de convite."
+            : conviteErr.message,
+        },
+        400,
+      );
+    }
+
+    const novoUsuario = convite.user;
+    const actionLink = convite.properties?.action_link;
 
     // Garantia extra: o trigger handle_new_user já vincula, mas reforçamos aqui
     if (team_member_id) {
       await adminClient
         .from("team_members")
-        .update({ email, user_id: created.user.id, invite_status: "active" })
+        .update({ email, user_id: novoUsuario.id, invite_status: "pending" })
         .eq("id", team_member_id)
         .eq("clinic_id", profile.clinic_id);
     }
 
-    return json({ ok: true, user_id: created.user.id });
+    // action_link é credencial de uso único: devolvido ao chamador e nunca
+    // registrado em log.
+    return json({ ok: true, user_id: novoUsuario.id, action_link: actionLink });
   } catch (e) {
     return json({ error: (e as Error).message }, 500);
   }
