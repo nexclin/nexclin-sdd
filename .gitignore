@@ -35,3 +35,6 @@ npm-debug.log*
 
 # === Agent Skills instaladas (terceiros — como deps) ===
 .agents/
+
+# === Clone de referencia (repo de terceiros, nao versionar aqui) ===
+strix/
