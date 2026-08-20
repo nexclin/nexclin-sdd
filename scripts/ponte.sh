@@ -25,7 +25,12 @@ case "${1:-}" in
     cd "$CLONE" || exit 1
     # O proprio .ponte-bundle e estado deste script, nao codigo da plataforma.
     # Sem isto o 'git add -A' do 'enviar' o commitaria em producao.
-    grep -qxF '.ponte-bundle' .git/info/exclude 2>/dev/null       || echo '.ponte-bundle' >> .git/info/exclude
+    # Residuos das nossas proprias ferramentas nao podem vazar para producao
+    # pelo `git add -A` do 'enviar'. .ponte-bundle e estado deste script;
+    # supabase/.temp/ e cache do CLI do Supabase.
+    for lixo in '.ponte-bundle' 'supabase/.temp/'; do
+      grep -qxF "$lixo" .git/info/exclude 2>/dev/null         || echo "$lixo" >> .git/info/exclude
+    done
     echo "== atualizando (o bot da Lovable tambem commita em main) =="
     git checkout -q main && git pull --ff-only origin main || {
       echo "!! pull falhou. Resolva antes de editar."; exit 1; }

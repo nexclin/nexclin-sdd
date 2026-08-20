@@ -185,6 +185,71 @@ externa está vazia.
 
 ---
 
+## V-22/V-23 — CORRIGIDO, PUBLICADO E TESTADO em 20/08/2026
+
+Commit `7eff4cf` na plataforma · bundle `index-Beehpt0v` → `index-BB1AQRtG`.
+
+### O que era, de verdade
+
+A triagem supunha "a regra de data não está implementada". **Estava.** Existe um
+helper canônico, `src/lib/paymentFees.ts::computeFeeForMethod`, que faz
+exatamente o que o Vinícius descreveu. O problema era uma **segunda cópia da
+mesma regra**, escrita à mão dentro de `onPaymentMethodChange`, com três
+defeitos:
+
+1. **`if (term)` antes de gravar a data.** Dinheiro e pix têm prazo **zero**;
+   `if (0)` é falso, o `setDueDate` não rodava e a data **ficava com a do método
+   anterior**. Passar por crédito (+30) e trocar para dinheiro deixava o
+   recebível vencendo em 30 dias. **É a causa exata do relato** — e, como a
+   investigação de 19/08 previu, também a dos "relatórios zerados": o dado ia
+   para setembro e sumia de um relatório filtrado em agosto.
+2. **Ignorava a antecipação.** Crédito antecipado ia para +30 em vez de D+1,
+   enquanto a taxa exibida na tela já vinha do helper, que considera antecipação.
+   Tela e dado discordavam.
+3. **Só recalculava ao trocar o método.** Marcar "antecipar" ou mudar parcelas
+   deixava a data velha.
+
+E em `LaunchReceivableDialog` um quarto: o prazo **nunca** era aplicado e a taxa
+da maquininha **não era descontada** — `net_value` sequer era gravado.
+
+### Aceite manual — executado, não presumido
+
+Na plataforma ao vivo, conta-mestra:
+
+| Passo | Esperado | Observado |
+|---|---|---|
+| Meio = **Boleto** (prazo 3) | 23/08 | **23/08** ✅ |
+| Trocar para **Dinheiro** (prazo 0) | volta para 20/08 | **20/08** ✅ |
+
+O segundo passo é o que prova a correção: antes, o `if (term)` deixaria em 23/08.
+
+Dados de teste criados e **removidos** ao final (paciente e consulta).
+
+### A D-5 fica sem efeito
+
+A decisão de criar uma configuração de clínica "antecipa recebimento de
+crédito?" **não deve ser implementada**. O banco já tem `anticipation_default`
+**por meio de pagamento**, mais um toggle por venda. A configuração de clínica
+seria uma **terceira** fonte de verdade para a mesma pergunta — e a que existe é
+melhor, porque antecipação é acordo por maquininha/bandeira, não por clínica.
+A pergunta que gerou a D-5 partia de uma premissa errada minha.
+
+### Três achados de passagem, registrados como itens novos
+
+- **V-32 — fuso horário na consulta.** Digitado **10:00**, a lista exibe
+  **07:00**. Deslocamento de 3 horas = UTC-3 aplicado onde não devia. Não estava
+  em nenhuma bateria. **Bug, atrapalha muito**: hora de consulta errada é
+  paciente chegando na hora errada.
+- **V-18 reproduzido ao vivo.** Com consulta de R$ 300 e prescrição de R$ 250, o
+  "Total geral" mostrou **R$ 250**. Confirma o relato: a consulta não entra no
+  valor a receber.
+- **`Consultas.tsx` é página órfã.** Não está roteada em `App.tsx`; o menu
+  "Consultas" aponta para `/acompanhamento`. Logo o `LaunchReceivableDialog` que
+  corrigi é **código morto em produção** — a correção está certa, mas não muda
+  nada que o usuário alcance hoje. Vale como preparo para a stack nova.
+
+---
+
 ## Convenção de numeração (para acomodar a leva do Erick)
 
 - **V-01 a V-33** — esta leva, Vinícius, 18–19/08. Numeração fixa: não
