@@ -25,10 +25,15 @@ contra memória. Cada marcação abaixo tem evidência ao lado.
 Legenda: ✅ feito · ⏳ parcial ou pendente de ato manual · ❌ não iniciada ·
 ⚠️ feito, com defeito registrado.
 
-**Duas dívidas que merecem destaque**, porque não aparecem na contagem:
-`T021` (testes de permissão) é **mínimo obrigatório da constituição** e está em
-zero; e `T014` foi portada com um caminho que deixa admin definir senha de
-terceiro, contra a regra (e) — correção marcada para 22–23/08.
+**As duas dívidas que mereciam destaque foram fechadas em 20/08/2026:**
+`T021` (testes de permissão, mínimo obrigatório da constituição) saiu de zero
+para 19 testes verificados por mutação; e o `T014`, que aceitava senha de
+terceiro contra a regra (e), foi reescrito e publicado — aqui e na plataforma ao
+vivo — antecipando a janela de 22–23/08.
+
+**O que ficou aberto e importa:** `T020` (guards `ProtectedRoute`,
+`RequirePermission`, `OnboardingGuard`), `T027` (e2e da cascata, que é onde a
+regra de permissão de fato se prova) e `T012` (senha do superadmin, ato manual).
 
 ## Fase 1 — Réplica do banco  (`fase:F1` · `tipo:db` · `setor:plataforma`)
 
@@ -51,7 +56,7 @@ terceiro, contra a regra (e) — correção marcada para 22–23/08.
 ## Fase 3 — Edge functions  (`fase:F3` · `tipo:infra` · `setor:seguranca`)
 
 - [x] T013 Portar `supabase/functions/superadmin-manage-user` (guardas: bearer + `is_superadmin`; `update_email` audita `old→new`; `send_password_reset` via `resetPasswordForEmail`; **nenhuma action define senha**) ✅ `supabase/functions/superadmin-manage-user/` — só `update_email` e `send_password_reset`; `set_password` removida.
-- [x] T014 [P] Portar `supabase/functions/invite-team-user` (cria usuário convidado + vínculo; secrets via env do projeto novo) ✅ portada; o defeito herdado do MVP — aceitava `password` do cliente, contra a regra (e) — foi **corrigido em 19/08 pelo T017 da SPEC 002**. Hoje a função convida por `generateLink` e nenhum caminho define senha de terceiro. Falta aplicar o mesmo na plataforma Lovable, que segue com a versão antiga.
+- [x] T014 [P] Portar `supabase/functions/invite-team-user` (cria usuário convidado + vínculo; secrets via env do projeto novo) ✅ portada; o defeito herdado do MVP — aceitava `password` do cliente, contra a regra (e) — foi **corrigido em 20/08 pelo T017 da SPEC 002**. Hoje a função convida por `generateLink` e nenhum caminho define senha de terceiro. O mesmo já foi aplicado e deployado na plataforma Lovable no mesmo dia (commit `dabf1ef`).
 - [x] T015 [P] Registrar `anamnesis-public` e `generate-insights` em `specs/BACKLOG.md` (não portar agora) ✅ as duas registradas em `specs/BACKLOG.md`.
 - [x] T016 Deploy das functions via CLI (`supabase functions deploy`) ✅ **verificado ao vivo 18/08**: as duas respondem no projeto novo.
 - [ ] T017 [aceite] Smoke test de auth: chamada sem token → 401/403; `update_email` grava diff em `superadmin_audit_log` ⏳ **parcial** — sem token → **401 confirmado** nas duas. Falta provar o diff de `update_email` em `superadmin_audit_log`.
