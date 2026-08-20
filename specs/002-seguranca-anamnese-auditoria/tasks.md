@@ -92,7 +92,15 @@ servidor, encaminhamento de link, `Referer`. Um token dedicado se revoga sozinho
 
 ## Na mesma janela, fora desta spec
 
-- [ ] T017 Remover o caminho que define senha de terceiro em `supabase/functions/invite-team-user` (`index.ts:47-51,66-75` aceita `password` do cliente) e acrescentar checagem de `my_permission('equipe')`. Viola a regra (e) da constituição e está **em produção**. Entra aqui porque é a mesma janela e o mesmo tipo de risco.
+- [x] T017 Remover o caminho que define senha de terceiro em `supabase/functions/invite-team-user` (`index.ts:47-51,66-75` aceita `password` do cliente) e acrescentar checagem de `my_permission('equipe')`. Viola a regra (e) da constituição e está **em produção**. Entra aqui porque é a mesma janela e o mesmo tipo de risco.
+  - **Feito em 19/08/2026 na stack nova, antecipado** para não competir com a bateria de correções do Vinícius na janela de 22–23.
+  - A função não aceita, não transporta e não gera senha: `generateLink({ type: "invite" })` cria o convidado e devolve o link; quem digita a senha é ele, em `/nova-senha`. Corpo com `password` agora é recusado com 400 — um front desatualizado falha alto em vez de ser ignorado em silêncio.
+  - Autorização acrescentada: `my_permission('equipe') = 'full'`, avaliada pelo banco com a identidade do chamador.
+  - **Por que o link volta na resposta e não vai por e-mail:** a entrega transacional não está de pé (`specs/001-fundacao-superadmin/research.md` R5 — o SMTP embutido comprovadamente não entrega) e o Resend só entra na SPEC 003. Até lá o admin repassa o link por fora. Quando o Resend entrar: trocar por `inviteUserByEmail` e parar de devolver `action_link`.
+  - **Catraca:** o hook `guarda-constituicao` não pegava `admin.createUser({ password })` — foi por essa porta que a violação chegou à produção. Padrão acrescentado e testado contra a versão antiga (bloqueia) e a nova (passa).
+  - **Produção fechada em 20/08/2026.** Commit `dabf1ef` pela ponte inversa, em 3 arquivos: a function, o `ConfigTeamDialog` (o campo "Senha provisória" era `type="text"` — senha em claro na tela; virou o link de primeiro acesso com botão de copiar) e o `ResetPassword.tsx`, que **só aceitava `type=recovery`** e chutaria o convidado para o `/login` sem ele nunca definir senha. Publish com crédito mensal 20 → 20.
+  - **Furo do procedimento descoberto aqui:** o Publish **não** redeploya edge function, e o CLI do Supabase responde 403 no projeto gerenciado pela Lovable. Publicar o front antes de garantir a function deixou o convite quebrado por alguns minutos. Resolvido pedindo o deploy ao agente do editor (custo: 0,4 do crédito diário de build). Procedimento e ordem obrigatória agora registrados em `docs/ponte/ponte-inversa.md` — **ler antes da janela de 22–23**, que também mexe em function.
+  - **Falta o aceite manual:** convidar um membro de verdade na plataforma, abrir o link gerado, definir senha e entrar. Enquanto isso não for feito, é código lido, não comportamento provado (Princípio IV).
 
 ## Pré-condição de lançamento
 

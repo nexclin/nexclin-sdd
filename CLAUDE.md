@@ -3,7 +3,7 @@
 > **O que é este arquivo:** a memória permanente do projeto para o Claude Code.
 > Lido no início de toda sessão. Contém o que é o NexClin, tudo que já foi
 > construído e validado, por que a arquitetura mudou, as regras inegociáveis
-> e o plano do banco de dados. Atualizado em 29/07/2026.
+> e o plano do banco de dados. Atualizado em 20/08/2026.
 
 ---
 
@@ -21,8 +21,12 @@ recomendações), não competir feature a feature com sistemas genéricos
 repositório) · Erick (estruturação da empresa e go-to-market) · mentor de
 gestão clínica (conhecimento de domínio + canal de distribuição).
 
-**Prazo vivo:** primeiros clientes assinantes previstos para ~1 mês. Escopo
-de lançamento: fundação + módulos que o primeiro cliente usará de fato.
+**Prazo vivo (revisado em 20/08/2026):** **01/09/2026** abre para um grupo de
+**clientes fundadores, em uso gratuito**, na plataforma Lovable — não são
+assinantes, e a plataforma é temporária. A stack deste repositório assume em
+**outubro**. Escopo: fundação + os módulos que o fundador usará de fato. **O
+que se corrige até lá segue o critério da §2.5, não o instinto de deixar
+perfeito.**
 
 **Mercado/regulatório:** dados sensíveis de saúde → LGPD é requisito de
 arquitetura, não feature. Futuro do roadmap: prontuário (assinatura digital /
@@ -53,8 +57,13 @@ RLS + Edge Functions) + Claude Code (plano Max) + SDD via GitHub Spec Kit.**
   US$25 + Vercel Pro US$20 + domínio), previsível.
 - E-mail transacional definitivo: **Resend** (o SMTP embutido não entrega —
   limitação já comprovada em teste).
-- `../nexclin-lovable` = export do MVP, **referência somente leitura**.
-  Nada é editado lá; regras de negócio são extraídas de lá.
+- `../nexclin-lovable` = clone do repositório ao vivo da plataforma
+  (`nexclin/nexclin`), usado para **ler as regras de negócio** e, desde
+  17/08/2026, também como área de trabalho da **ponte inversa** que leva
+  correção a produção sem consumir crédito. Ver a regra (i) em §4 e
+  `docs/ponte/ponte-inversa.md`. *(Até 17/08 este caminho era descrito como
+  "export do MVP, somente leitura" — o texto ficou para trás; o diretório
+  passou a ser editável por desenho.)*
 
 ### 2.4 Por que essa arquitetura é a certa
 1. **Segurança mora no banco:** RLS multi-tenant no Postgres — bug de
@@ -65,6 +74,50 @@ RLS + Edge Functions) + Claude Code (plano Max) + SDD via GitHub Spec Kit.**
 3. **Independência de fornecedor:** código no GitHub, banco no Supabase,
    hosting na Vercel — qualquer peça é trocável.
 4. **Custo previsível:** desenvolver mais não custa mais.
+
+### 2.5 A plataforma Lovable é ponte, não destino — e isso decide o que se corrige
+
+> **Leia isto antes de aceitar qualquer pedido de correção na plataforma ao
+> vivo.** Registrado em 20/08/2026, decisão do Arthur. Substitui o critério
+> anterior de "zerar todos os bugs que atrapalham antes de abrir".
+
+**A situação.** A plataforma no Lovable entra no ar em 01/09/2026 para um grupo
+de **clientes fundadores, em uso gratuito**. Ela é **temporária**: vive cerca de
+um mês, até fechar os 30 dias desses fundadores. A stack Next.js deste
+repositório deve substituí-la em **outubro/2026**, numa transição gradual a
+partir de meados de setembro.
+
+**O compromisso com o fundador** é entregar o que foi prometido — um software de
+gestão em lançamento, com os problemas de um lançamento. **Não precisa ser
+perfeito.** O que não pode é decepcionar: ele tem de conseguir operar a clínica.
+
+**O critério de correção, em uma frase:** corrigir na plataforma só vale quando
+a correção **atravessa** para a stack nova. Fora disso é polir o que será
+descartado.
+
+**A consequência que se esquece com facilidade:** na maioria dos casos o que
+atravessa **não é o código — é a regra escrita**. O front React/Vite do Lovable
+será reescrito em Next.js de qualquer jeito. O que sobrevive é a decisão de
+*como o sistema deve se comportar*. **Escrever a regra é a entrega; implementar
+na Lovable é opcional.**
+
+Três faixas, para triar qualquer apontamento novo:
+
+| Faixa | Pergunta | Ação |
+|---|---|---|
+| **A — atravessa como banco** | É migração, RLS, trigger, coluna, regra de recebível? | **Corrigir.** As migrações vão intactas para a stack nova (§2.4). Aqui o código é o artefato durável. |
+| **B — atravessa como regra** | Depende de uma regra que a stack nova também vai precisar? | **Escrever a regra**, datada, em `docs/planejamento/` ou na spec do módulo. Implementar na Lovable só se o fundador esbarrar no uso. |
+| **C — não atravessa** | É front, layout, mensagem, comportamento de tela? | **Não corrigir.** Vira requisito da stack nova. Exceção única: se impedir o fundador de usar o que foi prometido. |
+
+**Corolário sobre backlog:** a meta é a stack nova nascer **sem bug e sem
+backlog**. Então item de backlog não é trabalho adiado — é **requisito da stack
+nova**, e deve entrar na spec do módulo correspondente em vez de dormir numa
+lista.
+
+**Onde isso já está aplicado:** `docs/planejamento/triagem-baterias-18-19.md`
+(33 apontamentos das baterias do Vinícius, classificados nas três faixas, com as
+decisões de regra datadas). É o modelo para triar a bateria do Erick e o que
+vier depois.
 
 ---
 
@@ -146,8 +199,8 @@ do teto; permissão individual nunca excede o plano.*
 ### 3.5 Edge functions (4, na referência)
 | Function | Papel | Destino |
 |---|---|---|
-| superadmin-manage-user | e-mail/reset com guarda dupla | portar (Fase 3) |
-| invite-team-user | cria usuário convidado + vínculo | portar (Fase 3) |
+| superadmin-manage-user | e-mail/reset com guarda dupla | **portada** (T013, Fase 3) — só `update_email` e `send_password_reset`; `set_password` removida |
+| invite-team-user | convida por link; o convidado define a própria senha | portada (Fase 3) e **reescrita no T017 da SPEC 002** (20/08) — o caminho que aceitava `password` do admin foi removido aqui **e** na plataforma ao vivo |
 | anamnesis-public | endpoint público de anamnese | backlog |
 | generate-insights | insights via gateway de IA do Lovable | backlog (re-especificar com API própria) |
 
@@ -177,7 +230,14 @@ do teto; permissão individual nunca excede o plano.*
     variáveis de ambiente (.env.local, fora do git).
 (h) Método SDD: nenhuma feature sem spec aprovada em specs/. Executor gera
     plano por fases e PARA para aprovação humana antes de cada fase.
-(i) ../nexclin-lovable é somente leitura.
+(i) `../nexclin-lovable` **mudou de papel** — leia antes de editar. Era o
+    export do MVP, somente leitura. Desde a criação da ponte inversa
+    (`scripts/ponte.sh`), é o **clone do repositório ao vivo da plataforma**,
+    no mesmo caminho, e É EDITÁVEL — é por ele que a correção chega ao
+    cliente. O que continua proibido é editar ali **fora do procedimento**:
+    só bug, conserto mínimo, `git pull` antes, `main` sempre, nunca
+    `--force`, e a ordem obrigatória **function antes do Publish do front**.
+    Procedimento em `docs/ponte/ponte-inversa.md`.
 (j) "Implementado ≠ funciona": toda fase fecha com critérios de aceite
     executados manualmente por Arthur.
 (k) TypeScript estrito; testes automatizados mínimos em guards e permissões.
@@ -224,9 +284,44 @@ registro em superadmin_operators. Rodar 2x sem duplicar.
     esqueleto do app da clínica)
 [ ] Critérios de aceite da SPEC 001 executados por Arthur
 [ ] Senha nova da conta-mestra via reset no painel (pós Fase 2)
-[ ] Constitution formal do Spec Kit (este arquivo é a base)
+[x] Constitution formal do Spec Kit (.specify/memory/constitution.md, v1.0.0)
 [ ] SPEC 002+ : módulos do escopo de lançamento do 1º cliente
+[ ] T021 da SPEC 001 — testes de permissão em Vitest: EM ZERO, e é mínimo
+    obrigatório da constituição (Princípio V)
 ```
+
+### Linha do tempo viva (atualizada em 20/08/2026)
+
+```
+01/09  abre para os clientes fundadores, na plataforma Lovable, de graça
+set/2  transição gradual começa
+out    stack Next.js substitui a plataforma  ← o destino real
+```
+
+**Frente Lovable (temporária, ~1 mês de vida).** Ver §2.5 para o critério do
+que se corrige e do que não se corrige.
+- [x] T017 — `invite-team-user` sem senha de terceiro, em produção (20/08).
+      Fechou a última violação conhecida da regra (e) na plataforma ao vivo.
+- [ ] **Aceite manual do T017**: convidar alguém de verdade, abrir o link,
+      definir senha, entrar. Até isso, é código lido, não comportamento
+      provado.
+- [x] Triagem das baterias do Vinícius (18–19/08): 33 apontamentos, 25 bugs,
+      classificados nas 3 faixas da §2.5 →
+      `docs/planejamento/triagem-baterias-18-19.md`
+- [ ] Quatro perguntas devolvidas ao Vinícius, prazo 21/08 →
+      `docs/planejamento/perguntas-vinicius-20-08.md`
+- [ ] Bateria do Erick (24–26/08) — triar no mesmo documento, numeração E-01
+      em diante já reservada
+- [ ] Janela 22–23/08: faixa A da bateria + **Fase 2 da SPEC 002**, que tem
+      prioridade por ser banco puro (atravessa 100%)
+- [ ] **T004 da SPEC 002 é gate absoluto e assíncrono** — exportar o banco
+      antes de qualquer escrita; o link chega por e-mail e só se pode
+      exportar 1 vez a cada 24h. Disparar ANTES de 22/08.
+
+**Armadilha de procedimento aprendida em 20/08:** o Publish do Lovable **não**
+redeploya edge function, e o CLI do Supabase responde **403** no projeto
+gerenciado por eles. Correção que toca front + function tem de subir a
+**function primeiro**. Detalhes e custo em `docs/ponte/ponte-inversa.md`.
 
 A especificação completa da fundação, com fases, pré-requisitos e critérios
 de aceite, vive em **specs/001-fundacao-superadmin.md** (fonte de verdade
