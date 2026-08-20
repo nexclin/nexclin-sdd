@@ -55,7 +55,8 @@ espera a stack nova.
 ### Arthur
 | # | Tarefa | Por que |
 |---|---|---|
-| A5 | Cobrar a resposta do Vinícius se não vier | Sem ela a spec da stack nova nasce com buraco. |
+| ~~A5~~ | ~~Cobrar a resposta do Vinícius~~ | ✅ Respondeu em 20/08. |
+| A5b | Encerrar a bateria e mandar o que aparecer no dia | Último dia dele. |
 | A6 | **Disparar novo export do banco** — a tela fica em `More → Cloud → Overview → Advanced settings → Export data` | O último é de **18/08**. Não é urgente hoje (o que se perderia é dado de teste), mas em 22/08, minutos antes das escritas da Fase 2, é o que evita perder tudo que os testes produziram. ⚠️ Logo abaixo do botão estão "Pause Cloud" e **"Remove Lovable Cloud"** — este apaga o banco. |
 
 ### Claude
@@ -161,11 +162,14 @@ espera a stack nova.
 
 Registrado para ninguém cobrar depois achando que foi esquecido:
 
-- **Os 13 itens de faixa B** (dashboard, atribuição de tarefa, financeiro,
-  relatórios). A regra está escrita e datada na triagem; vira critério de
-  aceite na stack nova. Não se implementa na Lovable.
-- **A faixa C inteira** (scroll, mensagens, botão de ver senha, filtros). Vira
-  requisito da stack nova.
+- **Faixa B — dashboard, atribuição de tarefa, financeiro.** A regra está
+  escrita e datada na triagem; vira critério de aceite na stack nova.
+  **Relatórios saíram desta lista** pela D-8: o time do Vinícius opera por eles,
+  então têm de funcionar em 01/09.
+- **Faixa C** — scroll da lista de especialidades, mensagens de boas-vindas e
+  conclusão, botão de ver senha. Vira requisito da stack nova.
+  **Os filtros também saíram daqui**: V-17 e V-28B são o mesmo bug de data
+  (D-11) e batem direto no relatório, que agora é obrigatório.
 - **Zerar a trava de lançamento antes de abrir.** Era a D-1, revogada pela D-7.
   A plataforma vive um mês; não precisa ser perfeita, precisa deixar o fundador
   operar.
