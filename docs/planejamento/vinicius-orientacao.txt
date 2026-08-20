@@ -1,0 +1,289 @@
+BATERIA DE TESTES DO NEXCLIN — VINÍCIUS
+17 a 21 de agosto · antes do lançamento de 01/09
+
+Fala, Vinícius. Esse texto é pra você ler uma vez, no começo, e voltar
+quando bater dúvida. Leva uns 5 minutos.
+
+Onde testar: https://nexclin.lovable.app
+Quanto tempo: cerca de 45 minutos por dia, 5 dias.
+Onde registrar: Notion, base Apontamentos.
+
+
+-------------------------------------------------------------------
+1. QUAL É O SEU OLHAR
+-------------------------------------------------------------------
+
+Você não está caçando erro de programação. Você está respondendo uma
+pergunta só:
+
+    O sistema dá conta da rotina real de uma clínica?
+
+Falta campo? Falta uma etapa? O fluxo bate com o que você vê na
+consultoria? Um sistema pode não ter nenhum erro técnico e mesmo assim
+ser inútil pra quem atende paciente — e é exatamente isso que só você
+consegue enxergar.
+
+Você é o primeiro a testar, e a ordem tem motivo: falha de regra de
+negócio muda tela, e não adianta avaliar a beleza de uma tela que ainda
+vai mudar. O Erick vem depois, de 24 a 26, olhando fluidez e experiência
+sobre a versão já corrigida.
+
+
+-------------------------------------------------------------------
+2. A REGRA — E É UMA SÓ
+-------------------------------------------------------------------
+
+BUG — o sistema faz algo errado, ou não faz o que deveria fazer.
+      Correção imediata, antes do lançamento.
+
+BACKLOG — o sistema faz certo, mas você gostaria que fizesse diferente
+      ou a mais. Entra depois do lançamento.
+
+Na dúvida, marque BUG. É melhor eu descartar um item do que perder um
+problema real.
+
+Backlog não é rejeição, é fila.
+
+
+-------------------------------------------------------------------
+3. TRÊS COISAS QUE JÁ SABEMOS — NÃO PRECISA REGISTRAR
+-------------------------------------------------------------------
+
+1. Lista aparecendo vazia em Pacientes ou Consultas.
+   O filtro vem em "Este mês" e o cadastro some. Troque o período e
+   tudo aparece.
+
+2. Tela branca no primeiro acesso.
+   Recarregue com F5 e funciona.
+
+3. Filtro de período diferente de uma tela pra outra.
+
+Cuidado: parecido não é igual. Lista vazia DEPOIS de trocar o período
+é bug. Tela branca que não volta com F5 é bug. A dúvida joga a favor de
+apontar.
+
+
+-------------------------------------------------------------------
+4. ANTES DE COMEÇAR
+-------------------------------------------------------------------
+
+Crie uma clínica nova pelo cadastro e teste nela.
+
+O ambiente tem umas 16 clínicas de teste antigas com dado bagunçado, e
+testar naquilo faz você perder tempo com lixo que não é seu.
+
+Faça o cadastro do zero, como uma clínica de verdade faria. O primeiro
+cadastro já é o primeiro teste: anote quanto tempo levou e o que te
+confundiu.
+
+
+-------------------------------------------------------------------
+5. O ROTEIRO, DIA A DIA
+-------------------------------------------------------------------
+
+Siga a ordem. Cada dia monta em cima do anterior, igual à rotina real.
+Em cada dia: faça, confira, e responda a pergunta de gestão — que é
+onde mora o seu valor.
+
+
+DIA 1 · 17/08 — NASCER A CLÍNICA
+
+  Faça: cadastro da clínica do zero. Depois vá em Configurações e
+  preencha tudo que uma clínica preencheria antes de abrir a porta:
+  dados, especialidades, procedimentos e preços, formas de pagamento,
+  horários, profissionais. Por fim, em Equipe, convide um segundo
+  acesso (pode ser um e-mail seu alternativo) como secretária.
+
+  Confira:
+   - O que você cadastrou continua lá depois de sair e voltar?
+   - A secretária que você convidou consegue entrar?
+   - Com o acesso de secretária, o que ela vê e o que ela não vê? Ela
+     alcança o financeiro? Deveria?
+
+  Pergunta de gestão: uma clínica consegue se configurar sozinha, sem
+  ninguém explicando? Faltou algum cadastro que toda clínica tem —
+  convênio, sala, equipamento, tipo de retorno?
+
+
+DIA 2 · 18/08 — O PACIENTE CHEGA
+
+  Faça: em Atendimentos, cadastre 3 ou 4 interessados como chegam na
+  vida real (indicação, Instagram, telefone) e mova pelo funil. Leve um
+  deles até virar consulta agendada. Depois vá em Pacientes e cadastre
+  um paciente completo. Em Anamnese, envie um formulário pra esse
+  paciente e preencha como se fosse ele, pelo link.
+
+  Confira:
+   - A origem do paciente ficou registrada de forma que dê pra saber,
+     depois, de onde vem quem fecha?
+   - O que o paciente respondeu na anamnese aparece na ficha dele?
+   - Dá pra ver a lista de quem ainda não respondeu?
+
+  Pergunta de gestão: o funil corresponde a como uma clínica realmente
+  capta? Faltou etapa — orçamento enviado, em negociação, perdido com
+  motivo? A anamnese cobre o que a especialidade precisa perguntar?
+
+
+DIA 3 · 19/08 — A AGENDA GIRA
+
+  Faça: agende consultas pros pacientes criados — inclusive uma pra
+  amanhã e uma pra semana que vem. Passe uma consulta por todos os
+  estados: confirmada, compareceu, não compareceu, cancelada. Registre
+  o que foi feito e o valor. Em Tarefas, veja o que o sistema gerou
+  sozinho e crie uma tarefa manual (ligar pra confirmar).
+
+  Confira:
+   - Dá pra ver o dia de amanhã de forma útil pra quem vai confirmar
+     por WhatsApp de manhã?
+   - Um "não compareceu" muda alguma coisa no resto do sistema, ou
+     morre ali?
+   - A consulta atendida virou dinheiro a receber automaticamente?
+
+  Pergunta de gestão: a agenda serve pra operar o dia, ou só pra
+  registrar depois? O que a secretária precisa ver às 8h da manhã está
+  numa tela só? Falta bloqueio de horário, encaixe, retorno, lista de
+  espera?
+
+
+DIA 4 · 20/08 — O DINHEIRO
+
+  Faça: em Contas a Receber, encontre o que as consultas geraram;
+  receba uma à vista, deixe outra vencer e parcele uma terceira. Em
+  Contas a Pagar, lance uma despesa fixa (aluguel) e uma variável
+  (material). Abra o Fluxo de Caixa e leia o mês.
+
+  Confira:
+   - A soma bate com o que você registrou? Confira na mão.
+   - Uma consulta cancelada sumiu do que há pra receber, ou ficou
+     cobrando?
+   - O que a clínica deve ao médico parceiro (repasse) aparece em algum
+     lugar?
+
+  Pergunta de gestão: esta é a área mais importante pro nosso
+  posicionamento. O dono da clínica consegue responder, olhando estas
+  telas: quanto entrou, quanto falta entrar, quanto sai, e o que sobra?
+  Se não consegue, aqui está o apontamento mais valioso da bateria
+  inteira.
+
+
+DIA 5 · 21/08 — A LEITURA E O VEREDITO
+
+  Faça: abra o Dashboard e depois Relatórios, um por um. Leia Insights
+  IA. Por último, volte ao começo: entre com o acesso de secretária e
+  tente fazer o dia dela.
+
+  Confira:
+   - Os números do Dashboard batem com o que você lançou a semana
+     inteira?
+   - Algum relatório mostra número que você sabe que está errado?
+   - A secretária consegue trabalhar sem esbarrar em bloqueio que não
+     faz sentido — e sem alcançar o que não deveria?
+
+  Pergunta final, escreva a resposta no Notion: você entregaria este
+  sistema pra uma clínica cliente sua na segunda-feira? Se não, o que
+  exatamente impede? Se sim, o que você avisaria antes?
+
+
+-------------------------------------------------------------------
+6. UM ITEM DE SEGURANÇA, DO SEU JEITO
+-------------------------------------------------------------------
+
+Não precisa entender de tecnologia pra testar o que mais importa aqui:
+uma clínica jamais pode ver o dado de outra.
+
+Faça este teste no Dia 5, leva 3 minutos:
+
+  1. Anote o endereço (URL) de um paciente seu — a parte final, com
+     números e letras.
+  2. Saia da sua clínica e entre com um acesso de outra clínica de
+     teste.
+  3. Cole aquele endereço na barra do navegador.
+
+O esperado é NÃO ACHAR NADA — erro, tela vazia ou "sem permissão".
+
+Se aparecer o seu paciente: pare o teste e me ligue na hora. Não
+registre no Notion. Isso é a coisa mais grave que pode acontecer neste
+produto e não deve ficar escrito em lugar compartilhado.
+
+
+-------------------------------------------------------------------
+7. COMO REGISTRAR
+-------------------------------------------------------------------
+
+Tudo vai pro Notion, na base Apontamentos.
+
+Cada rodada de teste ganha a sua própria página lá dentro, com nome que
+identifique o evento e a data. A sua é:
+
+    Bateria de testes — Vinícius — 17 a 21/08 — pré-lançamento
+
+É isso que permite saber depois de onde veio cada apontamento e
+priorizar a correção.
+
+Dentro da sua página, cada apontamento precisa de quatro coisas, e só:
+
+    1. Onde aconteceu (a tela)
+    2. O que você fez, na ordem
+    3. O que aconteceu
+    4. O que você esperava que acontecesse
+
+Depois classifique — Bug ou Backlog, na dúvida Bug — e marque se
+ATRAPALHA MUITO.
+
+Essa última marcação é a mais importante de todas: o número de bugs
+abertos marcados como "atrapalha muito" precisa chegar a zero antes de
+abrirmos pra cliente. É a trava de lançamento. Por isso preencher isso
+direito importa mais do que escrever bonito.
+
+Print ajuda muito. Se der, cole na página.
+
+Se travar de vez e não conseguir seguir, pule pro dia seguinte e
+registre o travamento — não perca o dia tentando contornar.
+
+
+MODELO PRONTO, pra copiar e colar:
+
+    Onde: <tela>
+    O que eu fiz:
+      1.
+      2.
+      3.
+    O que aconteceu:
+    O que eu esperava:
+    Tipo: Bug / Backlog
+    Atrapalha muito: sim / não
+
+
+-------------------------------------------------------------------
+8. O ATALHO — DEIXE O CLAUDE ESCREVER PRA VOCÊ
+-------------------------------------------------------------------
+
+Você não precisa escrever nada disso na mão.
+
+Abra o Claude Code na pasta do projeto (aquele que clonamos no vídeo) e
+simplesmente conte o que aconteceu, do jeito que você contaria no
+telefone:
+
+    "Cadastrei um paciente em Pacientes, salvei, voltei pra lista e
+     ele não está lá."
+
+Ele devolve o registro pronto, no formato certo, já classificado — é
+só colar no Notion. Se o que você viu for um dos três não-bugs
+conhecidos, ele te avisa antes de você gastar tempo registrando.
+
+Se ele não pegar de primeira, diga: "usa a skill nx-apontamento".
+
+
+-------------------------------------------------------------------
+9. O QUE ACONTECE DEPOIS
+-------------------------------------------------------------------
+
+22 e 23/08 — Arthur corrige tudo que virou bug.
+24 a 26/08 — Erick roda a bateria dele sobre a versão já corrigida.
+01/09      — lançamento.
+
+Sua bateria é a que define o que é corrigido. Um apontamento seu que
+ninguém mais faria vale mais que dez erros de digitação que qualquer
+um acharia.
+
+Qualquer coisa, me chama. — Arthur

@@ -23,9 +23,10 @@ ele descobrir pode virar registro no repositório na hora.
 
 ## O que ainda falta para ele começar
 
-- [ ] **Planilha de apontamentos** — criar no Google Sheets a partir de
-      `planilha-apontamentos-baterias.xlsx` (arquivo pronto nesta pasta) e
-      distribuir o link no grupo. Ainda não foi distribuída.
+- [x] **Canal de registro** — resolvido de outro jeito: em vez da planilha do
+      Google Sheets, os apontamentos vão para a base **Apontamentos** no Notion,
+      com uma página por rodada de teste. O `planilha-apontamentos-baterias.xlsx`
+      fica como registro histórico, não é mais o canal.
 - [ ] **Avisar dos três não-bugs** — o rascunho da mensagem está pronto e
       aguarda revisão do Arthur. Sem ele, a bateria gera falso-positivo.
 - [ ] **Confirmar que ele viu** `bateria-testes-vinicius-17-21.md`. O arquivo

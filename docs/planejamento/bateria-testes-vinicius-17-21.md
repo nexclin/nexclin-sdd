@@ -5,7 +5,8 @@
 > o que está sendo testado.
 > **Onde testar:** `https://nexclin.lovable.app`
 > **Quanto tempo:** cerca de 45 minutos por dia, 5 dias.
-> **Onde registrar:** planilha de apontamentos distribuída no grupo.
+> **Onde registrar:** base **Apontamentos** no Notion, na sua página da rodada
+> — `Bateria de testes — Vinícius — 17 a 21/08 — pré-lançamento`.
 
 ---
 
@@ -39,9 +40,9 @@ Na dúvida, marque **bug**.
 Nada novo entra agora. Se é ideia boa mas não impede a clínica de operar, é
 backlog — e backlog não é rejeição, é fila.
 
-A planilha tem um indicador de **trava de lançamento**: a contagem de bugs
-abertos que impedem ou atrapalham muito o uso. Esse número precisa chegar a
-zero antes de abrirmos para cliente.
+Existe uma **trava de lançamento**: a contagem de bugs abertos marcados como
+"Atrapalha muito" precisa chegar a zero antes de abrirmos para cliente. É por
+isso que preencher essa marcação direito importa mais do que escrever bonito.
 
 ---
 
@@ -187,7 +188,7 @@ secretária e tente fazer o dia dela.
 - A secretária consegue trabalhar sem esbarrar em bloqueio que não faz sentido
   — e sem alcançar o que não deveria?
 
-**Pergunta de gestão final — escreva a resposta na planilha:**
+**Pergunta de gestão final — escreva a resposta no Notion, na sua página:**
 > Você entregaria este sistema para uma clínica cliente sua na segunda-feira?
 > Se não, **o que exatamente** impede? Se sim, o que você avisaria antes?
 
@@ -207,30 +208,41 @@ Faça este teste no Dia 5, leva 3 minutos:
 
 **O esperado é não achar nada** — erro, tela vazia ou "sem permissão". Se
 aparecer o seu paciente, **pare o teste e me avise imediatamente**, por
-telefone. Não registre na planilha: isso é a coisa mais grave que pode
+telefone. Não registre no Notion: isso é a coisa mais grave que pode
 acontecer neste produto e não deve ficar escrito em lugar compartilhado.
 
 ---
 
 ## 6. Como registrar
 
-Para cada apontamento, na planilha:
+Tudo vai para a base **Apontamentos** no Notion. Cada rodada de teste ganha a
+sua própria página lá dentro, com nome que identifique o evento e a data — a
+sua é `Bateria de testes — Vinícius — 17 a 21/08 — pré-lançamento`. É isso que
+permite saber depois de onde veio cada apontamento e priorizar a correção.
+
+Dentro da sua página, registre o que encontrar. Cada apontamento precisa de
+quatro coisas, e só:
 
 | Campo | O que escrever |
 |---|---|
-| Tela | onde aconteceu (ex.: Contas a Receber) |
+| Onde aconteceu | a tela (ex.: Contas a Receber) |
 | O que eu fiz | os passos, na ordem |
 | O que aconteceu | o que você viu |
 | O que eu esperava | o que deveria ter acontecido |
-| Tipo | Bug ou Backlog (na dúvida, Bug) |
-| Atrapalha muito? | sim / não — é isso que alimenta a trava de lançamento |
 
-**Print ajuda muito.** Se der, cole ou anexe.
+Depois classifique — **Bug** ou **Backlog**, na dúvida Bug — e marque se
+**atrapalha muito**. É essa marcação que alimenta a trava de lançamento.
+
+Você pode escrever direto no Notion, ou descrever o problema para o **Claude
+Code na pasta do projeto** e pedir que ele escreva o registro: a skill
+`nx-apontamento` já conhece o sistema e devolve o bloco no formato certo,
+pronto para colar. Ele também te avisa quando o que você viu é um dos três
+não-bugs conhecidos.
+
+**Print ajuda muito.** Se der, cole na página.
 
 Se travar de vez e não conseguir seguir, pule para o dia seguinte e registre o
 travamento — não perca o dia tentando contornar.
-
----
 
 ## 7. O que acontece depois
 

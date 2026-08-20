@@ -1,0 +1,934 @@
+<title>Bateria Pré-Lançamento</title>
+
+<style>
+  /* ---------- tokens: tema claro (bone) ---------- */
+  :root {
+    --bone:        #F4F1EC;
+    --paper:       #FAF8F4;
+    --raised:      #FFFFFF;
+    --ink:         #0E1620;
+    --slate:       #3A4A5C;
+    --muted:       #6B7A8C;
+    --line:        #E5E0D8;
+    --line-soft:   #EFEBE3;
+    --teal:        #1F8C8C;
+    --teal-deep:   #186F6F;
+    --teal-wash:   #E4EFEC;
+    --navy:        #141C28;
+    --navy-soft:   #1E2A3A;
+    --on-navy:     #EDEAE3;
+    --on-navy-dim: #8FA0AF;
+    --shadow:      0 1px 2px rgba(14,22,32,.05), 0 8px 24px -16px rgba(14,22,32,.28);
+    --radius:      3px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bone:      #101825;
+      --paper:     #141C28;
+      --raised:    #1E2A3A;
+      --ink:       #E9E5DD;
+      --slate:     #B9C3CE;
+      --muted:     #8593A3;
+      --line:      #2A3646;
+      --line-soft: #212C3B;
+      --teal:      #2BA8A8;
+      --teal-deep: #46C2C2;
+      --teal-wash: #17313A;
+      --navy:      #0A111B;
+      --navy-soft: #16202E;
+      --on-navy:   #E9E5DD;
+      --on-navy-dim: #8593A3;
+      --shadow:    0 1px 2px rgba(0,0,0,.3), 0 8px 24px -16px rgba(0,0,0,.7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bone:      #101825;
+    --paper:     #141C28;
+    --raised:    #1E2A3A;
+    --ink:       #E9E5DD;
+    --slate:     #B9C3CE;
+    --muted:     #8593A3;
+    --line:      #2A3646;
+    --line-soft: #212C3B;
+    --teal:      #2BA8A8;
+    --teal-deep: #46C2C2;
+    --teal-wash: #17313A;
+    --navy:      #0A111B;
+    --navy-soft: #16202E;
+    --on-navy:   #E9E5DD;
+    --on-navy-dim: #8593A3;
+    --shadow:    0 1px 2px rgba(0,0,0,.3), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bone);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+  }
+
+  .display {
+    font-family: "Segoe UI Variable Display", "Segoe UI Semibold", "Avenir Next",
+                 system-ui, sans-serif;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* ---------- barra de navegação ---------- */
+  nav.rail {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--bone) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .rail-inner {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 10px 28px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .rail-mark {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    white-space: nowrap;
+    padding-right: 4px;
+    border-right: 1px solid var(--line);
+  }
+  .rail-mark span { color: var(--teal); }
+  nav.rail a {
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition: color .15s, border-color .15s;
+  }
+  nav.rail a:hover { color: var(--ink); border-bottom-color: var(--teal); }
+  nav.rail a:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+
+  /* ---------- estrutura ---------- */
+  main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 28px 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  section { display: flex; flex-direction: column; gap: 18px; scroll-margin-top: 68px; }
+  h2 { font-size: 25px; font-weight: 600; margin: 0; line-height: 1.25; }
+  h3 { font-size: 17px; font-weight: 600; margin: 0; }
+  p  { margin: 0; max-width: 66ch; }
+  .sec-head { display: flex; flex-direction: column; gap: 5px; }
+  .prose { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ---------- cabeçalho ---------- */
+  header.hero {
+    padding: 68px 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  header.hero h1 { font-size: 46px; font-weight: 600; margin: 0; line-height: 1.06; }
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 26px;
+    font-size: 13px;
+    color: var(--muted);
+    padding-top: 6px;
+    border-top: 1px solid var(--line);
+  }
+  .hero-meta b { color: var(--slate); font-weight: 600; }
+  .hero-meta a { color: var(--teal-deep); text-decoration: none; border-bottom: 1px solid var(--line); }
+  .hero-meta a:hover { border-bottom-color: var(--teal); }
+
+  .thesis {
+    background: var(--navy);
+    color: var(--on-navy);
+    padding: 30px 32px;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .thesis .eyebrow { color: var(--on-navy-dim); }
+  .thesis q {
+    font-family: "Segoe UI Variable Display", "Avenir Next", system-ui, sans-serif;
+    font-size: 27px;
+    line-height: 1.24;
+    font-weight: 500;
+    quotes: none;
+    letter-spacing: -0.015em;
+  }
+  .thesis q b { color: var(--teal-deep); font-weight: 500; }
+  .thesis p { color: var(--on-navy-dim); font-size: 14.5px; max-width: 62ch; }
+
+  /* ---------- cartões ---------- */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card p { font-size: 14.5px; color: var(--slate); }
+  .card .verdict {
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 10px;
+    margin-top: 2px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .card--bug { border-left: 3px solid var(--teal); }
+
+  .chip {
+    display: inline-block;
+    align-self: flex-start;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 2px;
+  }
+  .chip--solid  { background: var(--ink); color: var(--bone); }
+  .chip--hollow { border: 1px solid var(--line); color: var(--muted); }
+  .chip--teal   { background: var(--teal); color: #FFF; }
+
+  .doubt {
+    background: var(--teal-wash);
+    border-radius: var(--radius);
+    padding: 15px 20px;
+    font-size: 15px;
+    color: var(--ink);
+    border-left: 3px solid var(--teal);
+  }
+  .doubt b { font-weight: 700; }
+
+  /* ---------- trava ---------- */
+  .lock {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    flex-wrap: wrap;
+  }
+  .lock-num {
+    font-family: "Segoe UI Variable Display", "Avenir Next", system-ui, sans-serif;
+    font-size: 60px;
+    line-height: 1;
+    font-weight: 300;
+    color: var(--teal);
+    font-variant-numeric: tabular-nums;
+  }
+  .lock p { font-size: 14.5px; color: var(--slate); flex: 1 1 340px; }
+
+  /* ---------- não-bugs ---------- */
+  .known { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+  .known-row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 6px 28px;
+    padding: 15px 2px;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .known-row strong { font-size: 15px; font-weight: 600; }
+  .known-row span { font-size: 14px; color: var(--muted); }
+
+  /* ---------- dias ---------- */
+  .days { display: flex; flex-direction: column; gap: 12px; }
+  .day {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .15s;
+  }
+  .day[data-today="1"] { border-color: var(--teal); box-shadow: var(--shadow); }
+  .day-head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: none;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+  .day-head:focus-visible { outline: 2px solid var(--teal); outline-offset: -3px; }
+  .day-n {
+    font-family: "Segoe UI Variable Display", "Avenir Next", system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
+    min-width: 22px;
+  }
+  .day[data-done="1"] .day-n { color: var(--teal); }
+  .day-t { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+  .day-t strong { font-size: 16.5px; font-weight: 600; }
+  .day-t span { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .day-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--teal); border: 1px solid var(--teal); border-radius: 2px; padding: 2px 7px;
+  }
+  .caret { color: var(--muted); font-size: 12px; transition: transform .2s; }
+  .day[open-panel] .caret { transform: rotate(180deg); }
+
+  .day-body {
+    display: none;
+    padding: 4px 20px 22px;
+    border-top: 1px solid var(--line-soft);
+    flex-direction: column;
+    gap: 18px;
+  }
+  .day[open-panel] .day-body { display: flex; }
+  .block { display: flex; flex-direction: column; gap: 7px; padding-top: 14px; }
+  .block > .eyebrow { color: var(--teal-deep); }
+  .block p, .block li { font-size: 14.8px; color: var(--slate); }
+  .block ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .block--ask {
+    background: var(--bone);
+    border-radius: var(--radius);
+    padding: 15px 18px;
+    gap: 8px;
+  }
+  .block--ask p { color: var(--ink); font-size: 15px; }
+
+  .day-check {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 13px; color: var(--muted); cursor: pointer;
+    padding-top: 4px; align-self: flex-start;
+  }
+  .day-check input { accent-color: var(--teal); width: 15px; height: 15px; cursor: pointer; }
+
+  /* ---------- alerta grave ---------- */
+  .grave {
+    background: var(--navy);
+    color: var(--on-navy);
+    border-radius: var(--radius);
+    padding: 28px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-left: 4px solid var(--teal);
+  }
+  .grave .eyebrow { color: var(--teal-deep); }
+  .grave h3 { font-size: 20px; }
+  .grave p, .grave li { color: var(--on-navy-dim); font-size: 14.8px; max-width: 64ch; }
+  .grave ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .grave strong { color: var(--on-navy); font-weight: 600; }
+
+  /* ---------- registro ---------- */
+  .fields { display: flex; flex-direction: column; gap: 0; }
+  .field {
+    display: flex; gap: 16px; align-items: baseline;
+    padding: 13px 2px; border-bottom: 1px solid var(--line);
+  }
+  .fields .field:first-child { border-top: 1px solid var(--line); }
+  .field-n {
+    font-size: 12px; font-weight: 700; color: var(--teal);
+    font-variant-numeric: tabular-nums; min-width: 18px;
+  }
+  .field strong { font-size: 15px; font-weight: 600; }
+  .field span { font-size: 14px; color: var(--muted); }
+
+  .tmpl {
+    background: var(--navy);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .tmpl-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 16px; border-bottom: 1px solid var(--navy-soft);
+  }
+  .tmpl-bar .eyebrow { color: var(--on-navy-dim); }
+  .copy {
+    font: inherit; font-size: 12px; font-weight: 600;
+    background: var(--navy-soft); color: var(--on-navy);
+    border: 1px solid transparent; border-radius: 2px;
+    padding: 5px 12px; cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .copy:hover { background: var(--teal); color: #FFF; }
+  .copy:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  .copy[data-ok="1"] { background: var(--teal); color: #FFF; }
+  pre.tmpl-body {
+    margin: 0; padding: 18px 20px; overflow-x: auto;
+    color: var(--on-navy);
+    font-family: "Cascadia Mono", Consolas, "SF Mono", ui-monospace, monospace;
+    font-size: 13px; line-height: 1.72;
+  }
+  pre.tmpl-body b { color: var(--teal-deep); font-weight: 400; }
+
+  /* ---------- atalho claude ---------- */
+  .shortcut {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--paper);
+    padding: 24px 26px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .say {
+    background: var(--bone); border-left: 3px solid var(--teal);
+    border-radius: var(--radius); padding: 13px 18px;
+    font-size: 15px; color: var(--ink); font-style: italic;
+  }
+
+  /* ---------- fim ---------- */
+  .after { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+  .after-row {
+    display: flex; gap: 20px; align-items: baseline;
+    padding: 13px 2px; border-bottom: 1px solid var(--line); font-size: 15px;
+  }
+  .after-row time {
+    font-size: 12.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); min-width: 116px; font-variant-numeric: tabular-nums;
+  }
+  .after-row[data-launch="1"] time, .after-row[data-launch="1"] { color: var(--teal); font-weight: 600; }
+
+  footer {
+    padding-top: 22px; border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--muted); max-width: 64ch;
+  }
+
+  @media (max-width: 720px) {
+    header.hero { padding-top: 44px; }
+    header.hero h1 { font-size: 34px; }
+    .thesis q { font-size: 22px; }
+    .cards { grid-template-columns: 1fr; }
+    .known-row { grid-template-columns: 1fr; }
+    .field { flex-wrap: wrap; }
+    main { padding: 0 20px 72px; gap: 44px; }
+    .rail-inner { padding: 10px 20px; }
+    .lock-num { font-size: 46px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+
+<nav class="rail">
+  <div class="rail-inner">
+    <span class="rail-mark">NEX<span>CLIN</span></span>
+    <a href="#regra">A regra</a>
+    <a href="#sabemos">Já sabemos</a>
+    <a href="#roteiro">Roteiro</a>
+    <a href="#seguranca">Segurança</a>
+    <a href="#registrar">Registrar</a>
+    <a href="#claude">Atalho</a>
+  </div>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <p class="eyebrow">Pré-lançamento · 01 / 09</p>
+    <h1 class="display">Bateria de testes<br>Vinícius</h1>
+    <div class="hero-meta">
+      <span><b>Quando</b> 17 a 21 de agosto</span>
+      <span><b>Ritmo</b> ~45 min por dia</span>
+      <span><b>Onde testar</b> <a href="https://nexclin.lovable.app">nexclin.lovable.app</a></span>
+      <span><b>Onde registrar</b> Notion · base Apontamentos</span>
+    </div>
+  </header>
+
+  <section class="thesis">
+    <p class="eyebrow">O seu olhar</p>
+    <q class="display">O sistema dá conta da <b>rotina real</b> de uma clínica?</q>
+    <p>Você não está caçando erro de programação — está respondendo essa pergunta só.
+       Falta campo? Falta uma etapa? O fluxo bate com o que você vê na consultoria?
+       Um sistema pode não ter nenhum erro técnico e ainda assim ser inútil para quem
+       atende paciente. É exatamente isso que só você consegue enxergar.</p>
+    <p>Você é o primeiro a testar, e a ordem tem motivo: falha de regra de negócio muda
+       tela, e não adianta avaliar a beleza de uma tela que ainda vai mudar. O Erick vem
+       depois, de 24 a 26, olhando fluidez e experiência sobre a versão já corrigida.</p>
+  </section>
+
+  <section id="regra">
+    <div class="sec-head">
+      <p class="eyebrow">01 / Classificação</p>
+      <h2 class="display">A regra, que é uma só</h2>
+    </div>
+    <div class="cards">
+      <div class="card card--bug">
+        <span class="chip chip--solid">Bug</span>
+        <p>O sistema faz algo errado, ou não faz o que deveria fazer.</p>
+        <p class="verdict">Correção imediata, antes do lançamento.</p>
+      </div>
+      <div class="card">
+        <span class="chip chip--hollow">Backlog</span>
+        <p>O sistema faz certo, mas você gostaria que fizesse diferente ou a mais.</p>
+        <p class="verdict">Fica registrado e entra depois do lançamento.</p>
+      </div>
+    </div>
+    <p class="doubt"><b>Na dúvida, marque Bug.</b> É melhor o Arthur descartar um item
+       do que perder um problema real. E backlog não é rejeição — é fila.</p>
+  </section>
+
+  <section id="trava">
+    <div class="sec-head">
+      <p class="eyebrow">02 / O número que todos acompanham</p>
+      <h2 class="display">Trava de lançamento</h2>
+    </div>
+    <div class="lock">
+      <span class="lock-num">0</span>
+      <p>O número de bugs abertos marcados como <b>“Atrapalha muito”</b> precisa chegar
+         a zero antes de abrirmos para cliente. É por isso que preencher essa marcação
+         direito importa mais do que escrever bonito.</p>
+    </div>
+  </section>
+
+  <section id="sabemos">
+    <div class="sec-head">
+      <p class="eyebrow">03 / Antes de começar</p>
+      <h2 class="display">Crie uma clínica nova, sua</h2>
+    </div>
+    <div class="prose">
+      <p>Não teste no dado que já está lá. O ambiente tem cerca de 16 clínicas de teste
+         antigas, com dado bagunçado de várias tentativas — testar em cima daquilo faz
+         você perder tempo entendendo lixo que não é seu.</p>
+      <p>Faça o cadastro do zero, como uma clínica de verdade faria, e rode tudo dentro
+         dela. <b>O primeiro cadastro já é o primeiro teste:</b> anote quanto tempo levou
+         e o que te confundiu.</p>
+    </div>
+
+    <h3 class="display" style="margin-top:14px">Três coisas que já sabemos</h3>
+    <p style="font-size:14.5px;color:var(--muted)">Se acontecerem, não precisa registrar.</p>
+    <div class="known">
+      <div class="known-row">
+        <strong>Lista vazia em Pacientes ou Consultas</strong>
+        <span>O filtro vem em “Este mês” e o cadastro some. Troque o período e tudo aparece.</span>
+      </div>
+      <div class="known-row">
+        <strong>Tela branca no primeiro acesso</strong>
+        <span>Recarregue com F5 e funciona.</span>
+      </div>
+      <div class="known-row">
+        <strong>Filtro de período diferente de uma tela para outra</strong>
+        <span>Três vocabulários convivendo. Conhecido.</span>
+      </div>
+    </div>
+    <p class="doubt"><b>Parecido não é igual.</b> Lista vazia <i>depois</i> de trocar o
+       período é bug. Tela branca que não volta com F5 é bug. A dúvida joga a favor de apontar.</p>
+  </section>
+
+  <section id="roteiro">
+    <div class="sec-head">
+      <p class="eyebrow">04 / Cinco dias</p>
+      <h2 class="display">O roteiro, dia a dia</h2>
+    </div>
+    <p>Siga a ordem — cada dia monta em cima do anterior, igual à rotina real. Em cada
+       item: <b>faça</b>, <b>confira</b>, e responda a <b>pergunta de gestão</b>, que é
+       onde mora o seu valor.</p>
+
+    <div class="days" id="days">
+
+      <article class="day" data-day="1" data-date="2026-08-17">
+        <button class="day-head" type="button">
+          <span class="day-n">01</span>
+          <span class="day-t"><strong>Nascer a clínica</strong><span>17 / 08</span></span>
+          <span class="day-badge" hidden>Hoje</span>
+          <span class="caret">▼</span>
+        </button>
+        <div class="day-body">
+          <div class="block">
+            <p class="eyebrow">Faça</p>
+            <p>Cadastro da clínica do zero. Depois vá em <b>Configurações</b> e preencha
+               tudo que uma clínica preencheria antes de abrir a porta: dados,
+               especialidades, procedimentos e preços, formas de pagamento, horários,
+               profissionais. Por fim, em <b>Equipe</b>, convide um segundo acesso
+               (pode ser um e-mail seu alternativo) no papel de secretária.</p>
+          </div>
+          <div class="block">
+            <p class="eyebrow">Confira</p>
+            <ul>
+              <li>O que você cadastrou continua lá depois de sair e voltar?</li>
+              <li>A secretária que você convidou consegue entrar?</li>
+              <li>Com o acesso de secretária, o que ela <b>vê</b> e o que ela <b>não vê</b>?
+                  Ela alcança o financeiro? Deveria?</li>
+            </ul>
+          </div>
+          <div class="block block--ask">
+            <p class="eyebrow">Pergunta de gestão</p>
+            <p>Uma clínica consegue se configurar sozinha, sem ninguém explicando? Faltou
+               algum cadastro que toda clínica tem — convênio, sala, equipamento, tipo de
+               retorno?</p>
+          </div>
+          <label class="day-check"><input type="checkbox"> Dia concluído</label>
+        </div>
+      </article>
+
+      <article class="day" data-day="2" data-date="2026-08-18">
+        <button class="day-head" type="button">
+          <span class="day-n">02</span>
+          <span class="day-t"><strong>O paciente chega</strong><span>18 / 08</span></span>
+          <span class="day-badge" hidden>Hoje</span>
+          <span class="caret">▼</span>
+        </button>
+        <div class="day-body">
+          <div class="block">
+            <p class="eyebrow">Faça</p>
+            <p>Em <b>Atendimentos</b>, cadastre 3 ou 4 interessados como chegam na vida
+               real (indicação, Instagram, telefone) e mova pelo funil. Leve um deles até
+               virar consulta agendada. Depois vá em <b>Pacientes</b> e cadastre um
+               paciente completo. Em <b>Anamnese</b>, envie um formulário para esse
+               paciente e preencha-o como se fosse ele, pelo link.</p>
+          </div>
+          <div class="block">
+            <p class="eyebrow">Confira</p>
+            <ul>
+              <li>A origem do paciente ficou registrada de forma que dê para saber,
+                  depois, de onde vem quem fecha?</li>
+              <li>O que o paciente respondeu na anamnese aparece na ficha dele?</li>
+              <li>Dá para ver a lista de quem ainda não respondeu?</li>
+            </ul>
+          </div>
+          <div class="block block--ask">
+            <p class="eyebrow">Pergunta de gestão</p>
+            <p>O funil corresponde a como uma clínica realmente capta? Faltou etapa —
+               orçamento enviado, em negociação, perdido com motivo? A anamnese cobre o
+               que a especialidade precisa perguntar?</p>
+          </div>
+          <label class="day-check"><input type="checkbox"> Dia concluído</label>
+        </div>
+      </article>
+
+      <article class="day" data-day="3" data-date="2026-08-19">
+        <button class="day-head" type="button">
+          <span class="day-n">03</span>
+          <span class="day-t"><strong>A agenda gira</strong><span>19 / 08</span></span>
+          <span class="day-badge" hidden>Hoje</span>
+          <span class="caret">▼</span>
+        </button>
+        <div class="day-body">
+          <div class="block">
+            <p class="eyebrow">Faça</p>
+            <p>Agende consultas para os pacientes criados — inclusive uma para
+               <b>amanhã</b> e uma para <b>semana que vem</b>. Passe uma consulta por
+               todos os estados: confirmada, compareceu, não compareceu, cancelada.
+               Registre o que foi feito e o valor. Em <b>Tarefas</b>, veja o que o
+               sistema gerou sozinho e crie uma tarefa manual (ligar para confirmar).</p>
+          </div>
+          <div class="block">
+            <p class="eyebrow">Confira</p>
+            <ul>
+              <li>Dá para ver o dia de amanhã de forma útil para quem vai confirmar por
+                  WhatsApp de manhã?</li>
+              <li>Um “não compareceu” muda alguma coisa no resto do sistema, ou morre ali?</li>
+              <li>A consulta atendida virou dinheiro a receber automaticamente?</li>
+            </ul>
+          </div>
+          <div class="block block--ask">
+            <p class="eyebrow">Pergunta de gestão</p>
+            <p>A agenda serve para <b>operar o dia</b>, ou só para registrar depois? O que
+               a secretária precisa ver às 8h da manhã está numa tela só? Falta bloqueio
+               de horário, encaixe, retorno, lista de espera?</p>
+          </div>
+          <label class="day-check"><input type="checkbox"> Dia concluído</label>
+        </div>
+      </article>
+
+      <article class="day" data-day="4" data-date="2026-08-20">
+        <button class="day-head" type="button">
+          <span class="day-n">04</span>
+          <span class="day-t"><strong>O dinheiro</strong><span>20 / 08</span></span>
+          <span class="day-badge" hidden>Hoje</span>
+          <span class="caret">▼</span>
+        </button>
+        <div class="day-body">
+          <div class="block">
+            <p class="eyebrow">Faça</p>
+            <p>Em <b>Contas a Receber</b>, encontre o que as consultas geraram; receba uma
+               à vista, deixe outra vencer e parcele uma terceira. Em <b>Contas a
+               Pagar</b>, lance uma despesa fixa (aluguel) e uma variável (material).
+               Abra o <b>Fluxo de Caixa</b> e leia o mês.</p>
+          </div>
+          <div class="block">
+            <p class="eyebrow">Confira</p>
+            <ul>
+              <li>A soma bate com o que você registrou? Confira na mão.</li>
+              <li>Uma consulta cancelada sumiu do que há para receber, ou ficou cobrando?</li>
+              <li>O que a clínica deve ao médico parceiro (repasse) aparece em algum lugar?</li>
+            </ul>
+          </div>
+          <div class="block block--ask">
+            <p class="eyebrow">Pergunta de gestão · a mais importante da semana</p>
+            <p>Esta é a área mais importante para o nosso posicionamento. O dono da
+               clínica consegue responder, olhando estas telas: <b>quanto entrou, quanto
+               falta entrar, quanto sai, e o que sobra?</b> Se não consegue, aqui está o
+               apontamento mais valioso da bateria inteira.</p>
+          </div>
+          <label class="day-check"><input type="checkbox"> Dia concluído</label>
+        </div>
+      </article>
+
+      <article class="day" data-day="5" data-date="2026-08-21">
+        <button class="day-head" type="button">
+          <span class="day-n">05</span>
+          <span class="day-t"><strong>A leitura e o veredito</strong><span>21 / 08</span></span>
+          <span class="day-badge" hidden>Hoje</span>
+          <span class="caret">▼</span>
+        </button>
+        <div class="day-body">
+          <div class="block">
+            <p class="eyebrow">Faça</p>
+            <p>Abra o <b>Dashboard</b> e depois <b>Relatórios</b>, um por um. Leia
+               <b>Insights IA</b>. Por último, volte ao começo: entre com o acesso de
+               secretária e tente fazer o dia dela. E rode o teste de segurança da seção
+               abaixo — leva 3 minutos.</p>
+          </div>
+          <div class="block">
+            <p class="eyebrow">Confira</p>
+            <ul>
+              <li>Os números do Dashboard batem com o que você lançou a semana inteira?</li>
+              <li>Algum relatório mostra número que você sabe que está errado?</li>
+              <li>A secretária consegue trabalhar sem esbarrar em bloqueio que não faz
+                  sentido — e sem alcançar o que não deveria?</li>
+            </ul>
+          </div>
+          <div class="block block--ask">
+            <p class="eyebrow">Pergunta final · escreva a resposta no Notion</p>
+            <p>Você entregaria este sistema para uma clínica cliente sua na
+               segunda-feira? Se não, <b>o que exatamente</b> impede? Se sim, o que você
+               avisaria antes?</p>
+          </div>
+          <label class="day-check"><input type="checkbox"> Dia concluído</label>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="seguranca">
+    <div class="sec-head">
+      <p class="eyebrow">05 / Dia 5, três minutos</p>
+      <h2 class="display">Um item de segurança, do seu jeito</h2>
+    </div>
+    <p>Não precisa entender de tecnologia para testar o que mais importa aqui:
+       <b>uma clínica jamais pode ver o dado de outra.</b></p>
+    <div class="grave">
+      <p class="eyebrow">Como fazer</p>
+      <ol>
+        <li>Anote o endereço (URL) de um paciente seu — a parte final, com números e letras.</li>
+        <li>Saia da sua clínica e entre com um acesso de outra clínica de teste.</li>
+        <li>Cole aquele endereço na barra do navegador.</li>
+      </ol>
+      <h3 class="display">O esperado é não achar nada</h3>
+      <p>Erro, tela vazia ou “sem permissão”. Se aparecer o seu paciente:
+         <strong>pare o teste e ligue para o Arthur imediatamente.</strong>
+         Não registre no Notion — isso é a coisa mais grave que pode acontecer neste
+         produto e não deve ficar escrito em lugar compartilhado.</p>
+    </div>
+  </section>
+
+  <section id="registrar">
+    <div class="sec-head">
+      <p class="eyebrow">06 / Notion · base Apontamentos</p>
+      <h2 class="display">Como registrar</h2>
+    </div>
+    <div class="prose">
+      <p>Cada rodada de teste ganha a sua própria página, com nome que identifique o
+         evento e a data. A sua é <b>“Bateria de testes — Vinícius — 17 a 21/08 —
+         pré-lançamento”</b>. É isso que permite saber depois de onde veio cada
+         apontamento e priorizar a correção.</p>
+      <p>Dentro da sua página, cada apontamento precisa de quatro coisas, e só:</p>
+    </div>
+
+    <div class="fields">
+      <div class="field"><span class="field-n">1</span><strong>Onde aconteceu</strong><span>a tela</span></div>
+      <div class="field"><span class="field-n">2</span><strong>O que você fez</strong><span>os passos, na ordem</span></div>
+      <div class="field"><span class="field-n">3</span><strong>O que aconteceu</strong><span>o que você viu</span></div>
+      <div class="field"><span class="field-n">4</span><strong>O que você esperava</strong><span>o que deveria ter acontecido</span></div>
+    </div>
+
+    <p>Depois classifique — <span class="chip chip--solid">Bug</span>
+       ou <span class="chip chip--hollow">Backlog</span>, na dúvida Bug — e marque
+       <span class="chip chip--teal">Atrapalha muito</span>, que é o que alimenta a
+       trava de lançamento. <b>Print ajuda muito</b>; se der, cole na página.</p>
+
+    <div class="tmpl">
+      <div class="tmpl-bar">
+        <p class="eyebrow">Modelo pronto</p>
+        <button class="copy" type="button" id="copyBtn">Copiar</button>
+      </div>
+<pre class="tmpl-body" id="tmplText"><b>Onde:</b>
+<b>O que eu fiz:</b>
+  1.
+  2.
+  3.
+<b>O que aconteceu:</b>
+<b>O que eu esperava:</b>
+
+<b>Tipo:</b> Bug / Backlog
+<b>Atrapalha muito:</b> sim / não</pre>
+    </div>
+
+    <p style="font-size:14.5px;color:var(--muted)">Se travar de vez e não conseguir
+       seguir, pule para o dia seguinte e registre o travamento — não perca o dia
+       tentando contornar.</p>
+  </section>
+
+  <section id="claude">
+    <div class="sec-head">
+      <p class="eyebrow">07 / O atalho</p>
+      <h2 class="display">Deixe o Claude escrever para você</h2>
+    </div>
+    <div class="shortcut">
+      <p>Você não precisa escrever nada disso na mão. Abra o <b>Claude Code na pasta do
+         projeto</b> — aquele que clonamos no vídeo — e conte o que aconteceu, do jeito
+         que você contaria no telefone:</p>
+      <p class="say">“Cadastrei um paciente em Pacientes, salvei, voltei para a lista e
+         ele não está lá.”</p>
+      <p>Ele devolve o registro pronto, no formato certo, já classificado — é só colar no
+         Notion. Se o que você viu for um dos três não-bugs conhecidos, ele avisa antes
+         de você gastar tempo registrando. E se algo parecer vazamento entre clínicas,
+         ele manda você ligar em vez de escrever.</p>
+      <p style="font-size:14px;color:var(--muted)">Se ele não pegar de primeira, diga:
+         <b>“usa a skill nx-apontamento”</b>.</p>
+    </div>
+  </section>
+
+  <section id="depois">
+    <div class="sec-head">
+      <p class="eyebrow">08 / Calendário</p>
+      <h2 class="display">O que acontece depois</h2>
+    </div>
+    <div class="after">
+      <div class="after-row"><time>22 e 23/08</time><span>Arthur corrige tudo que virou bug.</span></div>
+      <div class="after-row"><time>24 a 26/08</time><span>Erick roda a bateria dele sobre a versão já corrigida.</span></div>
+      <div class="after-row" data-launch="1"><time>01/09</time><span>Lançamento.</span></div>
+    </div>
+    <footer>
+      Sua bateria é a que define o que é corrigido. Um apontamento seu que ninguém mais
+      faria vale mais que dez erros de digitação que qualquer um acharia.
+    </footer>
+  </section>
+
+</main>
+
+<script>
+  (function () {
+    var KEY = 'nexclin-bateria-vinicius';
+    var days = Array.prototype.slice.call(document.querySelectorAll('.day'));
+
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { state = {}; }
+
+    function save() {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    }
+
+    // data de hoje no fuso local, em YYYY-MM-DD
+    var now = new Date();
+    var today = now.getFullYear() + '-' +
+                String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                String(now.getDate()).padStart(2, '0');
+
+    var opened = false;
+
+    days.forEach(function (day) {
+      var n     = day.getAttribute('data-day');
+      var head  = day.querySelector('.day-head');
+      var check = day.querySelector('.day-check input');
+      var badge = day.querySelector('.day-badge');
+
+      if (state[n]) { day.setAttribute('data-done', '1'); check.checked = true; }
+
+      if (day.getAttribute('data-date') === today) {
+        day.setAttribute('data-today', '1');
+        badge.hidden = false;
+        day.setAttribute('open-panel', '');
+        opened = true;
+      }
+
+      head.addEventListener('click', function () {
+        if (day.hasAttribute('open-panel')) day.removeAttribute('open-panel');
+        else day.setAttribute('open-panel', '');
+      });
+
+      check.addEventListener('click', function (e) { e.stopPropagation(); });
+      check.addEventListener('change', function () {
+        state[n] = check.checked;
+        if (check.checked) day.setAttribute('data-done', '1');
+        else day.removeAttribute('data-done');
+        save();
+      });
+    });
+
+    // fora da janela da bateria: abre o primeiro dia ainda não concluído
+    if (!opened) {
+      var next = days.filter(function (d) { return !d.hasAttribute('data-done'); })[0] || days[0];
+      next.setAttribute('open-panel', '');
+    }
+
+    // copiar o modelo
+    var btn = document.getElementById('copyBtn');
+    var pre = document.getElementById('tmplText');
+    btn.addEventListener('click', function () {
+      var text = pre.innerText;
+      function done() {
+        btn.textContent = 'Copiado';
+        btn.setAttribute('data-ok', '1');
+        setTimeout(function () {
+          btn.textContent = 'Copiar';
+          btn.removeAttribute('data-ok');
+        }, 1800);
+      }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); }
+        catch (e) { btn.textContent = 'Selecione e copie'; }
+        document.body.removeChild(ta);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, fallback);
+      } else {
+        fallback();
+      }
+    });
+  })();
+</script>
