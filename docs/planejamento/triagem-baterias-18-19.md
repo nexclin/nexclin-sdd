@@ -944,8 +944,66 @@ O artefato é a migração, e migração vai intacta para a stack nova.
 |---|---|---|
 | **V-22 + V-23** | Data do recebível por meio de pagamento (dinheiro/pix no dia, crédito antecipado em D+1, crédito sem antecipação em 30 dias) + a configuração "antecipa crédito?" da **D-5** | Regra de recebível vive no banco e na geração de parcelas. A coluna de configuração é migração literal. É o item de maior retorno do lote. |
 | **V-04B** | Linha órfã em `team_members` quando a criação de acesso falha | Ordem de transação: só gravar o membro depois do acesso existir. Erro de modelagem que se repetiria na stack nova se não fosse escrito agora. |
-| **V-24** | Plano de contas não carrega | **Só é faixa A se a causa for RLS ou dado ausente.** Se for query do front, é faixa C. Investigar antes de decidir — 20 minutos. |
-| **V-26 + V-27** | Relatórios de Contas a Pagar e DRE/DFC zerados | Mesma ressalva: se a agregação estiver errada no banco/na view, atravessa; se for montagem no front, não. Investigar juntos, suspeita de causa comum. |
+| **V-24** | Plano de contas não carrega | **Investigado em 20/08: três hipóteses descartadas.** Falta uma consulta ao banco para decidir entre faixa A e C — a query está abaixo e leva dois minutos no SQL editor. |
+| ~~**V-26 + V-27**~~ | Relatórios zerados | **Investigado em 20/08: provavelmente sintoma do V-22**, não bug próprio — o relatório filtra o mês corrente e a despesa nasce vencendo em 30 dias. Não são itens separados. Ver a investigação abaixo. |
+
+#### Investigação de 20/08 — os três indefinidos, resolvidos no código
+
+Os três itens que estavam "faixa A **se** a causa for banco" foram investigados
+lendo o clone da plataforma. Resultado:
+
+**V-26 e V-27 (relatórios zerados) — provavelmente NÃO são relatório quebrado.**
+
+`RelatorioContasPagar.tsx:38` inicializa o período em **mês corrente**
+(`startOfMonth(now)` → `endOfMonth(now)`) e a query filtra
+`due_date` dentro desse intervalo (linha 56). O Vinícius testou em **19/08**.
+Se a despesa que ele lançou nasceu com vencimento 30 dias à frente — que é
+**exatamente o que o V-22 descreve** ("por padrão ele coloca o primeiro
+vencimento para daqui a 30 dias") — ela cai em **setembro** e some de um
+relatório filtrado em agosto.
+
+Ou seja: **V-26 e V-27 são provavelmente sintoma do V-22**, não bugs próprios.
+Corrigir a regra de data do vencimento deve fazer os dois desaparecerem.
+
+Isso reforça a prioridade: **V-22/V-23 deixa de valer por si e passa a valer por
+três**. É o item de maior retorno da janela inteira, e é faixa A.
+
+Fica de pé um defeito menor e real: um relatório vazio por causa do filtro
+**parece quebrado**. Deveria dizer "nenhum lançamento neste período" em vez de
+exibir zeros — mas isso é faixa C, e vira requisito da stack nova.
+
+**V-24 (plano de contas não carrega) — não é determinável pelo código.**
+
+Foram descartadas três hipóteses, todas verificadas:
+1. *O REVOKE de 02/08 quebrou o seed* — **não**. `handle_new_user` é
+   `SECURITY DEFINER`; roda como dono da função, que mantém o EXECUTE.
+2. *As contas nascem inativas e o filtro `.eq("active", true)` as descarta* —
+   **não**. A coluna é `active boolean NOT NULL DEFAULT true`.
+3. *RLS bloqueia o SELECT* — **não**. A policy usa
+   `clinic_id = get_my_clinic_id()`, e essa função segue concedida a
+   `authenticated`.
+
+O que sobra: ou a clínica dela não tem linhas em `chart_of_accounts`, ou tem
+mas nenhuma de **nível 3** — e `chart-account-select.tsx:50` mostra **só nível
+3** (`analyticalOnly` é `true` por padrão).
+
+**Uma consulta decide, e é grátis** (SQL editor do Lovable, que precisa da sua
+sessão — não é dirigível por automação, conforme `docs/seguranca/`):
+
+```sql
+select level, count(*)
+from chart_of_accounts
+where clinic_id = (select clinic_id from profiles
+                   where user_id = (select id from auth.users
+                                    where email = '<e-mail da conta de teste>'))
+group by level order by level;
+```
+
+- **Sem linhas, ou sem nível 3** → o seed não rodou para ela: **faixa A**,
+  conserto no banco, atravessa para a stack nova.
+- **Com nível 3** → o problema é do front: **faixa C**, não corrige.
+
+---
 
 #### Faixa B — atravessa como regra. **Já está feito neste documento.**
 
