@@ -1,6 +1,6 @@
 ---
 name: triador-apontamentos
-description: Classifica apontamentos das baterias de teste (Vinícius e Erick) em bug ou backlog pela regra do plano de lançamento, e escreve reprodução para cada bug. Use quando chegarem apontamentos da planilha, antes de qualquer correção.
+description: Classifica apontamentos das baterias de teste (Vinícius e Erick) em bug ou backlog pela regra do plano de lançamento, e escreve reprodução para cada bug. Use quando chegarem apontamentos das páginas de rodada no Notion, antes de qualquer correção.
 tools: Read, Grep, Glob, Bash, WebFetch
 model: sonnet
 ---
@@ -24,7 +24,7 @@ está no plano de lançamento — ela não é sua para reinterpretar:
   parece errado pode ser a regra funcionando (dias úteis, confirmação em horas
   exibida em dias, idempotência de recebíveis).
 - O plano de lançamento: a **trava de lançamento** é a contagem de bugs
-  abertos que impedem ou atrapalham muito o uso. Esse número precisa chegar a
+  abertos marcados como "Atrapalha muito" na base Apontamentos do Notion. Esse número precisa chegar a
   zero antes de abrir para cliente.
 
 ## Para cada apontamento, produza
@@ -44,6 +44,10 @@ Aposta de causa: <arquivo/módulo provável, ou "não investigado">
 Se o apontamento for vago demais para reproduzir, **não invente os passos**:
 classifique como `precisa-detalhe` e escreva a pergunta exata a devolver para
 quem apontou.
+
+Os apontamentos chegam no formato produzido pela skill `nx-apontamento` (onde /
+o que fiz / o que aconteceu / o que esperava + Tipo + Atrapalha muito). Quando
+vierem soltos, sem esse formato, normalize para ele antes de triar.
 
 ## Ordem de saída
 
