@@ -81,6 +81,110 @@ trava.
 
 ---
 
+## RESPOSTAS DO VINÍCIUS — 20/08/2026, e a inversão que elas provocam
+
+As quatro perguntas voltaram respondidas, e veio junto um áudio que muda a
+prioridade do lote inteiro. Isto é mais recente que a seção D-7 e que a
+classificação em faixas; **onde divergir, vale o que está aqui.**
+
+### D-8 — Os relatórios saem da faixa B. São o que precisa funcionar em 01/09.
+
+Palavras dele, transcritas:
+
+> "Onde que eles vão buscar informação? No dashboard? Lógico que não, **a gente
+> não entra no dashboard**. O dashboard é só a visão ali pro médico, é uma coisa
+> simples. A gente vai buscar exatamente nos **relatórios**, a gente vai baixar
+> essas bases. Se as bases de dados estão erradas, os relatórios estão vindo
+> errados, a gente não tem consistência. (…) Pelo menos os relatórios, cara,
+> eles têm que estar rodando muito bem no dia primeiro."
+
+O contexto importa: o time dele **puxa as bases semanalmente** e trabalha em
+cima delas. Relatório errado não é incômodo de tela — é decisão errada tomada
+em cima de número errado, e ele diz na sequência que isso significa perda para
+a empresa dele.
+
+**Consequência direta:** eu classifiquei relatório como faixa B — "a regra
+escrita basta, implementar na Lovable é opcional". **Está errado.** A §2.5 do
+CLAUDE.md prevê exatamente esta exceção: *"não corrigir, salvo se impedir o
+fundador de usar o que foi prometido"*. Puxar base semanal É o que foi
+prometido ao time dele.
+
+| Item | Antes | Agora |
+|---|---|---|
+| V-25, V-26, V-27, V-28A, V-28B, V-29 (relatórios) | faixa B — regra escrita bastava | **Faixa A por exceção. Têm de funcionar em 01/09.** |
+| V-13, V-21 (dashboard) | trava, prioridade alta | **Rebaixados.** Ele não usa o dashboard; é "visão simples pro médico". A regra fica escrita, a implementação espera a stack nova. |
+
+E reforça o que já sabíamos: **V-22/V-23 continua sendo o item nº 1**. "Se as
+**bases de dados** estão erradas, os relatórios vêm errados" — a data do
+recebível é base de dados. Corrigi-la é pré-requisito de relatório certo.
+
+### D-9 — Ticket médio: por orçamento aprovado, valor bruto
+
+Resposta literal: *"Ticket médio deve ser calculado por orçamento aprovado. Se
+um mesmo paciente tem 3 orçamentos aprovados, em valores diferentes, tem que
+contabilizar 3 vezes."*
+
+O exemplo dele, que vira caso de teste:
+
+- Orçamento 1 (19/08): vitamina D 200 + consulta 1000 + tirzepatida 200 = **1400**
+- Orçamento 2 (20/08): soro alfalipoico 500 + nandrolona 200 = **700**
+- **Ticket médio = (1400 + 700) / 2 = R$ 1.050**
+
+> "O ticket médio desconsidera que ambos os orçamentos foram aprovados para o
+> mesmo paciente. Ele apenas mostra o quanto, em média, é fechado em cada venda
+> realizada para a clínica."
+
+**Indicador novo, que não existia em lugar nenhum: LTV.** A soma das compras do
+mesmo paciente no período — R$ 2.100 no exemplo. Ele chama de *"outro indicador
+importante para acompanharmos também"*. **Não é bug de nenhuma bateria: é
+requisito novo.** Vai para a stack nova, não para a janela.
+
+### D-10 — Relatório de vendas: uma linha por item, com as colunas dele
+
+Uma linha para **cada item** do orçamento — não uma linha por orçamento, e não
+uma linha por dose. Pelo exemplo: orçamento 1 gera 3 linhas, orçamento 2 gera 2.
+
+Colunas exigidas, na ordem em que ele listou: **data da venda · valor
+individual · quantidade vendida · valor pago · forma de pagamento · quantidade
+de parcelas · médico prescritor · responsável pela venda · taxas**.
+
+As duas últimas são as que faltam hoje e ele já tinha apontado no relato original.
+
+### D-11 — V-17 e V-28B são o mesmo bug: o filtro de DATA
+
+As duas respostas foram idênticas: *"Usei somente o filtro de data, mudando os
+períodos."* Tarefas e relatório de Contas a Receber, mesmo comportamento.
+
+**Dois itens da trava viram uma correção.** E há uma pista forte no próprio
+repositório: `.claude/rules/app.md` e `INVENTARIO-UI.md §5` registram como dívida
+conhecida que **existem três vocabulários de período convivendo no app**. É o
+suspeito número um — investigar o componente de período antes de olhar cada tela.
+
+### D-12 — V-29: valor orçado e valor fechado são coisas distintas
+
+Exemplo dele: prescrição de vitamina D (2 doses × 200), tirzepatida (2 × 200) e
+soro alfalipoico (2 × 500) = **R$ 1.800 orçado**. O paciente aprovou tudo menos
+uma dose de vitamina D → **R$ 1.600 fechado**.
+
+> "Hoje está constando o **valor fechado** como se fosse o valor do orçamento,
+> mas não é, são coisas distintas."
+
+O relatório deve trazer as duas colunas. Sem isso não dá para calcular conversão
+por profissional, que é o motivo de o relatório existir.
+
+### Confirmado sem ressalva
+
+Ele respondeu **"Ok pra tudo"** à lista de regras que eu havia dado como
+fechadas: taxa de conversão, fechamento parcial, novos pacientes, agenda que
+avisa em vez de bloquear, tarefa para o responsável pela venda com campo
+obrigatório na avulsa, antecipação de crédito como configuração da clínica, e
+entrada abatendo a consulta com o desenho em dois blocos adiado.
+
+**Nenhum item ficou `precisa-decisao`.** A lista de bloqueios por dependência
+externa está vazia.
+
+---
+
 ## Convenção de numeração (para acomodar a leva do Erick)
 
 - **V-01 a V-33** — esta leva, Vinícius, 18–19/08. Numeração fixa: não

@@ -114,6 +114,18 @@ backlog**. Então item de backlog não é trabalho adiado — é **requisito da 
 nova**, e deve entrar na spec do módulo correspondente em vez de dormir numa
 lista.
 
+**A exceção da faixa C tem um nome, e ele é RELATÓRIO.** Em 20/08 o Vinícius
+foi explícito: o time dele **não usa o dashboard** — puxa as bases pelos
+**relatórios**, toda semana, e decide em cima delas. Relatório errado vira
+decisão errada e perda para a clínica. Logo, **os relatórios não são faixa B:
+têm de funcionar em 01/09**, mesmo sendo a plataforma temporária. É o caso
+literal de "impedir o fundador de usar o que foi prometido". Dashboard, ao
+contrário, foi rebaixado — é "visão simples pro médico", nas palavras dele.
+
+Regra de bolso que sai daí: **antes de classificar em faixa, pergunte por onde
+o cliente realmente opera.** A intuição de quem constrói (dashboard é a cara do
+produto) não bateu com a de quem usa (a cara é o relatório).
+
 **Onde isso já está aplicado:** `docs/planejamento/triagem-baterias-18-19.md`
 (33 apontamentos das baterias do Vinícius, classificados nas três faixas, com as
 decisões de regra datadas). É o modelo para triar a bateria do Erick e o que
