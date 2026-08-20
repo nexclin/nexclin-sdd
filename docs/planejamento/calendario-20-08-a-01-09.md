@@ -1,7 +1,14 @@
 # Calendário até o lançamento — quem faz o quê
 
-**Corte:** 20/08/2026 · **Critério que decide o escopo:** `CLAUDE.md` §2.5 —
-corrigir só o que atravessa para a stack Next.js.
+**Corte:** 20/08/2026, revisado no fim do dia · **Critério:** `CLAUDE.md` §2.5.
+
+> **Revisão de 20/08, fim do dia.** O Vinícius respondeu as quatro perguntas e
+> mandou um áudio que inverte a prioridade: o time dele **não usa o dashboard**,
+> puxa as bases pelos **relatórios**, semanalmente. Relatórios passaram a ser o
+> que precisa funcionar em 01/09; dashboard desceu. Ver D-8 na triagem.
+>
+> **A2 saiu da lista** — as perguntas foram respondidas e nenhum item ficou
+> bloqueado por dependência externa.
 
 Duas colunas porque há dois tipos de trabalho que não se substituem: o que
 **só o Arthur pode fazer** (navegador logado, decisão, ato manual) e o que
@@ -16,15 +23,30 @@ Duas colunas porque há dois tipos de trabalho que não se substituem: o que
 | # | Tarefa | Tempo | Por que agora |
 |---|---|---|---|
 | A1 | Mover o export para `C:\Users\ahifr\NexClin-Backups\`, tirar o `sha256sum`, subir cópia para nuvem | 5 min | Sem a cópia em nuvem, se o Cloud da Lovable for desabilitado o dump some. |
-| A2 | Enviar as 4 perguntas ao Vinícius — texto pronto em `perguntas-vinicius-20-08.md` | 2 min | **É o gargalo.** V-13, V-21 e V-29 não andam sem resposta, e depois de 21/08 não cabe na janela. |
+| ~~A2~~ | ~~Enviar as 4 perguntas ao Vinícius~~ | — | ✅ **Feito.** Respondidas no mesmo dia, sem nenhum item restando em `precisa-decisao`. |
 | A3 | Rodar no SQL editor a consulta do V-24 (está na triagem, seção c-2) | 2 min | Decide sozinha se V-24 é faixa A (corrigir) ou C (descartar). |
 | A4 | **Reteste do convite de equipe** — convidar alguém, abrir o link, definir senha, entrar | 15 min | Item mais barato da trava: fecha sem uma linha de código. E prova o T017, que hoje é código lido, não comportamento provado. |
 
 ### Claude
-- Aguardando A2 e A3 para destravar os itens correspondentes.
-- Pode começar já: **V-22/V-23** — regra de data do recebível + configuração
-  "antecipa crédito?". Faixa A, e pela investigação derruba **três** itens
-  (V-22, V-23 e provavelmente V-26/V-27).
+- **V-22/V-23** — regra de data do recebível + configuração "antecipa crédito?".
+  Continua sendo o item nº 1, agora por dois motivos: é faixa A, e o Vinícius
+  disse que *"se as **bases de dados** estão erradas, os relatórios vêm
+  errados"*. Data de recebível é base de dados.
+- Aguardando só **A3** (a consulta do V-24).
+
+**Nova ordem dos relatórios, que agora são obrigatórios em 01/09 (D-8):**
+
+| Ordem | Item | Por quê |
+|---|---|---|
+| 1 | V-22/V-23 | Pré-requisito. Base errada ⇒ relatório errado. |
+| 2 | V-17 + V-28B | **São o mesmo bug** — filtro de data (D-11). Duas telas, uma correção. Suspeito: os três vocabulários de período registrados em `INVENTARIO-UI.md §5`. |
+| 3 | V-26 + V-27 | Prováveis sintomas do V-22; reconferir depois dele. |
+| 4 | V-29 | Separar valor orçado de valor fechado (D-12). |
+| 5 | V-25 | Relatório de vendas linha por item, com as 9 colunas (D-10). O maior dos relatórios. |
+| 6 | V-28A | Datas personalizadas. |
+
+**Rebaixados:** V-13 e V-21 (dashboard). A regra está escrita; a implementação
+espera a stack nova.
 
 ---
 
@@ -34,7 +56,7 @@ Duas colunas porque há dois tipos de trabalho que não se substituem: o que
 | # | Tarefa | Por que |
 |---|---|---|
 | A5 | Cobrar a resposta do Vinícius se não vier | Sem ela a spec da stack nova nasce com buraco. |
-| A6 | **Disparar novo export do banco** | O de hoje envelhece. É 1 a cada 24h — disparando em 21, você tem ponto de retorno fresco para as escritas de 22–23. |
+| A6 | **Disparar novo export do banco** — a tela fica em `More → Cloud → Overview → Advanced settings → Export data` | O último é de **18/08**. Não é urgente hoje (o que se perderia é dado de teste), mas em 22/08, minutos antes das escritas da Fase 2, é o que evita perder tudo que os testes produziram. ⚠️ Logo abaixo do botão estão "Pause Cloud" e **"Remove Lovable Cloud"** — este apaga o banco. |
 
 ### Claude
 - Fechar V-22/V-23.
@@ -123,6 +145,8 @@ Duas colunas porque há dois tipos de trabalho que não se substituem: o que
 
 | Item | Prazo | Dono |
 |---|---|---|
+| **LTV por paciente** — requisito novo, não veio de bug. Soma das compras do mesmo paciente no período. Pedido pelo Vinícius em 20/08 | stack nova | Claude, precisa de spec |
+| **Dashboard** (V-13, V-21) — ticket médio por orçamento aprovado, contagem de novos pacientes | stack nova | Claude, regra já escrita (D-9) |
 | Financeiro em dois blocos (consulta e prescrição com pagamento próprio) | backlog imediato | Claude, precisa de spec |
 | `public_token` da anamnese (T002/T003 da SPEC 002) | decisão datada | Arthur decide |
 | `npm audit` — 1 crítica, 5 altas, inclui `next` (`--force` sobe major) | pós-01/09 | Claude |
@@ -148,7 +172,7 @@ Registrado para ninguém cobrar depois achando que foi esquecido:
 
 ## O caminho crítico, em uma linha
 
-**A2 é o gargalo de hoje** — sem a resposta do Vinícius, três itens da trava não
-andam. **A6 é o gargalo de 22/08** — sem export fresco, a Fase 2 da SPEC 002 não
+**A2 saiu — o Vinícius respondeu no mesmo dia.** O gargalo de hoje virou **A4**
+(reteste do convite) e **A3** (a consulta do V-24). **A6 é o gargalo de 22/08** — sem export fresco, a Fase 2 da SPEC 002 não
 começa. **A11 é o gargalo do lançamento** — sem conta para movimentação, não há
 como cobrar em 01/09.
