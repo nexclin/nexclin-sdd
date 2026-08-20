@@ -113,6 +113,35 @@ use `/request-access`, que renderiza logado e usa o mesmo painel de marca.
 
 Marque o apontamento como corrigido na página de Apontamentos do Notion.
 
+## O Publish publica o PREVIEW, não o commit
+
+> Descoberto ao vivo em 20/08/2026, na segunda correção do dia. Custou um
+> "publiquei e nada mudou" que quase passou despercebido.
+
+Depois do push, o editor mostra o commit com um destes rótulos:
+
+- **"Previewing"** — o preview já foi construído com esse commit. Publicar sobe
+  esse código.
+- **"Preview is out of date"** + botão **"Update preview"** — o preview ainda é
+  de um commit anterior. **Publicar agora sobe o código VELHO**, e o botão
+  Publish ainda vai dizer "Your website is up to date".
+
+Foi exatamente o que aconteceu: cliquei Publish com o preview desatualizado, o
+painel respondeu "Published / up to date", e o bundle no ar **não mudou**.
+
+**Ordem correta:**
+1. `enviar` pela ponte
+2. No editor, se aparecer "Preview is out of date" → **Update preview** e
+   **espere terminar** (levou ~11 minutos numa mudança de 15 arquivos)
+3. Só quando o commit ler **"Previewing"**, clique Publish → Publish changes
+4. `conferir` — o bundle TEM de mudar. Se não mudou, você publicou o preview
+   velho; volte ao passo 2.
+
+**Regra de bolso:** o `conferir` não é formalidade. É a única coisa que
+distingue "publiquei" de "achei que publiquei". Duas vezes no mesmo dia o painel
+da Lovable afirmou sucesso sem ter publicado o que se pedia — uma na edge
+function, outra aqui.
+
 ## Correção de edge function — o Publish NÃO cobre
 
 > Descoberto ao vivo em 20/08/2026, corrigindo o `invite-team-user`.
