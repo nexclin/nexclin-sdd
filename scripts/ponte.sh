@@ -48,6 +48,30 @@ case "${1:-}" in
     MSG="${2:-}"
     [ -z "$MSG" ] && { echo "uso: ponte.sh enviar \"fix: mensagem\""; exit 1; }
     cd "$CLONE" || { echo "rode 'preparar' antes"; exit 1; }
+
+    # GATE DE TIPOS — nao e opcional, e nao e o `npm run build`.
+    #
+    # Em 20/08/2026 uma varredura minha gerou `new dataLocal(Date())` em 17
+    # lugares. O `npm run build` passou verde: vite usa esbuild, que REMOVE
+    # tipos sem checa-los. O codigo foi publicado e derrubou o app inteiro por
+    # ~1h35 — imports sao estaticos, e o erro estourava na avaliacao do modulo.
+    #
+    # Cuidado: `tsc -p tsconfig.json` nao serve. O projeto usa `references` com
+    # `"files": []`, entao esse comando checa ZERO arquivos e responde verde.
+    # O config que realmente checa e o tsconfig.app.json.
+    echo "== checando tipos (o build NAO faz isso) =="
+    if [ -f tsconfig.app.json ]; then
+      if ! npx --no-install tsc --noEmit -p tsconfig.app.json; then
+        echo
+        echo "!! TIPOS QUEBRADOS. Nada foi enviado."
+        echo "   Corrija antes. O build passar nao prova nada aqui."
+        exit 1
+      fi
+      echo "   ok, zero erros"
+    else
+      echo "   !! tsconfig.app.json nao encontrado — gate PULADO, confira a mao"
+    fi
+
     git diff --stat
     [ -z "$(git status --porcelain)" ] && { echo "nada para enviar"; exit 1; }
     git add -A && git commit -q -m "$MSG" && git push -q origin main || {

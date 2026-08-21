@@ -113,6 +113,49 @@ use `/request-access`, que renderiza logado e usa o mesmo painel de marca.
 
 Marque o apontamento como corrigido na página de Apontamentos do Notion.
 
+## `npm run build` NÃO checa tipos — e isso derrubou o app
+
+> Descoberto do jeito caro, em 20/08/2026: **app inteiro fora do ar por ~1h35**,
+> das 17:58 às 19:34 UTC. Leia antes de confiar em build verde.
+
+**O que aconteceu.** Uma varredura automatizada substituiu 32 formatações de
+data. A regex capturou `Date()` em vez de `new Date()` e gerou
+`new dataLocal(Date())` em **17 lugares**. Rodei `npm run build`, veio
+`✓ built`, publiquei.
+
+**Por que o build não pegou:** o Vite usa **esbuild**, que *remove* tipos sem
+checá-los. Erro de tipo não impede build nenhum aqui.
+
+**Por que derrubou tudo, e não só uma tela:** quatro dos casos estavam em
+`const empty = { … }` de **escopo de módulo**, e `App.tsx` usa **imports
+estáticos, zero `lazy()`**. O erro estourava na avaliação do módulo, ou seja no
+carregamento do bundle — **tela branca em qualquer rota**.
+
+**A armadilha dentro da armadilha:** rodei `tsc --noEmit -p tsconfig.json` para
+conferir e deu **zero erros**. Vazio: o projeto usa `references` com
+`"files": []`, então esse comando **não checa arquivo nenhum** e sempre responde
+verde. O config que checa de verdade é o **`tsconfig.app.json`**.
+
+```bash
+# ERRADO — checa zero arquivos, sempre verde
+npx tsc --noEmit -p tsconfig.json
+
+# CERTO
+npx tsc --noEmit -p tsconfig.app.json
+```
+
+**O gate agora está no `scripts/ponte.sh enviar`**, e recusa o push com tipos
+quebrados. Verificado por mutação: com o defeito reintroduzido ele bloqueia com
+`TS2350` e `TS2345`; sem, passa. Não depende de ninguém lembrar.
+
+**Quem consertou foi o bot da Lovable**, não eu — a varredura de segurança dele
+achou e corrigiu as 17 chamadas, usando `hojeLocal()`. Isso foi **sorte**, não
+processo. O gate existe para não depender dela de novo.
+
+**Lição transferível:** "build passou" não é prova de nada num projeto Vite. E
+uma verificação que responde verde precisa ser testada contra um defeito
+conhecido antes de virar rede de segurança — senão é só um verde bonito.
+
 ## O Publish publica o PREVIEW, não o commit
 
 > Descoberto ao vivo em 20/08/2026, na segunda correção do dia. Custou um
