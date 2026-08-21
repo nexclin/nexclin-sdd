@@ -114,6 +114,32 @@ backlog**. Então item de backlog não é trabalho adiado — é **requisito da 
 nova**, e deve entrar na spec do módulo correspondente em vez de dormir numa
 lista.
 
+**A régua fina: DADO atravessa, CÁLCULO DE TELA não.** Decidido em 20/08 pelo
+Arthur, e é o que torna a §2.5 utilizável em vez de ambígua.
+
+"Atravessa" não é só sobre código. **O banco migra intacto** (§2.4) — e com ele
+vem tudo que as clínicas registrarem no mês da Lovable. O Arthur estima
+**R$ 100–200 mil de faturamento** lançado por clínica nesse período. Lançamento
+errado em agosto **não é descartado em outubro: é importado**.
+
+> **Financeiro na Lovable tem de funcionar como vai funcionar na stack final.**
+> Outras coisas podem passar; financeiro não.
+
+A razão é de produto, não de engenharia: gestão financeira é o diferencial que
+as clínicas não têm, e é por ele que o NexClin foi vendido. Entregar número
+errado justamente aí destrói o argumento de venda.
+
+**Como aplicar, item a item:** pergunte *o que fica gravado?*
+- Muda o que é **persistido** — valor, data, atribuição, a qual conta pertence?
+  → **faixa A. Corrigir.** O erro migra.
+- Muda só **como a tela soma ou exibe** o que já está gravado certo?
+  → faixa B. A regra escrita basta; a stack nova calcula certo desde o começo.
+
+Exemplo do próprio lote: V-18 e V-20 (a entrada abate a consulta ou a
+prescrição) mudam **atribuição gravada** — atravessam, corrigem-se. V-13 e V-21
+(ticket médio, taxa de conversão no dashboard) são **cálculo sobre dado que já
+está certo** — a regra basta.
+
 **A exceção da faixa C tem um nome, e ele é RELATÓRIO.** Em 20/08 o Vinícius
 foi explícito: o time dele **não usa o dashboard** — puxa as bases pelos
 **relatórios**, toda semana, e decide em cima delas. Relatório errado vira
