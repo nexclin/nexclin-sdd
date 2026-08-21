@@ -250,6 +250,72 @@ A pergunta que gerou a D-5 partia de uma premissa errada minha.
 
 ---
 
+## D-13 — A taxa de maquininha é DESPESA (20/08/2026)
+
+Decisão do Arthur, com confirmação do Vinícius no mesmo dia. Fecha o V-26 (parte
+regra) e o V-27.
+
+### A regra
+
+> **"É porque já é descontado na fonte, mas é uma despesa."** — Arthur
+>
+> **"Na DRE tem um campo específico de taxas. Tem que ter. Taxas, custos
+> bancários, etc."** — Vinícius
+
+A taxa da adquirente **não deixa de ser custo por ser retida antes de o dinheiro
+chegar**. Ela tem de aparecer como despesa, com linha própria no DRE.
+
+**Conta contábil:** `8.1.1 — Despesas Bancárias`, dentro de
+`8 DESPESAS FINANCEIRAS → 8.1 Custos financeiros`. **Já existe no seed**
+(`seed_chart_of_accounts`), é nível 3 e portanto selecionável no combobox. Não
+precisa de migração para criá-la.
+
+### A armadilha que torna isso perigoso
+
+Hoje o recebível guarda **`net_value`** — bruto já menos a taxa. Criar a despesa
+por cima disso **desconta duas vezes**. Com R$ 250 no crédito a 3,5% (taxa
+R$ 8,75):
+
+| Cenário | Entra no caixa | Despesa | Resultado |
+|---|---|---|---|
+| Hoje | 241,25 (líquido) | — | 241,25 ✅ — mas a taxa é invisível |
+| Despesa criada sem mudar o resto | 241,25 (líquido) | 8,75 | **232,50** ❌ dupla contagem |
+| **Correto** | **250,00 (bruto)** | 8,75 | 241,25 ✅ e a taxa aparece |
+
+**Consequência:** a taxa só pode virar despesa se, **na mesma mudança**, o
+recebimento passar a entrar pelo **bruto**. Implementar metade corrompe o
+resultado — e o resultado é justamente o que o time do Vinícius lê para decidir.
+
+### O desenho
+
+1. O recebível entra no fluxo de caixa pelo **valor bruto**.
+2. Junto, nasce um lançamento em `expenses`:
+   - `chart_account_id` → `8.1.1 Despesas Bancárias`
+   - `value` = bruto × `fee_percent` / 100
+   - `due_date` = **a mesma data de crédito do recebível** — é quando a
+     adquirente retém
+   - `status` = **`pago`** e `paid_at` = a mesma data. Não existe pagamento
+     separado a fazer: a retenção é na fonte. Nascer "pendente" criaria uma
+     conta a pagar que ninguém vai pagar.
+   - `origin_type` que identifique a origem, para não ser confundido com
+     despesa lançada à mão
+3. O saldo bancário final não muda: entra 250, sai 8,75, líquido 241,25 — igual
+   a hoje. **O que muda é a visibilidade**, que é o ponto.
+
+### O que isso toca
+
+**Contas a Receber**, **Fluxo de Caixa** e **DRE/DFC** — três telas, e todas de
+dinheiro. É o maior item da faixa A e o de maior risco de todo o lote.
+
+### Aceite obrigatório
+
+Não fecha sem conferir, com uma venda real no crédito, que:
+- o extrato do banco bate com o líquido;
+- o DRE mostra a receita bruta e a linha de taxa separadamente;
+- a soma não desconta duas vezes.
+
+---
+
 ## Convenção de numeração (para acomodar a leva do Erick)
 
 - **V-01 a V-33** — esta leva, Vinícius, 18–19/08. Numeração fixa: não
