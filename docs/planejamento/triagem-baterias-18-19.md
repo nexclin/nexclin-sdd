@@ -250,6 +250,37 @@ A pergunta que gerou a D-5 partia de uma premissa errada minha.
 
 ---
 
+## V-26 — corrigido no clone, AGUARDANDO ENVIO (20/08/2026)
+
+A parte **bug** do V-26 (a parte regra é a D-13, abaixo).
+
+**A causa:** a materialização de despesa fixa cortava por `dueDate >= today`, em
+granularidade de **dia**. A intenção — não gerar despesa retroativa — é boa, mas
+o corte estava no lugar errado: cadastrar um aluguel no dia 20 com vencimento no
+dia 10 **pulava agosto inteiro**, e o relatório do mês vinha vazio sem dizer por
+quê.
+
+**A correção:** o corte passa a ser por **mês**. Conta que começa hoje ou no
+passado vale o mês corrente inteiro; conta que começa no futuro respeita a data
+configurada ao dia.
+
+**Simulado antes de confiar** (`ContasPagar.tsx`, `generateFixedExpenses`):
+
+| Caso | Antes | Depois |
+|---|---|---|
+| Venc. dia 10, cadastrado dia 20 — o caso relatado | 10/09 (agosto pulado) | **10/08** ✅ |
+| Venc. dia 25, cadastrado dia 20 | 25/08 | 25/08 — não regrediu ✅ |
+| Início futuro 15/09, venc. dia 5 | 05/09 — **antes do início configurado** | 05/10 ✅ |
+
+**Bug de brinde:** o terceiro caso mostra que o código antigo criava lançamento
+**antes da data de início** definida pelo usuário. A mesma correção resolve.
+
+**Estado:** no clone, com `tsc` limpo, **não enviado**. O aceite é cadastrar uma
+conta fixa com vencimento já passado no mês e conferir que ela aparece — vencida,
+que é o que ela é.
+
+---
+
 ## D-13 — A taxa de maquininha é DESPESA (20/08/2026)
 
 Decisão do Arthur, com confirmação do Vinícius no mesmo dia. Fecha o V-26 (parte
@@ -302,10 +333,32 @@ resultado — e o resultado é justamente o que o time do Vinícius lê para dec
 3. O saldo bancário final não muda: entra 250, sai 8,75, líquido 241,25 — igual
    a hoje. **O que muda é a visibilidade**, que é o ponto.
 
-### O que isso toca
+### O que isso toca — e o desenho mudou ao preparar
 
-**Contas a Receber**, **Fluxo de Caixa** e **DRE/DFC** — três telas, e todas de
-dinheiro. É o maior item da faixa A e o de maior risco de todo o lote.
+**Seis caminhos** inserem em `receivables` (LaunchReceivableDialog,
+ClosingDetailDialog, Acompanhamento ×3, ContasReceber). Remendar os seis no
+front garante que o sétimo nasça sem a taxa. **A regra é de domínio: mora no
+banco**, como trigger — e assim atravessa para a stack nova como migração, que é
+o único artefato que migra intacto.
+
+Código preparado, **não aplicado**, em
+`specs/002-seguranca-anamnese-auditoria/preparado/d13-taxa-como-despesa.sql`.
+
+**Três coisas têm de ir junto, ou o número fica errado:**
+
+1. **DRE passa a somar `gross_value`** em vez de `net_value`, senão a taxa
+   desconta duas vezes.
+2. **Inconsistência que já existe, achada ao preparar:** o Fluxo de Caixa soma
+   `r.value`, e `value` não é preenchido igual em todo lugar —
+   `ContasReceber.tsx:225` grava o **líquido**, os outros caminhos gravam o
+   **bruto**. O caixa já mistura os dois hoje, antes da D-13.
+3. **Backfill do histórico — decisão pendente.** O trigger só pega inserção
+   nova. Mudar o DRE para bruto sem backfill infla a receita histórica.
+   Como hoje só há dado de teste e o primeiro cliente entra em 01/09, a saída
+   mais limpa é provavelmente **limpar e começar do zero**.
+
+**Contas a Receber**, **Fluxo de Caixa** e **DRE/DFC** — três telas, todas de
+dinheiro. Maior item da faixa A e o de maior risco do lote.
 
 ### Aceite obrigatório
 
