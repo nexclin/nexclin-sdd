@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NexClin | Pesquisa de Mercado e Precificação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;600&family=Manrope:wght@300;400;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#1F8C8C;--teal-light:#2BA8A8;--navy:#1E2A3A;--navy-deep:#141C28;--slate:#3A4A5C;
+    --slate-light:#6B7A8C;--bone:#F4F1EC;--paper:#FAF8F4;--line:#E5E0D8;--brand-ink:#0E1620;
+    --ground:var(--paper);--surface:#FFFFFF;--surface-2:var(--bone);--ink:var(--brand-ink);
+    --ink-2:var(--slate);--muted:var(--slate-light);--rule:var(--line);--rule-strong:#CFC7BA;
+    --accent:var(--teal);--accent-soft:#E4F0EF;--ok:#2F7D5F;--ok-soft:#E1EFE8;--warn:#A8781A;
+    --warn-soft:#F7EEDA;--stop:#A8463A;--stop-soft:#F6E4E0;
+    --shadow:0 1px 2px rgba(14,22,32,.05),0 10px 28px rgba(14,22,32,.05);
+    --display:'Outfit','Segoe UI',system-ui,sans-serif;--body:'Manrope','Segoe UI',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:var(--navy-deep);--surface:var(--navy);--surface-2:#263446;--ink:var(--bone);
+    --ink-2:#C2CCD8;--muted:#8B9AAB;--rule:#2E3C4E;--rule-strong:#435469;--accent:var(--teal-light);
+    --accent-soft:#17313A;--ok:#5FBF95;--ok-soft:#16302A;--warn:#DFAE5D;--warn-soft:#2F2717;
+    --stop:#E08878;--stop-soft:#33201C;--shadow:0 1px 2px rgba(0,0,0,.45),0 10px 28px rgba(0,0,0,.35);}}
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:16px;
+    line-height:1.65;margin:0;padding:0 20px 96px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:940px;margin:0 auto}
+  .masthead{padding:48px 0 26px;border-bottom:2px solid var(--accent);margin-bottom:34px}
+  .brandline{display:flex;align-items:center;gap:13px;margin-bottom:30px}
+  .mark{width:32px;height:32px;border-radius:7px;background:var(--accent);display:grid;place-items:center;
+    font-family:var(--display);font-weight:600;color:#fff;font-size:17px;flex:none}
+  .brandline .nm{font-family:var(--display);font-size:1.16rem;font-weight:600}
+  .brandline .nm em{font-style:normal;font-weight:300;color:var(--accent)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 15px;font-weight:500}
+  h1{font-family:var(--display);font-size:clamp(2.05rem,5.4vw,3rem);line-height:1.06;font-weight:600;
+    letter-spacing:-.022em;text-wrap:balance;margin:0 0 17px}
+  .standfirst{font-size:1.13rem;line-height:1.55;font-weight:300;color:var(--ink-2);max-width:62ch;margin:0 0 24px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px 28px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .meta b{color:var(--ink-2);font-weight:500}
+  .part{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap;margin:58px 0 26px;
+    padding-bottom:11px;border-bottom:1px solid var(--accent)}
+  .part .pn{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    font-weight:600;color:var(--accent)}
+  .part .pt{font-family:var(--display);font-size:1.3rem;font-weight:500;letter-spacing:-.01em}
+  .part .pw{font-size:13px;color:var(--muted);margin-left:auto}
+  section{margin:0 0 50px}
+  h2{font-family:var(--display);font-size:1.5rem;font-weight:600;letter-spacing:-.016em;
+    text-wrap:balance;margin:0 0 7px;padding-top:20px;border-top:1px solid var(--rule-strong)}
+  h2 .num{font-family:var(--mono);font-size:.58em;font-weight:500;color:var(--accent);
+    letter-spacing:.07em;margin-right:.75em;vertical-align:.14em}
+  h3{font-family:var(--display);font-size:1.05rem;font-weight:600;letter-spacing:-.01em;margin:30px 0 10px}
+  h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin:26px 0 8px;font-weight:600}
+  .lede{color:var(--ink-2);margin:0 0 22px;max-width:68ch;font-weight:300;font-size:1.02rem}
+  p{max-width:68ch;margin:0 0 15px}
+  ul,ol{max-width:68ch;padding-left:1.15em;margin:0 0 15px}
+  li{margin-bottom:7px}
+  li::marker{color:var(--accent)}
+  strong{font-weight:600}
+  .panel{background:var(--surface);border:1px solid var(--rule);border-radius:8px;
+    box-shadow:var(--shadow);overflow:hidden;margin:0 0 22px}
+  .panel-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;
+    padding:13px 19px;background:var(--surface-2);border-bottom:1px solid var(--rule);
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);font-weight:500}
+  .scroll{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--muted);padding:12px 15px;border-bottom:1px solid var(--rule);
+    white-space:nowrap;vertical-align:bottom}
+  td{padding:11px 15px;border-bottom:1px solid var(--rule);vertical-align:top}
+  tbody tr:last-child td{border-bottom:0}
+  .num-cell{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums;
+    white-space:nowrap;font-size:13px}
+  .row-label{font-weight:600}
+  .sub{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+  .new{color:var(--accent);font-weight:600;font-family:var(--mono);font-size:13px;white-space:nowrap}
+  .pill{display:inline-block;white-space:nowrap;font-family:var(--mono);font-size:9.5px;font-weight:600;
+    letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:3px;border:1px solid transparent}
+  .p-ok{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+  .p-warn{background:var(--warn-soft);color:var(--warn);border-color:var(--warn)}
+  .p-stop{background:var(--stop-soft);color:var(--stop);border-color:var(--stop)}
+  .p-idle{background:var(--surface-2);color:var(--muted);border-color:var(--rule-strong)}
+  .p-acc{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+  .callout{background:var(--accent-soft);border:1px solid var(--accent);border-radius:8px;
+    padding:20px 23px;margin:0 0 22px}
+  .callout p:last-child,.callout ul:last-child,.callout ol:last-child{margin-bottom:0}
+  .callout .tag,.flag .tag,.note .tag{font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;font-weight:600;display:block;margin-bottom:9px}
+  .callout .tag{color:var(--accent)}
+  .flag{border-left:3px solid var(--stop);background:var(--stop-soft);padding:17px 21px;
+    border-radius:0 6px 6px 0;margin:0 0 22px}
+  .flag p:last-child,.flag ul:last-child{margin-bottom:0}
+  .flag .tag{color:var(--stop)}
+  .note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:17px 21px;
+    border-radius:0 6px 6px 0;margin:0 0 22px}
+  .note p:last-child,.note ul:last-child{margin-bottom:0}
+  .note .tag{color:var(--warn)}
+  .cards{display:grid;gap:15px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin:0 0 22px}
+  .card{background:var(--surface);border:1px solid var(--rule);border-top:3px solid var(--accent);
+    border-radius:7px;padding:18px;box-shadow:var(--shadow)}
+  .card.w2{border-top-color:var(--warn)}.card.w3{border-top-color:var(--muted)}
+  .card h5{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 5px;font-weight:600}
+  .card .big{font-family:var(--display);font-size:1.5rem;font-weight:600;margin:0 0 9px;
+    display:block;letter-spacing:-.015em;color:var(--accent)}
+  .card p{font-size:14px;margin:0;color:var(--ink-2)}
+  .src{font-family:var(--mono);font-size:10.5px;color:var(--muted)}
+  .footnote{font-size:13.5px;color:var(--muted);border-top:1px solid var(--rule);padding-top:22px;margin-top:46px}
+  .footnote p{max-width:72ch}
+  .footnote a{color:var(--accent)}
+  @media (max-width:560px){body{padding:0 16px 64px}.part .pw{margin-left:0;width:100%}}
+  @media print{body{background:#fff;color:#000;padding:0}.panel{break-inside:avoid;box-shadow:none}
+    section{break-inside:avoid-page}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="brandline">
+    <span class="mark">N</span>
+    <span class="nm">Nex<em>Clin</em></span>
+  </div>
+  <p class="eyebrow">Insumo da decisão P1 · prazo 18 de agosto</p>
+  <h1>Pesquisa de mercado e recomendação de preço</h1>
+  <p class="standfirst">
+    O que o mercado brasileiro cobra hoje, contra quem o NexClin compete de verdade
+    neste porte, quanto vale a mensalidade e a implantação, e o que o escopo funcional
+    atual permite e impede cobrar.
+  </p>
+  <div class="meta">
+    <span><b>Data</b> domingo, 16 ago 2026</span>
+    <span><b>Leitura</b> Arthur, Erick e Vinícius</span>
+    <span><b>Decide</b> tarefa P1 · valor da mensalidade e da implantação</span>
+    <span><b>Tempo</b> cerca de 25 minutos</span>
+  </div>
+</header>
+
+<div class="callout">
+  <span class="tag">Resumo executivo · leia isto se não ler mais nada</span>
+  <p>
+    <strong>Preço recomendado:</strong> R$ 249 (3 usuários), R$ 399 (5 usuários),
+    R$ 599 (8 usuários), R$ 89 por usuário adicional. Implantação remota R$ 1.200 e
+    presencial R$ 2.400, <strong>cobradas no ato</strong>, sem isenção — é a única
+    receita de setembro, porque o trial empurra a primeira mensalidade para outubro.
+  </p>
+  <p>
+    <strong>O concorrente real não é o iClinic. É a planilha.</strong> Entre 60 e 70 por cento
+    das clínicas de 3 a 8 pessoas ainda operam em Google Agenda, Excel e WhatsApp
+    <span class="src">(estimativa)</span>. O custo escondido dessa operação é de cerca de
+    <strong>R$ 6.000 por mês</strong> em falta não avisada, recebível perdido e retrabalho
+    de secretária — vinte vezes a mensalidade proposta. Esse é o argumento de venda,
+    não a comparação de funcionalidades.
+  </p>
+  <p>
+    <strong>A maior oportunidade</strong> é a lacuna de gestão financeira: iClinic, Ninsaúde e
+    HiDoctor são prontuário com financeiro fraco; Feegow e Clínica nas Nuvens são ERP caro
+    e pesado. Ninguém entrega funil de captação, repasse e fluxo de caixa a preço de
+    clínica pequena. É exatamente onde o NexClin está pronto.
+  </p>
+  <p>
+    <strong>O maior risco é de modelo, não de número:</strong> o mercado inteiro cobra
+    <em>por profissional de saúde</em>, com secretária ilimitada e grátis. O NexClin
+    cobra <em>por usuário</em>, e a secretária conta. Isso torna o NexClin caro no
+    comparativo em toda clínica com poucos médicos e muita equipe — que é a maioria.
+    A seção 10.2 mostra o tamanho do problema e como contorná-lo sem mudar a arquitetura.
+  </p>
+</div>
+
+<div class="note">
+  <span class="tag">Como ler os números deste documento</span>
+  <p>
+    Preço de concorrente marcado com <span class="pill p-ok">público</span> foi lido na
+    página de preços do próprio fornecedor em 16/08/2026. Marcado com
+    <span class="pill p-warn">terceiro</span> veio de comparativo publicado por outra
+    empresa. Marcado com <span class="pill p-idle">estimativa</span> é conta deste
+    documento, não dado de mercado. Nenhuma estimativa aparece aqui com cara de dado oficial.
+  </p>
+</div>
+
+<div class="part">
+  <span class="pn">Parte 1</span>
+  <span class="pt">Escopo, mercado e cliente</span>
+  <span class="pw">Seções 1 a 4</span>
+</div>
+
+<section>
+  <h2><span class="num">01</span>Definição do escopo</h2>
+  <p class="lede">
+    Onde o produto de hoje é forte, onde é lacuna, e o que isso significa para o
+    empacotamento por faixa de usuários.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Escopo atual contra o que o mercado espera</span><span>agosto de 2026</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Bloco</th><th>NexClin</th><th>Padrão do mercado neste porte</th><th>Efeito no preço</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Agenda e consultas</td><td><span class="pill p-ok">Pronto</span></td><td>Todos têm. Commodity.</td><td>Não sustenta preço, mas a ausência elimina.</td></tr>
+          <tr><td class="row-label">Cadastro de pacientes</td><td><span class="pill p-ok">Pronto</span></td><td>Todos têm.</td><td>Neutro.</td></tr>
+          <tr><td class="row-label">Funil de captação<span class="sub">canais, origens, objeções</span></td><td><span class="pill p-ok">Pronto</span></td><td><strong>Raro.</strong> Feegow e iClinic só no topo da linha; a maioria não tem.</td><td><strong>Sustenta preço.</strong> É diferencial real.</td></tr>
+          <tr><td class="row-label">Contas a pagar e fluxo de caixa</td><td><span class="pill p-ok">Pronto</span></td><td>Prontuários (iClinic, HiDoctor) só têm contas a receber.</td><td><strong>Sustenta preço</strong> contra a Categoria A.</td></tr>
+          <tr><td class="row-label">Relatório de repasse</td><td><span class="pill p-warn">Parcial</span><span class="sub">imposto fixado em zero</span></td><td>Feegow e Clinicorp têm. iClinic não.</td><td>Diferencial só quando o cálculo estiver correto.</td></tr>
+          <tr><td class="row-label">Anamnese com formulário público</td><td><span class="pill p-ok">Pronto</span></td><td>Existe em poucos. Pesa mais em estética e nutrição.</td><td>Sustenta preço em nichos.</td></tr>
+          <tr><td class="row-label">Permissões por área</td><td><span class="pill p-ok">Pronto</span></td><td>Esperado. Vira pergunta na venda.</td><td>Neutro, mas responde objeção de LGPD.</td></tr>
+          <tr><td class="row-label">Prontuário eletrônico certificado</td><td><span class="pill p-stop">Ausente</span></td><td>iClinic entrega já no plano de R$ 99.</td><td><strong>Derruba o teto.</strong> Maior limitador de preço.</td></tr>
+          <tr><td class="row-label">Prescrição digital assinada</td><td><span class="pill p-stop">Ausente</span></td><td>iClinic, Memed, Nexodata. Virou padrão.</td><td><strong>Derruba o teto</strong> e é a lacuna mais urgente.</td></tr>
+          <tr><td class="row-label">Telemedicina</td><td><span class="pill p-stop">Ausente</span></td><td>iClinic Premium, iMedicina, Feegow.</td><td>Perda pontual, por especialidade.</td></tr>
+          <tr><td class="row-label">Integração TISS / convênio</td><td><span class="pill p-stop">Ausente</span></td><td>Feegow desde o plano de entrada; iClinic do Plus para cima.</td><td><strong>Elimina</strong> a clínica de convênio do mercado endereçável.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flag">
+    <span class="tag">A leitura que muda a estratégia</span>
+    <p>
+      O NexClin não é um prontuário incompleto. <strong>É um ERP de clínica pequena
+      com o financeiro completo</strong> — e o financeiro completo é justamente o que os
+      prontuários consolidados não têm. Vender contra o iClinic pela lista de funções é
+      perder: eles têm prontuário, prescrição e assinatura por R$ 99 por médico.
+      Vender contra a planilha e o WhatsApp, pelo controle do dinheiro e da captação,
+      é ganhar. Toda a precificação abaixo parte disso.
+    </p>
+  </div>
+
+  <h3>Subnichos por modelo de operação</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Modelo</th><th>Perfil</th><th>Aderência ao escopo atual</th><th>Faixa NexClin</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Consultório individual</td><td>1 médico + 1 ou 2 secretárias</td><td><span class="pill p-warn">Média</span> Sente falta de prontuário e prescrição. Compara com R$ 99 do iClinic.</td><td>Faixa 3 — a mais difícil de vender</td></tr>
+          <tr><td class="row-label">Clínica com sócios</td><td>2 a 4 médicos sócios + equipe</td><td><span class="pill p-ok">Alta</span> Precisa de rateio, fluxo de caixa e resultado por sócio. Ninguém entrega bem.</td><td>Faixa 5 e 8 — <strong>o alvo</strong></td></tr>
+          <tr><td class="row-label">Clínica com corpo clínico e repasse</td><td>1 ou 2 donos + médicos parceiros</td><td><span class="pill p-ok">Alta</span> O repasse é a dor central. Hoje vive em planilha.</td><td>Faixa 8 + adicionais — <strong>o mais rentável</strong></td></tr>
+          <tr><td class="row-label">Clínica de convênio</td><td>Faturamento TISS obrigatório</td><td><span class="pill p-stop">Nenhuma</span> Sem TISS, não entra.</td><td>Fora do mercado endereçável hoje</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Proposta de valor para clínica de 3 a 8 usuários</h3>
+  <p>
+    Para o médico dono deste porte, o problema não é registrar a consulta — ele já
+    registra de algum jeito. O problema é que <strong>ele não sabe se a clínica dá
+    lucro, de onde vem o paciente, e o que a secretária deixou de cobrar.</strong>
+    A proposta de valor que cabe no escopo atual é: <em>a clínica que você já opera,
+    com o dinheiro e a captação sob controle, sem depender de planilha nem da memória
+    da secretária.</em>
+  </p>
+</section>
+
+<section>
+  <h2><span class="num">02</span>Panorama nacional</h2>
+  <p class="lede">
+    Quantos são, onde estão e quanto já compram software. Fonte e ano em cada linha.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <h5>Médicos em atividade</h5>
+      <span class="big">653.945</span>
+      <p>Projeção para o fim de 2025, densidade de 2,98 por mil habitantes. <span class="src">Demografia Médica no Brasil 2025 · FMUSP/AMB/CFM</span></p>
+    </div>
+    <div class="card">
+      <h5>Estabelecimentos médicos privados ativos</h5>
+      <span class="big">285.931</span>
+      <p>Soma dos CNAE 8630-5/01, 02 e 03. <span class="src">Receita Federal, base de CNPJ ativos, 2026</span></p>
+    </div>
+    <div class="card w2">
+      <h5>Mercado de saúde digital · Brasil</h5>
+      <span class="big">US$ 6,34 bi</span>
+      <p>Em 2024, com CAGR de 23,2% até 2030 (US$ 21,9 bi). <span class="src">Compilação de mercado, 2025</span></p>
+    </div>
+    <div class="card w3">
+      <h5>Investimento em healthtech</h5>
+      <span class="big">R$ 799 mi</span>
+      <p>Em 2024, 40 rodadas. Pico de R$ 3,49 bi em 2021 e queda desde então. <span class="src">Compilação de mercado, 2025</span></p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><span>Base de estabelecimentos por CNAE</span><span>empresas ativas · Receita Federal</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>CNAE</th><th>Descrição</th><th style="text-align:right">Ativas</th><th>Porte predominante</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">8630-5/03</td><td>Atividade médica ambulatorial restrita a consultas</td><td class="num-cell">216.621</td><td>Microempresa · 71%</td></tr>
+          <tr><td class="row-label">8630-5/02</td><td>Ambulatorial com recursos para exames complementares</td><td class="num-cell">39.257</td><td>Microempresa · 51%</td></tr>
+          <tr><td class="row-label">8630-5/01</td><td>Ambulatorial com recursos para procedimentos cirúrgicos</td><td class="num-cell">30.053</td><td>Microempresa · 56%</td></tr>
+          <tr><td class="row-label">Total médico</td><td>Base para o TAM da seção 6</td><td class="num-cell"><strong>285.931</strong></td><td>—</td></tr>
+          <tr><td class="row-label">8630-5/04</td><td>Atividade odontológica <span class="sub">segmento adjacente, seção 7</span></td><td class="num-cell">125.856</td><td>Microempresa · 82%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="tag">Onde o dado oficial acaba e a estimativa começa</span>
+    <p>
+      Nenhuma base pública brasileira publica a distribuição de estabelecimentos
+      ambulatoriais <strong>por número de profissionais</strong> em formato consultável.
+      O CNES tem o dado, mas exige extração e cruzamento das bases de estabelecimento e
+      de vínculo profissional — trabalho de meia hora no TabNet que vale a pena fazer
+      antes de fechar a projeção. Até lá, a distribuição usada na seção 6 é
+      <strong>estimativa</strong> calibrada pelo porte declarado na Receita: 65% com 1 a 2
+      profissionais, 22% com 3 a 5, 8% com 6 a 8 e 5% com 9 ou mais.
+    </p>
+  </div>
+
+  <h3>Digitalização: quanto do mercado ainda não comprou nada</h3>
+  <p>
+    Não existe pesquisa nacional publicada com esse recorte. O que existe é indireto e
+    convergente: 82% dos consultórios odontológicos e 71% dos consultórios médicos são
+    microempresas; o mercado de prontuário eletrônico e gestão hospitalar concentra 27,6%
+    das healthtechs brasileiras, quase todas mirando média e alta complexidade; e os
+    fornecedores de software para clínica pequena somados não passam de algumas dezenas
+    de milhares de contas. <strong>A estimativa deste documento é que 60 a 70 por cento
+    das clínicas de 3 a 8 pessoas ainda não pagam por nenhum sistema de gestão dedicado</strong>
+    <span class="pill p-idle">estimativa</span>. É o número mais importante da pesquisa e
+    o mais frágil — vale confirmar com as próprias clínicas do grupo fundador.
+  </p>
+
+  <h3>Especialidades que mais consomem software privado</h3>
+  <p>
+    A demanda segue duas variáveis, e não a especialidade em si: <strong>proporção de
+    atendimento particular</strong> e <strong>volume de retorno do mesmo paciente</strong>.
+    Dermatologia, ginecologia, psiquiatria, nutrição, estética e ortopedia lideram porque
+    combinam ticket alto, pagamento direto e recorrência. Pediatria e clínica médica, que
+    são as maiores em número de profissionais (10,0% e 12,4% dos títulos de especialista),
+    são as mais dependentes de convênio — e portanto as <strong>menos</strong> endereçáveis
+    para um produto sem TISS.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Particular puro contra convênio</span><span>consequência para um produto sem TISS</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Perfil</th><th>O que compra</th><th>NexClin atende?</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Particular puro</td><td>Gestão de captação, agenda, recebíveis e resultado. Não precisa de TISS.</td><td><span class="pill p-ok">Sim, integralmente</span></td></tr>
+          <tr><td class="row-label">Misto com convênio minoritário</td><td>Igual ao acima, mais o faturamento do convênio — que muitas vezes já é feito no portal da operadora.</td><td><span class="pill p-warn">Sim, com objeção</span></td></tr>
+          <tr><td class="row-label">Convênio majoritário</td><td>TISS é o coração da operação. Sem ele, o sistema não serve.</td><td><span class="pill p-stop">Não</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p>
+    Isso não é uma limitação pequena e precisa entrar no roteiro comercial como pergunta
+    de qualificação, não como descoberta no meio da demonstração: <strong>"que percentual
+    do seu faturamento é particular?"</strong> Abaixo de 60%, a conversa não avança.
+  </p>
+
+  <h3>Tendências que afetam o preço nos próximos 24 meses</h3>
+  <ul>
+    <li><strong>Consolidação.</strong> O iClinic foi absorvido pela Afya e hoje se apresenta como Afya iClinic. A pressão é de grupos com capital e força de distribuição, não de startups.</li>
+    <li><strong>Marketplace entrando no software.</strong> A Doctoralia deixou de ser só vitrine e vende agenda e assistente de IA (Noa Notes, R$ 199/mês). Ela chega ao médico antes de qualquer software.</li>
+    <li><strong>Prescrição digital virou expectativa, não diferencial.</strong> Está no plano de R$ 99 do iClinic. Quem não tem, explica.</li>
+    <li><strong>IA embutida como justificativa de aumento.</strong> Feegow VIP, iMedicina Intelligence e Doctoralia já usam IA para subir de patamar. É o próximo degrau de preço do mercado.</li>
+    <li><strong>ANPD saindo do modo educativo.</strong> Nove sanções aplicadas até 2026, três delas no setor de saúde. Ainda são órgãos públicos, mas a fiscalização de dado de saúde está declarada como prioridade.</li>
+  </ul>
+</section>
+<section>
+  <h2><span class="num">03</span>Análise do cliente ideal</h2>
+  <p class="lede">
+    O comprador é o médico dono. O usuário é a secretária. Quem sabota é quem não foi
+    consultado. Os três precisam de tratamento diferente.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Perfil econômico da clínica de 3 a 8 usuários</span><span>estimativa calibrada por dados públicos de consulta</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Indicador</th><th>Faixa 3 usuários</th><th>Faixa 5 usuários</th><th>Faixa 8 usuários</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Composição típica</td><td>1 médico + 2 de equipe</td><td>2 médicos + 3 de equipe</td><td>3 a 4 médicos + 4 de equipe</td></tr>
+          <tr><td class="row-label">Atendimentos/mês</td><td class="num-cell">120 a 180</td><td class="num-cell">250 a 400</td><td class="num-cell">450 a 800</td></tr>
+          <tr><td class="row-label">Ticket médio da consulta</td><td class="num-cell">R$ 250 a 400</td><td class="num-cell">R$ 250 a 450</td><td class="num-cell">R$ 250 a 500</td></tr>
+          <tr><td class="row-label">Faturamento mensal</td><td class="num-cell">R$ 35 a 60 mil</td><td class="num-cell">R$ 70 a 140 mil</td><td class="num-cell">R$ 130 a 300 mil</td></tr>
+          <tr><td class="row-label">Tem gestor dedicado?</td><td>Não. O médico faz nas horas vagas.</td><td>Raramente. Uma secretária sênior acumula.</td><td>Às vezes. É o divisor de água na adoção.</td></tr>
+          <tr><td class="row-label">Mensalidade proposta como % do faturamento</td><td class="num-cell">0,4 a 0,7%</td><td class="num-cell">0,3 a 0,6%</td><td class="num-cell">0,2 a 0,5%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="src">
+    Ticket de consulta: faixas públicas de 2026 por especialidade e cidade — clínico geral
+    R$ 150 a 350, dermatologista R$ 250 a 500, psiquiatra R$ 350 a 800, interior R$ 120 a 250.
+    Faturamento e número de atendimentos: estimativa derivada.
+  </p>
+
+  <h3>Quem decide, quem paga, quem usa e quem sabota</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Papel</th><th>Peso na decisão</th><th>O que quer</th><th>Como perde a venda</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Médico dono</td><td><span class="pill p-acc">Decide e paga</span></td><td>Saber se a clínica dá lucro e parar de ser o gargalo.</td><td>Se a demonstração começar pela agenda, ele desliga. Ele já tem agenda.</td></tr>
+          <tr><td class="row-label">Secretária / recepção</td><td><span class="pill p-stop">Veta na prática</span></td><td>Não perder o jeito que já funciona e não parecer lenta na frente do chefe.</td><td>Se não for chamada para a implantação, ela volta para a planilha em duas semanas e o médico cancela em três meses.</td></tr>
+          <tr><td class="row-label">Sócio ou cônjuge</td><td><span class="pill p-warn">Adia</span></td><td>Não gastar sem discutir.</td><td>Vira o "vou ver com meu sócio" que não volta.</td></tr>
+          <tr><td class="row-label">Contador</td><td><span class="pill p-idle">Influencia</span></td><td>Receber o financeiro organizado.</td><td>Raramente atrapalha. Costuma ajudar — ver seção 13.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flag">
+    <span class="tag">O erro mais caro de quem vende software para médico</span>
+    <p>
+      Vender para o médico e implantar com a secretária. <strong>O médico assina, mas
+      quem cancela é a secretária</strong> — não formalmente, e sim deixando de usar até
+      o sistema virar uma cobrança sem contrapartida. Se ela não estiver na sessão de
+      implantação, com nome e tarefa, a implantação foi entregue pela metade e o churn
+      dos primeiros 90 dias já está contratado.
+    </p>
+  </div>
+
+  <h3>Comportamento de compra</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Dimensão</th><th>Como funciona neste porte</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Como encontra fornecedor</td><td>Indicação de colega médico em primeiro lugar, com folga. Depois: representante que aparece no consultório, congresso de especialidade, Google, contador, consultoria de gestão. Instagram gera reconhecimento, não decisão.</td></tr>
+          <tr><td class="row-label">Critérios de decisão</td><td>Na ordem observada: quem já usa e recomenda; facilidade para a secretária; suporte com gente de verdade; migração dos dados; preço; segurança do dado. <strong>Preço é o quinto critério, não o primeiro</strong> — mas é o primeiro a ser dito em voz alta.</td></tr>
+          <tr><td class="row-label">Ciclo de decisão</td><td>De 3 a 8 semanas. Uma a duas demonstrações. Compara 2 a 3 fornecedores, quase sempre os que algum colega citou.</td></tr>
+          <tr><td class="row-label">Barreira de troca</td><td>Histórico de pacientes é a maior. Depois, o medo do retrabalho da equipe e o receio de ficar sem agenda durante a virada. <strong>Quem não migra o dado, não ganha o cliente que já tem sistema.</strong></td></tr>
+          <tr><td class="row-label">Sazonalidade</td><td>Janeiro e fevereiro (planejamento do ano) e agosto e setembro (retomada do segundo semestre) são as janelas quentes. Novembro e dezembro são as piores. <strong>O lançamento em 01/09 cai numa janela boa.</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>O que faz um médico abandonar o sistema que já usa</h3>
+  <ol>
+    <li>Suporte que não responde no dia em que a agenda quebrou.</li>
+    <li>Aumento de preço sem função nova, ou cobrança por módulo que ele achava que estava incluído.</li>
+    <li>Troca de secretária — o novo funcionário não aprende, e o sistema vira o culpado.</li>
+    <li>Descoberta de que o relatório que ele usava para decidir estava errado. <strong>Especialmente o repasse.</strong></li>
+    <li>Sistema lento ou fora do ar em horário de atendimento.</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="num">04</span>Dores e desejos</h2>
+  <p class="lede">
+    Cinco dores, com o impacto financeiro estimado para uma clínica média da faixa 5
+    (300 atendimentos/mês, ticket de R$ 300, faturamento de R$ 90 mil).
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>As cinco dores, na ordem em que doem</span><span>clínica de referência: 2 médicos, 300 atend/mês</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>#</th><th>Dor</th><th>Descrição</th><th style="text-align:right">Impacto/mês</th><th>Urgência</th></tr></thead>
+        <tbody>
+          <tr><td class="num-cell">1</td><td class="row-label">Falta não avisada</td><td>Taxa média de no-show no Brasil gira em 25%; consultórios particulares bem geridos ficam entre 5 e 12%. A diferença entre operar sem confirmação e operar com confirmação automática é de 7 a 10 pontos.</td><td class="num-cell">R$ 3.780</td><td><span class="pill p-stop">Alta</span></td></tr>
+          <tr><td class="num-cell">2</td><td class="row-label">Não saber quanto a clínica lucra</td><td>O médico sabe o faturamento e não sabe o resultado. Decide preço, contratação e investimento no escuro. Impacto não é uma perda direta — é decisão errada.</td><td class="num-cell">difuso</td><td><span class="pill p-stop">Alta</span></td></tr>
+          <tr><td class="num-cell">3</td><td class="row-label">Recebível que ninguém cobrou</td><td>Parcela não lançada, cartão não conciliado, retorno não cobrado. De 2 a 4% do faturamento simplesmente não entra.</td><td class="num-cell">R$ 1.620</td><td><span class="pill p-stop">Alta</span></td></tr>
+          <tr><td class="num-cell">4</td><td class="row-label">Repasse na planilha</td><td>Cálculo manual do que cabe a cada médico. Erro gera desconfiança do corpo clínico, que é o ativo mais caro de recuperar.</td><td class="num-cell">relacional</td><td><span class="pill p-warn">Média</span></td></tr>
+          <tr><td class="num-cell">5</td><td class="row-label">Secretária como ponto único de falha</td><td>A operação inteira mora na cabeça e no WhatsApp de uma pessoa. Se ela sai ou adoece, a clínica para. Retrabalho corrente estimado em 8 h/semana.</td><td class="num-cell">R$ 624</td><td><span class="pill p-warn">Média</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">O número que vende</span>
+    <p>
+      Somadas as três dores quantificáveis, a clínica de referência perde
+      <strong>cerca de R$ 6.000 por mês</strong> operando sem sistema
+      <span class="pill p-idle">estimativa</span>. A mensalidade proposta para essa mesma
+      clínica é de R$ 399. <strong>A conta é de quinze para um.</strong> Este é o slide
+      da apresentação comercial, e ele vale mais do que qualquer lista de funcionalidades.
+    </p>
+  </div>
+
+  <h3>As dores candidatas, aceitas e descartadas</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Candidata</th><th>Veredito</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Falta de pacientes / horário ocioso</td><td><span class="pill p-ok">Aceita · nº 1</span></td><td>Quantificável, imediata e o médico já sente. Melhor porta de entrada da conversa.</td></tr>
+          <tr><td class="row-label">Não saber de onde vem o paciente</td><td><span class="pill p-warn">Aceita com ressalva</span></td><td>É a dor que o NexClin resolve melhor que qualquer concorrente deste porte, mas o médico ainda não a sente. Precisa ser <em>ensinada</em> na venda, o que alonga o ciclo. Use como diferencial de fechamento, não como abertura.</td></tr>
+          <tr><td class="row-label">Não saber o lucro nem o resultado por profissional</td><td><span class="pill p-ok">Aceita · nº 2</span></td><td>É o que o médico dono verbaliza espontaneamente quando perguntado o que tira o sono.</td></tr>
+          <tr><td class="row-label">Repasse em planilha</td><td><span class="pill p-ok">Aceita · nº 4</span></td><td>Dor real e mal atendida, mas só existe em clínica com corpo clínico. Segmenta bem, não escala.</td></tr>
+          <tr><td class="row-label">Secretária como ponto único de falha</td><td><span class="pill p-ok">Aceita · nº 5</span></td><td>Aceita, mas cuidado: falar isso na frente da secretária transforma a usuária em inimiga.</td></tr>
+          <tr><td class="row-label">Dado espalhado entre WhatsApp, papel e planilha</td><td><span class="pill p-warn">Aceita como sintoma</span></td><td>Não é dor por si só — é a <em>causa</em> das outras. Vira dor quando reformulada como risco de LGPD (seção 11.4).</td></tr>
+          <tr><td class="row-label">Inadimplência e contas a receber</td><td><span class="pill p-ok">Aceita · nº 3</span></td><td>Quantificável e sentida no fim do mês.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>O que o médico dono quer, além do software</h3>
+  <p>
+    Previsibilidade, tempo livre e deixar de ser o gargalo — nessa ordem. A frustração
+    dominante com o mercado atual não é o preço, é a sensação de <strong>ter comprado um
+    sistema e continuado a fazer conta na planilha</strong>. O que o faria pagar mais caro
+    sem reclamar: alguém que assuma a implantação até a equipe estar operando de verdade,
+    suporte que responde no mesmo dia com uma pessoa, e um relatório mensal que ele possa
+    abrir e entender sozinho em cinco minutos. <strong>Nada disso é funcionalidade.
+    Tudo isso é serviço</strong> — e é exatamente o ativo que a consultoria do sócio já tem.
+  </p>
+</section>
+
+<div class="part">
+  <span class="pn">Parte 2</span>
+  <span class="pt">Concorrência e mercado endereçável</span>
+  <span class="pw">Seções 5 a 9</span>
+</div>
+
+<section>
+  <h2><span class="num">05</span>Concorrência em três categorias</h2>
+  <p class="lede">
+    A clínica de 3 a 8 pessoas não compara softwares equivalentes. Ela compara
+    "comprar um sistema" com "continuar como está". A análise precisa refletir isso.
+  </p>
+
+  <h3>Categoria A — Prontuário eletrônico consolidado</h3>
+  <div class="panel">
+    <div class="panel-head"><span>Espinha dorsal: o registro clínico</span><span>preços lidos em 16/08/2026</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Foco</th><th>Preço público</th><th>Cobrança</th><th>Forte</th><th>Fraco</th><th>Porte</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Afya iClinic <span class="pill p-ok">público</span></td>
+            <td>Prontuário + prescrição + agenda</td>
+            <td class="num-cell">R$ 99 · 129 · 169 · 299</td>
+            <td><strong>Por profissional de saúde.</strong> Secretária não conta. Sem implantação. Sem fidelidade no mensal.</td>
+            <td>Marca conhecida, capital da Afya, prescrição e assinatura digital no plano de entrada, TISS do Plus para cima.</td>
+            <td>Financeiro raso: não tem contas a pagar nem fluxo de caixa reais. Sem funil de captação. Sem repasse.</td>
+            <td>1 a 10 médicos</td>
+          </tr>
+          <tr>
+            <td class="row-label">HiDoctor <span class="pill p-ok">público</span></td>
+            <td>Prontuário instalado e online</td>
+            <td class="num-cell">R$ 85 → 110 → 209<br>Online R$ 98</td>
+            <td>Por médico. <strong>Usuários ilimitados</strong> para secretárias. Implantação gratuita.</td>
+            <td>Base grande e antiga, preço de entrada agressivo, secretária não custa nada.</td>
+            <td>Produto legado, escada de preço que triplica em 12 meses e gera insatisfação.</td>
+            <td>Consultório individual</td>
+          </tr>
+          <tr>
+            <td class="row-label">iMedicina <span class="pill p-ok">público</span></td>
+            <td>Prontuário + IA + telemedicina</td>
+            <td class="num-cell">Grátis · R$ 129 · R$ 499</td>
+            <td>Por profissional. Intelligence cobre até 4 profissionais. Autoatendimento na implantação.</td>
+            <td>Plano gratuito real como porta de entrada, IA embarcada, telemedicina ilimitada.</td>
+            <td>Gestão financeira e de equipe fracas. Autoatendimento não serve a clínica com equipe.</td>
+            <td>1 a 4 médicos</td>
+          </tr>
+          <tr>
+            <td class="row-label">Docthor <span class="pill p-ok">público</span></td>
+            <td>Prontuário + TISS</td>
+            <td class="num-cell">R$ 0 · 93,11 · 138,10 <span class="sub">por local de atendimento</span></td>
+            <td>Por local. <strong>Implantação de R$ 350</strong> — um dos poucos que cobra e publica.</td>
+            <td>Preço baixo, TISS no plano intermediário.</td>
+            <td>Marca pequena, produto enxuto.</td>
+            <td>Consultório e clínica pequena</td>
+          </tr>
+          <tr>
+            <td class="row-label">Ninsaúde e ProDoctor <span class="pill p-warn">terceiro</span></td>
+            <td>Prontuário consolidado</td>
+            <td class="num-cell">Sob consulta<br><span class="sub">~R$ 8 a 15 mil em 3 anos</span></td>
+            <td>Não publicam preço. Venda por proposta.</td>
+            <td>Bases instaladas grandes e antigas, muito citadas por médicos mais velhos.</td>
+            <td>Preço não público é sinal de venda consultiva com desconto negociado — e de ciclo longo.</td>
+            <td>Clínica média</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Categoria B — ERP clínico</h3>
+  <div class="panel">
+    <div class="panel-head"><span>Espinha dorsal: a operação e o financeiro</span><span>preços lidos em 16/08/2026</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Foco</th><th>Preço público</th><th>Cobrança</th><th>Forte</th><th>Fraco</th><th>Porte</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Feegow Clinic <span class="pill p-ok">público</span></td>
+            <td>ERP clínico completo</td>
+            <td class="num-cell">R$ 129 · 199 · 249</td>
+            <td><strong>Por profissional de saúde.</strong> Personalizado a partir de 10 profissionais.</td>
+            <td>TISS já no plano de entrada, gestão de glosas, rateio e repasse, IA no VIP, integração Doctoralia.</td>
+            <td>Pesado para clínica pequena. Implantação longa. Preço sobe rápido com o corpo clínico.</td>
+            <td>3 a 30 profissionais — <strong>o concorrente mais direto</strong></td>
+          </tr>
+          <tr>
+            <td class="row-label">Amplimed <span class="pill p-ok">público</span></td>
+            <td>Gestão + prontuário</td>
+            <td class="num-cell">A partir de R$ 89 <span class="sub">Lite · Pro · Personalizado</span></td>
+            <td>Por profissional. Módulos adicionais cobrados à parte.</td>
+            <td>Preço de entrada mais baixo do segmento. Bom para captar clínica que nunca pagou.</td>
+            <td>Cobrança por módulo gera a objeção mais comum do mercado: "achei que estava incluído".</td>
+            <td>1 a 15 profissionais</td>
+          </tr>
+          <tr>
+            <td class="row-label">Shosp <span class="pill p-ok">público</span></td>
+            <td>Gestão + agenda + financeiro</td>
+            <td class="num-cell">R$ 0 · 149 · 229</td>
+            <td>Por prestador, <strong>usuários ilimitados</strong>. Setup de R$ 299 no plano gratuito. <strong>Fidelidade padrão de 12 meses</strong>, removível pagando a implantação. 15% de desconto no anual.</td>
+            <td>Modelo de fidelidade bem desenhado: quem não quer se prender, paga a implantação. Plano gratuito real.</td>
+            <td>Fidelidade é objeção declarada de médico. Produto menos conhecido.</td>
+            <td>1 a 10 prestadores</td>
+          </tr>
+          <tr>
+            <td class="row-label">Clínica nas Nuvens <span class="pill p-ok">público</span></td>
+            <td>ERP clínico</td>
+            <td class="num-cell">R$ 499 <span class="sub">Essencial, até 3 profissionais</span></td>
+            <td><strong>Por pacote de profissionais</strong>, não por unidade. Implantação online gratuita. Enterprise sob consulta a partir de 15.</td>
+            <td>É o único que empacota como o NexClin pretende empacotar. <strong>Referência direta de ancoragem.</strong></td>
+            <td>R$ 499 para 3 profissionais é o preço mais alto do segmento de entrada. Salto abrupto para o Enterprise.</td>
+            <td>3 a 15 profissionais</td>
+          </tr>
+          <tr>
+            <td class="row-label">GestãoDS <span class="pill p-warn">terceiro</span></td>
+            <td>Gestão + marketing médico</td>
+            <td class="num-cell">Não publica</td>
+            <td>Declara cobrar <strong>por quantidade de usuários</strong>, com desconto progressivo — o mesmo modelo do NexClin.</td>
+            <td>Quatro planos por função (Essencial, Controle, Crescimento, Performance) e não só por usuário.</td>
+            <td>Preço atrás de formulário. Ciclo mais longo.</td>
+            <td>Clínica pequena e média</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="tag">A descoberta mais importante da seção 5</span>
+    <p>
+      <strong>Nove dos dez concorrentes cobram por profissional de saúde ou por prestador,
+      e tratam secretárias e recepcionistas como usuários ilimitados e gratuitos.</strong>
+      Apenas Clínica nas Nuvens e GestãoDS cobram por pacote ou por usuário. Ou seja: o
+      mercado já ensinou o médico que <em>ele não paga pela secretária</em>. Cobrar por
+      usuário total não é errado, mas exige uma explicação a mais em toda venda — e no
+      porte-alvo, onde a razão equipe/médico é de quase dois para um, a diferença
+      aparece já na primeira comparação. A seção 10.2 trata disso com número.
+    </p>
+  </div>
+  <h3>Categoria C — Ferramenta genérica adaptada</h3>
+  <p class="lede">
+    É contra isto que o NexClin realmente compete. Entre 60 e 70 por cento do mercado-alvo
+    está aqui hoje <span class="pill p-idle">estimativa</span>.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>O que a clínica usa hoje</span><span>e quanto isso custa de verdade</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Ferramenta</th><th>Papel na clínica</th><th style="text-align:right">Custo em software</th><th>Custo real</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Google Agenda ou caderno</td><td>Agenda</td><td class="num-cell">R$ 0</td><td>Sem confirmação automática. No-show de 20 a 25% em vez de 10 a 12%.</td></tr>
+          <tr><td class="row-label">Excel ou Google Sheets</td><td>Financeiro e repasse</td><td class="num-cell">R$ 0</td><td>De 4 a 8 h/semana de secretária. Erro de repasse. Nenhum resultado por profissional.</td></tr>
+          <tr><td class="row-label">WhatsApp</td><td>CRM, prontuário informal e agendamento</td><td class="num-cell">R$ 0</td><td><strong>Dado sensível de saúde em aparelho pessoal, sem controle de acesso nem trilha.</strong> Ver seção 11.4.</td></tr>
+          <tr><td class="row-label">Conta Azul, Bling, Nibo ou o contador</td><td>Financeiro fiscal</td><td class="num-cell">R$ 80 a 300</td><td>Não conhece paciente, consulta nem procedimento. Não fecha o ciclo.</td></tr>
+          <tr><td class="row-label">Doctoralia ou Calendly</td><td>Agendamento online</td><td class="num-cell">R$ 0 a 200</td><td>Traz paciente e não gerencia a clínica. Vira mais um lugar onde o dado mora.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">O custo real da Categoria C · clínica de referência da faixa 5</span>
+    <p>
+      Falta evitável (7 pontos de 300 atendimentos a R$ 300): <strong>R$ 3.780/mês</strong> ·
+      Recebível não cobrado (3% do faturamento): <strong>R$ 1.620/mês</strong> ·
+      Retrabalho administrativo (8 h/semana a R$ 18/h): <strong>R$ 624/mês</strong>.
+      <br><strong>Total: cerca de R$ 6.024 por mês</strong>
+      <span class="pill p-idle">estimativa</span>, contra R$ 0 de software.
+    </p>
+  </div>
+
+  <h3>Por que é "boa o suficiente" na cabeça do médico</h3>
+  <p>
+    Porque o custo é invisível e o benefício é imediato. A planilha não emite fatura,
+    não pede treinamento e não gera reunião com sócio. O médico não vê o dinheiro que
+    não entrou — ele vê o dinheiro que entrou. E a secretária domina o processo atual,
+    o que faz da mudança um risco pessoal para ela, não um ganho.
+  </p>
+
+  <h3>O gatilho que faz a clínica sair da Categoria C</h3>
+  <ol>
+    <li><strong>Contratação do segundo ou terceiro médico.</strong> O repasse e o rateio deixam de caber na planilha. É o gatilho número um deste porte.</li>
+    <li><strong>Saída da secretária que sabia tudo.</strong> A operação para e o dono descobre que ela era o sistema.</li>
+    <li><strong>Susto financeiro.</strong> Um mês fechando no vermelho sem explicação, ou a descoberta de um repasse pago a mais.</li>
+    <li><strong>Abertura de segunda unidade ou de sala compartilhada.</strong> A operação deixa de caber num só lugar físico.</li>
+    <li><strong>Exigência externa.</strong> Contador, auditoria ou uma pergunta de paciente sobre LGPD.</li>
+  </ol>
+  <p>
+    Os cinco gatilhos são <strong>eventos</strong>, não estados. Isso define a estratégia de
+    aquisição: não adianta convencer quem não teve o evento. Adianta estar presente quando
+    ele acontece — o que favorece indicação, contador e consultoria, e desfavorece anúncio.
+  </p>
+
+  <h3>Três lacunas que nenhuma das categorias cobre bem</h3>
+  <div class="cards">
+    <div class="card">
+      <h5>Lacuna 1</h5>
+      <span class="big">Origem do paciente</span>
+      <p>Nenhum sistema deste porte responde "quanto custou trazer este paciente e quanto ele já rendeu". O funil do NexClin responde. É o diferencial mais defensável e o menos copiável no curto prazo.</p>
+    </div>
+    <div class="card w2">
+      <h5>Lacuna 2</h5>
+      <span class="big">Resultado por sócio</span>
+      <p>Categoria A não tem financeiro. Categoria B tem, mas com implantação de semanas e preço por profissional que penaliza justamente a clínica com muitos médicos. Ninguém entrega repasse confiável e barato.</p>
+    </div>
+    <div class="card w3">
+      <h5>Lacuna 3</h5>
+      <span class="big">Implantação de verdade</span>
+      <p>Quase todos anunciam implantação "gratuita" — que é vídeo e autoatendimento. Ninguém entra na clínica e treina a equipe. Aqui a consultoria do sócio é vantagem estrutural, não argumento de marketing.</p>
+    </div>
+  </div>
+
+  <h3>Comparativo de modelo de cobrança</h3>
+  <div class="panel">
+    <div class="panel-head"><span>O que o mercado ensinou o médico a considerar normal</span><span>fontes públicas · 16/08/2026</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Concorrente</th><th>Por usuário?</th><th>Por profissional?</th><th>Por módulo?</th><th>Cobra implantação?</th><th>Fidelidade?</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Afya iClinic</td><td>Não</td><td><strong>Sim</strong></td><td>Parcial (teleconsulta avulsa)</td><td>Não</td><td>Não, no mensal</td></tr>
+          <tr><td class="row-label">HiDoctor</td><td>Não · ilimitados</td><td><strong>Sim</strong></td><td>Não</td><td>Não</td><td>Escada de preço em 12 meses</td></tr>
+          <tr><td class="row-label">iMedicina</td><td>Não</td><td><strong>Sim</strong></td><td>Sim (licença de IA)</td><td>Não</td><td>Não declarada</td></tr>
+          <tr><td class="row-label">Docthor</td><td>Não</td><td>Por local</td><td>Não</td><td><strong>Sim · R$ 350</strong></td><td>Não declarada</td></tr>
+          <tr><td class="row-label">Feegow</td><td>Não</td><td><strong>Sim</strong></td><td>Não</td><td>Não publica</td><td>Não publica</td></tr>
+          <tr><td class="row-label">Amplimed</td><td>Não</td><td><strong>Sim</strong></td><td><strong>Sim</strong></td><td>Não publica</td><td>Não publica</td></tr>
+          <tr><td class="row-label">Shosp</td><td>Não · ilimitados</td><td><strong>Sim</strong></td><td>Não</td><td><strong>Sim · R$ 299</strong>, opcional</td><td><strong>Sim · 12 meses</strong>, removível</td></tr>
+          <tr><td class="row-label">Clínica nas Nuvens</td><td>Não</td><td>Por pacote de 3</td><td>Não</td><td>Não · gratuita</td><td>Não publica</td></tr>
+          <tr><td class="row-label">Simples Dental</td><td>Não publica</td><td>Não publica</td><td>Por plano</td><td>Não publica</td><td>10% no anual</td></tr>
+          <tr><td class="row-label" style="color:var(--accent)"><strong>NexClin proposto</strong></td><td><strong>Sim · por faixa</strong></td><td>Não</td><td>Não</td><td><strong>Sim · R$ 1.200</strong></td><td>Não, com desconto no anual</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p>
+    Duas leituras. Primeira: <strong>cobrar implantação é minoria, mas não é anomalia</strong> —
+    Shosp e Docthor cobram e publicam, e a Shosp transformou a taxa em instrumento
+    (paga-se para não ter fidelidade). Segunda: <strong>o NexClin será o único a cobrar por
+    usuário total com implantação obrigatória.</strong> Isso é sustentável se, e somente se,
+    a implantação for visivelmente diferente da dos outros — presencial, com a equipe,
+    conduzida por quem faz gestão de clínica. Se ela virar um vídeo, a cobrança fica sem lastro.
+  </p>
+</section>
+
+<section>
+  <h2><span class="num">06</span>Dimensionamento de mercado</h2>
+  <p class="lede">
+    Calculado a partir da base de estabelecimentos por CNAE, com a conta aberta em cada linha.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>TAM · SAM · SOM</span><span>ticket recorrente anual de R$ 5.040 (R$ 420/mês)</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Métrica</th><th>Base de cálculo</th><th style="text-align:right">Clínicas</th><th style="text-align:right">Valor/ano</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="row-label">TAM</td>
+            <td>Todos os estabelecimentos médicos ambulatoriais privados ativos (CNAE 8630-5/01+02+03) × R$ 5.040</td>
+            <td class="num-cell">285.931</td>
+            <td class="num-cell">R$ 1,44 bi</td>
+          </tr>
+          <tr>
+            <td class="row-label">SAM</td>
+            <td>TAM × 35% (com 3 ou mais usuários potenciais) × 60% (particular ou misto, TISS não eliminatório) <span class="pill p-idle">estimativa</span></td>
+            <td class="num-cell">60.046</td>
+            <td class="num-cell">R$ 302,6 mi</td>
+          </tr>
+          <tr>
+            <td class="row-label">SOM 12 meses</td>
+            <td>Alcance real dos canais disponíveis: carteira da consultoria, indicação e outbound. 0,075% do SAM.</td>
+            <td class="num-cell">45</td>
+            <td class="num-cell">R$ 226,8 mil</td>
+          </tr>
+          <tr>
+            <td class="row-label">SOM 24 meses</td>
+            <td>Base acumulada com indicação estruturada funcionando. 0,22% do SAM.</td>
+            <td class="num-cell">130</td>
+            <td class="num-cell">R$ 655,2 mil</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="tag">O que o SOM está dizendo</span>
+    <p>
+      Capturar <strong>um décimo de um por cento</strong> do mercado endereçável em 24 meses
+      já entrega mais de meio milhão de reais de receita recorrente anual. O mercado não é
+      o gargalo deste negócio — a capacidade de implantar e atender é. Isso deveria
+      tranquilizar quanto ao tamanho e assustar quanto à operação: <strong>130 clientes em
+      24 meses são 130 implantações</strong>, e a seção 10.3 mostra que o modelo atual não
+      suporta nem 10.
+    </p>
+  </div>
+
+  <h3>Segmentação por faixa de usuários</h3>
+  <div class="panel">
+    <div class="panel-head"><span>Distribuição estimada dos 285.931 estabelecimentos</span><span>estimativa · confirmar no CNES</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Faixa</th><th style="text-align:right">Clínicas</th><th>Perfil típico</th><th>Faixa NexClin</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">1 a 2 profissionais</td><td class="num-cell">185.855 · 65%</td><td>PJ do médico, consultório sem equipe. Muitos são CNPJ de faturamento, não clínica.</td><td><span class="pill p-idle">Abaixo do mínimo</span> Não atender.</td></tr>
+          <tr><td class="row-label">3 a 5 usuários</td><td class="num-cell">62.905 · 22%</td><td>1 a 2 médicos + secretárias. Sai da planilha quando contrata o segundo médico.</td><td><span class="pill p-acc">Faixa 3 e 5</span> R$ 249 e R$ 399</td></tr>
+          <tr><td class="row-label">6 a 8 usuários</td><td class="num-cell">22.874 · 8%</td><td>3 a 4 médicos + equipe. Tem repasse. Quase sempre já paga algum sistema.</td><td><span class="pill p-ok">Faixa 8</span> R$ 599</td></tr>
+          <tr><td class="row-label">9 ou mais</td><td class="num-cell">14.297 · 5%</td><td>Corpo clínico e às vezes convênio. Metade sai por falta de TISS.</td><td><span class="pill p-ok">Faixa 8 + adicionais</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flag">
+    <span class="tag">A resposta direta que a pesquisa pediu</span>
+    <p>
+      <strong>A maior concentração está na faixa de 3 a 5 usuários — e ela não é a mais
+      rentável.</strong> São 62.905 clínicas a R$ 249 ou R$ 399, exatamente onde o NexClin
+      é mais caro que o concorrente no comparativo por profissional e onde a ausência de
+      prontuário e prescrição mais pesa. A faixa 8, com 22.874 clínicas, tem um terço do
+      volume mas ticket 50% maior, LTV maior e concorrência mais fraca no financeiro.
+      <br><br>
+      <strong>Recomendação:</strong> o volume está embaixo e a margem está em cima. A saída
+      não é escolher — é usar a faixa 3 como <em>porta</em> e desenhar o produto para
+      empurrar a clínica para cima. Cada médico novo que a clínica contrata deve ser um
+      degrau natural de faixa, não uma renegociação.
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">07</span>Segmentos adjacentes</h2>
+  <p class="lede">
+    Três candidatos com pouca ou nenhuma alteração de escopo. O critério é: o que já
+    funciona sem prontuário certificado, sem prescrição e sem TISS.
+  </p>
+
+  <div class="cards">
+    <div class="card">
+      <h5>Adjacente 1 · Recomendado</h5>
+      <span class="big">Psicologia e psiquiatria</span>
+      <p><strong>600.286 psicólogos registrados</strong> (CFP, mai/2026). Porte típico de 1 a 5 usuários, em consultório ou clínica de psicoterapia. Particular puro em quase toda a base.</p>
+    </div>
+    <div class="card w2">
+      <h5>Adjacente 2 · Testar</h5>
+      <span class="big">Estética e dermatologia estética</span>
+      <p>Ticket alto, recorrência de procedimento, forte dependência de captação paga. Porte de 3 a 10 usuários. Nenhum registro de conselho unificado.</p>
+    </div>
+    <div class="card w3">
+      <h5>Adjacente 3 · Ignorar por ora</h5>
+      <span class="big">Odontologia</span>
+      <p><strong>125.856 estabelecimentos ativos</strong> e 450 mil dentistas (CFO, out/2025). Volume enorme — e verticais dedicados fortíssimos.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><span>Avaliação dos três adjacentes</span><span>contra o escopo funcional de hoje</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Critério</th><th>Psicologia / psiquiatria</th><th>Estética</th><th>Odontologia</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Base</td><td>600.286 psicólogos; estimativa de 25 a 35 mil clínicas com 3+ pessoas</td><td>Estimativa de 15 a 25 mil clínicas formalizadas com 3+ pessoas</td><td>125.856 estabelecimentos ativos</td></tr>
+          <tr><td class="row-label">O que serve direto</td><td>Agenda, pacientes, anamnese pública, financeiro, repasse por terapeuta, tarefas</td><td>Funil de captação (é a dor nº 1 do setor), anamnese pública, financeiro, repasse</td><td>Agenda, pacientes, financeiro</td></tr>
+          <tr><td class="row-label">O que faltaria</td><td>Sessões recorrentes com pacote, evolução por sessão, controle de faltas com cobrança</td><td>Catálogo de protocolos com sessões, fotos de antes e depois, controle de pacotes</td><td><strong>Odontograma.</strong> Sem ele, o produto não entra. É desenvolvimento pesado.</td></tr>
+          <tr><td class="row-label">Ticket que suporta</td><td class="num-cell">R$ 199 a 449</td><td class="num-cell">R$ 299 a 699</td><td class="num-cell">R$ 150 a 350</td></tr>
+          <tr><td class="row-label">TAM estimado</td><td class="num-cell">R$ 90 a 130 mi/ano</td><td class="num-cell">R$ 70 a 120 mi/ano</td><td class="num-cell">R$ 300 mi+/ano</td></tr>
+          <tr><td class="row-label">Concorrência vertical</td><td>Média. Zenklub e afins atacam o paciente, não a clínica. Espaço real.</td><td>Média a alta. Belasis, Sinutri e nichados.</td><td><strong>Muito alta.</strong> Simples Dental (R$ 149,90 a 349,90), Clinicorp (a partir de R$ 159,90), Dental Office.</td></tr>
+          <tr><td class="row-label">Dificuldade de entrada</td><td><span class="pill p-ok">Baixa</span></td><td><span class="pill p-warn">Média</span></td><td><span class="pill p-stop">Alta</span></td></tr>
+          <tr><td class="row-label">Recomendação</td><td><strong>Expandir</strong> — depois dos 10 primeiros clientes médicos</td><td><strong>Testar</strong> — 1 ou 2 clínicas no grupo fundador</td><td><strong>Ignorar</strong> até haver caixa para um vertical</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p>
+    Uma observação que vale mais que a tabela: <strong>o adjacente mais barato de atacar é
+    aquele que a consultoria do sócio já atende.</strong> Antes de escolher por TAM, vale
+    perguntar o que existe na carteira. Um segmento com 20 mil clínicas e três clientes
+    quentes vale mais, nos primeiros 12 meses, que um com 125 mil e nenhum.
+  </p>
+</section>
+
+<section>
+  <h2><span class="num">08</span>Palavras-chave e demanda de busca</h2>
+  <p class="lede">
+    Todos os volumes e CPCs abaixo são <span class="pill p-idle">estimativa</span>.
+    Não há acesso a dado autenticado do Planejador do Google. Trate como ordem de
+    grandeza para decidir se vale investir, não como plano de mídia.
+  </p>
+
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Palavra-chave</th><th style="text-align:right">Volume/mês</th><th style="text-align:right">CPC</th><th>Intenção</th><th>Dificuldade</th><th>Quem domina</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">sistema para clínica médica</td><td class="num-cell">1.900 a 3.600</td><td class="num-cell">R$ 9 a 18</td><td>Comercial</td><td>Alta</td><td>iClinic, Feegow, Amplimed</td></tr>
+          <tr><td class="row-label">software gestão consultório</td><td class="num-cell">700 a 1.400</td><td class="num-cell">R$ 8 a 16</td><td>Comercial</td><td>Alta</td><td>iClinic, GestãoDS</td></tr>
+          <tr><td class="row-label">prontuário eletrônico preço</td><td class="num-cell">400 a 900</td><td class="num-cell">R$ 10 a 20</td><td>Transacional</td><td>Muito alta</td><td>iClinic, ProDoctor</td></tr>
+          <tr><td class="row-label">sistema para clínica de [especialidade]</td><td class="num-cell">50 a 300 cada</td><td class="num-cell">R$ 5 a 12</td><td>Comercial qualificada</td><td><strong>Média</strong></td><td>Pouco disputada — <strong>é aqui que dá para entrar</strong></td></tr>
+          <tr><td class="row-label">alternativa ao [concorrente]</td><td class="num-cell">30 a 200 cada</td><td class="num-cell">R$ 4 a 10</td><td>Troca iminente</td><td>Baixa</td><td>Comparativos de terceiros (ClínicaSysPro, ByDoctor)</td></tr>
+          <tr><td class="row-label">[concorrente] reclamação</td><td class="num-cell">20 a 150 cada</td><td class="num-cell">R$ 2 a 6</td><td>Insatisfação ativa</td><td>Baixa</td><td>Reclame Aqui</td></tr>
+          <tr><td class="row-label">planilha controle financeiro clínica</td><td class="num-cell">300 a 800</td><td class="num-cell">R$ 3 a 8</td><td>Informacional</td><td>Baixa</td><td>Blogs de fornecedor — <strong>a Categoria C se identificando sozinha</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flag">
+    <span class="tag">A conta que desqualifica o Google Ads no ano 1</span>
+    <p>
+      Com CPC de R$ 12 e uma taxa de conversão realista de visitante para demonstração de
+      2%, cada demonstração custa <strong>R$ 600</strong>. Com conversão de demonstração
+      para cliente de 20%, o CAC de mídia paga fica em <strong>R$ 3.000</strong> — contra
+      um LTV de R$ 10.500 a R$ 11.700 no cenário de churn de 4%. A relação LTV/CAC de 3,5
+      até é aceitável no papel, mas o <strong>payback passa de sete meses</strong> e exige
+      caixa que o projeto não tem: são R$ 3.000 desembolsados hoje para receber R$ 420 por
+      mês. <strong>Com R$ 964,93 investidos no projeto até hoje, mídia paga está fora de
+      questão nos primeiros 12 meses.</strong> Volta à mesa quando houver 30 clientes pagantes.
+    </p>
+  </div>
+
+  <p>
+    O que <em>vale</em> fazer com busca, e custa quase nada: escrever três a cinco páginas
+    de comparação honesta ("NexClin ou planilha", "quanto custa um sistema para clínica",
+    "sistema para clínica de psicologia") e uma calculadora pública de perda por falta.
+    Essas páginas capturam a cauda longa e a insatisfação, que é onde está o cliente pronto
+    para trocar, e não competem no leilão caro.
+  </p>
+</section>
+
+<section>
+  <h2><span class="num">09</span>Métricas e benchmarks</h2>
+  <p class="lede">
+    Referências de SaaS B2B para pequena empresa, ajustadas ao contexto real: três sócios,
+    quatro horas semanais de dois deles, sem equipe de sucesso do cliente.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Benchmarks e o número a assumir</span><span>referência de mercado × realidade NexClin</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Métrica</th><th>Referência de mercado</th><th>A assumir no NexClin</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Churn mensal de logo</td><td>1,5 a 3% em SaaS de PME maduro</td><td class="new">4%</td><td>Sem CS dedicado, produto novo e lacunas conhecidas de escopo. Assumir 2% é enganar a projeção.</td></tr>
+          <tr><td class="row-label">Churn anual equivalente</td><td>18 a 30%</td><td class="new">~39%</td><td>Composto de 4% ao mês.</td></tr>
+          <tr><td class="row-label">Vida média do cliente</td><td>36 a 60 meses</td><td class="new">25 meses</td><td>1 ÷ 0,04.</td></tr>
+          <tr><td class="row-label">LTV</td><td>—</td><td class="new">R$ 10.500<span class="sub">R$ 11.700 com implantação</span></td><td>R$ 420 × 25 meses.</td></tr>
+          <tr><td class="row-label">CAC · indicação e carteira</td><td>—</td><td class="new">R$ 150 a 400</td><td>Custo de tempo, não de mídia. É por isso que este canal vem primeiro.</td></tr>
+          <tr><td class="row-label">CAC · outbound ativo</td><td>—</td><td class="new">R$ 800 a 1.500</td><td>Horas de prospecção e demonstração dos sócios.</td></tr>
+          <tr><td class="row-label">CAC · mídia paga</td><td>—</td><td class="new">R$ 2.500 a 3.500</td><td>Ver a conta da seção 8.</td></tr>
+          <tr><td class="row-label">LTV/CAC saudável</td><td>3 a 5×</td><td class="new">&gt; 4× nos canais quentes</td><td>Com CAC de R$ 400, a relação passa de 26×. É o argumento para não abrir o canal frio cedo.</td></tr>
+          <tr><td class="row-label">Payback de CAC</td><td>&lt; 12 meses</td><td class="new">&lt; 3 meses</td><td>Com a implantação cobrada no ato, o CAC dos canais quentes se paga na assinatura.</td></tr>
+          <tr><td class="row-label">Conversão demonstração → assinatura</td><td>15 a 25%</td><td class="new">25 a 35% na carteira<br>10 a 15% no frio</td><td>Relação estabelecida converte muito acima da média.</td></tr>
+          <tr><td class="row-label">Onboarding e churn nos 90 dias</td><td>—</td><td class="new">Meta: 100% com equipe treinada em 14 dias</td><td>Cliente que não usa em 30 dias cancela em 90. Este é o indicador que mais move o churn.</td></tr>
+          <tr><td class="row-label">Receita de serviço sobre a total</td><td>10 a 20% em players comparáveis</td><td class="new">30 a 35% no ano 1</td><td>Ver as projeções da seção 14: a implantação é a maior linha de receita do primeiro ano.</td></tr>
+          <tr><td class="row-label">Meio de cobrança</td><td>Cartão recorrente &gt; Pix &gt; boleto</td><td class="new">Cartão recorrente como padrão</td><td>Boleto tem inadimplência e trabalho de baixa. Pix não é recorrente e depende de lembrete.</td></tr>
+          <tr><td class="row-label">Contrato anual × mensal</td><td>Anual reduz churn em 30 a 50%</td><td class="new">Oferecer anual com 2 meses de desconto</td><td>Menos churn e caixa antecipado. É a alavanca mais barata que existe.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Resposta direta: qual churn assumir nos primeiros 12 meses</span>
+    <p>
+      <strong>4% ao mês.</strong> Com margem para 5% no cenário conservador. Assumir menos
+      exige três coisas que ainda não existem: roteiro de implantação escrito, tempo de
+      resposta de suporte combinado, e prontuário ou prescrição fechando a lacuna de escopo.
+      Cada uma delas, entregue, vale cerca de meio ponto percentual de churn ao mês.
+    </p>
+  </div>
+</section>
+<div class="part">
+  <span class="pn">Parte 3</span>
+  <span class="pt">Preço e conformidade</span>
+  <span class="pw">Seções 10 e 11 · as prioritárias</span>
+</div>
+
+<section>
+  <h2><span class="num">10</span>Análise de preços</h2>
+  <p class="lede">
+    Esta seção entrega número. Todo o resto do documento existe para sustentá-la.
+  </p>
+
+  <h3>10.1 — Benchmark: o que a clínica de fato paga hoje</h3>
+  <p>
+    A tabela abaixo traduz o preço por profissional dos concorrentes para o que uma
+    clínica <em>real</em> paga em cada faixa de usuários do NexClin. A tradução é o
+    ponto: quando a clínica tem 5 usuários, ela costuma ter 2 médicos, e o concorrente
+    cobra por 2, não por 5.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Custo mensal do concorrente por porte real de clínica</span><span>preços públicos de 16/08/2026</span></div>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>Concorrente</th><th>Cat.</th><th style="text-align:right">3 usuários<span class="sub">1 médico</span></th><th style="text-align:right">5 usuários<span class="sub">2 médicos</span></th><th style="text-align:right">8 usuários<span class="sub">4 médicos</span></th><th>Modelo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="row-label">Amplimed Lite</td><td>B</td><td class="num-cell">R$ 89</td><td class="num-cell">R$ 178</td><td class="num-cell">R$ 356</td><td>Por profissional <span class="pill p-ok">público</span></td></tr>
+          <tr><td class="row-label">HiDoctor (preço padrão)</td><td>A</td><td class="num-cell">R$ 209</td><td class="num-cell">R$ 418</td><td class="num-cell">R$ 836</td><td>Por médico, secretárias grátis <span class="pill p-ok">público</span></td></tr>
+          <tr><td class="row-label">Shosp Fellowship</td><td>B</td><td class="num-cell">R$ 149</td><td class="num-cell">R$ 298</td><td class="num-cell">R$ 596</td><td>Por prestador, usuários ilimitados <span class="pill p-ok">público</span></td></tr>
+          <tr><td class="row-label">Afya iClinic Pro</td><td>A</td><td class="num-cell">R$ 169</td><td class="num-cell">R$ 338</td><td class="num-cell">R$ 676</td><td>Por profissional de saúde <span class="pill p-ok">público</span></td></tr>
+          <tr><td class="row-label">Feegow Plus</td><td>B</td><td class="num-cell">R$ 199</td><td class="num-cell">R$ 398</td><td class="num-cell">R$ 796</td><td>Por profissional <span class="pill p-ok">público</span></td></tr>
+          <tr><td class="row-label">Afya iClinic Premium</td><td>A</td><td class="num-cell">R$ 299</td><td class="num-cell">R$ 598</td><td class="num-cell">R$ 1.196</td><td>Por profissional <span class="pill p-ok">público</span></td></tr>
+          <tr><td class="row-label">Clínica nas Nuvens Essencial</td><td>B</td><td class="num-cell">R$ 499</td><td class="num-cell">R$ 499+</td><td class="num-cell">sob consulta</td><td>Pacote de 3 profissionais <span class="pill p-ok">público</span></td></tr>
+          <tr style="background:var(--accent-soft)"><td class="row-label" style="color:var(--accent)"><strong>NexClin proposto</strong></td><td>B</td><td class="num-cell"><strong>R$ 249</strong></td><td class="num-cell"><strong>R$ 399</strong></td><td class="num-cell"><strong>R$ 599</strong></td><td><strong>Por faixa de usuários totais</strong></td></tr>
+          <tr><td class="row-label">Mediana do mercado</td><td>—</td><td class="num-cell">R$ 199</td><td class="num-cell">R$ 398</td><td class="num-cell">R$ 736</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">A leitura da tabela em três frases</span>
+    <p>
+      Na faixa 3, o NexClin fica <strong>25% acima da mediana</strong> e sem prontuário —
+      é a célula mais frágil da tabela.
+      Na faixa 5, fica <strong>praticamente na mediana</strong>, com financeiro muito
+      superior — é onde a proposta é mais equilibrada.
+      Na faixa 8, fica <strong>19% abaixo da mediana</strong> e ganha com folga contra
+      Feegow, iClinic e Shosp — é onde o modelo por faixa vira vantagem, não desvantagem.
+    </p>
+  </div>
+
+  <h3>10.2 — Tabela de mensalidade proposta</h3>
+  <div class="panel">
+    <div class="panel-head"><span>Recomendação</span><span>valores mensais, contrato mensal, sem fidelidade</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Faixa</th><th style="text-align:right">Usuários</th><th style="text-align:right">Mensalidade</th><th style="text-align:right">Por usuário</th><th>Justificativa</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Essencial</td><td class="num-cell">3</td><td class="num-cell"><strong>R$ 249</strong></td><td class="num-cell">R$ 83,00</td><td>Piso de credibilidade. Acima do preço de app pessoal, abaixo do Feegow Plus. Porta de entrada, não alvo comercial.</td></tr>
+          <tr><td class="row-label">Profissional</td><td class="num-cell">5</td><td class="num-cell"><strong>R$ 399</strong></td><td class="num-cell">R$ 79,80</td><td>Empata com a mediana do mercado para 2 médicos e entrega financeiro que nenhum deles tem. É o plano que deve concentrar as vendas.</td></tr>
+          <tr><td class="row-label">Avançado</td><td class="num-cell">8</td><td class="num-cell"><strong>R$ 599</strong></td><td class="num-cell">R$ 74,88</td><td>Vence o Feegow em R$ 197 e o iClinic Pro em R$ 77 para a mesma clínica. Melhor relação valor-preço da tabela.</td></tr>
+          <tr><td class="row-label">Usuário adicional</td><td class="num-cell">+1 acima de 8</td><td class="num-cell"><strong>R$ 89</strong></td><td class="num-cell">—</td><td>Deliberadamente acima do preço por usuário de qualquer faixa, para que subir de faixa seja sempre mais barato que comprar avulso.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><span>Verificação do incentivo</span><span>o desenho não pode premiar quem compartilha login</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Situação</th><th style="text-align:right">Comprando adicionais</th><th style="text-align:right">Subindo de faixa</th><th>Resultado</th></tr></thead>
+        <tbody>
+          <tr><td>Clínica com 3 usuários precisa de 5</td><td class="num-cell">R$ 249 + 2×89 = R$ 427</td><td class="num-cell">R$ 399</td><td><span class="pill p-ok">Subir é mais barato</span></td></tr>
+          <tr><td>Clínica com 5 usuários precisa de 8</td><td class="num-cell">R$ 399 + 3×89 = R$ 666</td><td class="num-cell">R$ 599</td><td><span class="pill p-ok">Subir é mais barato</span></td></tr>
+          <tr><td>Clínica com 8 usuários precisa de 9</td><td class="num-cell">R$ 599 + 89 = R$ 688</td><td class="num-cell">não há faixa acima</td><td><span class="pill p-acc">Adicional é o caminho</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h4>Progressão: linear ou com desconto por volume?</h4>
+  <p>
+    <strong>Com desconto por volume, mas leve</strong> — de R$ 83 a R$ 74,88 por usuário,
+    uma queda de 10% da menor para a maior faixa. Desconto agressivo (30% ou mais) faria a
+    faixa 3 parecer punição e convidaria a clínica a mentir sobre o tamanho. Desconto
+    nenhum removeria o incentivo de crescer dentro do produto. O que faz a clínica subir
+    de faixa em vez de compartilhar login não é o desconto — <strong>é o adicional caro e
+    a permissão por área funcionando</strong>. Login compartilhado só é atraente quando as
+    permissões não são úteis; se cada pessoa precisa da própria visão para trabalhar, o
+    compartilhamento se resolve sozinho.
+  </p>
+
+  <h4>Piso e teto</h4>
+  <p>
+    <strong>Piso: R$ 199.</strong> Abaixo disso, o preço sinaliza produto amador para um
+    médico cuja consulta custa R$ 300. Software de R$ 99 é o iClinic com marca da Afya
+    atrás — o NexClin não tem essa marca para sustentar preço baixo sem parecer barato.
+    <br>
+    <strong>Teto: R$ 700 na faixa 8, hoje.</strong> Acima disso a clínica compara com
+    Feegow VIP, que tem TISS, glosas e IA. Sem prontuário certificado nem prescrição, o
+    NexClin não sustenta a comparação. Os R$ 599 propostos deixam cerca de R$ 100 de
+    espaço para o primeiro reajuste, quando a prescrição entrar.
+  </p>
+
+  <div class="flag">
+    <span class="tag">Por usuário ou por profissional de saúde: a decisão mais consequente da seção</span>
+    <p>
+      <strong>O mercado inteiro cobra por profissional.</strong> Nove dos dez concorrentes
+      pesquisados tratam secretária como usuária gratuita e ilimitada. Quando a clínica
+      de 5 usuários (2 médicos) compara R$ 399 do NexClin com R$ 338 do iClinic Pro, ela
+      não está comparando cinco contra cinco — está comparando cinco contra dois, e
+      concluindo que o NexClin cobra pela recepcionista.
+    </p>
+    <p>
+      <strong>Recomendação: manter a cobrança por faixa de usuários, e mudar o discurso, não a arquitetura.</strong>
+      Três razões para manter: o plano já é o teto de acesso no banco, as 15 áreas já são
+      contrato, e mudar isso agora significa reescrever a regra de plano a duas semanas do
+      lançamento — risco desproporcional. Além disso, cobrar por usuário é
+      <em>honesto</em> num produto cuja usuária principal é a secretária: ela consome
+      suporte, treinamento e dado como qualquer outro.
+    </p>
+    <p>
+      <strong>O que muda no discurso:</strong> nunca apresente o preço como "R$ 79,80 por
+      usuário". Apresente sempre como <strong>preço da clínica</strong> — "sua clínica
+      inteira, com toda a equipe, por R$ 399". E antecipe a objeção antes que ela venha:
+      <em>"a gente não cobra por médico, cobra pela clínica. Se você contratar mais um
+      médico amanhã, o preço não muda enquanto couber na faixa."</em> Essa frase transforma
+      a desvantagem em vantagem para a clínica de corpo clínico, que é justamente a mais
+      rentável.
+    </p>
+  </div>
+
+  <h4>Diferenciar as faixas também por funcionalidade?</h4>
+  <p>
+    <strong>Não no lançamento.</strong> Diferenciar por função exige decidir o que segurar,
+    e tudo o que está pronto é necessário para a proposta de valor: tirar contas a pagar
+    ou relatório de resultado do plano de entrada destrói o argumento contra a planilha.
+    Diferenciar por número de usuários é mais simples de vender, mais simples de explicar
+    e já está construído.
+    <br>
+    <strong>Depois do lançamento, sim</strong> — mas na direção contrária: as funções
+    <em>novas</em> (prescrição, telemedicina, IA) entram como plano superior ou como
+    adicional cobrado, criando o próximo degrau de preço sem mexer no que já foi vendido.
+  </p>
+
+  <h3>10.3 — Taxa de implantação</h3>
+  <div class="panel">
+    <div class="panel-head"><span>Proposta de implantação</span><span>mentoria e treinamento, com carga real de horas</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Item</th><th style="text-align:right">Valor</th><th>Justificativa</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Implantação remota</td><td class="num-cell"><strong>R$ 1.200</strong></td><td>Três encontros de 1h30 com o médico e a equipe, mais configuração de catálogos, regras de negócio e carga inicial de dados. Cerca de 8 h de trabalho.</td></tr>
+          <tr><td class="row-label">Implantação presencial</td><td class="num-cell"><strong>R$ 2.400</strong><span class="sub">+ deslocamento fora da cidade-sede</span></td><td>Um dia na clínica com a equipe operando ao vivo, mais o preparo e o acompanhamento remoto das duas semanas seguintes. Cerca de 14 h.</td></tr>
+          <tr><td class="row-label">Custo de entrega · modelo a três</td><td class="num-cell">R$ 2.250<span class="sub">15 h × R$ 150/h</span></td><td>Três sócios na mesma sessão. <strong>Margem negativa na remota.</strong></td></tr>
+          <tr><td class="row-label">Custo de entrega · uma pessoa com roteiro</td><td class="num-cell">R$ 750<span class="sub">5 h × R$ 150/h</span></td><td>Meta a partir da quarta implantação.</td></tr>
+          <tr><td class="row-label">Margem na remota</td><td class="num-cell"><strong>37,5%</strong> uma pessoa<br><span class="sub">−87% a três</span></td><td>A implantação só vira linha de receita quando deixa de ser feita a três.</td></tr>
+          <tr><td class="row-label">Margem na presencial</td><td class="num-cell"><strong>~53%</strong></td><td>Com 7,5 h de uma pessoa (R$ 1.125) sobre R$ 2.400.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h4>O que os concorrentes fazem</h4>
+  <p>
+    Dos nove concorrentes com preço público, <strong>sete isentam a implantação e a usam
+    como argumento de venda</strong> — iClinic, HiDoctor, Clínica nas Nuvens e iMedicina
+    dizem explicitamente "implantação gratuita". Dois cobram: Docthor (R$ 350, incluindo
+    configuração e treinamento online) e Shosp (R$ 299, opcional, para remover a fidelidade
+    de 12 meses).
+    <br><br>
+    <strong>Isso não invalida cobrar R$ 1.200.</strong> Invalida cobrar R$ 1.200 pela mesma
+    coisa. A implantação "gratuita" do mercado é vídeo, base de conhecimento e um chamado
+    de suporte. A do NexClin é mentoria de gestão conduzida por quem administra clínicas.
+    São produtos diferentes com o mesmo nome — e o nome precisa mudar na apresentação
+    comercial. <strong>Chame de "implantação assistida" ou "mentoria de implantação", nunca
+    só de "implantação"</strong>, ou a clínica compara R$ 1.200 com R$ 0.
+  </p>
+
+  <div class="flag">
+    <span class="tag">A consequência de caixa · e a recomendação</span>
+    <p>
+      Com trial de 30 dias para o grupo fundador, <strong>a primeira mensalidade só entra
+      em 01 de outubro</strong>. As três opções, avaliadas:
+    </p>
+    <ul>
+      <li><strong>Isenta em troca de contrato anual.</strong> Reduz churn e antecipa caixa, mas exige que a clínica pague 12 meses adiantados de um produto que ela nunca usou. Nenhuma clínica do grupo fundador vai aceitar isso antes do trial. <span class="pill p-stop">Descartada para o grupo fundador</span></li>
+      <li><strong>Diluída nos primeiros meses.</strong> Baixa a barreira de entrada e mantém setembro em zero. Além disso, cria um valor a receber de cliente que ainda pode cancelar — que é a pior combinação possível. <span class="pill p-stop">Descartada</span></li>
+      <li><strong>Cobrada no ato, 50% na assinatura e 50% na sessão final.</strong> Setembro fecha com <strong>R$ 4.800 a R$ 6.000</strong> em vez de zero, o compromisso financeiro aumenta a taxa de conclusão do onboarding, e o CAC dos canais quentes se paga na assinatura. <span class="pill p-ok">Recomendada</span></li>
+    </ul>
+    <p>
+      <strong>Regra a escrever antes do contato de 18/08:</strong> o trial de 30 dias isenta
+      a <em>mensalidade</em>, nunca a implantação. É a primeira pergunta que a clínica vai
+      fazer, e responder com hesitação custa a venda.
+    </p>
+  </div>
+
+  <h4>A implantação a três não escala. A partir de quando?</h4>
+  <p>
+    Três sócios numa sessão consomem 15 horas de um time que tem cerca de 12 horas
+    semanais disponíveis somadas. <strong>Na prática, o modelo a três suporta uma
+    implantação por semana — no máximo três clientes por mês, e às custas de todo o
+    desenvolvimento.</strong> O limite não é o quarto cliente: é o segundo mês.
+  </p>
+  <p>
+    <strong>Ponto de virada: a quarta implantação.</strong> As três primeiras são as do
+    grupo fundador e existem para produzir o roteiro; da quarta em diante, uma pessoa
+    conduz. Isso exige que a tarefa de <em>escrever o roteiro</em> tenha dono e prazo —
+    hoje ela não existe em nenhum plano, e sem ela a quarta implantação não tem o que
+    reproduzir e a cobrança perde lastro.
+    <br>
+    <strong>Impacto no valor cobrado: nenhum.</strong> O preço não cai quando o custo cai —
+    a margem é que aparece. O que muda é a promessa: a partir da quarta, a implantação é
+    conduzida por uma pessoa com roteiro, e isso deve ser dito como padronização, não como
+    redução.
+  </p>
+
+  <h3>10.4 — Sensibilidade a preço e ancoragem</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Com o que o médico compara</th><th>Efeito</th><th>Usar?</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Com outro software</td><td>Perde. O concorrente cobra por médico e tem prontuário.</td><td><span class="pill p-stop">Evitar</span></td></tr>
+          <tr><td class="row-label">Com o salário da secretária</td><td>R$ 399 é cerca de 13% de um salário com encargos. Bom argumento, mas sugere substituição de pessoa — e a secretária está na sala.</td><td><span class="pill p-warn">Cuidado</span></td></tr>
+          <tr><td class="row-label">Com o valor de uma consulta</td><td>R$ 399 é <strong>1,3 consulta por mês</strong>. Concreto, imediato e na moeda dele.</td><td><span class="pill p-ok">Usar</span></td></tr>
+          <tr><td class="row-label">Com o que ele perde hoje</td><td>R$ 399 contra R$ 6.024/mês de perda estimada. <strong>Quinze para um.</strong></td><td><span class="pill p-ok">Usar como fechamento</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Ancoragem recomendada</span>
+    <p>
+      <em>"Menos de duas consultas por mês. Se o sistema evitar duas faltas, ele já se
+      pagou — e a clínica de porte parecido com a sua perde de sete a dez faltas por mês
+      hoje."</em>
+      <br><br>
+      Uma consulta e meia é uma unidade que o médico calcula de cabeça e sente no bolso.
+      Nunca ancore em "R$ 13 por dia" ou "menos que um café" — soa a vendedor de plano
+      de celular e desqualifica um produto de gestão.
+    </p>
+  </div>
+
+  <h4>Existe espaço para preço premium?</h4>
+  <p>
+    Sim, e não vem do software. Vem de <strong>três coisas que o concorrente não pode
+    copiar rápido</strong>: mentoria de gestão por quem administra clínicas, suporte com
+    tempo de resposta combinado por escrito, e um relatório mensal de resultado
+    interpretado — não apenas emitido. Conformidade com a LGPD <em>não</em> sustenta
+    prêmio (seção 11.4): é vista como obrigação básica.
+    <br>
+    Um plano <strong>Avançado + Mentoria a R$ 899</strong>, com uma sessão mensal de
+    análise de resultado, é a extensão natural e reaproveita o ativo que já existe.
+    Não no lançamento — depois dos primeiros dez clientes, quando houver o que analisar.
+  </p>
+
+  <h4>Sweet spot</h4>
+  <p>
+    <strong>A faixa 5, a R$ 399.</strong> Concentra o segundo maior volume de clínicas,
+    empata com a mediana do mercado, entrega o diferencial mais forte (financeiro completo)
+    e tem margem bruta praticamente integral — a infraestrutura é custo fixo e não cresce
+    com o número de clientes. Cada cliente adicional na faixa 5 acrescenta R$ 399 de
+    receita contra R$ 126 de custo variável estimado: <strong>68% de margem de contribuição</strong>.
+  </p>
+
+  <h4>Desconto de fundador</h4>
+  <div class="panel">
+    <div class="panel-head"><span>Proposta para as 4 a 5 primeiras clínicas</span><span>o desconto precisa ter contrapartida e data de fim</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Item</th><th>Proposta</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Desconto</td><td><strong>40% na mensalidade por 12 meses</strong><span class="sub">Faixa 5 sai por R$ 239</span></td><td>Grande o suficiente para justificar o risco de ser o primeiro; pequeno o suficiente para não virar o preço de referência.</td></tr>
+          <tr><td class="row-label">Implantação</td><td><strong>Sem desconto.</strong> R$ 1.200 ou R$ 2.400 cheios.</td><td>É a receita de setembro e é o que garante que a clínica leve a implantação a sério.</td></tr>
+          <tr><td class="row-label">Trial</td><td>30 dias sem mensalidade, só para este grupo</td><td>Já decidido em 13/08.</td></tr>
+          <tr><td class="row-label">Contrapartida escrita</td><td>Depoimento em vídeo até o 4º mês · autorização de uso do nome e do case com números · duas indicações qualificadas até o 6º mês</td><td><strong>Sem contrapartida escrita, não é desconto de fundador — é só desconto.</strong> E desconto sem contrapartida nunca sobe.</td></tr>
+          <tr><td class="row-label">Fim do desconto</td><td>Data no contrato: 12 meses da assinatura, subindo em duas etapas de 20%</td><td>Ver 10.5.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>10.5 — Reajuste e evolução</h3>
+  <p>
+    <strong>Como reajustar o fundador sem perdê-lo.</strong> Três regras. Primeira: a data
+    de fim está no contrato desde o dia um — reajuste combinado não é reajuste, é
+    cronograma. Segunda: a subida é em duas etapas de 20% (mês 13 e mês 18), não em um
+    salto de 40%. Terceira, e a que mais importa: <strong>cada etapa é anunciada junto com
+    uma entrega</strong>. "A partir do mês 13, o plano passa a incluir prescrição digital
+    e o valor vai a R$ 319." Reajuste sem função nova é o segundo motivo de cancelamento
+    da lista da seção 3.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>O que cada função futura vale em preço</span><span>estimativa de disposição a pagar</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Função</th><th style="text-align:right">Vale</th><th>Efeito</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Prescrição digital assinada</td><td class="num-cell">+R$ 60 a 90/mês</td><td>Fecha a objeção mais frequente e desbloqueia o consultório individual. <strong>Maior retorno por esforço.</strong></td></tr>
+          <tr><td class="row-label">Prontuário estruturado por especialidade</td><td class="num-cell">+R$ 80 a 120/mês</td><td>Tira o NexClin da categoria "sistema de gestão" e o coloca na comparação direta com iClinic.</td></tr>
+          <tr><td class="row-label">TISS / convênio</td><td class="num-cell">+R$ 100 a 150/mês</td><td>Abre um mercado inteiro hoje fechado. Também o mais caro de construir e manter.</td></tr>
+          <tr><td class="row-label">Telemedicina integrada</td><td class="num-cell">+R$ 40 a 70/mês</td><td>Baixo custo de integração. Vale mais em psiquiatria e nutrição que em clínica geral.</td></tr>
+          <tr><td class="row-label">Confirmação automática por WhatsApp</td><td class="num-cell">+R$ 50 a 80/mês</td><td>Ataca diretamente a dor nº 1. <strong>Melhor relação valor percebido / esforço de toda a lista.</strong></td></tr>
+          <tr><td class="row-label">Aplicativo do paciente</td><td class="num-cell">+R$ 30 a 50/mês</td><td>Muito pedido, pouco usado. Última prioridade.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<section>
+  <h2><span class="num">11</span>LGPD e dado sensível de saúde</h2>
+  <p class="lede">
+    Dado de saúde é dado pessoal sensível. A conformidade é obrigação, aparece na venda,
+    e — ao contrário do que se imagina — não sustenta preço. O valor dela está em outro lugar.
+  </p>
+
+  <h3>11.1 — O que a lei exige, e o que é só boa prática</h3>
+  <div class="panel">
+    <div class="panel-head"><span>Separando obrigação legal de expectativa de mercado</span><span>legislação vigente em agosto de 2026</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Norma</th><th>O que determina</th><th>Aplica-se ao NexClin?</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="row-label">Lei 13.709/2018 · LGPD</td>
+            <td>Dado de saúde é dado pessoal sensível (art. 5º, II). Bases legais aplicáveis à clínica: tutela da saúde por profissional de saúde (art. 11, II, "f") — que dispensa consentimento para o atendimento — e consentimento específico e destacado para o que extrapola o atendimento, como marketing e pesquisa.</td>
+            <td><strong>Sim.</strong> A clínica é <strong>controladora</strong>; o NexClin é <strong>operador</strong>. Isso obriga contrato entre as partes definindo finalidade, instruções, subcontratação, segurança, prazo e devolução ou eliminação dos dados ao fim. <span class="pill p-stop">Obrigação legal</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Lei 13.787/2018</td>
+            <td>Autoriza a digitalização do prontuário e a eliminação do papel <strong>somente</strong> quando o sistema atende os requisitos de segurança do CFM. Guarda mínima do prontuário: <strong>20 anos</strong> a partir do último registro.</td>
+            <td><strong>Sim, com ressalva.</strong> O NexClin não é prontuário — mas armazena anamnese, que é registro clínico. A regra de retenção de 20 anos precisa estar escrita na política e refletida no que acontece quando um cliente cancela. <span class="pill p-stop">Obrigação legal</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Resolução CFM 1.821/2007</td>
+            <td>Define os requisitos de sistema informatizado de prontuário e remete aos níveis NGS1 e NGS2 do manual SBIS-CFM.</td>
+            <td>Parcial. Vira integralmente aplicável no dia em que houver prontuário no produto. <span class="pill p-warn">Preparar</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Certificação SBIS/CFM</td>
+            <td><strong>NGS1</strong>: controle de versão, gestão de acesso, autenticação, disponibilidade, comunicação remota segura e trilha de auditoria. <strong>NGS2</strong>: acrescenta certificado ICP-Brasil para assinatura — só o NGS2 permite operar 100% digital sem papel.</td>
+            <td><strong>Não é obrigatória.</strong> O próprio manual SBIS-CFM registra que o CFM exige os requisitos, mas não exige a auditoria da SBIS. O selo é parecer técnico qualificado, não licença de operação. <span class="pill p-idle">Boa prática</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Notificação de incidente</td>
+            <td>Comunicação à ANPD e ao titular em prazo razoável quando houver risco ou dano relevante. A ANPD já sancionou órgãos justamente por notificação inadequada ou tardia (IAMSPE, SEEDF).</td>
+            <td><strong>Sim.</strong> Precisa de procedimento escrito antes do primeiro cliente, não depois do primeiro incidente. <span class="pill p-stop">Obrigação legal</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Encarregado (DPO)</td>
+            <td>Indicação obrigatória em regra; a ANPD dispensou agentes de pequeno porte da <em>indicação formal</em>, mas manteve a obrigação de canal de comunicação com o titular.</td>
+            <td>Canal público de contato é obrigatório. Nomear um dos sócios como encarregado e publicar o e-mail resolve, e custa uma linha no site. <span class="pill p-warn">Fazer de qualquer forma</span></td>
+          </tr>
+          <tr>
+            <td class="row-label">Sanções</td>
+            <td>Advertência, multa simples de até <strong>2% do faturamento, limitada a R$ 50 milhões por infração</strong>, publicização, bloqueio e eliminação dos dados. Nove sanções aplicadas até 2026, três no setor de saúde — todas a órgãos públicos, que não recebem multa pecuniária.</td>
+            <td>O risco realista hoje não é a multa da ANPD. É a <strong>ação individual do paciente</strong> e o dano de reputação. <span class="pill p-warn">Real, mas mal dimensionado no mercado</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="tag">A distinção que quase todo fornecedor apaga</span>
+    <p>
+      Ter a certificação SBIS <strong>não é obrigatório</strong>, mas cumprir os requisitos
+      de NGS1 <strong>é</strong> — porque eles vêm da resolução do CFM, não do selo. Muito
+      concorrente anuncia "certificado SBIS" como se fosse licença, e muito outro ignora
+      NGS1 como se fosse opcional. Os dois estão errados. A posição correta e defensável
+      do NexClin: <em>"não somos prontuário certificado, e por isso não substituímos o seu
+      prontuário. Cumprimos os requisitos de segurança que a lei exige de qualquer sistema
+      que guarda dado de paciente."</em>
+    </p>
+  </div>
+
+  <h3>11.2 — Requisitos técnicos esperados pelo mercado</h3>
+  <div class="panel">
+    <div class="panel-head"><span>O que uma clínica exigente perguntaria</span><span>estado do NexClin em 16/08/2026</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Requisito</th><th>Obrigação legal?</th><th>Concorrentes anunciam?</th><th>NexClin atende?</th><th>Peso na venda</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Isolamento de dados entre clínicas</td><td>Sim · art. 46</td><td>Raramente explicitam</td><td><span class="pill p-ok">Sim, no banco</span><span class="sub">garantido pela camada de dados, não pela tela</span></td><td>Baixo — ninguém pergunta, mas é o que evita o desastre</td></tr>
+          <tr><td class="row-label">Trilha de auditoria de acesso e alteração</td><td>Sim · NGS1 e art. 37</td><td>Sim, os maiores</td><td><span class="pill p-warn">Parcial</span><span class="sub">cobre ações administrativas do nível mais alto; o que o dono da clínica faz dentro da própria conta ainda não deixa rastro</span></td><td><strong>Alto</strong> — é a resposta a "quem mexeu no meu dado"</td></tr>
+          <tr><td class="row-label">Permissão por área e perfil</td><td>Sim · princípio da necessidade</td><td>Sim</td><td><span class="pill p-ok">Sim</span></td><td><strong>Alto</strong> — o médico pergunta se a secretária vê o financeiro</td></tr>
+          <tr><td class="row-label">Criptografia em trânsito e em repouso</td><td>Boa prática exigível · art. 46</td><td>Sim</td><td><span class="pill p-ok">Sim</span></td><td>Médio — pergunta técnica, não comercial</td></tr>
+          <tr><td class="row-label">Senha e redefinição pelo próprio usuário</td><td>Sim · NGS1</td><td>Poucos explicitam</td><td><span class="pill p-ok">Sim</span><span class="sub">nem o suporte define senha de cliente</span></td><td><strong>Alto</strong> — vira a melhor resposta a "vocês veem meus dados?"</td></tr>
+          <tr><td class="row-label">Backup e plano de recuperação</td><td>Boa prática exigível</td><td>Sim, genericamente</td><td><span class="pill p-warn">A confirmar</span><span class="sub">existe backup do provedor; falta plano de recuperação escrito e testado</span></td><td><strong>Alto</strong> — "e se sumir tudo?" é pergunta de todo médico</td></tr>
+          <tr><td class="row-label">Servidores em território nacional</td><td><strong>Não.</strong> A LGPD permite transferência internacional com salvaguardas</td><td>Alguns usam como argumento</td><td><span class="pill p-idle">A confirmar</span></td><td>Médio — quando perguntam, é o advogado, não o médico</td></tr>
+          <tr><td class="row-label">Contrato de operador / adendo LGPD</td><td><strong>Sim</strong> · art. 39</td><td>Sim, os maiores</td><td><span class="pill p-stop">Pendente</span><span class="sub">cláusulas 9 e 9.2 paradas desde 24/07</span></td><td><strong>Alto</strong> — é o documento que o contador ou advogado pede</td></tr>
+          <tr><td class="row-label">Consentimento no formulário de anamnese</td><td><strong>Sim</strong>, ver abaixo</td><td>Poucos têm o recurso</td><td><span class="pill p-stop">A verificar</span></td><td><strong>Alto</strong> — é o ponto mais exposto do produto</td></tr>
+          <tr><td class="row-label">Exportação e portabilidade na saída</td><td><strong>Sim</strong> · art. 18</td><td>iClinic anuncia explicitamente</td><td><span class="pill p-warn">A confirmar</span></td><td><strong>Alto</strong> — remove a objeção "e se eu quiser sair?"</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flag">
+    <span class="tag">Ponto de atenção específico do produto · formulário público de anamnese</span>
+    <p>
+      O NexClin coleta <strong>dado pessoal sensível de saúde por meio de um link público,
+      preenchido pelo próprio paciente, sem autenticação</strong>. É o recurso mais
+      diferenciado do produto e o mais exposto juridicamente. Seis pontos a resolver antes
+      de 01/09:
+    </p>
+    <ul>
+      <li><strong>Base legal.</strong> O paciente que preenche por vontade própria antes da consulta está sob "tutela da saúde por profissional de saúde" (art. 11, II, "f") — não sob consentimento. Mas isso só vale se o formulário for parte do atendimento. Se um campo servir a marketing, ele precisa de consentimento específico e destacado, separado.</li>
+      <li><strong>Aviso de privacidade no próprio formulário.</strong> Quem é o controlador (a clínica, com nome), qual a finalidade, por quanto tempo o dado fica e como o titular exerce os direitos dele. Uma caixa de aceite genérica não cumpre isso.</li>
+      <li><strong>Segurança do link.</strong> Link público e adivinhável é vazamento à espera. Exigir token de uso único, com expiração curta (24 a 72 h) e vínculo ao agendamento — não um endereço fixo por clínica.</li>
+      <li><strong>Retenção do formulário não convertido.</strong> Anamnese preenchida por paciente que nunca compareceu é dado sensível sem finalidade. Precisa de regra de descarte automático.</li>
+      <li><strong>Trilha.</strong> Registrar data, hora e origem do preenchimento, e quem na clínica acessou depois.</li>
+      <li><strong>Responsabilidade.</strong> O NexClin fornece o formulário; a clínica define os campos. Se a clínica incluir um campo indevido, a responsabilidade é dela como controladora — <strong>desde que o contrato de operador diga isso</strong>. Hoje ele não diz, porque está parado em revisão.</li>
+    </ul>
+  </div>
+
+  <h3>11.3 — LGPD como objeção de venda</h3>
+  <p>
+    <strong>Quando aparece:</strong> raramente na primeira conversa; quase sempre entre a
+    demonstração e a assinatura, junto com a leitura do contrato.
+    <strong>Quem pergunta:</strong> em ordem de frequência, o sócio mais novo (formado depois
+    de 2018, que estudou LGPD), o advogado ou contador da clínica quando lê o contrato, e o
+    próprio médico — este último geralmente só depois de ter ouvido falar de um vazamento.
+    Em boa parte das clínicas, <strong>ninguém pergunta até acontecer um problema</strong>.
+    Isso não é motivo para relaxar: é o motivo pelo qual o assunto precisa ser levantado
+    pelo NexClin, e não esperado.
+  </p>
+
+  <div class="callout">
+    <span class="tag">Resposta de 30 segundos · "e se vazar o dado dos meus pacientes?"</span>
+    <p>
+      <em>"Três coisas. Primeira: o dado da sua clínica é separado do de qualquer outra
+      no próprio banco, não por programação de tela — uma falha de código não mistura
+      clínicas. Segunda: quem acessa o quê é definido por você, por área, e toda ação
+      fica registrada com autor e data. Terceira: se acontecer um incidente, a lei nos
+      obriga a comunicar você e a ANPD, e nosso contrato diz exatamente em quanto tempo.
+      Nenhum sistema pode prometer que nada acontece. O que a gente promete é que você
+      sabe primeiro e sabe o que aconteceu."</em>
+    </p>
+  </div>
+
+  <div class="callout">
+    <span class="tag">Resposta de 30 segundos · "quem garante que vocês não olham o prontuário dos meus pacientes?"</span>
+    <p>
+      <em>"Ninguém aqui consegue definir a senha de um usuário seu — nem o suporte.
+      A única forma de redefinir senha é o próprio usuário, pelo e-mail dele. E qualquer
+      acesso administrativo à sua conta fica registrado com nome, data e o que foi feito,
+      num registro que você pode pedir para ver. A garantia não é a nossa palavra; é o
+      fato de que não existe caminho técnico para isso passar despercebido."</em>
+    </p>
+    <p class="src">
+      Esta resposta depende de a trilha de auditoria cobrir também as ações dentro da conta
+      da clínica — hoje ela cobre só o nível administrativo mais alto. Fechar essa lacuna
+      transforma uma resposta boa numa resposta verificável.
+    </p>
+  </div>
+
+  <h4>Como transformar objeção em fechamento</h4>
+  <p>
+    Não espere a pergunta. <strong>Faça você a pergunta, antes.</strong> "Posso te mostrar
+    uma coisa que quase ninguém pergunta e devia?" — e então abra a tela de permissões e
+    mostre a secretária sem acesso ao financeiro. O efeito é duplo: resolve a objeção antes
+    de existir e reposiciona o vendedor como quem entende do assunto. Em seguida vem a
+    virada: <em>"agora me diz uma coisa — hoje, onde está a ficha dos seus pacientes?"</em>
+    A resposta vai ser WhatsApp, papel ou planilha. E aí a conversa deixa de ser sobre o
+    risco do NexClin e passa a ser sobre o risco atual da clínica.
+  </p>
+
+  <h3>11.4 — LGPD como alavanca de preço</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pergunta</th><th>Resposta</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Conformidade sustenta preço premium?</td><td><strong>Não.</strong> É vista como obrigação básica — como cinto de segurança em carro. Ninguém paga a mais por ter, e todo mundo desiste da compra se faltar. Cobrar por "conformidade" soa a cobrar pelo que já deveria estar incluído.</td></tr>
+          <tr><td class="row-label">Quanto vale, em R$/mês, o argumento "sua clínica fica em conformidade"?</td><td><strong>Zero como acréscimo de preço. Muito como razão de escolha.</strong> Entre dois sistemas de preço parecido, é desempate. Como linha de cobrança, é rejeitado.</td></tr>
+          <tr><td class="row-label">Cabe um serviço pago de adequação LGPD da clínica?</td><td><strong>Sim, e é a melhor oportunidade desta seção.</strong> Política de privacidade da clínica, termo de consentimento para uso de imagem e marketing, aviso no formulário, treinamento da equipe sobre WhatsApp e mapeamento de onde o dado mora. É serviço de consultoria, cabe exatamente no que o sócio já faz, e o mercado cobra de R$ 2.500 a R$ 8.000 por um pacote desses. <strong>Vendido como adicional único no momento da implantação</strong>, a R$ 1.500 ou R$ 2.000, quase dobra a receita de serviço por cliente sem tocar na mensalidade.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="tag">O argumento mais forte contra a Categoria C</span>
+    <p>
+      A clínica que opera com paciente no WhatsApp e planilha no computador da recepção
+      está, hoje, em <strong>descumprimento em pelo menos cinco pontos</strong>: dado
+      sensível em dispositivo pessoal sem controle de acesso; nenhuma trilha de quem viu o
+      quê; nenhuma segregação entre quem pode ver a ficha clínica e quem só agenda;
+      backup inexistente ou no Google Drive pessoal de um funcionário; e nenhuma forma de
+      atender a um pedido de exclusão ou portabilidade do paciente.
+    </p>
+    <p>
+      A exposição não é a multa da ANPD — que ainda não atingiu clínica privada pequena.
+      É a <strong>ação individual do paciente</strong>, que não depende de fiscalização e
+      já é rotina em juizado. Some-se a isso o cenário mais concreto de todos:
+      <strong>a secretária sai da clínica com o WhatsApp da recepção no celular dela</strong>,
+      com os dados de todos os pacientes. Não é hipótese, é o que acontece.
+      <br><br>
+      <strong>Esse é o argumento.</strong> Não "o NexClin é conforme", e sim
+      <em>"hoje, quem sai da sua clínica leva a base de pacientes no bolso"</em>.
+    </p>
+  </div>
+</section>
+
+<div class="part">
+  <span class="pn">Parte 4</span>
+  <span class="pt">Voz do mercado, aquisição e projeção</span>
+  <span class="pw">Seções 12 a 17</span>
+</div>
+
+<section>
+  <h2><span class="num">12</span>Voz do mercado</h2>
+  <p class="lede">
+    As sete objeções que vão aparecer, o que elas realmente significam, e como responder.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Objeções</span><span>o que está por trás e o que dizer</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Objeção</th><th>O que ela quer dizer de verdade</th><th>Como contornar</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">"Está caro"</td><td>Quase nunca é preço. É "ainda não entendi o que ganho". Preço é o quinto critério de decisão, mas o primeiro a ser dito em voz alta.</td><td>Não desconte. Volte para o número: <em>"caro comparado com o quê? Sua clínica hoje perde por volta de sete faltas por mês. São duas por semana que ninguém confirmou."</em> Depois ancore em consultas.</td></tr>
+          <tr><td class="row-label">"Já uso outro sistema"</td><td>Ou está satisfeito — e aí não é cliente agora — ou tem medo de perder o histórico. Descubra qual em uma pergunta.</td><td><em>"Se eu pudesse mudar uma coisa no que você usa hoje, o que seria?"</em> Se a resposta for financeiro ou repasse, você tem venda. Se for "nada", agradeça e peça uma indicação.</td></tr>
+          <tr><td class="row-label">"Minha secretária não vai se adaptar"</td><td>Muitas vezes é o médico falando pela secretária, porque <em>ele</em> não quer o atrito. Às vezes ela já disse não.</td><td>Traga-a para a conversa: <em>"quero que ela participe da demonstração e diga o que atrapalha. A implantação é com ela, não com você."</em> Transforma o veto em aliança.</td></tr>
+          <tr><td class="row-label">"Não tenho tempo para implantar agora"</td><td>Objeção verdadeira e a mais honesta da lista. O médico já viu implantação virar projeto.</td><td>Concretize: <em>"são três encontros de uma hora e meia, marcados por você. Fora isso, quem trabalha somos nós."</em> Ofereça data em duas semanas, nunca "quando você quiser".</td></tr>
+          <tr><td class="row-label">"E se vazar o dado dos meus pacientes?"</td><td>Preocupação legítima, quase sempre disparada por notícia recente.</td><td>A resposta de 30 segundos da seção 11.3, seguida da virada: <em>"e hoje, onde está a ficha deles?"</em></td></tr>
+          <tr><td class="row-label">"Falta prontuário / prescrição"</td><td>Objeção real, não contornável com retórica. É a lacuna conhecida do escopo.</td><td>Não minimize. <em>"Não temos, e não vamos fingir que temos. O que a gente resolve é o outro lado: quanto entra, quanto sai, de onde vem o paciente e quanto sobra por médico. Muitos clientes usam a gente junto com o prontuário que já têm."</em> <strong>Coexistir é uma resposta melhor que prometer.</strong></td></tr>
+          <tr><td class="row-label">"Vou pensar / vou ver com meu sócio"</td><td>Ou falta a pessoa certa na sala, ou faltou motivo para decidir hoje.</td><td>Nunca aceite sem data: <em>"faz sentido. Quinta às 15h eu volto, e se puder trazer o seu sócio, respondo os dois de uma vez."</em> E acrescente o motivo de decidir: a vaga no grupo fundador tem número.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Linguagem do cliente</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Ele diz</th><th>Não diz</th></tr></thead>
+        <tbody>
+          <tr><td><strong>"sistema"</strong> · "programa" · "prontuário" (usado como sinônimo de sistema inteiro) · "agenda" · "planilha"</td><td>"software de gestão", "SaaS", "plataforma", "solução", "ERP"</td></tr>
+          <tr><td>"quanto custa por mês?" · "dá para ver antes?" · "quem mais usa aqui na cidade?"</td><td>"qual o preço da licença?", "vocês têm um trial?"</td></tr>
+          <tr><td><strong>Primeira pergunta na primeira conversa:</strong> "quem mais usa isso?" — antes até do preço. Indicação vale mais que qualquer argumento.</td><td>—</td></tr>
+          <tr><td><strong>Soa bem:</strong> organizado, no controle, sem retrabalho, sua equipe, sua clínica, resultado, o que sobra</td><td><strong>Soa mal:</strong> onboarding, dashboard, escalável, disruptivo, jornada do paciente, otimizar, solução completa</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Gatilhos de decisão</h3>
+  <ul>
+    <li><strong>Fecha rápido quando</strong> a indicação veio de um colega que ele respeita, quando ele acabou de viver um dos cinco eventos da seção 5, e quando a demonstração usou os números <em>dele</em> e não uma clínica genérica.</li>
+    <li><strong>Escolhe você em vez do concorrente quando</strong> percebe que do outro lado tem alguém que entende de clínica, não de software. É a única vantagem que o NexClin tem sobre a Afya e ela precisa aparecer nos primeiros cinco minutos.</li>
+    <li><strong>Indica outro médico quando</strong> teve um resultado que ele consegue contar em uma frase — "descobri que 40% dos meus pacientes vinham de uma origem que eu nem media". Indicação entre médicos vale mais que qualquer anúncio porque <strong>o risco reputacional de indicar mal é alto</strong> em uma comunidade pequena e conectada: quem indica está colocando o próprio nome, e o receptor sabe disso.</li>
+  </ul>
+</section>
+<section>
+  <h2><span class="num">13</span>Estratégia de aquisição B2B</h2>
+  <p class="lede">
+    O ponto de partida não é prospecção fria. É uma consultoria de gestão com 5
+    colaboradores e carteira ativa. A estratégia parte daí e só depois se abre.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Canais, na ordem em que devem ser abertos</span><span>primeiros 12 meses</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Canal</th><th style="text-align:right">% do esforço</th><th>Objetivo</th><th>Custo</th><th>Prazo até o 1º cliente</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Carteira e rede da consultoria</td><td class="num-cell">45%</td><td>Os 4 a 5 fundadores e os 10 primeiros pagantes</td><td>Tempo. CAC de R$ 150 a 400.</td><td><span class="pill p-ok">Imediato</span></td></tr>
+          <tr><td class="row-label">Indicação estruturada de cliente para cliente</td><td class="num-cell">20%</td><td>Transformar cada cliente satisfeito em 1 a 2 conversas</td><td>Um mês de mensalidade por indicação convertida</td><td>Mês 4 a 6</td></tr>
+          <tr><td class="row-label">Parceria com contabilidade médica</td><td class="num-cell">15%</td><td>Canal recorrente que não depende dos sócios</td><td>Comissão de 15 a 20% recorrente</td><td>Mês 3 a 5</td></tr>
+          <tr><td class="row-label">Outbound ativo</td><td class="num-cell">10%</td><td>Aprender a vender para quem não conhece ninguém</td><td>Tempo. CAC de R$ 800 a 1.500.</td><td>Mês 6+</td></tr>
+          <tr><td class="row-label">Associações e sociedades de especialidade</td><td class="num-cell">7%</td><td>Acesso a lista qualificada e credibilidade emprestada</td><td>R$ 3 a 15 mil por ação</td><td>Mês 8+</td></tr>
+          <tr><td class="row-label">Congressos de especialidade</td><td class="num-cell">3%</td><td>Presença, não venda</td><td>R$ 8 a 30 mil por evento</td><td>Mês 10+</td></tr>
+          <tr><td class="row-label">Google Ads e conteúdo</td><td class="num-cell">0%<span class="sub">conteúdo sim, mídia paga não</span></td><td>Cauda longa e páginas de comparação</td><td>Tempo. Mídia paga: fora, ver seção 8.</td><td>Mês 9+ (orgânico)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>O canal quente: a consultoria do sócio</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Pergunta</th><th>Resposta</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Quantas clínicas a carteira alcança?</td><td><strong>Este documento não sabe, e isso é um problema.</strong> É o número mais importante de toda a estratégia e ele não está escrito em lugar nenhum. Antes de 18/08, a carteira precisa virar uma lista com nome, porte, número de usuários e percentual de atendimento particular. Sem essa lista, a projeção da seção 14 é chute e o SOM da seção 6 é literatura.</td></tr>
+          <tr><td class="row-label">Como oferecer sem canibalizar a consultoria?</td><td>Posicionando como <strong>instrumento da consultoria, não como produto concorrente</strong>. A consultoria vende diagnóstico e método; o NexClin é onde o método vira rotina. Uma frase resolve: <em>"o que a gente construiu com você na consultoria some quando a gente sai. O sistema é o que faz ficar."</em></td></tr>
+          <tr><td class="row-label">E o risco de conflito de interesse?</td><td><strong>Real, e a solução é o inverso do instinto: declarar antes de ser perguntado.</strong> <em>"Eu sou sócio do sistema. Estou te oferecendo porque é o que eu uso para trabalhar com você — e se não servir para a sua clínica, eu te digo."</em> Consultor que declara sociedade vira consultor confiável; consultor que esconde e é descoberto perde as duas receitas. Complemento prático: <strong>nunca condicione o serviço de consultoria à adoção do sistema</strong>, nem no contrato nem na conversa.</td></tr>
+          <tr><td class="row-label">Ferramenta da consultoria ou produto vendido à parte?</td><td>
+            <strong>Ferramenta agora, produto depois.</strong> Como ferramenta: ciclo de venda curtíssimo, objeção quase nula, implantação já contratada como parte da consultoria — mas o teto é o tamanho da carteira e o produto nunca aprende a se vender sozinho. Como produto à parte: escala de verdade, mas exige apresentação, argumentário e alguém que venda — coisas que não existem hoje.
+            <br><br>
+            <strong>Recomendação:</strong> meses 1 a 6 como ferramenta, para conseguir os primeiros clientes e os cases. Meses 7 a 12 obrigatoriamente como produto à parte, porque é o único jeito de descobrir se ele se sustenta sem o sócio na sala. <strong>Se em 12 meses todo cliente veio da carteira, o negócio não é um SaaS — é uma consultoria com software.</strong></td></tr>
+          <tr><td class="row-label">Como remunerar os 5 colaboradores da consultoria?</td><td><strong>Bônus por indicação convertida, não comissão recorrente.</strong> Comissão recorrente cria expectativa de renda passiva sobre um contrato que eles não sustentam e vira passivo se alguém sair. Valor sugerido: <strong>R$ 300 a 500 por clínica convertida</strong>, pago na primeira mensalidade efetiva. Simples, barato e não contamina a folha.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Contabilidade médica</h3>
+  <p>
+    O contador é o canal mais subestimado deste mercado por três razões: ele já tem a
+    confiança do médico, <strong>ele vê o financeiro da clínica antes de qualquer um</strong>,
+    e ele sofre diretamente com a bagunça — todo mês recebe a planilha malfeita e refaz.
+    Um sistema que organiza o financeiro do cliente reduz o trabalho <em>dele</em>.
+    <br><br>
+    <strong>Modelo:</strong> indicação comissionada, não revenda. Revenda exige treinar o
+    contador para vender e suportar, o que ele não quer. Comissão praticada em parcerias de
+    software no Brasil: <strong>10% a 20% recorrente</strong> enquanto o cliente ficar, ou
+    de 1 a 3 mensalidades como pagamento único. <strong>Recomendação: 15% recorrente</strong> —
+    é o número que mantém o contador olhando para a retenção, não só para a venda.
+  </p>
+
+  <h3>Associações e sociedades de especialidade</h3>
+  <p>
+    As sociedades estaduais são muito mais acessíveis comercialmente que as nacionais, e
+    as de especialidades com forte atuação privada (dermatologia, ginecologia, psiquiatria,
+    nutrologia) são mais ativas que as hospitalares. O modelo típico é
+    <strong>benefício ao associado com desconto</strong>, que custa pouco (10 a 15% de
+    desconto) e entrega lista qualificada com credibilidade emprestada — muito melhor
+    retorno que estande em congresso, que custa de R$ 8 a 30 mil e gera cartões, não clientes.
+    <strong>Recomendação: nenhuma ação de associação antes do mês 8</strong>, e a primeira
+    delas sendo convênio de desconto, não patrocínio.
+  </p>
+
+  <h3>Ações por horizonte</h3>
+  <div class="cards">
+    <div class="card">
+      <h5>Primeiros 30 dias</h5>
+      <span class="big">Converter os 5</span>
+      <p>Listar a carteira com porte e % particular · fechar preço (P1) e a regra de que o trial não isenta a implantação · roteiro de demonstração de 20 minutos que abre pela dor nº 1 · convidar as 8 a 10 clínicas mais aderentes para 5 vagas · <strong>escrever o roteiro de implantação durante as três primeiras</strong>.</p>
+    </div>
+    <div class="card w2">
+      <h5>Até 90 dias</h5>
+      <span class="big">Sair da carteira</span>
+      <p>Primeiro case com número · programa de indicação escrito com valor e prazo · abordar 3 escritórios de contabilidade médica · publicar 3 páginas de comparação · <strong>fazer a primeira implantação com uma pessoa só</strong> e medir quanto tempo levou.</p>
+    </div>
+    <div class="card w3">
+      <h5>Até 180 dias</h5>
+      <span class="big">Abrir o frio</span>
+      <p>Só depois de: 10 clientes pagantes, churn medido em dado real e não em estimativa, roteiro de implantação testado por alguém que não é sócio, e tempo de resposta de suporte combinado por escrito. <strong>Abrir o canal frio antes disso não gera crescimento — gera churn caro.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">14</span>Projeções de 12 meses</h2>
+  <p class="lede">
+    De setembro de 2026 a agosto de 2027. Base zero, churn acumulado mês a mês, trial de
+    30 dias só para o grupo fundador, e infraestrutura como custo fixo.
+  </p>
+
+  <div class="panel">
+    <div class="panel-head"><span>Premissas comuns aos três cenários</span><span>declaradas para poderem ser contestadas</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Premissa</th><th style="text-align:right">Valor</th><th>Origem</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Ticket médio ponderado</td><td class="num-cell">R$ 420</td><td>Mix de 25% na faixa 3, 45% na faixa 5 e 30% na faixa 8 → R$ 421,50, arredondado para baixo.</td></tr>
+          <tr><td class="row-label">Implantação média</td><td class="num-cell">R$ 1.200</td><td>Assume tudo remoto. Cada presencial acrescenta R$ 1.200 não projetados.</td></tr>
+          <tr><td class="row-label">Custo variável por cliente</td><td class="num-cell">R$ 126/mês</td><td>Derivado da projeção interna do NexClin de 13/08.</td></tr>
+          <tr><td class="row-label">Custo fixo · meses 1 a 6</td><td class="num-cell">R$ 2.000/mês</td><td>Infraestrutura e ferramentas, sem pró-labore e sem suporte contratado.</td></tr>
+          <tr><td class="row-label">Custo fixo · meses 7 a 12</td><td class="num-cell">R$ 5.100/mês</td><td>Com uma pessoa de suporte. Sem ela, o churn sobe e a projeção não vale.</td></tr>
+          <tr><td class="row-label">Trial</td><td class="num-cell">30 dias</td><td>Só o grupo fundador. A mensalidade deles entra no mês 2.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><span>Os três cenários no mês 12</span><span>agosto de 2027</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Indicador</th><th style="text-align:right">Conservador</th><th style="text-align:right">Realista</th><th style="text-align:right">Otimista</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Grupo fundador</td><td class="num-cell">4</td><td class="num-cell">5</td><td class="num-cell">5</td></tr>
+          <tr><td class="row-label">Novos clientes/mês</td><td class="num-cell">2</td><td class="num-cell">4</td><td class="num-cell">8</td></tr>
+          <tr><td class="row-label">Churn mensal</td><td class="num-cell">5%</td><td class="num-cell">4%</td><td class="num-cell">3%</td></tr>
+          <tr><td class="row-label">Base ativa no mês 12</td><td class="num-cell"><strong>19,5</strong></td><td class="num-cell"><strong>39,4</strong></td><td class="num-cell"><strong>79,5</strong></td></tr>
+          <tr><td class="row-label">Clientes perdidos no ano</td><td class="num-cell">6,5</td><td class="num-cell">9,6</td><td class="num-cell">13,5</td></tr>
+          <tr><td class="row-label">MRR no mês 12</td><td class="num-cell">R$ 8.200</td><td class="num-cell">R$ 16.534</td><td class="num-cell">R$ 33.388</td></tr>
+          <tr><td class="row-label">ARR saindo do ano 1</td><td class="num-cell">R$ 98.400</td><td class="num-cell">R$ 198.408</td><td class="num-cell">R$ 400.656</td></tr>
+          <tr><td class="row-label">Receita de implantação acumulada</td><td class="num-cell">R$ 31.200</td><td class="num-cell">R$ 58.800</td><td class="num-cell">R$ 111.600</td></tr>
+          <tr><td class="row-label">Receita total do ano</td><td class="num-cell"><strong>R$ 92.124</strong></td><td class="num-cell"><strong>R$ 174.378</strong></td><td class="num-cell"><strong>R$ 331.942</strong></td></tr>
+          <tr><td class="row-label">Implantação sobre a receita total</td><td class="num-cell">34%</td><td class="num-cell">34%</td><td class="num-cell">34%</td></tr>
+          <tr><td class="row-label">Caixa acumulado em 12 meses</td><td class="num-cell">R$ 30.743</td><td class="num-cell">R$ 96.475</td><td class="num-cell">R$ 222.610</td></tr>
+          <tr><td class="row-label">Mês em que a recorrência cobre o custo</td><td class="num-cell">3º<span class="sub">perde no 7º, retoma no 11º</span></td><td class="num-cell">2º<span class="sub">e se sustenta</span></td><td class="num-cell">2º<span class="sub">e se sustenta</span></td></tr>
+          <tr><td class="row-label">Implantações a executar no ano</td><td class="num-cell">26</td><td class="num-cell">49</td><td class="num-cell">93</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="flag">
+    <span class="tag">Três coisas que os números estão dizendo e que é fácil não ver</span>
+    <p>
+      <strong>1. A implantação é um terço da receita do ano 1, nos três cenários.</strong>
+      Não é acessório — é a linha que paga o primeiro ano. Isentá-la, mesmo parcialmente,
+      tira de R$ 31 mil a R$ 111 mil do caixa. É por isso que a recomendação da seção 10.3
+      é categórica.
+    </p>
+    <p>
+      <strong>2. O cenário conservador quebra o equilíbrio quando o suporte é contratado.</strong>
+      Ele cobre o custo no mês 3 com R$ 3.154 de MRR, perde no mês 7 quando o fixo salta
+      para R$ 5.100, e só retoma no mês 11. É viável apenas porque a implantação segura o
+      caixa nesse intervalo. <strong>Com 2 clientes por mês, contratar suporte no mês 7 é
+      prematuro</strong> — ou os sócios seguram, ou a receita não sustenta.
+    </p>
+    <p>
+      <strong>3. O cenário otimista é operacionalmente impossível no modelo atual.</strong>
+      93 implantações em 12 meses são quase 8 por mês. Com implantação a três, o teto é 3
+      por mês; com uma pessoa e roteiro, talvez 6 a 8 — e sem sobrar tempo para
+      desenvolvimento, suporte ou venda. <strong>O gargalo do cenário otimista não é
+      comercial, é de entrega.</strong> Ele só existe se, até o mês 4, houver alguém
+      dedicado a implantar que não seja um dos três sócios.
+    </p>
+  </div>
+
+  <div class="note">
+    <span class="tag">Comparação com a projeção interna de 13/08</span>
+    <p>
+      A projeção do documento anterior chegou a 30 clientes com faturamento mensal de
+      R$ 17.838 — um ticket implícito de <strong>R$ 594</strong> por cliente. O preço
+      recomendado aqui entrega ticket ponderado de <strong>R$ 420</strong>. A diferença é
+      de 29% e ela é material: o número de R$ 594 só se sustenta se praticamente toda a
+      base entrar na faixa 8, o que contraria a distribuição da seção 6, onde a maior
+      concentração está na faixa de 3 a 5 usuários.
+      <br><br>
+      <strong>Recomendação: refazer a planilha de projeção com ticket de R$ 420</strong>
+      antes de qualquer decisão baseada nela. Se a faixa 8 realmente dominar a base, a
+      surpresa será boa — e surpresa boa não quebra caixa.
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">15</span>Síntese estratégica</h2>
+
+  <div class="callout">
+    <span class="tag">Posicionamento recomendado</span>
+    <p style="font-size:1.08rem;line-height:1.5">
+      Para <strong>clínicas de 3 a 8 pessoas que atendem particular e cresceram além da
+      planilha</strong>, que precisam <strong>saber quanto entra, de onde vem o paciente e
+      quanto sobra por médico</strong>, o NexClin é a escolha certa porque
+      <strong>é o único sistema deste porte construído de dentro de uma consultoria de
+      gestão clínica — e que entrega junto com o software a implantação que faz a equipe
+      usar de verdade.</strong>
+    </p>
+  </div>
+
+  <h3>Big Idea</h3>
+  <p>
+    <strong>"O sistema que veio da gestão, não da tecnologia."</strong>
+    <br><br>
+    E a pergunta que a pesquisa pediu para responder: <em>nascer dentro de uma consultoria
+    é diferencial ou é irrelevante para o comprador?</em>
+    <strong>É diferencial — mas não do jeito que parece.</strong> O médico não compra
+    "software feito por quem entende de clínica" como argumento abstrato; ele já ouviu
+    isso de todo fornecedor. O que ele compra é a <strong>evidência disso na conversa</strong>:
+    quando o vendedor pergunta pela taxa de retorno, pelo percentual de particular e pelo
+    critério de repasse antes de abrir a tela, o médico percebe em dois minutos que está
+    falando com um par, não com um vendedor. A origem não vale como slogan. Vale como
+    roteiro de demonstração — e é assim que precisa ser usada.
+  </p>
+
+  <h3>Promessa principal</h3>
+  <p>
+    <strong>"Em 30 dias, a sua equipe operando no sistema — ou a implantação sai de graça."</strong>
+    Nenhum concorrente garante isso, porque nenhum deles implanta de verdade: eles entregam
+    acesso e vídeo. É uma promessa que o NexClin pode fazer justamente porque o custo dela
+    é hora de sócio, não margem de software. E ela ataca a objeção mais honesta da lista
+    ("não tenho tempo para implantar agora") sem baixar o preço.
+  </p>
+
+  <h3>Prova de conceito antes de existir base</h3>
+  <ul>
+    <li><strong>A clínica de teste povoada</strong>, com dados realistas — não com "Paciente 1" e "Procedimento A". Demonstração com clínica vazia mata a venda.</li>
+    <li><strong>O número da dor.</strong> R$ 6.024/mês de perda estimada, com a conta aberta na tela. Funciona sem nenhum cliente.</li>
+    <li><strong>A carteira da consultoria como prova indireta.</strong> "Estas são as clínicas que eu administro; o sistema é o que eu uso para administrá-las."</li>
+    <li><strong>O grupo fundador como escassez legítima.</strong> Cinco vagas é um número real, não artifício — a capacidade de implantação a três é essa mesmo.</li>
+  </ul>
+
+  <h3>Meta SMART · 12 meses</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <tbody>
+          <tr><td class="row-label" style="width:130px">Específica</td><td>Chegar a 40 clínicas ativas pagantes, sendo no mínimo 15 originadas <strong>fora</strong> da carteira da consultoria.</td></tr>
+          <tr><td class="row-label">Mensurável</td><td>Base ativa ao fim de agosto/2027, MRR de R$ 16.500, churn mensal medido abaixo de 4%, e origem registrada por cliente no próprio funil de captação do NexClin.</td></tr>
+          <tr><td class="row-label">Alcançável</td><td>É o cenário realista da seção 14: 4 clientes por mês e churn de 4%. Exige 49 implantações no ano, o que exige o roteiro escrito até a quarta.</td></tr>
+          <tr><td class="row-label">Relevante</td><td>O corte de 15 clientes fora da carteira é o que separa "SaaS" de "consultoria com software" — e é a única métrica que prova que o produto se vende.</td></tr>
+          <tr><td class="row-label">Temporal</td><td>01/09/2026 a 31/08/2027, com checagem trimestral em 30/11, 28/02 e 31/05.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">16</span>Plano de ação</h2>
+  <div class="panel">
+    <div class="panel-head"><span>Sete passos</span><span>na ordem em que destravam</span></div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>#</th><th>Ação</th><th>Prazo</th><th>Responsável</th><th>Resultado esperado</th></tr></thead>
+        <tbody>
+          <tr><td class="num-cell">1</td><td class="row-label">Aprovar a tabela de preço e a regra do trial<span class="sub">R$ 249 / 399 / 599, adicional R$ 89, implantação R$ 1.200 e R$ 2.400 cobrada no ato</span></td><td class="new">18/08</td><td>Todos · tarefa P1</td><td>Destrava 4 tarefas dependentes, a configuração do sistema e o contato com o grupo fundador.</td></tr>
+          <tr><td class="num-cell">2</td><td class="row-label">Transformar a carteira da consultoria em lista<span class="sub">nome, porte, nº de usuários, % de atendimento particular</span></td><td class="new">18/08</td><td>Vinícius</td><td>O SOM deixa de ser estimativa. Define quantas das 5 vagas já têm dono.</td></tr>
+          <tr><td class="num-cell">3</td><td class="row-label">Fechar as cláusulas 9 e 9.2 com o contrato de operador LGPD<span class="sub">e o aviso de privacidade do formulário público de anamnese</span></td><td class="new">18/08</td><td>Todos</td><td>Remove o único bloqueio jurídico à assinatura e responde a pergunta do contador da clínica.</td></tr>
+          <tr><td class="num-cell">4</td><td class="row-label">Refazer a projeção com ticket de R$ 420<span class="sub">em vez dos R$ 594 implícitos hoje</span></td><td class="new">20/08</td><td>Arthur e Erick</td><td>A planilha passa a refletir o preço que será praticado.</td></tr>
+          <tr><td class="num-cell">5</td><td class="row-label">Escrever o roteiro de implantação durante as três primeiras sessões<span class="sub">tarefa que hoje não existe em nenhum plano</span></td><td class="new">30/09</td><td>Vinícius e Erick</td><td>A quarta implantação vira sessão de uma pessoa. Sem isso, o crescimento trava no mês 2.</td></tr>
+          <tr><td class="num-cell">6</td><td class="row-label">Fechar a trilha de auditoria dentro da conta da clínica<span class="sub">hoje cobre só o nível administrativo mais alto</span></td><td class="new">31/10</td><td>Arthur</td><td>Torna verificável a resposta comercial sobre privacidade e fecha dívida de conformidade.</td></tr>
+          <tr><td class="num-cell">7</td><td class="row-label">Abordar 3 escritórios de contabilidade médica<span class="sub">indicação comissionada a 15% recorrente</span></td><td class="new">30/11</td><td>Erick</td><td>Primeiro canal que gera cliente sem consumir hora de sócio.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">17</span>Riscos e pontos de atenção</h2>
+
+  <h3>Os três riscos principais</h3>
+  <div class="cards">
+    <div class="card">
+      <h5>Risco 1 · o mais provável</h5>
+      <span class="big">Entrega, não venda</span>
+      <p>O gargalo não é achar cliente — é implantar. Com implantação a três, o teto é 3 clientes/mês. O cenário realista exige 4. <strong>O crescimento trava no segundo mês, não no décimo.</strong></p>
+    </div>
+    <div class="card w2">
+      <h5>Risco 2 · o mais caro</h5>
+      <span class="big">Churn maior que o previsto</span>
+      <p>Sem roteiro de implantação, sem tempo de resposta combinado e com lacunas conhecidas de escopo, 6 a 7% ao mês é tão plausível quanto 4%. A 6%, a base do cenário realista cai de 39 para 35, o número de clientes perdidos no ano sobe de 9,6 para 13,6, e o LTV cai de R$ 10.500 para R$ 7.000.</p>
+    </div>
+    <div class="card w3">
+      <h5>Risco 3 · o mais silencioso</h5>
+      <span class="big">Nunca sair da carteira</span>
+      <p>Doze meses confortáveis vendendo para quem já confia no sócio, e a descoberta no mês 13 de que o produto nunca foi testado contra um comprador frio. É o risco que não dói enquanto acontece.</p>
+    </div>
+  </div>
+
+  <h3>Risco de escopo: quando cada ausência vira perda de negócio</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Ausência</th><th>Quando vira perda</th><th>Urgência</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Prescrição digital assinada</td><td><strong>Imediatamente</strong>, em toda venda a consultório individual e em boa parte das clínicas de 2 médicos. É a primeira coisa que o médico procura na tela.</td><td><span class="pill p-stop">A mais urgente</span></td></tr>
+          <tr><td class="row-label">Prontuário estruturado</td><td>Do 3º mês em diante, quando o cliente percebe que continua registrando em dois lugares. Aparece como churn, não como objeção de venda.</td><td><span class="pill p-stop">Alta</span></td></tr>
+          <tr><td class="row-label">TISS / convênio</td><td>Já hoje — mas como qualificação, não como perda. Elimina o cliente antes da demonstração, o que é preferível a perdê-lo depois.</td><td><span class="pill p-warn">Média · decisão estratégica</span></td></tr>
+          <tr><td class="row-label">Telemedicina</td><td>Só em especialidades específicas. Contornável com integração de terceiro.</td><td><span class="pill p-idle">Baixa</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p>
+    <strong>A mais urgente é a prescrição</strong>, com folga — e é também a mais barata de
+    resolver, porque existem provedores que se integram (Memed, Nexodata) em vez de exigir
+    construção. Vale mais que qualquer relatório novo do backlog.
+  </p>
+
+  <h3>Os demais riscos</h3>
+  <div class="panel">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Risco</th><th>Avaliação</th><th>O que fazer</th></tr></thead>
+        <tbody>
+          <tr><td class="row-label">Concentração na carteira de um sócio</td><td>Alto e estrutural. Se o Vinícius sair ou reduzir a dedicação, o canal principal fecha.</td><td>Meta de 15 clientes fora da carteira em 12 meses, medida trimestralmente. É a métrica que transforma o risco em número.</td></tr>
+          <tr><td class="row-label">Operar com dado sensível sem certificação</td><td>Baixo no aspecto legal (a certificação não é obrigatória), <strong>médio no comercial</strong> — algum cliente vai perguntar.</td><td>Resposta pronta: não somos prontuário e cumprimos os requisitos de NGS1. Se um cliente exigir o selo, ele quer um prontuário certificado, e a venda certa é dizer que não é o produto dele.</td></tr>
+          <tr><td class="row-label">Entrar barato demais</td><td><strong>Não é o risco deste caso.</strong> O risco aqui é o oposto: a faixa 3 a R$ 249 já está 25% acima da mediana e sem prontuário.</td><td>A pressão nos primeiros meses será de dar desconto. <strong>Não dê na mensalidade</strong> — dê na implantação, que é one-off, ou em meses grátis com data de fim. Desconto na mensalidade nunca sobe.</td></tr>
+          <tr><td class="row-label">Implantação a três não escala</td><td>Trava no <strong>mês 2</strong> do cenário realista, não no décimo cliente.</td><td>Roteiro escrito até 30/09 (passo 5 da seção 16) e primeira implantação solo até o mês 3, medida em horas.</td></tr>
+          <tr><td class="row-label">Capital de giro</td><td>Com R$ 964,93 investidos e receita zero, não há folga para erro de caixa.</td><td>A implantação cobrada no ato é o que resolve isso. É a razão prática — não teórica — da recomendação da seção 10.3.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Pontos cegos de quem vende software para médico</h3>
+  <ol>
+    <li><strong>Achar que o médico decide sozinho.</strong> Ele assina sozinho e cancela acompanhado — pela secretária que não usou.</li>
+    <li><strong>Vender funcionalidade para quem compra tranquilidade.</strong> A lista de 15 áreas impressiona outro desenvolvedor, não um médico.</li>
+    <li><strong>Confundir "implantado" com "em uso".</strong> Conta criada não é cliente ativo. O indicador que prevê churn é acesso da secretária na terceira semana.</li>
+    <li><strong>Subestimar a comunidade.</strong> Médicos de uma mesma cidade e especialidade conversam. Um cliente mal atendido fecha uma praça inteira; um bem atendido abre.</li>
+    <li><strong>Prometer prazo de desenvolvimento na venda.</strong> "Isso entra no mês que vem" é a dívida mais cara que existe, e ela vence.</li>
+    <li><strong>Falar como startup.</strong> "Onboarding", "jornada" e "solução" produzem desconfiança em quem trabalha com nomenclatura clínica precisa.</li>
+  </ol>
+
+  <h3>Dependências críticas</h3>
+  <ul>
+    <li><strong>Equipe.</strong> Três sócios com cerca de 12 horas semanais somadas precisam cobrir desenvolvimento, venda, implantação e suporte. A primeira contratação necessária é de implantação e suporte, não de desenvolvimento — e ela vence antes do que a projeção sugere.</li>
+    <li><strong>Suporte.</strong> Sem tempo de resposta combinado por escrito, vira plantão sem limite e o churn sobe. Item já registrado como pendente e ainda sem dono.</li>
+    <li><strong>Capital de giro.</strong> A implantação cobrada no ato é o que sustenta o caixa até a recorrência assumir — no cenário realista, a partir do mês 5 ou 6.</li>
+    <li><strong>Contrato societário.</strong> Vencido desde 04/08. Nenhuma projeção de 12 meses faz sentido enquanto a sociedade que a executa não estiver assinada.</li>
+  </ul>
+</section>
+
+<div class="footnote">
+  <p>
+    <strong>Sobre as fontes.</strong> Preços de concorrentes lidos nas páginas públicas dos
+    próprios fornecedores em 16 de agosto de 2026: Afya iClinic, Feegow Clinic, Shosp,
+    Clínica nas Nuvens, HiDoctor, iMedicina, Docthor e Simples Dental. Preços da Amplimed,
+    Ninsaúde, ProDoctor, GestãoDS e Clinicorp não são publicados integralmente e foram
+    complementados por comparativos de terceiros, sinalizados como tal. Base de
+    estabelecimentos: CNAE 8630-5 na Receita Federal. Médicos: Demografia Médica no Brasil
+    2025 (FMUSP, AMB e CFM). Dentistas: CFO, outubro de 2025. Psicólogos: CFP, maio de 2026.
+    Legislação: Lei 13.709/2018, Lei 13.787/2018, Resolução CFM 1.821/2007 e manual de
+    certificação SBIS-CFM. Sanções: mapa público de sanções da ANPD até 2026.
+  </p>
+  <p>
+    <strong>Sobre as estimativas.</strong> Não são dado oficial e estão marcadas como
+    estimativa em cada ocorrência: a distribuição de estabelecimentos por número de
+    profissionais, o percentual de clínicas ainda sem sistema, o custo oculto da operação
+    em planilha, o faturamento típico por faixa, todos os volumes e CPCs de busca, e os
+    TAM dos segmentos adjacentes. As três mais frágeis, e que valem confirmação antes de
+    virarem decisão: a distribuição por porte (extraível do CNES), o tamanho real da
+    carteira da consultoria, e a taxa de no-show das clínicas do grupo fundador.
+  </p>
+  <p>
+    <strong>Sobre a aritmética.</strong> As projeções da seção 14 e as contas de
+    ancoragem e de incentivo de faixa da seção 10 foram calculadas programaticamente,
+    com churn acumulando mês a mês sobre a base do mês anterior e com a mensalidade do
+    grupo fundador começando no mês 2 por causa do trial. Os três cenários usam as mesmas
+    premissas de custo, declaradas na tabela de premissas.
+  </p>
+  <div class="sig" style="display:flex;align-items:center;gap:10px;margin-top:22px;opacity:.75">
+    <span class="mark" style="width:20px;height:20px;font-size:11px;border-radius:5px">N</span>
+    <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">NexClin · documento interno · 16 ago 2026</span>
+  </div>
+</div>
+
+</div>
+</body></html>

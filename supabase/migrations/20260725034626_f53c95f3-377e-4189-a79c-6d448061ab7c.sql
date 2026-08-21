@@ -1,1 +1,8 @@
-INSERT INTO public.user_roles (user_id, role) VALUES ('c38ac7c1-78b6-4a07-9b26-cefc34214edd','admin') ON CONFLICT DO NOTHING;
+-- SPEC 001 / Fase 1 — dado de teste do MVP NEUTRALIZADO (base limpa).
+-- Original: INSERT INTO public.user_roles (user_id, role)
+--           VALUES ('c38ac7c1-78b6-4a07-9b26-cefc34214edd','admin');
+-- Removido porque o user_id fixo não existe no auth.users do projeto novo
+-- (violava a FK user_roles_user_id_fkey). Papéis nascem pelo fluxo real
+-- (handle_new_user / convites), nunca por seed fixo. Ver research.md e a
+-- decisão análoga do trigger de seed do superadmin (migração 20260802090000).
+-- (Migração preservada como no-op para manter a ordem/histórico do schema.)
