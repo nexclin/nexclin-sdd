@@ -308,3 +308,106 @@ a criação da ponte inversa (17/08) isso deixou de valer — o `CLAUDE.md` §4(
 já registra a mudança de papel, mas a constituição v1.0.0 não foi atualizada.
 Como a constituição vence as rules em conflito, o texto precisa acompanhar,
 senão o próximo executor lê a lei e para.
+
+
+---
+
+## TERCEIRA RODADA — 23/08, fim do dia
+
+Commits na plataforma: `63f87a4`, `799c82d`, `3287cf9`. Gate de tipos limpo nos
+três. **Nenhum publicado.**
+
+### O erro de teste que o Arthur pegou, e o que ele ensina
+
+Mandei uma captura do calendário em teal. Ele abriu e viu **preto**. As duas
+coisas eram verdade.
+
+Existe em `nx-dashboard.css` uma regra global de botão de ação —
+`.nx-content button.bg-primary { background: var(--navy-deep) }` — com
+especificidade maior que qualquer utilitário do Tailwind. O dia do calendário é
+um `<button>`. E em modo **intervalo** o react-day-picker marca **todos** os
+dias do período como `selected`, então todos herdavam `bg-primary` e o intervalo
+inteiro saía navy `#141C28`.
+
+**Meu harness não reproduziu porque não envolvia o componente em
+`.nx-root > .nx-content`** — que é o que o `NxAppShell` faz em todo o app.
+Testei o componente fora do lugar onde ele vive.
+
+> **Regra que sai daí, e vale para o Princípio IX:** harness que não replica os
+> wrappers reais do app não é verificação — é uma segunda opinião sobre o mesmo
+> palpite. O sinal de que ficou fiel foi a tipografia: depois de corrigido, a
+> captura passou a mostrar o cabeçalho em maiúsculas, igual à tela dele.
+
+A correção evita a classe **literal** `bg-primary`, usando o mesmo token por
+valor arbitrário. Há comentário no arquivo avisando para não voltar atrás.
+
+### O achado financeiro mais grave do dia
+
+Investigando por que a conversão dava 100% com item reprovado (V-21.3),
+apareceu uma **multiplicação dupla**.
+
+`appointment_items` guarda unidades diferentes no mesmo par de colunas:
+
+| Coluna | O que guarda |
+|---|---|
+| `prescribed_value` | valor **unitário** |
+| `sold_value` | **total**, já multiplicado pela quantidade aprovada |
+
+Então `prescribed_value * quantity` está certo e `sold_value * quantity`
+multiplica duas vezes. **Três leitores faziam isso — e um deles fui eu**, no
+V-29 de hoje mais cedo.
+
+Simulado com o caso do Vinícius (vit D 2×200, tirzepatida 2×200, soro 2×500,
+uma dose reprovada):
+
+| | valor |
+|---|---|
+| orçado | 1800 ✓ |
+| fechado **com** a multiplicação | **3200** ✗ |
+| fechado **sem** a multiplicação | 1600 ✓ |
+| conversão errada | **177,8%** |
+| conversão certa | 88,9% |
+
+Com quantidade 2 o fator é exatamente 2×. Estourando o teto, a taxa aparecia
+achatada em 100% — literalmente o que foi relatado.
+
+### Dashboard entrou, e a razão é o Erick
+
+A D-8 rebaixou o dashboard porque o time do Vinícius não usa. Mas a bateria do
+Erick é **visão geral de gestão**: ele abre o dashboard primeiro. Deixá-lo
+quebrado queima a passada dele.
+
+- **V-21.1** (TOTAL CONSULTAS zerado) — mesma causa raiz do V-18 propagando:
+  `useFinancialBreakdown` procurava `consultation_type_id` só em
+  `consultation_types`, mas a tela grava ali um `services.id`. O comentário no
+  topo do próprio arquivo já dizia *"consultation_type (ou service
+  equivalente)"* — a intenção estava certa, o código não.
+- **V-13** — a contagem de 1ª vez saía de **todas** as consultas do período,
+  inclusive canceladas, mas é exibida como contexto do card CONSULTAS, que
+  conta só as realizadas. Duas bases no mesmo número.
+- **V-14** — a entrada nascia sem `macro_category`, então todo lugar que
+  classifica receita por essa coluna a jogava em VENDAS. Faixa A: a
+  classificação fica gravada.
+- Drill-down "Receitas" lia de `revenues` (a tabela que ninguém escreve).
+
+### Dívidas de modelo para a stack nova — não são backlog, são requisito
+
+1. **`appointment_items` guarda unidades diferentes no mesmo par de colunas.**
+   Violação direta do Princípio VIII. Consertar muda o que fica **gravado** e
+   exige migração com backfill — não se faz na véspera da bateria. Por ora, os
+   leitores foram alinhados e há nota grande em `Dashboard.tsx`.
+2. **`appointments.consultation_type_id` sem FK, apontando para duas tabelas.**
+   Causa raiz de V-18 e V-21.1. Na stack nova: um conceito, uma tabela, com FK.
+3. **`revenues` existe e ninguém escreve.** Ou passa a ser alimentada, ou é
+   removida. Coluna morta que alimenta relatório é pior que coluna ausente:
+   falha em silêncio.
+
+### Não corrigido, e por quê
+
+- **V-21.6** (gráfico do fluxo de caixa) — o gráfico já lê de `receivables`, não
+  de `revenues`. Sem dado ao vivo não consigo reproduzir, e a T005 me diz para
+  não corrigir antes de reproduzir. Fica para o aceite do Arthur dizer se ainda
+  ocorre.
+- **V-21.2** (ticket médio por orçamento, D-9) — o cálculo já é
+  `consolidado / nº de closings`, que é por orçamento fechado. Provavelmente
+  parecia errado só porque `consultaGross` era zero. Reconferir no aceite.
