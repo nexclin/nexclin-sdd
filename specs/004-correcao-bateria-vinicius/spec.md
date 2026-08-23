@@ -1,6 +1,6 @@
 # SPEC 004 — Correção da 1ª bateria de testes (Vinícius, 18–19/08)
 
-> **Status:** proposta · **Executor:** Claude Code · **Aprovador:** Arthur Hideo
+> **Status:** em execução — 3 itens da trava abertos · **Executor:** Claude Code · **Aprovador:** Arthur Hideo
 > **Alvo:** plataforma Lovable (`nexclin/nexclin`, branch `main`), via ponte inversa
 > **Janela:** 23/08/2026 — **último dia antes da bateria do Erick (24–26/08)**
 > **Lei:** `.specify/memory/constitution.md` · **Critério:** `CLAUDE.md` §2.5
@@ -86,6 +86,29 @@ Detalhe item a item na `tasks.md`.
 Menores: "Build unsuccessful" no editor é **falso** (aparece em todo commit
 vindo do GitHub). E **`Consultas.tsx` é página órfã** — o menu "Consultas"
 aponta para `/acompanhamento`; conferir roteamento antes de corrigir um arquivo.
+
+## ESTADO EM 23/08, FIM DO DIA
+
+**Trava: 20 de 23 fechados.** Nove commits na `main` da plataforma, todos
+publicados. O estado item a item vive em `tasks.md`; a narrativa de como cada
+causa foi encontrada, em `historico-execucao.md`.
+
+| Bloco | Estado |
+|---|---|
+| Trava fechada | 20 itens |
+| **Trava aberta** | **3** — V-24 (bloqueado numa consulta SQL), V-21 (parcial, 4 de 6), V-04 (falta reteste) |
+| Fora da trava, fechados | V-19, V-03 |
+| Achados novos, corrigidos | 4 — nenhum tinha sido reportado |
+| Interface (pedidos de 23/08) | 6, todos enviados |
+| Fora de escopo por decisão | 8, pela D-7 |
+
+**O que este dia ensinou e virou lei:** a constituição subiu para **v2.0.0** com
+três princípios comprados aqui — VII (*o dado atravessa, a tela não*),
+VIII (*uma regra, uma fonte*) e IX (*verificação vale mais que build verde*).
+
+**A ressalva que vale mais que o placar:** nada foi provado na tela por mim. A
+política de rede deste ambiente bloqueia `nexclin.lovable.app`. Todo `[x]`
+significa **código enviado**, não **comportamento provado** — Princípio IV.
 
 ## FASES
 
