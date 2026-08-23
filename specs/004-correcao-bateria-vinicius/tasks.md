@@ -411,3 +411,59 @@ quebrado queima a passada dele.
 - **V-21.2** (ticket médio por orçamento, D-9) — o cálculo já é
   `consolidado / nº de closings`, que é por orçamento fechado. Provavelmente
   parecia errado só porque `consultaGross` era zero. Reconferir no aceite.
+
+
+---
+
+## QUARTA RODADA — layout e responsividade (23/08, noite)
+
+Commit `a7531e0`. Dois apontamentos novos do Arthur, fora da bateria.
+
+### O calendário empurrava o dashboard
+
+Era renderizado **inline**, no fluxo do documento. Abrir o "Personalizado"
+empurrava o card de faturamento para baixo — o usuário perdia de vista o número
+que ia filtrar. Virou popover, com colisão automática, **rascunho e botão
+"Aplicar período"**: antes o `onChange` disparava já na primeira ponta, com o
+fim igual ao início, e o painel piscava um período de um dia. Uma consulta por
+escolha, não uma por clique.
+
+### O layout não era responsivo — era de dois saltos
+
+1.900 linhas de CSS com **duas** media queries (1200 e 800). Entre elas, o
+buraco onde vive a maior parte dos notebooks. E a causa direta da queixa da TV
+de 32": `.nx-content` tinha `max-width: 1500px` **sem `margin auto`** — numa
+tela de 2560 o conteúdo ficava preso à esquerda com um vazio enorme à direita.
+
+Três camadas, na ordem em que resolvem:
+1. **Grids intrínsecos** — `repeat(auto-fit, minmax(min(Xpx,100%), 1fr))` nas
+   cinco linhas principais. Refluem sozinhos, sem breakpoint.
+2. **Tipografia fluida** — `clamp()` no título, no número do herói e nos KPIs.
+3. **Media queries só para estrutura** — a barra lateral, com pontos novos em
+   1100 (só ícones) e 560 (sai do fluxo).
+
+Mais duas fontes de rolagem horizontal, achadas **medindo**:
+- filho de grid tem `min-width: auto` e não encolhe abaixo do conteúdo — no
+  celular a coluna `1fr` estourava para 408px numa tela de 390;
+- o cabeçalho não quebrava linha e empurrava o seletor de período para fora.
+
+**Medido em cinco resoluções, dentro do esqueleto real do `NxAppShell`:**
+
+| tela | colunas | título | herói | overflow-x | centralizado |
+|---|---|---|---|---|---|
+| TV 2560 | 6 | 38px | 68px | não | sim |
+| Monitor 1920 | 6 | 38px | 68px | não | sim |
+| Notebook 1366 | 4 | 37px | 61px | não | sim |
+| Tablet 820 | 3 | 29px | 42px | não | sim |
+| Celular 390 | 1 | 26px | 38px | não | sim |
+
+### O que NÃO consigo verificar, e por quê
+
+A política de rede deste ambiente bloqueia `nexclin.lovable.app` **e**
+`lovable.dev` — ambos respondem `http=000` no CONNECT. Não é sessão nem login:
+o pacote não sai daqui. Testado duas vezes, em momentos diferentes.
+
+Então V-21.6 e V-21.2 não têm como ser provados por mim. O que entrego no lugar
+é `docs/planejamento/roteiro-verificacao-23-08.md`: sete testes com números
+esperados e tabela de interpretação — inclusive o que cada resultado
+*significa*, para o teste não virar "apareceu / não apareceu".
