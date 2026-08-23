@@ -40,7 +40,7 @@
       `88df535`). **Não corrigir antes de reproduzir.** O código de
       `RelatorioContasPagar.tsx` foi lido hoje e a consulta está correta —
       filtra `due_date`/`paid_at` por intervalo, sem erro aparente.
-- [ ] T006 **V-29 — separar valor orçado de valor fechado** (D-12).
+- [x] T006 **V-29 — separar valor orçado de valor fechado** (D-12).
       **Causa confirmada por leitura:** `RelatorioProdutividade.tsx:59` consulta
       `appointment_items` com `.eq("approval_status", "aprovado")` e soma
       `sold_value` (linha 124). Ou seja: só o **aprovado**, exibido como se
@@ -49,11 +49,11 @@
       `prescribed_value` de **todos** os itens como orçado, `sold_value` dos
       aprovados como fechado, e derivar a conversão.
       Caso de teste da D-12: 1.800 orçado / 1.600 fechado.
-- [ ] T007 [P] **V-28A — datas personalizadas nos relatórios.** O componente já
+- [x] T007 [P] **V-28A — datas personalizadas nos relatórios.** O componente já
       existe: `nx-range-calendar.tsx`, criado em 21/08 (`6b03f6c`) — mas foi
       ligado **só ao `Dashboard.tsx`**. Os relatórios seguem no
       `DateRangeFilter` antigo. Estender aos sete relatórios.
-- [ ] T008 **V-25 — Relatório de Vendas por item do orçamento** (D-10). O maior
+- [x] T008 **V-25 — Relatório de Vendas por item do orçamento** (D-10). O maior
       item da fase. **Causa confirmada:** `RelatorioVendas.tsx:52` lê de
       `receivables` — uma linha por recebível/parcela. Daí as "vendas quebradas
       em diversas linhas". Deve ler de `appointment_items` (aprovados), com
@@ -68,18 +68,18 @@
 
 ## Fase 2 — Atribuição e financeiro gravado  (faixa A: muda o que fica gravado)
 
-- [ ] T010 **V-18 + V-20 — a entrada abate a consulta, não a prescrição** (D-3).
+- [x] T010 **V-18 + V-20 — a entrada abate a consulta, não a prescrição** (D-3).
       Escopo desta janela, fixado pela D-3 e **não reabrir**: total a receber
       soma consulta + prescrição; a entrada abate a consulta; adiantamento para
       de contar como venda. O redesenho em dois blocos com pagamento
       independente **não entra antes de 01/09**.
-- [ ] T011 **V-12 — consulta avulsa gera as tarefas automáticas.**
+- [x] T011 **V-12 — consulta avulsa gera as tarefas automáticas.**
       `createAppointmentTasks` (`lib/tasksAutomation.ts`) é chamada pelo
       `LeadToAppointmentWizard`; o caminho avulso não a chama.
-- [ ] T012 **V-11 — responsável obrigatório na consulta avulsa** (D-2). Sem
+- [x] T012 **V-11 — responsável obrigatório na consulta avulsa** (D-2). Sem
       fallback para o médico e sem tarefa órfã. É o que torna T011, T013
       implementáveis com uma regra só.
-- [ ] T013 **V-15 + V-16 — tarefa de recaptação e de remarcação vão para o
+- [x] T013 **V-15 + V-16 — tarefa de recaptação e de remarcação vão para o
       responsável pela venda, não para o médico.** Mesmo ponto de código
       (`AppointmentStatusDialogs.tsx`); mesmo commit.
 - [ ] T014 [P] **V-19 — fechamento parcial exibido como "fechamento total".**
@@ -89,12 +89,12 @@
 
 ## Fase 3 — Integridade de cadastro e agenda
 
-- [ ] T016 **V-04B — linha órfã em `team_members`.** `ConfigTeamDialog` insere
+- [x] T016 **V-04B — linha órfã em `team_members`.** `ConfigTeamDialog` insere
       antes de confirmar o sucesso do convite; cada tentativa deixa uma
       duplicata. Reordenar: só gravar após sucesso, ou reverter na falha.
 - [ ] T017 [arthur] Apagar por SQL as duplicatas já existentes nas clínicas de
       teste, inclusive a do Vinícius.
-- [ ] T018 **V-32 — fuso na HORA da consulta.** Digitado 10:00, exibe 07:00 —
+- [x] T018 **V-32 — fuso na HORA da consulta.** Digitado 10:00, exibe 07:00 —
       deslocamento de 3h (UTC-3) aplicado onde não devia. Bug novo, achado em
       20/08, **não veio de bateria**. Mesma família do fuso já corrigido, mas
       em `datetime`, não em `date`: `appointments.date` carrega data e hora numa
@@ -159,3 +159,73 @@ dia para o V-25, que é o maior.
 publicar na Lovable. Eu commito e envio; o clique é dele — e o
 `bash scripts/ponte.sh conferir` é o que separa "publiquei" de "achei que
 publiquei".
+
+
+---
+
+## LOG DE EXECUÇÃO — 23/08/2026
+
+Enviado à plataforma em três lotes. **Nenhum publicado ainda** — o Publish é
+manual e é do Arthur. Até o aceite na tela, tudo abaixo é *"código lido e
+simulado, não comportamento provado"*.
+
+| Commit | Itens | Verificação feita aqui |
+|---|---|---|
+| `8ad3a15` | V-29, V-25, V-28A | `tsc` limpo + simulação numérica dos dois casos do Vinícius |
+| `be92a38` | V-18, V-20 | `tsc` limpo + 4 casos de abatimento simulados |
+| `1dbf842` | V-32, V-15, V-16, V-11, V-12, V-04B | `tsc` limpo + round-trip de fuso em `America/Sao_Paulo` |
+
+### As causas raiz, que quase todas diferiam da aposta da triagem
+
+- **V-18 — é estrutural, e é o achado mais grave do dia.**
+  `appointments.consultation_type_id` **não tem chave estrangeira**. O seletor
+  "Tipo de Consulta" lista `services` (macro_category = Consulta) e grava um
+  **`services.id`**; todo o cálculo procurava esse id em **`consultation_types`**.
+  O `.find()` nunca casava, `consultationValue` era **sempre 0**, e o "Total a
+  pagar" trazia só a prescrição. Sem FK, nada acusava a troca.
+  → **Requisito da stack nova:** um conceito, uma tabela, com FK. Duas tabelas
+  para "tipo de consulta" não podem renascer. Entra na spec do módulo de
+  consultas.
+
+- **V-29 — havia uma segunda cópia da regra, e a certa já existia.**
+  `useFinancialBreakdown` já calculava orçado × fechado exatamente como a D-12
+  manda. O relatório tinha uma cópia própria, escrita à mão e errada. **É a
+  mesma doença do V-22** (a regra de data duplicada dentro de
+  `onPaymentMethodChange`). Duas ocorrências do mesmo padrão em um lote já é
+  sinal: regra de dinheiro duplicada no front é a fonte recorrente de erro
+  deste código.
+
+- **V-25 — a quebra era por PARCELA, não por item.** `receivables` já tem
+  `item` e `quantity`; o que multiplica linha é `installment_number`. Uma venda
+  em 3x virava 3 linhas. Agrupar por (atendimento, item, meio, parcelas)
+  resolve sem tocar em valor — e o Vinícius já dizia que *"os valores batiam
+  certinho"*.
+
+- **V-28A — meio caminho já estava andado sem registro.** O `nx-range-calendar`
+  foi criado em 21/08 e ligado **só ao Dashboard**. Movido para dentro do
+  `DateRangeFilter`, alcança os 7 relatórios **e mais 9 telas**.
+
+### Achados novos, não vieram de bateria
+
+- **V-33 — `tasks.due_date` é `TIMESTAMPTZ` e recebia data pura.** Em três
+  pontos (`Tarefas.tsx`, e duas tarefas automáticas em `Acompanhamento.tsx`)
+  gravava-se `"2026-08-23"`, que vira meia-noite UTC = **21:00 do dia anterior**
+  no Brasil. A tarefa aparecia um dia cedo. Mesma família do V-32, corrigido no
+  mesmo lote. **Faixa A: o instante errado fica gravado.**
+
+- **V-34 — centavo perdido no parcelamento.** `perInstallment = itemTotal /
+  installments` com arredondamento por parcela: R$ 1.000 em 3x soma R$ 999,99.
+  Some um centavo por venda parcelada. Não corrigido — é do caminho de escrita
+  e o conserto certo é a última parcela absorver a diferença. **Registrar na
+  spec do financeiro da stack nova.**
+
+- **Dívida do storage (do adendo do handoff).** As policies que o bot criou em
+  `storage.objects` **não filtram por `bucket_id`**. Hoje funciona porque só
+  existe o bucket de export; quando existir bucket de anexo de paciente, só o
+  superadmin conseguirá ler ou gravar, e o upload falhará sem explicação.
+
+### Ainda bloqueado no Arthur
+
+`T001` (A-SEC, `storage.objects`) · `T002` (A3, plano de contas do V-24) ·
+`T004` (A4, reteste do convite — mais relevante agora, porque o T016 mexeu
+nesse fluxo) · `T003` (export, gate da Fase 4).

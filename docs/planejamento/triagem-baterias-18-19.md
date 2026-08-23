@@ -369,6 +369,60 @@ Não fecha sem conferir, com uma venda real no crédito, que:
 
 ---
 
+## D-14 — A limpeza do histórico tem janela própria: 27–30/08 (23/08/2026)
+
+Decisão do Arthur, tomada ao definir o escopo do dia 23/08. Fecha o item que a
+D-13 tinha deixado em aberto ("backfill — decisão pendente").
+
+**O caminho é limpar, não fazer backfill.** Sem histórico, o backfill deixa de
+existir como problema — não há passado em `net_value` para reconciliar com o
+futuro em bruto.
+
+**Mas não hoje, e a razão é de calendário:**
+
+> "O Erick roda a bateria dele em 24–26/08 e vai gerar mais dado de teste.
+> Limpar agora é trabalho que se refaz. O momento é 27–30/08, no congelamento:
+> depois das duas baterias, antes do cliente." — Arthur, 23/08
+
+**Duas condições inegociáveis da limpeza:**
+
+1. **Export confirmado antes.** Não há recuperação no tempo neste tier.
+2. **Limpar só o transacional.** Consultas, orçamentos, recebíveis, despesas,
+   tarefas, leads. **Configuração fica** — plano de contas, meios de pagamento,
+   taxas, tipos de consulta, serviços, equipe. *"Se apagar configuração, o
+   fundador recebe um sistema em branco."*
+
+**Consequência para a D-13:** ela sai da janela de 23/08 e passa a 27–30/08,
+junto da limpeza, como uma coisa só. A ordem é: export → limpar transacional →
+aplicar o trigger → DRE passa a somar bruto → uniformizar `receivables.value`.
+
+**Por que não antecipar mesmo assim:** hoje a taxa é invisível no DRE, mas o
+resultado fecha certo. Subir metade da D-13 antes da bateria do Erick faria ele
+testar em cima de número financeiro com dupla contagem — e é exatamente a tela
+que ele, olhando gestão, vai abrir.
+
+---
+
+## D-3 CONFIRMADA PELO VINÍCIUS — entra na janela de 23/08
+
+A D-3 (entrada abate a consulta; total a receber soma consulta + prescrição)
+estava fixada como "fix mínimo nesta janela", mas sem confirmação de quem usa.
+Veio em 21/08, sem rodeios:
+
+> "Por mim, entra. Porque **o pagamento da consulta não tá entrando em lugar
+> nenhum**. E isso vai fuder com tudo." — Vinícius, 21/08
+
+**O que isso muda:** V-18 e V-20 sobem para o topo da faixa A, ao lado dos
+relatórios. E confirma a leitura da régua fina da §2.5 — é **atribuição
+gravada**, não cálculo de tela: o pagamento da consulta não está sendo
+registrado como receita da consulta em lugar nenhum do banco. Erro que migra
+para a stack nova em outubro.
+
+O escopo continua sendo o da D-3, e **não se reabre**: o redesenho em dois
+blocos com pagamento independente por bloco fica para depois de 01/09.
+
+---
+
 ## Convenção de numeração (para acomodar a leva do Erick)
 
 - **V-01 a V-33** — esta leva, Vinícius, 18–19/08. Numeração fixa: não
