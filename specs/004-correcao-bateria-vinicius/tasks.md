@@ -34,7 +34,7 @@
 
 ## Fase 1 — Relatórios  (obrigatórios em 01/09 pela D-8)
 
-- [ ] T005 **V-26 + V-27 — reconferir antes de corrigir.** Hipótese registrada:
+- [x] T005 **V-26 + V-27 — reconferir antes de corrigir.** Hipótese registrada:
       eram sintoma do V-22 (data indo para setembro) somado ao corte de
       materialização de despesa fixa, ambos já corrigidos (`7eff4cf`,
       `88df535`). **Não corrigir antes de reproduzir.** O código de
@@ -82,7 +82,7 @@
 - [x] T013 **V-15 + V-16 — tarefa de recaptação e de remarcação vão para o
       responsável pela venda, não para o médico.** Mesmo ponto de código
       (`AppointmentStatusDialogs.tsx`); mesmo commit.
-- [ ] T014 [P] **V-19 — fechamento parcial exibido como "fechamento total".**
+- [x] T014 [P] **V-19 — fechamento parcial exibido como "fechamento total".**
 - [ ] T015 [aceite] Ciclo completo: consulta avulsa → tarefas nascem com
       responsável certo → comparecer com entrada → orçamento aprovado → tela
       financeira soma consulta + prescrição com a entrada abatendo a consulta.
@@ -103,7 +103,7 @@
       **Atrapalha muito: hora errada é paciente chegando na hora errada.**
 - [ ] T019 **V-24 — plano de contas no lançamento avulso.** Canal decidido pelo
       resultado de T002: sem linha nível 3 ⇒ SQL (seed); com linhas ⇒ front.
-- [ ] T020 [P] **V-10 — agenda avisa e deixa confirmar** (D-4). Não bloquear:
+- [x] T020 [P] **V-10 — agenda avisa e deixa confirmar** (D-4). Não bloquear:
       bloqueio duro faz a secretária burlar criando consulta em horário falso.
 - [ ] T021 [aceite] Provar cada um na tela.
 
@@ -131,12 +131,15 @@
 
 ## Fase 5 — Faixa C barata  (só se sobrar dia)
 
-- [ ] T027 [P] **V-01** — scroll da lista de especialidades no cadastro do médico.
-- [ ] T028 [P] **V-03** — botão de ver a senha no login. Classificado backlog
+- [x] T027 [P] **V-01** — scroll da lista de especialidades no cadastro do médico.
+- [x] T028 [P] **V-03** — botão de ver a senha no login. Classificado backlog
       pela regra, mas o Vinícius marcou "atrapalha muito" e o conserto é de
       minutos.
 - [ ] T029 [P] **V-02 / V-06** — mensagem de boas-vindas e de conclusão da
-      anamnese.
+      anamnese. **NÃO FEITO, de propósito.** São os dois únicos itens puramente
+      cosméticos do lote (severidade "cosmético", `Atrapalha muito: Não`) e não
+      têm dado nem regra atrás. Pela D-7 viram requisito da stack nova. Foram
+      mantidos aqui só para constar que a decisão foi tomada, não esquecida.
 
 ---
 
@@ -229,3 +232,79 @@ simulado, não comportamento provado"*.
 `T001` (A-SEC, `storage.objects`) · `T002` (A3, plano de contas do V-24) ·
 `T004` (A4, reteste do convite — mais relevante agora, porque o T016 mexeu
 nesse fluxo) · `T003` (export, gate da Fase 4).
+
+
+---
+
+## SEGUNDA RODADA — `/speckit-implement`, 23/08/2026
+
+Commit `a239dec`. Gate de tipos limpo. **Não publicado.**
+
+### V-27 é o achado mais grave depois do V-18 — e também não era o que se supunha
+
+A triagem apostava que V-26 e V-27 eram sintomas do V-22 (data indo para
+setembro). **Nenhum dos dois era.**
+
+O DRE buscava as entradas realizadas na tabela **`revenues`**. Ela existe no
+schema, mas **nenhum caminho do app escreve nela** — nem fechamento, nem
+lançamento avulso, nem recebimento. Todo o dinheiro entra em `receivables`.
+O bloco de entradas do DRE era **permanentemente zero**, com qualquer período,
+para qualquer clínica, desde sempre.
+
+Mais quatro telas leem `revenues` e recebem o mesmo vazio:
+
+| Tela | Efeito | Situação |
+|---|---|---|
+| `RelatorioDfcDre` | entradas zeradas | **corrigido** |
+| `FluxoCaixa` | lê `receivables` **e** `revenues`; funciona pelo primeiro | sem efeito prático |
+| `RelatorioRepasse` | zerado | **não corrigido — ver abaixo** |
+| `Dashboard` | parte dos cards zerada | rebaixado pela D-8 |
+| `Insights` | zerado | fora da Onda 1 |
+
+**Por que não corrigi o repasse:** ele está fora da Onda 1 de propósito — o
+plano de lançamento registra que tem *"imposto fixado em zero e atribuição de
+profissional estimada"* e que *"para um público de médicos, é o relatório mais
+sensível que existe"*. Fazer as entradas aparecerem sem resolver imposto e
+atribuição entrega um número **plausível e errado** a médicos que conferem
+repasse — pior que um relatório visivelmente vazio. Fica como requisito da
+stack nova, com a regra de repasse escrita antes do código.
+
+**E V-26 foi reconferido sem alteração.** `RelatorioContasPagar` está correto:
+filtra `expenses` por `due_date`/`paid_at` no intervalo. O vazio vinha da
+despesa fixa não materializada no mês corrente — já corrigido em `88df535`.
+A instrução da T005 era "não corrija antes de reproduzir"; reproduzi por
+leitura e não mexi.
+
+### Os outros três
+
+- **V-19** — o rótulo contava só ITENS aprovados. Aprovar 2 das 3 doses também
+  é retirar alguma coisa, e a regra do Vinícius é literal: *"se qualquer coisa
+  foi retirada, é fechamento parcial"*. Passa a detectar redução de quantidade.
+- **V-10 / D-4** — a agenda avisa com o nome de quem já está marcado e oferece
+  "Confirmar encaixe". Não bloqueia: bloqueio duro faz a secretária criar
+  consulta em horário falso, corrompendo a agenda em vez de protegê-la.
+- **V-01** — `SelectContent` não tinha teto ligado à altura disponível na
+  janela, então o Radix não ativava os botões de rolagem. Corrigido no
+  componente compartilhado: vale para todos os selects do app.
+
+### Achado de segurança — precisa do Arthur
+
+**Existe um `.env` versionado em `nexclin/nexclin`.** Tentei listar apenas os
+NOMES das chaves (sem valores) e a regra de permissão do repositório bloqueou
+a leitura — corretamente, e **não contornei**.
+
+Precisa ser conferido à mão. Se contiver só `VITE_SUPABASE_URL` e a chave
+**anon**, está tudo bem: a anon é pública por desenho e quem protege é a RLS.
+Se contiver `service_role`, é vazamento crítico — essa chave ignora RLS, está
+no histórico do git e **não sai com `rm`**: exige rotação no painel do Supabase.
+
+Princípio V da constituição: *"Nenhuma credencial deve aparecer em código, spec
+ou arquivo versionado."*
+
+### Inconsistência da constituição, para corrigir num `/speckit-constitution`
+
+O Princípio IV ainda diz que `../nexclin-lovable` é **somente leitura**. Desde
+a criação da ponte inversa (17/08) isso deixou de valer — o `CLAUDE.md` §4(i)
+já registra a mudança de papel, mas a constituição v1.0.0 não foi atualizada.
+Como a constituição vence as rules em conflito, o texto precisa acompanhar,
+senão o próximo executor lê a lei e para.
