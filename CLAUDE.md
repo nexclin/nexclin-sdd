@@ -357,7 +357,11 @@ que se corrige e do que não se corrige.
       exportar 1 vez a cada 24h. Disparar ANTES de 22/08.
 
 > **Retomando em sessão nova?** Comece por
-> `docs/planejamento/handoffs/2026-08-20-fim-do-dia.md` — ele diz o que ler, em
+> `docs/planejamento/handoffs/2026-08-24-proximas-acoes.md` — é o handoff
+> corrente, escrito para ser colado inteiro num chat novo. O de 20/08 continua
+> valendo como histórico, mas foi superado.
+>
+> *(referência antiga)* `docs/planejamento/handoffs/2026-08-20-fim-do-dia.md` — ele diz o que ler, em
 > que ordem, o que está publicado, o que falta, e as armadilhas do procedimento.
 > A primeira ação pendente é uma consulta de segurança em `storage.objects`
 > (`docs/seguranca/storage-objects-2026-08-20.md`), que só o Arthur pode rodar.
