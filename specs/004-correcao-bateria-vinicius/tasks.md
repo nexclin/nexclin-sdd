@@ -33,7 +33,7 @@
 |---|---|
 | Apontamentos da bateria | 33 |
 | Bugs | 25 · Backlog 8 |
-| **Trava (23, após a D-2)** | **20 fechados · 3 abertos** |
+| **Trava (23, após a D-2)** | **20 fechados · 3 abertos** (V-24 e V-04 dependem só de atos do Arthur) |
 | Achados novos, fora da bateria | 4 — todos corrigidos |
 | Melhorias de interface pedidas pelo Arthur | 6 — todas enviadas |
 | Fora de escopo por decisão | 8 |
@@ -122,7 +122,7 @@ group by level order by level;
 
 **prova:** lançar uma despesa avulsa escolhendo uma conta e salvar.
 
-### `[~]` T102 · V-21 — Bloco de indicadores do dashboard · **4 de 6**
+### `[~]` T102 · V-21 — Bloco de indicadores do dashboard · **5 de 6**
 
 | Faceta | Estado |
 |---|---|
@@ -130,7 +130,7 @@ group by level order by level;
 | 2. Ticket por item, não por orçamento | `[ ]` o cálculo já é por orçamento fechado (D-9). Parecia errado porque a consulta valia zero. **Reconferir** |
 | 3. Conversão em 100% com item reprovado | `[x]` `3287cf9` — era multiplicação dupla |
 | 4. Quadro de ticket médio zerado | `[x]` deve cair junto com a faceta 1 |
-| 5. Top macro-categorias e top médicos zerados | `[ ]` **não verificado** |
+| 5. Top macro-categorias e top médicos zerados | `[x]` `551bb12` — a descrição do item carregava o sufixo de desconto e quebrava a busca do serviço. Achado por leitura |
 | 6. Gráfico do fluxo de caixa não aparece | `[ ]` **não reproduzido** — já lê de `receivables`, não da tabela vazia |
 
 **Por que não corrigi as três:** dependem de olhar a tela com dado real, e a
@@ -198,18 +198,41 @@ Nenhum foi reportado por ninguém. Aparecem aqui porque **atravessam**.
 - [x] **I-06** Rolagem horizontal no celular · `a7531e0`
       Filho de grid sem `min-width: 0`, e cabeçalho que não quebrava linha.
 
-## BLOCO 6 — Fora de escopo POR DECISÃO (8)
+## BLOCO 5B — Achados de 24/08, dos prints do Arthur (2) + desbloqueios (3)
 
-Pela **D-7**: não são trabalho adiado, são **requisito das specs da stack nova**.
+- [x] **A-01** Campo "Data e Hora" ainda usava o seletor nativo · `2b90912`
+      A troca anterior cobriu `type="date"`; ficaram cinco `datetime-local`, e um
+      deles é o campo mais usado da tela mais usada. Novo `NxDateTimeField`,
+      com `lang="pt-BR"` no campo de hora — `<input type="time">` segue o locale
+      do **navegador**, e numa máquina em en-US mostraria "08:47 PM".
+- [x] **A-02** "Erro ao excluir consulta" · `2b90912`
+      `receivables.appointment_id` referencia `appointments(id)` **sem
+      `ON DELETE`**. A correção é uma **regra**: recebível **pago** recusa a
+      exclusão e diz o valor que trava; **pendentes** saem junto. Apagar
+      recebimento pago destruiria um registro de caixa que aconteceu.
+- [x] **N-05** Descrição com desconto quebrava a busca do serviço · `551bb12`
+      Fecha **V-21.5**. Ver Bloco 2, T102.
+- [x] **N-06** V-24 deixou de ser beco sem saída · `551bb12`
+      A lista vazia distingue "sua busca não achou" de "não há o que achar".
+      Não resolve a causa — resolve o abandono.
+- [x] **N-07** Falha do convite passa a ser diagnosticável · `551bb12`
+      `invErr.message` de edge function não-2xx é **sempre** a string genérica;
+      o corpo era descartado. Era literalmente a frase que apareceu na tela do
+      Vinícius.
 
-- [-] **V-02, V-06** — boas-vindas e mensagem de conclusão da anamnese.
+## BLOCO 6 — Antes fora de escopo, AGORA NA FILA (D-15, 24/08)
+
+A **D-15** reverteu a D-7 para estes itens: entram todos. O plano de execução,
+com fases e ordem, está em `plan.md`.
+
+- [ ] **V-02, V-06** — boas-vindas e mensagem de conclusão da anamnese.
       Cosméticos, sem dado nem regra atrás.
-- [-] **V-05** — especialidade não pré-carregada no template de anamnese.
-- [-] **V-07** — formulário público sem identidade visual da clínica.
-- [-] **V-08** — respostas de anamnese sem copiar / resumo por IA.
-- [-] **V-09** — ficha do paciente sem canal de entrada nem anamnese.
-- [-] **V-30** — visão de agenda em calendário.
-- [-] **V-31** — responsável configurável por tipo de atividade.
+- [ ] **V-05** — especialidade não pré-carregada no template de anamnese.
+- [ ] **V-07** — formulário público sem identidade visual da clínica.
+- [ ] **V-08** — respostas de anamnese sem copiar / resumo por IA.
+- [ ] **V-09** — ficha do paciente sem canal de entrada nem anamnese.
+- [~] **V-30** — visão de agenda em calendário.
+- [~] **V-31** — responsável configurável por tipo de atividade.
 
 ## BLOCO 7 — Adiado com data (D-13 + D-14)
 

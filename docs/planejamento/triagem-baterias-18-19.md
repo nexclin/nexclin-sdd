@@ -423,6 +423,40 @@ blocos com pagamento independente por bloco fica para depois de 01/09.
 
 ---
 
+## D-15 — Corrigir TUDO, não só o que trava (24/08/2026)
+
+Decisão do Arthur. **Reverte parte da D-7**, que mandava não gastar esforço no
+que não atravessa para a stack nova.
+
+> "Vamos mudar a política, faremos todas as correções, não somente aquelas que
+> travam o uso."
+
+**O que muda:** os 8 itens que estavam fora de escopo — V-02, V-05, V-06, V-07,
+V-08, V-09, V-30, V-31 — voltam para a fila.
+
+**O que NÃO muda, e é o ponto:** a D-7 continua certa sobre *por que* corrigir.
+O que ela decidia era **prioridade**, não **valor**. Um item de faixa C corrigido
+segue sendo código descartado em outubro — a diferença é que agora aceitamos
+pagar por isso, e o plano diz o preço em voz alta.
+
+**Custo registrado** (`specs/004-.../plan.md`, seção Constitution Check): cada
+hora aqui é uma hora que não vai para a stack nova, que não é descartada. E
+mexer em tela estável a 8 dias do lançamento introduz regressão onde não havia
+bug.
+
+**Mitigação:** faixa C entra **por último e em commit isolado**, para que uma
+regressão nela não contamine o lote financeiro. E cada item vira também
+requisito escrito da stack nova — o esforço rende duas vezes.
+
+**Uma exceção à própria D-15, recomendada e não imposta:** V-30 (agenda em
+calendário) e V-31 (responsável por tipo de atividade) **não são bugs, são
+funcionalidades novas**. V-31 ainda interage com a D-2, que acabou de fixar
+responsável único por atendimento. Recomendo que não entrem antes de 01/09 —
+não por serem faixa C, mas por serem **escopo novo a 8 dias do lançamento**,
+com a bateria do Erick ainda por triar.
+
+---
+
 ## Convenção de numeração (para acomodar a leva do Erick)
 
 - **V-01 a V-33** — esta leva, Vinícius, 18–19/08. Numeração fixa: não
