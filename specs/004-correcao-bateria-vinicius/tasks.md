@@ -36,7 +36,7 @@
 | **Trava (23, após a D-2)** | **20 fechados · 3 abertos** (V-24 e V-04 dependem só de atos do Arthur) |
 | Achados novos, fora da bateria | 4 — todos corrigidos |
 | Melhorias de interface pedidas pelo Arthur | 6 — todas enviadas |
-| Fora de escopo por decisão | 8 |
+| Antes fora de escopo (D-15) | **6 executados · 2 com recomendação de adiar** |
 
 ---
 
@@ -220,19 +220,44 @@ Nenhum foi reportado por ninguém. Aparecem aqui porque **atravessam**.
       o corpo era descartado. Era literalmente a frase que apareceu na tela do
       Vinícius.
 
-## BLOCO 6 — Antes fora de escopo, AGORA NA FILA (D-15, 24/08)
+## BLOCO 6 — Antes fora de escopo, EXECUTADOS (D-15, 24/08)
 
-A **D-15** reverteu a D-7 para estes itens: entram todos. O plano de execução,
-com fases e ordem, está em `plan.md`.
+A **D-15** reverteu a D-7. Seis dos oito foram feitos em `bba9076`.
 
-- [ ] **V-02, V-06** — boas-vindas e mensagem de conclusão da anamnese.
-      Cosméticos, sem dado nem regra atrás.
-- [ ] **V-05** — especialidade não pré-carregada no template de anamnese.
-- [ ] **V-07** — formulário público sem identidade visual da clínica.
-- [ ] **V-08** — respostas de anamnese sem copiar / resumo por IA.
-- [ ] **V-09** — ficha do paciente sem canal de entrada nem anamnese.
-- [~] **V-30** — visão de agenda em calendário.
-- [~] **V-31** — responsável configurável por tipo de atividade.
+- [x] **V-02** Saudação após o cadastro · `bba9076`
+      O texto usa o que o próprio Vinícius sugeriu — a versão dele explica **por
+      que** a próxima tela é de configuração.
+- [x] **V-06** Mensagem de conclusão · `bba9076`
+      **Ela já existia e nunca aparecia**, por dois motivos somados: só abria
+      pelo botão do tour, e o guard desmonta o tour no instante em que o
+      onboarding fica completo — o componente que continha a mensagem deixava
+      de existir exatamente quando ela deveria surgir. Mudou para o guard.
+- [x] **V-05** Especialidade pré-carregada · `bba9076`
+      Já era usada pelo `loadTemplate`, mas o Select nascia vazio.
+- [x] **V-08** Copiar respostas para o prontuário · `bba9076` — **parcial, por
+      decisão.** O *resumo por IA* depende do gateway da Lovable, que **não
+      sobrevive à migração**: construir sobre fundação que vai embora. Vira spec
+      da stack nova, com API própria.
+- [x] **V-09** Canal de entrada e anamnese na ficha · `bba9076`
+      O dado **sempre existiu** em `patients.channel_id`/`origin_id`. Faltava
+      exibir.
+- [~] **V-07** Nome da clínica no formulário público · `bba9076` — **parcial.**
+      **O que falta exige banco:** `clinics` não tem colunas de logo nem cor.
+      Logo e paleta dependem de uma migração no SQL editor. O nome — que é o que
+      identifica o remetente para quem recebe o link — está feito.
+      ⚠️ **Depende de redeploy da edge function `anamnesis-public`** antes do
+      Publish do front.
+
+### Os 2 que continuam fora, com recomendação registrada
+
+- [~] **V-30** — agenda em visão de calendário
+- [~] **V-31** — responsável configurável por tipo de atividade
+
+**Não são bugs, são funcionalidades novas.** O V-31 ainda interage com a **D-2**,
+que acabou de fixar responsável único por atendimento — mexer nisso agora
+desfaria uma regra decidida há dois dias. A recomendação é que não entrem antes
+de 01/09: não por serem faixa C, mas por serem **escopo novo a 8 dias do
+lançamento**, com a bateria do Erick ainda por triar. **A decisão é do Arthur.**
 
 ## BLOCO 7 — Adiado com data (D-13 + D-14)
 
