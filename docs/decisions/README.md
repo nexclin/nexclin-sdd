@@ -70,7 +70,25 @@ Valem porque o projeto tem três sócios e nem sempre os três estão na convers
 | 0007 | Cobrança por faixa de usuário, e não por profissional de saúde | Aceita | pesquisa de precificação §10.2 |
 | 0008 | 16ª ModuleKey `residuos` exige emenda à constituição | **Em aberto** | `specs/013-residuos-conformidade/spec.md` |
 
-**Estado desta pasta:** o índice existe, os arquivos individuais ainda não.
+> A numeração acima era um **índice de onde cada decisão vive**, montado antes de
+> existir arquivo. Os arquivos começaram a ser escritos em 25/08 e usam a sua
+> própria sequência, abaixo. Quando as decisões da tabela acima virarem arquivo,
+> elas entram na sequência de baixo e a tabela some.
+
+## Decisões com arquivo próprio
+
+| # | Decisão | Situação |
+|---|---|---|
+| [0001](./0001-consultas-sai-do-contrato-de-modulos.md) | A ModuleKey `consultas` sai do contrato | Proposta, **preparada e não aplicada** |
+| [0002](./0002-sem-cifra-em-coluna-por-enquanto.md) | Nenhuma coluna de dado de saúde é cifrada na aplicação | Proposta |
+
+**As duas foram decididas pelo executor em 25/08, sob delegação explícita do
+Arthur**, que pediu para decidir pela documentação em vez de interromper. As
+duas trazem a seção *Como reverter*, e nenhuma alterou banco, constituição ou
+código.
+
+**Estado desta pasta:** os dois primeiros arquivos existem; as decisões da
+tabela de cima ainda não foram migradas.
 Migrar o texto de cada linha para o seu próprio ADR é a tarefa OC-4 da análise
 do OpenClinic, e ela é trabalho de depois do lançamento. Até lá, esta tabela é
 o índice de onde cada decisão vive.
