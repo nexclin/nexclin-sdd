@@ -66,11 +66,24 @@ servidor, encaminhamento de link, `Referer`. Um token dedicado se revoga sozinho
 
 ## Fase 2 — Rastro em dado de paciente  *(o trabalho da janela de 22–23/08)*
 
-- [ ] T004 **Exportar o banco antes de qualquer escrita** — `Cloud → Overview → Advanced settings → Export project data → Export → Start export`. Não há recuperação no tempo neste tier; este é o único ponto de retorno. **Nenhuma tarefa abaixo começa sem isto.**
+- [x] T004 **Export do banco feito em 25/08/2026, gate cumprido.** Arquivo `nexclin_260825.backup.zip`, sha256 `b56d8d5f9fafd194f17a055bc91dc47619c249f3518590f8615a3176574c873e`, guardado em `C:/Users/ahifr/NexClin-Backups/`. Foi baixado dentro da pasta do repositorio e movido de la: copiado, conferido por hash nas duas pontas, e so entao o original foi removido. Registrado em `docs/seguranca/registro-exports-banco.md`.
+  - **Correcao do Arthur, registrada junto:** o export **nao** e assincrono, **nao** chega por e-mail e **nao** tem limite de um a cada 24 horas. E feito na hora e pode ser repetido. O texto anterior estava errado e fazia esta fase inteira parecer travada por uma espera que nao existe.
+  - **Cuidado que continua valendo:** na mesma tela, logo abaixo do `Export data`, ficam `Pause` e `Remove` (este apaga a instancia em definitivo), os dois em vermelho, num espaco de cerca de 200 pixels.
+  - **Falta a copia em nuvem**, exigida por `registro-exports-banco.md`. Enquanto ela nao existir ha **um** ponto de retorno, num disco so.
+  - **As escritas de T005 a T009 estao liberadas.**
   - **O export é assíncrono.** A tela confirma com "Database export started" e o link chega **por e-mail**, depois. *Disparar* o export não é *ter* o dump — o gate só fecha quando o link chega e o arquivo baixa. Observado ao vivo em 18/08/2026.
   - **Limite de 1 export a cada 24 horas** (texto do próprio modal). Se a janela de 22–23/08 precisar de dois pontos de retorno no mesmo dia, **não haverá**: planeje as escritas para caber num único ponto, ou distribua entre os dois dias.
   - O arquivo fica no Cloud storage do projeto. Se o Cloud for desabilitado, os exports **deixam de ser baixáveis** — guarde uma cópia fora da Lovable.
 > **Estado em 25/08/2026 — T005 a T008 estão ESCRITOS, e NÃO aplicados.**
+>
+> **Como aplicar:** `preparado/fase2-aplicacao-guiada.md`, escrito em 25/08.
+> Sao **cinco blocos** para colar um por vez no SQL editor, cada um com a sua
+> consulta de conferencia e o resultado esperado. O bloco 4, que troca as
+> policies de `patients`, tem reversao palavra por palavra logo abaixo dele.
+>
+> **Por que colado a mao:** `docs/seguranca/nota-sql-editor-lovable-2026-08-19.md`
+> provou que o SQL editor da Lovable, dirigido por automacao, executa uma
+> consulta diferente da que esta na tela. Contra producao, isso e inaceitavel.
 >
 > A migração vive em
 > `supabase/migrations/20260825060000_auditoria_de_dado_e_soft_delete_em_patients.sql`
