@@ -93,11 +93,13 @@ regra de permissão de fato se prova) e `T012` (senha do superadmin, ato manual)
   - O menu é montado a partir de `my_permission`, um módulo por vez, e item negado não aparece. Esconder é cortesia; quem bloqueia é a rota e a RLS.
   - **`consultas` e `equipe` ficaram fora do menu**, com motivo: `consultas` não tem destino próprio decidido (a ambiguidade está registrada em `docs/dominio/modulos.md`) e `equipe` vive dentro de configurações. Item de menu sem destino é bug de navegação.
   - A tela de conta suspensa existe porque negar sem explicar manda o usuário para um app sem menu nenhum, sem entender por quê.
-- [ ] T027 e2e (Playwright) ⏳ **escrito em 25/08, NÃO executado.** `playwright.config.ts` e `e2e/guards.spec.ts` existem, `@playwright/test` instalado, script `npm run test:e2e` criado.
-  - **Por que não fechou:** rodar exige um banco com seed e credenciais de teste (`E2E_SUPERADMIN_EMAIL`, `E2E_USUARIO_EMAIL` e as senhas). Elas não existem ainda, e o T012 registra que o superadmin nunca logou.
-  - **O que já roda sem credencial:** o bloco de sessão ausente, que cobre as 3 rotas do app e as 10 do painel.
-  - **Os testes pulam com motivo explícito quando falta credencial**, em vez de passar vazios. Suíte verde que não exercitou nada é o pior resultado possível: some com o alarme sem resolver o problema.
-  - **Fecha quando** o Arthur rodar `npm run test:e2e` com as variáveis preenchidas.
+- [~] T027 e2e (Playwright) — **executado em parte, em 25/08. 15 testes passando, 0 falhas, 5 pulados.**
+  - `playwright.config.ts`, `e2e/guards.spec.ts`, chromium instalado, script `npm run test:e2e`.
+  - **O que ficou PROVADO no navegador, contra o app rodando:** sem sessão, as 3 rotas do app e as 10 do painel redirecionam para o login certo, cada uma para o seu (o app para `/login`, o painel para `/superadmin/login`); o app não entrega conteúdo protegido antes de redirecionar; e rota do menu que ainda não tem página não entrega menu, dado nem banner.
+  - **Um defeito de teste encontrado e corrigido na primeira rodada:** a lista incluía `/app/pacientes`, que **não existe ainda** (é a spec 006). Rota sem `page.tsx` não faz o layout rodar, então o guard não dispara e o Next devolve 404 na própria URL. Não é vazamento, porque não há o que vazar. **Corrigi o teste, não o código** — testar rota inexistente como se existisse é testar ficção. No lugar entrou um teste que cobra o que de fato importa ali: que nada de dado aparece.
+  - **Regra que fica:** ao criar cada tela nova, acrescente a rota em `ROTAS_DO_APP`. É essa lista que garante que o guard continua valendo para ela.
+  - **Os 5 que faltam exigem login**, e pulam com motivo explícito em vez de passar vazios. Eles cobrem o que só a cascata real prova: menu montado por `my_permission`, usuário comum barrado no painel, e módulo negado bloqueando a rota por URL direta.
+  - **Para fechar, 5 minutos seus** (receita em `.env.example`): (1) T012, definir a senha do superadmin por recovery; (2) convidar um usuário de teste com permissão **parcial**, deixando ao menos um módulo negado, que é o que exercita o bloqueio; (3) preencher as quatro variáveis `E2E_*`.
 - [ ] T028 [aceite] Executar os 7 critérios de aceite da spec (roteiro em `quickstart.md`) ❌ depende das anteriores.
 
 ---

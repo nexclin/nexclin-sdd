@@ -32,8 +32,20 @@ const USUARIO = {
   senha: process.env.E2E_USUARIO_SENHA,
 };
 
-/** Rotas do app da clínica que exigem sessão. */
-const ROTAS_DO_APP = ["/app", "/app/configuracoes", "/app/pacientes"];
+/**
+ * Rotas do app da clínica que **existem hoje** e exigem sessão.
+ *
+ * `/app/pacientes` e as outras do menu ainda não têm página: são as specs 006 em
+ * diante. A primeira versão desta lista incluía `/app/pacientes` e o teste
+ * falhou, com razão: rota sem `page.tsx` não faz o layout rodar, então o guard
+ * não dispara e o Next devolve 404 na própria URL. Não é vazamento, porque não
+ * há o que vazar; é rota que não existe. Testar rota inexistente como se
+ * existisse é testar ficção, e o teste foi corrigido em vez do código.
+ *
+ * **Ao criar cada tela nova, acrescente a rota aqui.** É esta lista que garante
+ * que o guard continua valendo para ela.
+ */
+const ROTAS_DO_APP = ["/app", "/app/configuracoes", "/app/conta-suspensa"];
 
 /** Rotas do painel que exigem superadmin. */
 const ROTAS_DO_PAINEL = [
@@ -73,6 +85,19 @@ test.describe("sem sessão, tudo é negado", () => {
       await expect(page).toHaveURL(/\/superadmin\/login/);
     });
   }
+
+  test("rota do menu que ainda não existe não entrega conteúdo", async ({
+    page,
+  }) => {
+    // Enquanto a spec do módulo não chega, a rota do menu não tem página. O que
+    // importa provar não é o redirecionamento, é que **nada** de dado aparece:
+    // sem sessão, sem clínica, sem menu. Quando a tela nascer, ela entra em
+    // ROTAS_DO_APP acima e passa a ser cobrada pelo redirecionamento também.
+    await page.goto("/app/pacientes");
+    await expect(page.getByRole("navigation")).toHaveCount(0);
+    await expect(page.getByText(/Seus módulos/i)).toHaveCount(0);
+    await expect(page.getByText(/Modo suporte/i)).toHaveCount(0);
+  });
 
   test("o app não pisca conteúdo protegido antes de redirecionar", async ({
     page,
