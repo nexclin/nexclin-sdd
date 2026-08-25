@@ -9,6 +9,12 @@ paths:
 
 Fonte: `nexclin.html` (Brand Concept v1.0). Tokens em `docs/marca/tokens.md`.
 
+> **Marca também é como o projeto escreve.** Esta regra cobre a interface. A voz
+> escrita (travessão proibido, barra como conector, superlativo sem conta,
+> formato de mensagem) vive em `.claude/rules/escrita.md`, que tem escopo de
+> caminho mais amplo porque vale para documento, spec, commit e resposta na
+> tela, não só para `app/**`.
+
 ## Paleta
 
 | Papel | Token | Hex |
