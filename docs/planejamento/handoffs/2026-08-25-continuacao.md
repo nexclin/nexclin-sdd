@@ -49,39 +49,21 @@ Dia longo. Em ordem:
 
 ## 3. A PRIMEIRA COISA A FAZER
 
-### O commit existe, e NÃO está no GitHub. Empurre ele.
+### Publicar `ae2b37d`
 
-**Correção importante, e ela é do próprio autor deste documento.** A primeira
-versão desta seção dizia que o commit já estava em `nexclin/nexclin`. **Não
-está.** Ele está **commitado apenas no clone local**:
+**O commit está no GitHub.** `nexclin/nexclin`, branch `main`, empurrado em
+25/08 com onze correcoes verificadas. **Ainda nao esta no ar** -- publicar exige
+navegador logado, e e passo do Arthur.
 
-- **Onde:** `C:\Users\ahifr\Downloads\nexclin-lovable`
-- **Commit:** `ae2b37d`
-- **Estado:** `main ahead 1` — commitado, não empurrado
-
-**Por que não subiu:** o remoto `https://github.com/nexclin/nexclin.git` pede
-credencial e o Git Credential Manager abre prompt interativo, que uma sessão de
-agente não consegue responder. O `gh` **tem** permissão de push nesse
-repositório (`"push": true`, conferido pela API), então é só falta de
-credencial em cache, não de acesso.
-
-O outro repositório, `nexclin-sdd`, empurra normal — a diferença é só qual
-credencial o gerenciador já guardou.
-
-**O trabalho não está perdido**, está commitado. Mas ele mora num diretório só,
-e um diretório é um ponto único de falha.
-
-#### Passo 1 — empurrar
-
-```bash
-cd "C:/Users/ahifr/Downloads/nexclin-lovable" && git push origin main
-```
-
-Se pedir usuário e senha, use o token do `gh`, ou rode uma vez:
-
-```bash
-gh auth setup-git
-```
+> **Historico, porque a licao vale mais que o fato.** Este documento afirmou
+> duas coisas erradas sobre este commit antes de acertar: primeiro que ja estava
+> no GitHub quando nao estava, depois que nao daria para empurrar. As duas foram
+> corrigidas no mesmo dia.
+>
+> **O que travava:** o remoto `nexclin/nexclin` caia no Git Credential Manager,
+> que abre prompt interativo. **O que resolveu:** `gh auth setup-git`, uma vez.
+> Ele registra o `gh` como helper para `github.com` e o push passa a sair
+> sozinho. Se voltar a travar em outra maquina, e esse o comando.
 
 #### Passo 2 — publicar
 
