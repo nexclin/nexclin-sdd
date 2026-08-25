@@ -49,10 +49,11 @@ Dia longo. Em ordem:
 
 ## 3. A PRIMEIRA COISA A FAZER
 
-### Publicar `ae2b37d`
+### Publicar `a356057`
 
-**O commit está no GitHub.** `nexclin/nexclin`, branch `main`, empurrado em
-25/08 com onze correcoes verificadas. **Ainda nao esta no ar** -- publicar exige
+**Dois commits estao no GitHub.** `nexclin/nexclin`, branch `main`: `ae2b37d`
+com as ondas 1 e 2, e `a356057` com as ondas 3 e 4. **Dezoito correcoes no
+total**, todas com tipo e build verdes. **Ainda nao esta no ar** -- publicar exige
 navegador logado, e e passo do Arthur.
 
 > **Historico, porque a licao vale mais que o fato.** Este documento afirmou
@@ -98,6 +99,13 @@ Todas com `tsc --noEmit -p tsconfig.app.json` limpo e `vite build` verde.
 | **DASH-3** | Saldo não batia | Sai junto com FIN-4 |
 | **ORC-1** | Serviços inativos na prescrição | **Metade**: passou a usar `servicosAtivos`. A outra metade é regra, ver §5 |
 | **UX-3** | Não dava para digitar o dia | Estado aceita texto, valida no blur. E `max` virou **31**, não 30 |
+| **DASH-1** | "0 novos agendamentos" com conversão certa ao lado | Passa a usar a mesma base da conversão. O contador antigo exigia `lead_id`, gravado por um caminho só |
+| **ANA-1** | Anamnese embaralhada **sempre** | `jsonb` não preserva ordem de chave. A leitura passa a percorrer o **formulário**, não o objeto salvo. Resposta órfã vai para seção própria, não some |
+| **ANA-2** | Ficha do paciente sem as respostas | A consulta nunca buscava `responses`. Virou componente compartilhado com a tela de Anamnese |
+| **REL-1** | Faltavam competência e forma de pagamento | As duas colunas já existiam na tabela e não eram declaradas |
+| **REL-3** | Repasse **completamente zerado** | Lia `revenues`, que ninguém escreve. Repontado para `receivables`, recorte por pagamento, e o profissional agora sai do atendimento |
+| **UX-2** | Lista de paciente sem busca | Busca dentro do seletor. As 4 telas que o usam ganham de uma vez |
+| **TAR-2** | Motivo do cancelamento sumia | Nunca sumiu do banco. A tela é que não renderizava `description` |
 
 **Quatro arquivos novos**, todos com a regra em **uma** fonte só, como manda o
 Princípio VIII: `parcelas.ts`, `dataDeCaixa.ts`, `chaveDaVenda.ts`, mais o
@@ -143,8 +151,21 @@ de capacidade, não de permissão.
 
 ### 5.3 O resto da bateria
 
-Ondas 3, 4 e 5 da triagem: DASH-1, DASH-4, ANA-1, ANA-2, TAR-1, TAR-2, UX-1,
-UX-2, REL-1, REL-2, REL-3, REL-5. **Nenhuma tocada.**
+O que **ainda não foi tocado**: **DASH-4**, **TAR-1**, **UX-1**, **REL-2** e
+**REL-5**.
+
+- **DASH-4** (top macro, top profissionais, ticket médio vazios) é o único que a
+  triagem manda **investigar com dados antes de corrigir**, e ela traz as três
+  consultas que dizem qual elo quebrou.
+- **TAR-1** (abrir, editar e associar paciente na tarefa) precisa de
+  `tasks.created_by` e `tasks.origem` para a regra de quem pode editar. A parte
+  de leitura saiu junto do TAR-2.
+- **UX-1** (digitar data e hora) mexe em dois componentes usados por 20 telas.
+  Grande, e sem risco de número errado.
+- **REL-2** melhora sozinho com FIN-1 e FIN-3; o que sobra é deixar o modo de
+  recorte explícito na tela.
+- **REL-5** é relatório novo, e a triagem confirma que sai quase inteiro do que
+  já existe em `tasks`.
 
 A triagem completa está no artefato
 `https://claude.ai/code/artifact/19e0233d-d431-42a2-bfa8-a3d4fe3a7a64`, com
