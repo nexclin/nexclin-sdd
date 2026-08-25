@@ -72,10 +72,20 @@ Code, adaptada ao que este repositório já tinha (Spec Kit + constituição).
 |---|---|---|---|
 | `CLAUDE.md` | contexto sempre presente | toda sessão | já existia — contexto do produto |
 | `.specify/memory/constitution.md` | a lei | referenciada | já existia — 6 princípios |
-| `.claude/rules/*.md` | restrição por área do código | ao tocar os `paths` | banco, app, marca |
-| `.claude/skills/*/SKILL.md` | procedimento de várias etapas | quando invocada | `nx-modulo`, `nx-ponte` |
+| `.claude/rules/*.md` | restrição por área do código | ao tocar os `paths` | banco, app, marca, **escrita** |
+| `.claude/skills/*/SKILL.md` | procedimento de várias etapas | quando invocada | 4 nossas, 11 do Spec Kit, **11 incorporadas** |
 | `.claude/agents/*.md` | trabalho paralelo com contexto próprio | quando delegado | 4 agentes |
-| `.claude/settings.json` | automação determinística | evento de ciclo de vida | 1 hook + permissões |
+| `.claude/settings.json` | automação determinística | evento de ciclo de vida | 1 hook, permissões, **marketplaces** |
+
+**Atualização de 25/08/2026.** Duas peças novas e uma pasta nova:
+
+- `.claude/rules/escrita.md` — a voz do projeto. Travessão proibido, barra como
+  conector proibida, superlativo exige conta atrás, argumento se sustenta em
+  dado e não em quem falou. Cada item rastreia a uma correção do Arthur, com
+  data, como manda a catraca.
+- `.claude/skills/nx-paralelo/` — decide o que roda ao mesmo tempo sem colidir.
+- `.claude/skills/PROVENIENCIA.md` — o que é nosso, o que veio de fora, sob qual
+  licença e de qual commit. **Obrigatório atualizar ao trazer skill de fora.**
 
 A regra de bolso que separa os quatro últimos:
 
@@ -205,3 +215,22 @@ hoje**: são quatro agentes e um pipeline linear com um ponto de decisão. Adota
 maquinário de grafo agora seria escalar complexidade sem falha que a
 justifique. Se um dia houver dezenas de módulos sendo reconstruídos em
 paralelo, o desenho acima já está no formato que essas ferramentas consomem.
+
+**Revisão de 25/08/2026.** O Arthur pediu execução de várias tarefas ao mesmo
+tempo ainda no pré-lançamento. A conclusão acima **continua valendo para
+framework**: LangGraph e companhia seguem fora, porque nada aqui exige estado
+compartilhado entre nós. O que mudou é que o grafo saiu do implícito e virou
+artefato:
+
+- [`docs/orquestracao/mapa-de-execucao.md`](../orquestracao/mapa-de-execucao.md)
+  tem o grafo de dependências das 27 tarefas pendentes e as raias que podem
+  correr juntas.
+- `nx-paralelo` diz **como** despachar, com o único teste que importa: mesma
+  árvore de arquivo, mesmo banco, ou dependência de resultado.
+- As skills incorporadas do `superpowers` (`dispatching-parallel-agents`,
+  `using-git-worktrees`, `subagent-driven-development`) trazem o mecanismo
+  maduro, sob MIT.
+
+A descoberta que destravou isso não foi ferramenta, foi leitura: **Ponte e
+Stack nova já vivem em diretórios diferentes**, então boa parte do paralelismo
+já existia de graça e ninguém estava usando.

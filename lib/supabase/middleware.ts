@@ -8,6 +8,19 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
  * NÃO decide autorização aqui — isso é responsabilidade dos guards/RLS.
  */
 export async function updateSession(request: NextRequest) {
+  // SPEC 001 / T020 — a rota atual, para os guards de layout.
+  //
+  // O Next não passa o caminho como prop para um layout. Sem este cabeçalho, o
+  // layout de `/app` não sabe qual módulo protege a rota e cai no padrão
+  // "sem módulo", que **não** é gateado. Ou seja: sem isto, `RequirePermission`
+  // simplesmente não dispara no nível do layout. Por isso ele é escrito aqui, e
+  // por isso cada página também declara o seu módulo — defesa em profundidade,
+  // porque um cabeçalho perdido não pode virar módulo liberado.
+  //
+  // Escrito no request, não na resposta: cabeçalho de resposta não chega ao
+  // Server Component.
+  request.headers.set("x-pathname", request.nextUrl.pathname);
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
