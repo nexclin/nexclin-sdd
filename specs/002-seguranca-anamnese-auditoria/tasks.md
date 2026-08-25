@@ -70,10 +70,45 @@ servidor, encaminhamento de link, `Referer`. Um token dedicado se revoga sozinho
   - **O export é assíncrono.** A tela confirma com "Database export started" e o link chega **por e-mail**, depois. *Disparar* o export não é *ter* o dump — o gate só fecha quando o link chega e o arquivo baixa. Observado ao vivo em 18/08/2026.
   - **Limite de 1 export a cada 24 horas** (texto do próprio modal). Se a janela de 22–23/08 precisar de dois pontos de retorno no mesmo dia, **não haverá**: planeje as escritas para caber num único ponto, ou distribua entre os dois dias.
   - O arquivo fica no Cloud storage do projeto. Se o Cloud for desabilitado, os exports **deixam de ser baixáveis** — guarde uma cópia fora da Lovable.
-- [ ] T005 Migração: tabela `data_audit_log` — `actor` (`auth.uid()`), `created_at`, `table_name`, `action`, `record_id`, `clinic_id`, `previous_state jsonb`. RLS ligada: leitura só para admin da própria clínica e superadmin; escrita só pelo trigger.
-- [ ] T006 Trigger `AFTER INSERT/UPDATE/DELETE` em `patients` gravando em `data_audit_log`, com o estado anterior completo em jsonb — é ele que permite reconstruir a linha.
-- [ ] T007 [P] Migração: coluna `deleted_at timestamptz` em `patients`.
-- [ ] T008 Ajustar as policies de `patients` para não vazar linha apagada: leituras filtram `deleted_at is null`, mantendo o isolamento por `clinic_id`.
+> **Estado em 25/08/2026 — T005 a T008 estão ESCRITOS, e NÃO aplicados.**
+>
+> A migração vive em
+> `supabase/migrations/20260825060000_auditoria_de_dado_e_soft_delete_em_patients.sql`
+> e cobre as quatro tarefas de uma vez: a tabela `data_audit_log` com RLS, o
+> trigger de auditoria em `patients`, a coluna `deleted_at` e as policies
+> separadas por operação.
+>
+> **Foi escrita aqui primeiro, e essa é a ordem certa.** A constituição diz que
+> `supabase/migrations` é a fonte de verdade do schema e que nenhuma mudança de
+> banco entra por alteração manual no painel. O handoff de 20/08 previa o
+> caminho inverso (corrigir na plataforma e fazer o backport depois, no T014);
+> escrever no repositório primeiro e levar pela ponte elimina o passo de
+> transcrição, que é onde o erro entra.
+>
+> **O que uma sessão de agente NÃO pode fazer, e não fez:** aplicar. Aplicar
+> exige o export (T004) confirmado à mão e é ato do Arthur. Nada foi escrito em
+> banco nenhum.
+>
+> **Três decisões da migração que valem leitura antes de aplicar:**
+>
+> 1. `data_audit_log` **não tem policy de INSERT, UPDATE nem DELETE.** Com RLS
+>    ligada e nenhuma policy de escrita, toda escrita por sessão de usuário é
+>    negada, e quem grava é o trigger, que roda `SECURITY DEFINER` e não passa
+>    por RLS. É assim que "escrita só pelo trigger" vira garantia do banco em
+>    vez de confiança no código da aplicação. A trilha fica imutável inclusive
+>    para o superadmin.
+> 2. **`DELETE` em `patients` deixa de existir para a aplicação.** Não se cria
+>    policy de DELETE, então ele é negado por default deny. Se o DELETE
+>    continuasse disponível, o soft delete seria convenção opcional em vez de
+>    garantia.
+> 3. **A policy única `FOR ALL` foi separada por operação.** O `SELECT` passa a
+>    filtrar `deleted_at is null`; o `UPDATE` **não** filtra, porque é por ele
+>    que a exclusão acontece e é por ele que a restauração acontece.
+
+- [~] T005 (escrito, não aplicado) Migração: tabela `data_audit_log` — `actor` (`auth.uid()`), `created_at`, `table_name`, `action`, `record_id`, `clinic_id`, `previous_state jsonb`. RLS ligada: leitura só para admin da própria clínica e superadmin; escrita só pelo trigger.
+- [~] T006 (escrito, não aplicado) Trigger `AFTER INSERT/UPDATE/DELETE` em `patients` gravando em `data_audit_log`, com o estado anterior completo em jsonb — é ele que permite reconstruir a linha.
+- [~] T007 [P] (escrito, não aplicado) Migração: coluna `deleted_at timestamptz` em `patients`.
+- [~] T008 (escrito, não aplicado) Ajustar as policies de `patients` para não vazar linha apagada: leituras filtram `deleted_at is null`, mantendo o isolamento por `clinic_id`.
 - [ ] T009 Ajustar o app da plataforma: a exclusão de paciente vira `update ... set deleted_at = now()`, e todas as listas filtram. Pela **ponte inversa** (`docs/ponte/ponte-inversa.md`) — commit no repositório, e **não esquecer o Publish**.
 - [ ] T010 [aceite] Apagar um paciente de teste deixa registro com **autor, hora e estado anterior**.
 - [ ] T011 [aceite] O paciente some das listas, mas a linha existe com `deleted_at` preenchido.

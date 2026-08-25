@@ -381,9 +381,14 @@ que se corrige e do que não se corrige.
       em diante já reservada
 - [ ] Janela 22–23/08: faixa A da bateria + **Fase 2 da SPEC 002**, que tem
       prioridade por ser banco puro (atravessa 100%)
-- [ ] **T004 da SPEC 002 é gate absoluto e assíncrono** — exportar o banco
-      antes de qualquer escrita; o link chega por e-mail e só se pode
-      exportar 1 vez a cada 24h. Disparar ANTES de 22/08.
+- [ ] **T004 da SPEC 002 é gate absoluto**: exportar o banco antes de qualquer
+      escrita. **Correção de 25/08, do Arthur:** o export **não** é assíncrono,
+      **não** chega por e-mail e **não** tem limite de um a cada 24 horas. Ele
+      é feito na hora, pela função de exportar dados, e pode ser repetido
+      quando se quiser. O texto anterior, herdado do handoff de 20/08, estava
+      errado, e o erro tinha custo: ele fazia a Fase 2 inteira parecer travada
+      por um gargalo que não existe. **T004 continua sendo gate**, porque o
+      ponto de retorno importa; só deixou de ser caro.
 
 > **Retomando em sessão nova?** Comece por
 > `docs/planejamento/handoffs/2026-08-20-fim-do-dia.md` — ele diz o que ler, em

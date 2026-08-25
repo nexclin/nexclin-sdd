@@ -47,7 +47,7 @@ Essa é a paralelização que já existe de graça e que não estava sendo usada
 flowchart TD
     subgraph HUM["Só o Arthur faz (bloqueiam tudo abaixo)"]
         ASEC["A-SEC · consulta storage.objects"]
-        A6["A6 / T004 · export do banco<br/>1 por 24h, assíncrono"]
+        A6["A6 / T004 · export do banco<br/>na hora, repetível"]
         A4["A4 · reteste do convite<br/>prova o T017"]
         A20["T018 · Supabase Pro"]
     end
@@ -100,10 +100,13 @@ flowchart TD
 
 Três leituras que o grafo entrega e uma lista não entregava:
 
-1. **`A6` (o export) é o gargalo mais caro do projeto.** É assíncrono, chega
-   por e-mail, só pode ser feito **uma vez a cada 24 horas**, e a raia BANCO
-   inteira, que são 17 tarefas, está atrás dele. Se ele não for disparado hoje,
-   a Fase 2 perde o dia inteiro de amanhã.
+1. **`A6` (o export) é gate, e não é gargalo.** Corrigido pelo Arthur em
+   25/08: o export é feito na hora, pela função de exportar dados, sem espera
+   por e-mail e sem limite de um a cada 24 horas. A versão anterior deste
+   documento dizia o contrário, herdando o erro do handoff de 20/08, e a
+   consequência era real: a raia BANCO inteira, 17 tarefas, parecia bloqueada
+   por uma espera que não existe. Continua sendo pré-requisito, porque o ponto
+   de retorno importa antes de escrever no banco. Só é barato.
 2. **A raia STACK NOVA não tem nenhuma seta vindo da Ponte.** Ela pode começar
    agora, hoje, sem esperar nada. É trabalho de escrever spec, e é onde a
    paralelização rende mais.
@@ -224,7 +227,7 @@ proposta, não compromisso, e a primeira coluna é o que trava se atrasar.
 
 | Data | Arthur (gate) | Claude, raia principal | Claude, raia paralela |
 |---|---|---|---|
-| **25/08 hoje** | **A-SEC** e **A6/T004 o export**, nesta ordem | triagem da bateria do Erick | SPEC 004 começa |
+| **25/08 hoje** | **A-SEC**, depois **A6/T004 o export** (leva minutos) | triagem da bateria do Erick | ✅ SPEC 001 T019/T020/T023/T024/T025/T026/T027 |
 | 26/08 | A4 reteste do convite | Fase 2: T005, T006, T007 | SPEC 004 |
 | 27/08 | A3 consulta do V-24 | Fase 2: T008, T009 | SPEC 005 |
 | 28/08 | aceites T010 a T013 | V-26 e V-27 reconferir, V-29 | T020 guards |
