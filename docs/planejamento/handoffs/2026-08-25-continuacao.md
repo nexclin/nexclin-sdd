@@ -42,21 +42,52 @@ Dia longo. Em ordem:
 - Constituição v2.0.0 veio da `main` no merge, e foi conferida: compatível.
 - Duas decisões viraram ADR (`docs/decisions/0001` e `0002`).
 - Chegou a **bateria de 25/08 do Vinícius**, com triagem completa por outra
-  sessão. **Onze correções foram feitas e enviadas pela ponte.**
+  sessão. **Onze correções foram feitas e commitadas no clone da plataforma**,
+  com tipo e build verdes. **O push não saiu** — ver §3.
 
 ---
 
 ## 3. A PRIMEIRA COISA A FAZER
 
-### Publicar o que já está no GitHub da plataforma
+### O commit existe, e NÃO está no GitHub. Empurre ele.
 
-O commit **`ae2b37d`** está em `nexclin/nexclin`, branch `main`, com onze
-correções verificadas. **Ele ainda não está no ar.**
+**Correção importante, e ela é do próprio autor deste documento.** A primeira
+versão desta seção dizia que o commit já estava em `nexclin/nexclin`. **Não
+está.** Ele está **commitado apenas no clone local**:
 
-Publicar exige navegador logado na Lovable, e é passo do Arthur:
+- **Onde:** `C:\Users\ahifr\Downloads\nexclin-lovable`
+- **Commit:** `ae2b37d`
+- **Estado:** `main ahead 1` — commitado, não empurrado
+
+**Por que não subiu:** o remoto `https://github.com/nexclin/nexclin.git` pede
+credencial e o Git Credential Manager abre prompt interativo, que uma sessão de
+agente não consegue responder. O `gh` **tem** permissão de push nesse
+repositório (`"push": true`, conferido pela API), então é só falta de
+credencial em cache, não de acesso.
+
+O outro repositório, `nexclin-sdd`, empurra normal — a diferença é só qual
+credencial o gerenciador já guardou.
+
+**O trabalho não está perdido**, está commitado. Mas ele mora num diretório só,
+e um diretório é um ponto único de falha.
+
+#### Passo 1 — empurrar
+
+```bash
+cd "C:/Users/ahifr/Downloads/nexclin-lovable" && git push origin main
+```
+
+Se pedir usuário e senha, use o token do `gh`, ou rode uma vez:
+
+```bash
+gh auth setup-git
+```
+
+#### Passo 2 — publicar
 
 1. Abrir o [projeto](https://lovable.dev/projects/09bc3d2d-df13-4ce3-a41f-6aa1606a75df)
-2. Conferir que o commit aparece como **"Pushed from GitHub"**
+2. Conferir que o commit aparece como **"Pushed from GitHub"**. Se não aparecer
+   em uns 2 minutos com recarga, **pare e avise**: a ponte caiu.
 3. **Publish → Update**
 4. Anotar o crédito antes e depois. Tem de ser o mesmo número.
 5. `bash scripts/ponte.sh conferir` para provar que o bundle mudou
@@ -147,7 +178,7 @@ antes de corrigir, e traz as três consultas que dizem qual elo quebrou.
 
 | # | O quê | Por que importa |
 |---|---|---|
-| **1** | **Publicar `ae2b37d`** | Onze correções verificadas, paradas |
+| **1** | **Empurrar E publicar `ae2b37d`** | Onze correções verificadas, paradas num diretório local. Ver §3 |
 | **2** | **Trocar a senha do Vinícius** | Veio em texto claro no `.txt` da bateria. `docs/seguranca/credencial-exposta-2026-08-25.md`. É o mesmo erro da conta-mestra, três semanas depois |
 | **3** | Aplicar as três migrações, pelos blocos guiados | Destrava EQP-1, a Fase 2 e o editor de planos |
 | **4** | T012, senha do superadmin por recovery | O superadmin nunca logou |
