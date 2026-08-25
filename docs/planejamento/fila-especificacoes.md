@@ -13,6 +13,13 @@
 > em pé. "Implementado ≠ funciona" — cada critério de pronto abaixo é um
 > teste manual real que Arthur executa antes de fechar a spec.
 >
+> **Nota de 25/08/2026 — os números 004 a 012 continuam reservados a esta
+> fila.** A SPEC de resíduos/conformidade, escrita fora da ordem por ter vindo
+> de uma pauta comercial, ficou com o número **013**
+> (`specs/013-residuos-conformidade/`) justamente para não roubar um lugar
+> daqui. Ela **não entra na Onda 1 nem na Onda 2** — depende de `contas_pagar`,
+> de emenda à constituição (16ª ModuleKey) e de decisão comercial do grupo.
+>
 > Esta fila é um **índice**. Os `spec.md` propriamente ditos são escritos
 > um por vez, na hora de começar cada um, seguindo o modelo de
 > `specs/001-fundacao-superadmin/` (spec + plan + tasks + contracts +

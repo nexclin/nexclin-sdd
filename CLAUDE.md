@@ -21,12 +21,20 @@ recomendações), não competir feature a feature com sistemas genéricos
 repositório) · Erick (estruturação da empresa e go-to-market) · mentor de
 gestão clínica (conhecimento de domínio + canal de distribuição).
 
-**Prazo vivo (revisado em 20/08/2026):** **01/09/2026** abre para um grupo de
+**Prazo vivo (revisado em 25/08/2026):** **08/09/2026** abre para um grupo de
 **clientes fundadores, em uso gratuito**, na plataforma Lovable — não são
 assinantes, e a plataforma é temporária. A stack deste repositório assume em
 **outubro**. Escopo: fundação + os módulos que o fundador usará de fato. **O
 que se corrige até lá segue o critério da §2.5, não o instinto de deixar
 perfeito.**
+
+> **A data mudou de 01/09 para 08/09 em 24/08**, por proposta do Vinícius
+> aceita pelo Arthur: os três fundadores estão em evento em Gramado e em SP e
+> viajam a partir de terça, 25/08: abrir para quem não vai olhar queima a única
+> primeira impressão que existe. Os prazos internos da §6 deslizam junto,
+> **exceto os que têm data própria** (bateria do Erick, gate do export). A
+> prioridade da semana extra continua sendo **terminar a faixa A e fechar a
+> Fase 2 da SPEC 002**.
 
 **Mercado/regulatório:** dados sensíveis de saúde → LGPD é requisito de
 arquitetura, não feature. Futuro do roadmap: prontuário (assinatura digital /
@@ -100,6 +108,22 @@ atravessa **não é o código — é a regra escrita**. O front React/Vite do Lo
 será reescrito em Next.js de qualquer jeito. O que sobrevive é a decisão de
 *como o sistema deve se comportar*. **Escrever a regra é a entrega; implementar
 na Lovable é opcional.**
+
+**Precisão de 25/08/2026, do Arthur — o critério é sobre RETRABALHO, nunca
+sobre custo em crédito.** Registrada porque a sessão do Claude errou nisso e
+escreveu "construir na Lovable é o desperdício mais caro possível", o que é
+falso e já foi corrigido.
+
+Desde a ponte inversa (`scripts/ponte.sh`), **não se compra crédito da Lovable
+para construir**: o trabalho é commit no repositório e publicação. O que se
+migra em outubro é **banco, front e hospedagem**; a estrutura, o dado e a regra
+de negócio são os mesmos nos dois lados, e o banco vai intacto (§2.4).
+
+Logo, ao recusar trabalho na plataforma, **diga a razão certa**. A razão certa é
+"esta tela será reescrita, então o artefato durável é a regra". A razão errada,
+e proibida a partir de agora, é "isso custa caro" — não custa. Confundir as duas
+faz a §2.5 recusar coisa que deveria aceitar, e é como uma funcionalidade
+legítima quase virou "não dá para encaixar".
 
 Três faixas, para triar qualquer apontamento novo:
 
@@ -324,16 +348,21 @@ registro em superadmin_operators. Rodar 2x sem duplicar.
 [ ] Senha nova da conta-mestra via reset no painel (pós Fase 2)
 [x] Constitution formal do Spec Kit (.specify/memory/constitution.md, v1.0.0)
 [ ] SPEC 002+ : módulos do escopo de lançamento do 1º cliente
+[>] SPEC 013 (specs/013-residuos-conformidade/) — resíduos/MTR/DMR/CDF.
+    Escrita em 25/08, **parada de propósito**: depende de decisão comercial
+    do grupo e de emenda à constituição (16ª ModuleKey). Ver §Decisões
+    pendentes da própria spec. Numeração 004–012 segue reservada à fila.
 [ ] T021 da SPEC 001 — testes de permissão em Vitest: EM ZERO, e é mínimo
     obrigatório da constituição (Princípio V)
 ```
 
-### Linha do tempo viva (atualizada em 20/08/2026)
+### Linha do tempo viva (atualizada em 25/08/2026)
 
 ```
-01/09  abre para os clientes fundadores, na plataforma Lovable, de graça
-set/2  transição gradual começa
-out    stack Next.js substitui a plataforma  ← o destino real
+24-26/08  bateria de testes do Erick (data própria, não deslizou)
+08/09     abre para os clientes fundadores, na Lovable, de graça  ← era 01/09
+set/2     transição gradual começa
+out       stack Next.js substitui a plataforma  ← o destino real
 ```
 
 **Frente Lovable (temporária, ~1 mês de vida).** Ver §2.5 para o critério do
@@ -381,11 +410,21 @@ peça rastreia a uma falha real do projeto (princípio da catraca) — leia
 
 - **`.claude/hooks/guarda-constituicao.mjs`** — roda a cada escrita; bloqueia
   RLS ausente, `USING(true)`, caminho que define senha e segredo versionado.
-- **`.claude/rules/{banco,app,marca}.md`** — restrições por área (`paths:`).
+- **`.claude/rules/{banco,app,marca,escrita}.md`** — restrições por área
+  (`paths:`). `escrita.md` é a voz do projeto: travessão proibido, barra como
+  conector proibida, superlativo exige conta atrás.
 - **`.claude/agents/`** — auditor-multitenant, triador-apontamentos,
   consultor-vertical, relator-semanal.
 - **`.claude/skills/`** — `nx-modulo` (portar um dos 15 módulos),
-  `nx-ponte` (corrigir bug na plataforma Lovable até a migração).
+  `nx-ponte` (corrigir bug na plataforma Lovable até a migração),
+  `nx-paralelo` (decidir o que roda ao mesmo tempo sem colidir), mais 11 skills
+  incorporadas do `superpowers` sob MIT. Proveniência e licença de cada uma em
+  `.claude/skills/PROVENIENCIA.md`.
+- **`docs/orquestracao/mapa-de-execucao.md`** — o grafo de dependências das
+  tarefas pendentes, as raias paralelas e o calendário até 08/09. **É por onde
+  se começa quando a pergunta é "o que faço agora".**
+- **`docs/README.md`** — índice da árvore de documentação e a tabela de onde
+  cada tipo de artefato deve nascer.
 - **`docs/dominio/`** — as 15 ModuleKeys × ondas, e os 4 verticais
   (médico ativo; psicologia/estética na fila; odonto fechado).
 - **`docs/marca/tokens.md`** — paleta e tipografia da identidade.
