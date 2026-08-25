@@ -11,15 +11,19 @@
 
 | Spec | Estado | Tarefas | Concluídas | Pendentes |
 |---|---|---:|---:|---:|
-| **001** fundação e superadmin | em execução | 28 | 18 | **10** |
-| **002** segurança, anamnese, auditoria | quase parada | 18 | 1 | **17** |
+| **001** fundação e superadmin | em execução | 28 | **24** | **4** |
+| **002** segurança, anamnese, auditoria | gate cumprido | 18 | 2 | **16**, sendo 4 escritas e aguardando aplicação |
 | **003** superadmin blindado | só o `spec.md` | sem `tasks.md` | 0 | tudo |
 | **013** resíduos e conformidade | escrita, bloqueada | sem `tasks.md` | 0 | tudo |
-| **004 a 012** fila da Onda 1 | 9 specs não escritas | zero | 0 | tudo |
+| **004** correção da bateria do Vinícius | veio da `main` em 25/08 | tem `tasks.md` | — | ver §3.6 |
+| **005** configurações da clínica | escrita em 25/08 | sem `tasks.md` | 0 | tudo |
+| **016** endurecimento de segurança | escrita em 25/08 | sem `tasks.md` | 0 | tudo |
+| **006 a 012** fila da Onda 1 | 7 specs não escritas | zero | 0 | tudo |
 
-Somando: **27 tarefas nomeadas pendentes**, mais 11 specs que ainda não têm
-tarefa porque não foram escritas. É muito, e é por isso que a ordem importa
-mais que a velocidade.
+Somando: **20 tarefas nomeadas pendentes**, contra 27 na abertura do dia.
+
+Das 4 que restam na SPEC 001, **três são aceite manual do Arthur** e uma
+depende de credencial de teste. Nenhuma é código pendente.
 
 ---
 
@@ -36,7 +40,7 @@ disputa, e a razão é física: **cada frente vive num diretório diferente**.
 
 Ponte e Stack nova tocam **árvores de arquivo distintas**. Um agente
 trabalhando em `../nexclin-lovable/src/pages/Relatorios.tsx` e outro
-trabalhando em `specs/004-configuracoes-clinica/spec.md` não têm como colidir.
+trabalhando em `specs/005-configuracoes-clinica/spec.md` não têm como colidir.
 Essa é a paralelização que já existe de graça e que não estava sendo usada.
 
 ---
@@ -76,11 +80,11 @@ flowchart TD
     end
 
     subgraph NOVA["Raia STACK NOVA · sem prazo, nunca colide"]
-        S004["SPEC 004 configuracoes"] --> S005["SPEC 005 equipe"]
-        S005 --> S006["SPEC 006 pacientes"]
-        S006 --> S007["SPEC 007 consultas"]
-        S007 --> S011["SPEC 011 contas a receber"]
-        S011 --> S014["SPEC 014 contas a pagar"]
+        S005["SPEC 005 configuracoes"] --> S006["SPEC 006 equipe"]
+        S006 --> S007["SPEC 007 pacientes"]
+        S007 --> S008["SPEC 008 consultas"]
+        S008 --> S012["SPEC 012 contas a receber"]
+        S012 --> S014["SPEC 014 contas a pagar"]
         S014 --> S015["SPEC 015 fluxo de caixa"]
         S015 --> S013["SPEC 013 resíduos<br/>bloqueada também por D-R1"]
         T020["T020 guards"] --> T027["T027 e2e Playwright"]
@@ -120,31 +124,31 @@ Três leituras que o grafo entrega e uma lista não entregava:
 
 ### 3.1 SPEC 001, fundação e superadmin (10 pendentes de 28)
 
-| Tarefa | O que falta | Bloqueada por | Raia |
-|---|---|---|---|
-| T012 | Senha real do superadmin via recovery. Ele nunca logou. | Arthur | HUMANO |
-| T017 aceite | Provar o diff de `update_email` em `superadmin_audit_log` | nada | NOVA |
-| T019 | Login do usuário comum e rotas da clínica. Reset já funciona. | nada | NOVA |
-| T020 | `ProtectedRoute`, `RequirePermission`, `OnboardingGuard`. Só existe `useSuperAdmin`. | nada | NOVA |
-| T023 | 9 das 11 telas do painel | T019 | NOVA |
-| T024 | Seção Perfis. Sem modelo na referência, precisa ser desenhada. | SPEC 003 | NOVA |
-| T025 | Banner âmbar, sair da conta, limpeza de cache | T019 | NOVA |
-| T026 | Esqueleto do app da clínica | T020 | NOVA |
-| T027 | e2e em Playwright. Não existe nem o config. | T020 | NOVA |
-| T028 | Os 7 critérios de aceite | todas acima | HUMANO |
+| Tarefa | O que falta | Quem destrava |
+|---|---|---|
+| T012 | Senha real do superadmin por recovery. Ele nunca logou. | **Arthur** |
+| T017 aceite | Provar o diff de `update_email` em `superadmin_audit_log` | **Arthur**, com o sistema no ar |
+| T027 | Os 5 e2e que exigem login. Os outros 15 já rodam e passam. | **Arthur**, gerando as credenciais |
+| T028 | Os 7 critérios de aceite da spec | **Arthur** |
 
-**Observação que muda a prioridade:** o T021 (testes de permissão em Vitest)
-foi fechado em 20/08 com 19 testes, mas o **T020 não existe**. Ou seja, temos
-teste de uma regra que nenhuma tela consome ainda. O T020 é o item de maior
-retorno da spec inteira.
+**Fechadas em 25/08:** T019 (login), T020 (guards), T023 (as 11 telas do
+painel), T024 (Perfis), T025 (impersonação), T026 (esqueleto do app).
+
+**A observação que motivou a ordem, e que já foi resolvida:** o T021 tinha 19
+testes de permissão e **nenhuma tela que consumisse a regra**, porque o T020 não
+existia. Hoje existem 80 testes de unidade e 15 de navegador, e os guards estão
+em uso nas duas árvores de rota.
 
 ### 3.2 SPEC 002, segurança e auditoria (17 pendentes de 18)
 
 Bloco público (T001 a T003): T002 é decisão do Arthur sobre `public_token`,
 e sem ela o T003 não abre.
 
-Bloco de auditoria (T004 a T013): **T004 é gate absoluto**, o export.
-Depois dele, T005 a T009 são banco e app, T010 a T013 são aceites manuais.
+Bloco de auditoria (T004 a T013): **T004 cumprido em 25/08**, com o export
+feito, conferido por hash e registrado. T005 a T008 estão **escritos** como
+migração versionada e aguardam aplicação manual, pelos cinco blocos de
+`preparado/fase2-aplicacao-guiada.md`. T009 é a ponte, depois deles. T010 a
+T013 são aceites.
 
 Bloco de backport (T014 a T016): traz tudo para `supabase/migrations` daqui.
 
@@ -162,17 +166,38 @@ Escrita em 25/08. Bloqueada por três coisas: a decisão D-R1 (em qual plano
 entra), a emenda à constituição para a 16ª ModuleKey, e a dívida de
 `storage.objects` sem filtro por `bucket_id`.
 
-### 3.5 A fila 004 a 012, mais duas que faltavam número
+### 3.5 A numeração, depois da colisão de 25/08
 
-A `fila-especificacoes.md` reserva 004 a 012. Duas specs que o Arthur
-priorizou em 25/08 (**os módulos financeiros**) não tinham número porque
-estavam fora da Onda 1. Ficam assim:
+Duas sessões em paralelo criaram, cada uma, uma SPEC 004 diferente. A `main`
+tinha `004-correcao-bateria-vinicius`; esta sessão criou
+`004-configuracoes-clinica`. **Quem chegou primeiro no `main` fica com o
+número**, então configurações virou **005** e a fila inteira deslocou em um.
 
-| Nº | Spec | Onda | Motivo do número |
-|---|---|---|---|
-| 004 a 012 | fila existente | 1 | já reservados |
-| **014** | `contas-pagar` | 2 | numerado agora, era só texto no BACKLOG |
-| **015** | `fluxo-caixa` | 2 | idem, depende das duas pontas |
+| Nº | Spec | Estado |
+|---|---|---|
+| 004 | `correcao-bateria-vinicius` | veio da `main` |
+| **005** | `configuracoes-clinica` | escrita, sem `tasks.md` |
+| 006 | `equipe-e-convites` | não escrita |
+| 007 | `pacientes` | não escrita |
+| 008 | `consultas-acompanhamento` | não escrita |
+| 009 a 012 | tarefas, leads, anamnese, contas a receber, dashboard | não escritas |
+| 013 | `residuos-conformidade` | escrita, bloqueada por decisão comercial |
+| 014 e 015 | `contas-pagar`, `fluxo-caixa` | reservados |
+| **016** | `endurecimento-seguranca` | escrita, sem `tasks.md` |
+
+**A lição, e ela é de processo:** `create-new-feature.ps1` só enxerga o disco
+local. Antes de criar spec, `git fetch` e conferir
+`git ls-tree -d --name-only origin/main specs/`.
+
+### 3.6 SPEC 004, a que veio da `main`
+
+Corrige a bateria do Vinícius na plataforma Lovable. Tem `spec.md`, `plan.md`,
+`tasks.md` e `historico-execucao.md`, e é o maior bloco de trabalho com data:
+é o que o cliente fundador vê em 08/09.
+
+**É trabalho de raia PONTE**, o que significa publicar em produção. Fica
+registrado aqui como a maior massa pendente com prazo, e não como algo que uma
+sessão sem acompanhamento deva empurrar sozinha.
 
 ---
 

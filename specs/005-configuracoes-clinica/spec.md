@@ -1,6 +1,6 @@
 # Feature Specification: Configurações da clínica
 
-**Feature Branch**: `004-configuracoes-clinica`
+**Feature Branch**: `005-configuracoes-clinica`
 
 **Created**: 2026-08-25
 
@@ -294,10 +294,10 @@ com a única exceção de nenhuma.
 
 | # | Decisão | Estado |
 |---|---|---|
-| **D-004.1** | `enabled_modules` é objeto `Record<ModuleKey, boolean>` | **Fechada pela evidência**: o trigger já impõe desde `20260725033102`. O BACKLOG a tratava como pergunta aberta por engano. |
-| **D-004.2** | O default da coluna passa a `'{}'::jsonb` | **Proposta**, com migração dentro desta spec |
-| **D-004.3** | Desativação é lógica, nunca exclusão | **Proposta** |
-| **D-004.4** | Um componente de período para todo o app | **Proposta** |
+| **D-005.1** | `enabled_modules` é objeto `Record<ModuleKey, boolean>` | **Fechada pela evidência**: o trigger já impõe desde `20260725033102`. O BACKLOG a tratava como pergunta aberta por engano. |
+| **D-005.2** | O default da coluna passa a `'{}'::jsonb` | **Proposta**, com migração dentro desta spec |
+| **D-005.3** | Desativação é lógica, nunca exclusão | **Proposta** |
+| **D-005.4** | Um componente de período para todo o app | **Proposta** |
 
 ## Decisão que esta spec NÃO fecha, e precisa de você
 

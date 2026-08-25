@@ -13,12 +13,35 @@
 > em pé. "Implementado ≠ funciona" — cada critério de pronto abaixo é um
 > teste manual real que Arthur executa antes de fechar a spec.
 >
-> **Nota de 25/08/2026 — os números 004 a 012 continuam reservados a esta
-> fila.** A SPEC de resíduos/conformidade, escrita fora da ordem por ter vindo
-> de uma pauta comercial, ficou com o número **013**
-> (`specs/013-residuos-conformidade/`) justamente para não roubar um lugar
-> daqui. Ela **não entra na Onda 1 nem na Onda 2** — depende de `contas_pagar`,
-> de emenda à constituição (16ª ModuleKey) e de decisão comercial do grupo.
+> **Nota de 25/08/2026, reescrita depois do merge com a `main`.**
+>
+> **A numeração aspiracional desta fila não sobreviveu ao contato com a
+> realidade, e isso é informação, não acidente.** Duas sessões trabalhando em
+> paralelo criaram, cada uma, uma SPEC 004 diferente: a `main` tinha
+> `004-correcao-bateria-vinicius` e esta fila reservava o 004 para
+> `configuracoes`. Quem chegou primeiro no `main` fica com o número.
+>
+> **O mapa real, que substitui o aspiracional:**
+>
+> | Nº | Spec | Origem |
+> |---|---|---|
+> | 001 | `fundacao-superadmin` | fundação |
+> | 002 | `seguranca-anamnese-auditoria` | dívida de segurança |
+> | 003 | `superadmin-blindado` | stack nova |
+> | **004** | `correcao-bateria-vinicius` | **tomou o número na `main`** |
+> | **005** | `configuracoes-clinica` | era 004 nesta fila, renumerada |
+> | 006 em diante | `equipe`, `pacientes`, `consultas`, `tarefas`, `leads`, `anamnese`, `contas_receber`, `dashboard` | a fila abaixo, deslocada em um |
+> | 013 | `residuos-conformidade` | pauta comercial, fora de ordem |
+> | 016 | `endurecimento-seguranca` | auditoria dos 20 itens |
+>
+> **A lição, que vale mais que a renumeração:** número de spec é alocado por
+> quem escreve, e duas frentes em paralelo colidem. O `create-new-feature.ps1`
+> só enxerga o disco local, não a `main`. **Antes de criar spec nova, dê
+> `git fetch` e confira `git ls-tree -d --name-only origin/main specs/`.**
+> Custa cinco segundos e evita o que aconteceu aqui.
+>
+> A numeração desta fila deixa de ser promessa e passa a ser **ordem de
+> execução**. O número sai na hora de escrever.
 >
 > Esta fila é um **índice**. Os `spec.md` propriamente ditos são escritos
 > um por vez, na hora de começar cada um, seguindo o modelo de

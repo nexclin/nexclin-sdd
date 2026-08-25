@@ -369,6 +369,94 @@ Não fecha sem conferir, com uma venda real no crédito, que:
 
 ---
 
+## D-14 — A limpeza do histórico tem janela própria: 27–30/08 (23/08/2026)
+
+Decisão do Arthur, tomada ao definir o escopo do dia 23/08. Fecha o item que a
+D-13 tinha deixado em aberto ("backfill — decisão pendente").
+
+**O caminho é limpar, não fazer backfill.** Sem histórico, o backfill deixa de
+existir como problema — não há passado em `net_value` para reconciliar com o
+futuro em bruto.
+
+**Mas não hoje, e a razão é de calendário:**
+
+> "O Erick roda a bateria dele em 24–26/08 e vai gerar mais dado de teste.
+> Limpar agora é trabalho que se refaz. O momento é 27–30/08, no congelamento:
+> depois das duas baterias, antes do cliente." — Arthur, 23/08
+
+**Duas condições inegociáveis da limpeza:**
+
+1. **Export confirmado antes.** Não há recuperação no tempo neste tier.
+2. **Limpar só o transacional.** Consultas, orçamentos, recebíveis, despesas,
+   tarefas, leads. **Configuração fica** — plano de contas, meios de pagamento,
+   taxas, tipos de consulta, serviços, equipe. *"Se apagar configuração, o
+   fundador recebe um sistema em branco."*
+
+**Consequência para a D-13:** ela sai da janela de 23/08 e passa a 27–30/08,
+junto da limpeza, como uma coisa só. A ordem é: export → limpar transacional →
+aplicar o trigger → DRE passa a somar bruto → uniformizar `receivables.value`.
+
+**Por que não antecipar mesmo assim:** hoje a taxa é invisível no DRE, mas o
+resultado fecha certo. Subir metade da D-13 antes da bateria do Erick faria ele
+testar em cima de número financeiro com dupla contagem — e é exatamente a tela
+que ele, olhando gestão, vai abrir.
+
+---
+
+## D-3 CONFIRMADA PELO VINÍCIUS — entra na janela de 23/08
+
+A D-3 (entrada abate a consulta; total a receber soma consulta + prescrição)
+estava fixada como "fix mínimo nesta janela", mas sem confirmação de quem usa.
+Veio em 21/08, sem rodeios:
+
+> "Por mim, entra. Porque **o pagamento da consulta não tá entrando em lugar
+> nenhum**. E isso vai fuder com tudo." — Vinícius, 21/08
+
+**O que isso muda:** V-18 e V-20 sobem para o topo da faixa A, ao lado dos
+relatórios. E confirma a leitura da régua fina da §2.5 — é **atribuição
+gravada**, não cálculo de tela: o pagamento da consulta não está sendo
+registrado como receita da consulta em lugar nenhum do banco. Erro que migra
+para a stack nova em outubro.
+
+O escopo continua sendo o da D-3, e **não se reabre**: o redesenho em dois
+blocos com pagamento independente por bloco fica para depois de 01/09.
+
+---
+
+## D-15 — Corrigir TUDO, não só o que trava (24/08/2026)
+
+Decisão do Arthur. **Reverte parte da D-7**, que mandava não gastar esforço no
+que não atravessa para a stack nova.
+
+> "Vamos mudar a política, faremos todas as correções, não somente aquelas que
+> travam o uso."
+
+**O que muda:** os 8 itens que estavam fora de escopo — V-02, V-05, V-06, V-07,
+V-08, V-09, V-30, V-31 — voltam para a fila.
+
+**O que NÃO muda, e é o ponto:** a D-7 continua certa sobre *por que* corrigir.
+O que ela decidia era **prioridade**, não **valor**. Um item de faixa C corrigido
+segue sendo código descartado em outubro — a diferença é que agora aceitamos
+pagar por isso, e o plano diz o preço em voz alta.
+
+**Custo registrado** (`specs/004-.../plan.md`, seção Constitution Check): cada
+hora aqui é uma hora que não vai para a stack nova, que não é descartada. E
+mexer em tela estável a 8 dias do lançamento introduz regressão onde não havia
+bug.
+
+**Mitigação:** faixa C entra **por último e em commit isolado**, para que uma
+regressão nela não contamine o lote financeiro. E cada item vira também
+requisito escrito da stack nova — o esforço rende duas vezes.
+
+**Uma exceção à própria D-15, recomendada e não imposta:** V-30 (agenda em
+calendário) e V-31 (responsável por tipo de atividade) **não são bugs, são
+funcionalidades novas**. V-31 ainda interage com a D-2, que acabou de fixar
+responsável único por atendimento. Recomendo que não entrem antes de 01/09 —
+não por serem faixa C, mas por serem **escopo novo a 8 dias do lançamento**,
+com a bateria do Erick ainda por triar.
+
+---
+
 ## Convenção de numeração (para acomodar a leva do Erick)
 
 - **V-01 a V-33** — esta leva, Vinícius, 18–19/08. Numeração fixa: não
