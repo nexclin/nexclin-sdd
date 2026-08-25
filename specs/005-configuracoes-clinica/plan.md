@@ -105,7 +105,12 @@ O que **não** entra no genérico, e por quê:
 - **`anamnesis_config`**: tem `fields` jsonb, que é um construtor de formulário.
   Tela própria, e a mais cara das quatro.
 
-Ou seja: **9 catálogos no genérico, 4 telas próprias, 1 tela de regras.**
+Ou seja: **9 catálogos no genérico, 5 telas próprias, 1 tela de regras.**
+
+> **Corrigido pela fase 0.** O plano dizia "4 telas próprias". São **5**:
+> `bank_accounts` cabe no genérico em forma, mas os campos não são "nome e
+> ativo" — são agência e conta, e errar dígito de conta bancária tem
+> consequência que um catálogo de canal não tem. Ver `research.md` §3.
 
 ## Fases
 

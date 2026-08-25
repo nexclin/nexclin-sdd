@@ -45,7 +45,12 @@ const USUARIO = {
  * **Ao criar cada tela nova, acrescente a rota aqui.** É esta lista que garante
  * que o guard continua valendo para ela.
  */
-const ROTAS_DO_APP = ["/app", "/app/configuracoes", "/app/conta-suspensa"];
+const ROTAS_DO_APP = [
+  "/app",
+  "/app/configuracoes",
+  "/app/configuracoes/servicos",
+  "/app/conta-suspensa",
+];
 
 /** Rotas do painel que exigem superadmin. */
 const ROTAS_DO_PAINEL = [
@@ -111,6 +116,22 @@ test.describe("sem sessão, tudo é negado", () => {
     await expect(page).toHaveURL(/\/login/);
     await expect(page.getByText(/nenhum módulo liberado/i)).toHaveCount(0);
   });
+});
+
+test.describe("a rota de catálogo não aceita tabela pela URL", () => {
+  // A rota `[catalogo]` usa o parâmetro da URL para escolher a tabela
+  // consultada. Sem validação, `/app/configuracoes/patients` viraria uma
+  // leitura de `patients` por uma tela de configuração. O registro em
+  // `lib/config/catalogo.ts` é a lista de permissão, e um teste de unidade já
+  // cobre a função; este cobre a rota de verdade.
+  for (const invalido of ["patients", "profiles", "receivables", "inexistente"]) {
+    test(`/app/configuracoes/${invalido} não entrega dado`, async ({ page }) => {
+      await page.goto(`/app/configuracoes/${invalido}`);
+      // Sem sessão o guard redireciona; com sessão e slug inválido é 404. Em
+      // nenhum dos dois casos pode aparecer tabela de catálogo.
+      await expect(page.getByRole("table")).toHaveCount(0);
+    });
+  }
 });
 
 test.describe("sessão de superadmin", () => {
