@@ -2,7 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { RequirePermission } from "@/lib/auth/guards";
-import { catalogoPorSlug, colunasDaLista } from "@/lib/config/catalogo";
+import {
+  catalogoPorSlug,
+  colunasDaLista,
+  vizinhosDoCatalogo,
+} from "@/lib/config/catalogo";
 import { lerCatalogo } from "@/lib/config/servidor";
 
 /**
@@ -38,6 +42,7 @@ export default async function CatalogoPage({
 
   const linhas = await lerCatalogo(definicao, { incluirInativos });
   const colunas = colunasDaLista(definicao);
+  const { anterior, proximo } = vizinhosDoCatalogo(definicao.slug);
 
   return (
     <RequirePermission module="configuracoes">
@@ -52,6 +57,10 @@ export default async function CatalogoPage({
           <h1 className="mt-1 text-2xl font-semibold">{definicao.rotulo}</h1>
           <p className="mt-1 max-w-2xl text-sm text-[#3A4A5C]">
             {definicao.descricao}
+          </p>
+          <p className="mt-2 max-w-2xl text-xs text-[#3A4A5C]/80">
+            <span className="font-medium">Usado em:</span>{" "}
+            {definicao.alimenta.join(", ")}
           </p>
         </div>
 
@@ -135,6 +144,47 @@ export default async function CatalogoPage({
           A edição entra na próxima tarefa desta spec. Esta tela já lê do banco,
           com as colunas nomeadas e a permissão do módulo <code>configuracoes</code>.
         </p>
+
+        {/*
+          A sequência. Ideia importada do INI, registrada em
+          `docs/planejamento/pesquisa-ini-2026-08-25.md`: configuração deixa de
+          ser gaveta e vira corrente, e quem está numa tela sabe qual é a
+          seguinte sem voltar ao índice.
+
+          Nas pontas o botão SOME em vez de ficar desabilitado. Botão apagado
+          que não faz nada é ruído, e a âncora do índice cobre os dois lados.
+        */}
+        <nav
+          aria-label="Sequência de configuração"
+          className="flex items-center justify-between gap-3 border-t border-[#3A4A5C]/10 pt-4"
+        >
+          {anterior ? (
+            <Link
+              href={`/app/configuracoes/${anterior.slug}`}
+              className="text-sm text-[#1F8C8C] hover:underline"
+            >
+              ← Voltar: {anterior.rotulo}
+            </Link>
+          ) : (
+            <span />
+          )}
+
+          {proximo ? (
+            <Link
+              href={`/app/configuracoes/${proximo.slug}`}
+              className="rounded-lg bg-[#1F8C8C] px-4 py-2 text-sm font-medium text-white transition hover:bg-[#1F8C8C]/90"
+            >
+              Avançar: {proximo.rotulo} →
+            </Link>
+          ) : (
+            <Link
+              href="/app/configuracoes"
+              className="text-sm text-[#1F8C8C] hover:underline"
+            >
+              Fim da sequência. Voltar ao índice
+            </Link>
+          )}
+        </nav>
       </div>
     </RequirePermission>
   );

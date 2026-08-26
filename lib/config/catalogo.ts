@@ -37,6 +37,35 @@ export interface CampoDeCatalogo {
 export interface DefinicaoDeCatalogo {
   /** O identificador na URL. Precisa ser estável: vira link salvo pelo usuário. */
   slug: string;
+  /**
+   * Onde este catálogo reaparece no sistema.
+   *
+   * # Por que isto é dado e não frase
+   *
+   * A `descricao` já explica o catálogo em prosa. Isto é outra coisa: a lista
+   * das telas que **leem** estas linhas, para a configuração deixar de ser uma
+   * gaveta e virar uma corrente de consequência.
+   *
+   * Vem da pesquisa de 25/08 sobre o INI, em
+   * `docs/planejamento/pesquisa-ini-2026-08-25.md`. Lá, cada cartão de cadastro
+   * diz o que alimenta ("estas são as colunas do Kanban", "isto alimenta o
+   * Imobilizado"), e foi o item de maior retorno por menor custo da pesquisa
+   * inteira.
+   *
+   * O achado que sustenta a decisão: **na conta do próprio Arthur no INI, o
+   * planejamento estava em 0 de 28 itens.** Profundidade de configuração
+   * encanta na demonstração e é abandonada no uso. Dizer para que serve é o que
+   * dá motivo para preencher.
+   */
+  alimenta: readonly string[];
+  /**
+   * A posição na sequência sugerida, e ela é por DEPENDÊNCIA DE DADO.
+   *
+   * Serviço vem antes de forma de pagamento porque o preço nasce no serviço;
+   * origem vem depois de canal porque origem pertence a um canal. Preencher
+   * fora de ordem funciona, e só custa voltar.
+   */
+  ordem: number;
   /** A tabela no Postgres. Só nomes desta lista chegam a uma consulta. */
   tabela: string;
   rotulo: string;
@@ -63,6 +92,8 @@ const NOME: CampoDeCatalogo = {
 export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   {
     slug: "canais",
+    ordem: 7,
+    alimenta: ["Leads", "Relatório de leads", "Dashboard"],
     tabela: "channels",
     rotulo: "Canais",
     rotuloSingular: "Canal",
@@ -72,6 +103,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "origens",
+    ordem: 8,
+    alimenta: ["Leads", "Relatório de leads"],
     tabela: "origins",
     rotulo: "Origens",
     rotuloSingular: "Origem",
@@ -81,6 +114,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "objecoes",
+    ordem: 9,
+    alimenta: ["Leads", "Relatório de leads"],
     tabela: "objections",
     rotulo: "Objeções",
     rotuloSingular: "Objeção",
@@ -90,6 +125,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "servicos",
+    ordem: 1,
+    alimenta: ["Consultas", "Orçamentos", "Contas a receber", "Relatório de vendas", "Dashboard"],
     tabela: "services",
     rotulo: "Serviços",
     rotuloSingular: "Serviço",
@@ -108,6 +145,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "formas-de-pagamento",
+    ordem: 4,
+    alimenta: ["Contas a receber", "Fluxo de caixa", "Relatório de vendas"],
     tabela: "payment_methods",
     rotulo: "Formas de pagamento",
     rotuloSingular: "Forma de pagamento",
@@ -124,6 +163,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "categorias-de-despesa",
+    ordem: 6,
+    alimenta: ["Contas a pagar", "Fluxo de caixa"],
     tabela: "expense_categories",
     rotulo: "Categorias de despesa",
     rotuloSingular: "Categoria de despesa",
@@ -136,6 +177,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "tipos-de-fechamento",
+    ordem: 5,
+    alimenta: ["Acompanhamento", "Relatório de vendas"],
     tabela: "closing_types",
     rotulo: "Tipos de fechamento",
     rotuloSingular: "Tipo de fechamento",
@@ -145,6 +188,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "tipos-de-consulta",
+    ordem: 2,
+    alimenta: ["Consultas", "Agenda"],
     tabela: "consultation_types",
     rotulo: "Tipos de consulta",
     rotuloSingular: "Tipo de consulta",
@@ -157,6 +202,8 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "adquirentes",
+    ordem: 3,
+    alimenta: ["Formas de pagamento", "Contas a receber", "Fluxo de caixa"],
     tabela: "acquirers",
     rotulo: "Adquirentes",
     rotuloSingular: "Adquirente",
@@ -179,6 +226,37 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
 export function catalogoPorSlug(slug: unknown): DefinicaoDeCatalogo | null {
   if (typeof slug !== "string" || slug === "") return null;
   return CATALOGOS.find((c) => c.slug === slug) ?? null;
+}
+
+/**
+ * Os catálogos na ordem sugerida de preenchimento.
+ *
+ * A ordem do array `CATALOGOS` é a de escrita, e ela não é a de dependência.
+ * Quem monta tela usa esta função; quem valida slug usa o array.
+ */
+export function catalogosEmOrdem(): DefinicaoDeCatalogo[] {
+  return [...CATALOGOS].sort((a, b) => a.ordem - b.ordem);
+}
+
+/**
+ * O catálogo anterior e o próximo, para os botões Voltar e Avançar.
+ *
+ * Devolve `null` nas pontas, e é assim que a tela sabe não desenhar o botão.
+ * Slug desconhecido devolve os dois `null`, e não uma exceção: quem chama já
+ * tratou o desconhecido com um 404 antes de chegar aqui, e uma exceção aqui só
+ * derrubaria a página duas vezes pelo mesmo motivo.
+ */
+export function vizinhosDoCatalogo(slug: string): {
+  anterior: DefinicaoDeCatalogo | null;
+  proximo: DefinicaoDeCatalogo | null;
+} {
+  const ordenados = catalogosEmOrdem();
+  const i = ordenados.findIndex((c) => c.slug === slug);
+  if (i < 0) return { anterior: null, proximo: null };
+  return {
+    anterior: ordenados[i - 1] ?? null,
+    proximo: ordenados[i + 1] ?? null,
+  };
 }
 
 /** As colunas que a listagem mostra, sempre com o nome primeiro. */

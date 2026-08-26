@@ -22,8 +22,10 @@ import {
 import {
   CATALOGOS,
   catalogoPorSlug,
+  catalogosEmOrdem,
   colunasDaLista,
   colunasParaConsulta,
+  vizinhosDoCatalogo,
 } from "../catalogo";
 
 describe("confirmation_hours: a ida e volta tem de ser estável", () => {
@@ -191,5 +193,74 @@ describe("registro de catálogos", () => {
     const semFlag = CATALOGOS.filter((c) => !c.temIsSystem);
     for (const c of comFlag) expect(colunasParaConsulta(c)).toContain("is_system");
     for (const c of semFlag) expect(colunasParaConsulta(c)).not.toContain("is_system");
+  });
+});
+
+describe("a sequência de configuração", () => {
+  // Importada do INI, registrada em `docs/planejamento/pesquisa-ini-2026-08-25.md`.
+  //
+  // O que se testa aqui não é a ordem "certa" — ordem é decisão de produto e
+  // pode mudar. O que se testa é que a ESTRUTURA da sequência não tem buraco,
+  // porque um buraco significa uma tela de onde não se sai, ou duas telas
+  // disputando a mesma posição.
+
+  it("toda ordem é única, senão duas telas disputam a mesma posição", () => {
+    const ordens = CATALOGOS.map((c) => c.ordem);
+    expect(new Set(ordens).size).toBe(CATALOGOS.length);
+  });
+
+  it("a sequência é contínua de 1 até o total, sem pular número", () => {
+    const ordens = [...CATALOGOS.map((c) => c.ordem)].sort((a, b) => a - b);
+    expect(ordens).toEqual(
+      Array.from({ length: CATALOGOS.length }, (_, i) => i + 1),
+    );
+  });
+
+  it("todo catálogo diz onde é usado, e sem entrada vazia", () => {
+    for (const c of CATALOGOS) {
+      expect(c.alimenta.length, `${c.slug} não diz onde é usado`).toBeGreaterThan(0);
+      for (const onde of c.alimenta) {
+        expect(onde.trim(), `${c.slug} tem destino vazio`).not.toBe("");
+      }
+    }
+  });
+
+  it("percorrer só pelo Avançar visita todos os catálogos, uma vez cada", () => {
+    // É a prova de que não existe tela de onde não se sai. Sem ela, um erro de
+    // `ordem` deixaria um catálogo inalcançável pela sequência, e ninguém
+    // notaria até um cliente reclamar de um cadastro que "não existe".
+    const primeiro = catalogosEmOrdem()[0];
+    const visitados: string[] = [];
+    let atual: string | null = primeiro.slug;
+
+    while (atual) {
+      expect(visitados, `${atual} visitado duas vezes: há um ciclo`).not.toContain(atual);
+      visitados.push(atual);
+      atual = vizinhosDoCatalogo(atual).proximo?.slug ?? null;
+    }
+
+    expect(visitados.length).toBe(CATALOGOS.length);
+    expect(new Set(visitados)).toEqual(new Set(CATALOGOS.map((c) => c.slug)));
+  });
+
+  it("as pontas não têm vizinho, e é assim que o botão some", () => {
+    const ordenados = catalogosEmOrdem();
+    expect(vizinhosDoCatalogo(ordenados[0].slug).anterior).toBeNull();
+    expect(vizinhosDoCatalogo(ordenados[ordenados.length - 1].slug).proximo).toBeNull();
+  });
+
+  it("Voltar desfaz Avançar em todo par vizinho", () => {
+    for (const c of catalogosEmOrdem()) {
+      const proximo = vizinhosDoCatalogo(c.slug).proximo;
+      if (!proximo) continue;
+      expect(vizinhosDoCatalogo(proximo.slug).anterior?.slug).toBe(c.slug);
+    }
+  });
+
+  it("slug desconhecido devolve os dois nulos, sem lançar", () => {
+    // A tela já respondeu 404 antes de chegar aqui. Lançar seria derrubar a
+    // página duas vezes pelo mesmo motivo.
+    expect(vizinhosDoCatalogo("patients")).toEqual({ anterior: null, proximo: null });
+    expect(vizinhosDoCatalogo("")).toEqual({ anterior: null, proximo: null });
   });
 });

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { RequirePermission } from "@/lib/auth/guards";
 import { lerContextoDoUsuario } from "@/lib/auth/servidor";
 import { PASSOS_ONBOARDING } from "@/lib/auth/onboarding";
-import { CATALOGOS } from "@/lib/config/catalogo";
+import { catalogosEmOrdem } from "@/lib/config/catalogo";
 import { lerRegras } from "@/lib/config/servidor";
 import { horasParaDias } from "@/lib/config/regras";
 
@@ -63,18 +63,33 @@ export default async function ConfiguracoesPage() {
         )}
 
         <section>
-          <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
             Catálogos
           </h2>
+          <p className="mb-3 max-w-2xl text-xs text-[#3A4A5C]">
+            Estão na ordem sugerida, que é a ordem de dependência: o serviço
+            carrega o preço que o recebível usa, e a origem pertence a um canal.
+            Preencher fora de ordem funciona, e só custa voltar. Cada tela tem
+            um botão Avançar para a seguinte.
+          </p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {CATALOGOS.map((c) => (
+            {catalogosEmOrdem().map((c, i) => (
               <Link
                 key={c.slug}
                 href={`/app/configuracoes/${c.slug}`}
                 className="rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
               >
-                <div className="font-medium">{c.rotulo}</div>
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xs tabular-nums text-[#3A4A5C]/60">
+                    {i + 1}
+                  </span>
+                  <span className="font-medium">{c.rotulo}</span>
+                </div>
                 <p className="mt-1 text-xs text-[#3A4A5C]">{c.descricao}</p>
+                <p className="mt-2 text-xs text-[#3A4A5C]/80">
+                  <span className="font-medium">Usado em:</span>{" "}
+                  {c.alimenta.join(", ")}
+                </p>
               </Link>
             ))}
           </div>
