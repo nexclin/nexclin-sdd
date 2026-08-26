@@ -63,7 +63,42 @@ Inclui reparo idempotente do histórico já auditado.
 | Item | Estado | Como foi medido |
 |---|---|---|
 | As 11 telas | ✅ | `app/superadmin/(panel)/` tem contas, detalhe, planos, cupons, faturamento, métricas, comunicação, logs, operadores, configurações e o painel |
+| **O painel ESCREVE** | ✅ **26/08** | Ver abaixo |
 | Reagem ao banco vivo | ⏳ | **Não medido.** É código lido, não comportamento provado. Fecha no aceite do Arthur. |
+
+### O painel era somente leitura, e ninguém tinha reparado
+
+Medição de 26/08, e ela é o achado mais direto desta auditoria:
+
+```
+escritas em app/superadmin/  ->  1, e é a impersonação
+```
+
+As onze telas existiam e mostravam dado. Dava para **ver** conta, plano e
+faturamento, e não dava para **mudar** nada. O superadmin é quem libera plano,
+define cobrança e suspende quem não paga, e nenhuma dessas três tinha caminho.
+
+O que entrou, em `lib/superadmin/`:
+
+| O quê | Onde |
+|---|---|
+| Criar conta: clínica, assinatura com plano e cobrança, linha do dono | `/superadmin/contas/nova` |
+| Mudar plano, situação e dia de cobrança | detalhe da conta |
+| Criar e editar plano, com mensalidade, limites e as 15 chaves | `/superadmin/planos` |
+
+**A criação de conta tem dois passos, e é desenho e não pendência.** O usuário
+de login não nasce ali. A edge function de convite deriva a clínica do perfil de
+quem chama, e o comentário dela é explícito: *"é ela que o convidado herda,
+nunca uma vinda do body"*. Um caminho privilegiado que aceitasse `clinic_id` de
+fora desmontaria essa guarda. Então o segundo passo é entrar na conta, que já é
+auditado, e convidar pela tela de equipe. A própria tela explica isso.
+
+**A armadilha que os testes pegaram**, e ela é de calendário: conta cobrada dia
+31 não pode ser cobrada em fevereiro. `new Date(ano, mes, 31)` **transborda para
+3 de março em silêncio**, porque o JavaScript aceita e ajusta. Na vida real
+seria a fatura de fevereiro sumir e duas caírem em março. O dia passou a ser
+grampeado ao último do mês, com um teste que varre todos os dias de todos os
+meses de 2026. Provado por mutação: tirar o grampeamento derruba 4 testes.
 
 ---
 
@@ -183,3 +218,31 @@ marcar como pronto o que ninguém executou.
    Zero é o esperado. Maior que zero é achado, não detalhe.
 
 O item 5 é o gargalo de todos os outros, e é uma tarefa de cinco minutos.
+
+---
+
+## O roteiro de teste do painel, para a bateria
+
+Na ordem, porque cada passo alimenta o seguinte.
+
+1. **Definir a senha do superadmin** por recovery no Supabase, e entrar em
+   `/superadmin/login`. Sem isto nada abaixo roda.
+2. **Criar um plano** em Planos: nome, mensalidade, limites, e marcar os
+   módulos. Confira que os módulos desmarcados aparecem riscados na lista.
+3. **Criar uma conta** em Contas, botão Nova conta: clínica, responsável,
+   plano, situação Em teste, dia de cobrança **31**. Escolha 31 de propósito.
+4. **Abrir a conta** e conferir a data de cobrança calculada. Se hoje for
+   depois do dia 31 do mês, ela cai no último dia do mês seguinte, e em
+   fevereiro cai no dia 28.
+5. **Mudar a situação** para Ativa e salvar. Depois tente ir para Cancelada e,
+   em seguida, reativar: a opção de reativar **não deve aparecer**, e forçar
+   pela requisição deve ser recusado pelo servidor.
+6. **Conferir a linha do tempo** da conta. Cada uma das mudanças acima tem de
+   estar lá, **sem que nenhuma tela tenha escrito nela**: quem escreve é a
+   trigger.
+7. **Entrar na conta** e convidar o dono pela tela de Equipe. Ele define a
+   própria senha pelo link.
+8. **Sair do modo suporte** e conferir, na linha do tempo, a entrada e a saída.
+
+O passo 5 é o que prova que a regra vive no servidor, e o passo 6 é o que prova
+que a auditoria não depende de ninguém lembrar de escrevê-la.
