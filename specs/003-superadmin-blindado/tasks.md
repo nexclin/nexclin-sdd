@@ -72,12 +72,53 @@ Inclui reparo idempotente do histórico já auditado.
 | # | Item | Estado | Como foi medido |
 |---|---|---|---|
 | F3.1 | Impersonação escopada, banner, saída | ✅ | SPEC 001 T025; policy `Superadmins manage own impersonation sessions` exige `superadmin_user_id = auth.uid()` |
+| **F3.1b** | **Sessão de suporte com prazo** | ✅ **26/08**, com dívida declarada | Ver abaixo |
+| F3.1c | Trilha de auditoria imutável | ✅ | `superadmin_audit_log` tem policy de SELECT e de INSERT, e **nenhuma** de UPDATE ou DELETE. Por default deny, ninguém edita nem apaga, inclusive o superadmin |
 | F3.2 | Dados sensíveis da equipe só por RPC | ✅ | `20260802073330` revoga `SELECT` da tabela e concede coluna a coluna; e-mail, telefone e repasse ficam de fora. A RPC é `get_clinic_team_full` |
 | F3.3 | Escrita em `user_roles` só por superadmin | ✅ | `20260802073330` |
 | F3.3b | `is_superadmin` só responde sobre o próprio usuário | ⚠️ **aberto, e de propósito** | Ver abaixo |
 | F3.4 | `SECURITY DEFINER` com `SET search_path` em toda função | ✅ | **Varredura das 64 migrações: zero funções `SECURITY DEFINER` sem `SET search_path`.** Não é opinião, é contagem |
 | F3.5 | Testes nos guards | ✅ | `decidirSuperAdmin` coberto em `lib/auth/__tests__/decisoes.test.ts` |
 | F3.5b | Auditor multi-tenant sobre o painel | ⏳ | Pendente |
+
+### F3.1b, o prazo, e o que eu achei ao verificar
+
+Pesquisa sobre controles de impersonação em SaaS trata como básico um tempo
+máximo de sessão de suporte. Não tínhamos. Ao ir implementar, achei coisa pior
+que a ausência do prazo.
+
+**A impersonação troca a ÂNCORA.** `superadmin_enter_clinic` faz
+`UPDATE profiles SET clinic_id = <clínica alvo>` no perfil do operador, e
+`get_my_clinic_id()` lê `profiles.clinic_id` e mais nada: ela **não consulta** a
+tabela de sessões.
+
+Logo, operador que entra numa conta e fecha o navegador sem clicar em sair fica
+com o perfil apontando para a clínica do cliente. Não por uma hora: **até alguém
+clicar em sair**. E na próxima vez que abrir o sistema, entra direto lá dentro.
+
+Isso também muda qual é o conserto certo. Um prazo só na sessão seria **pior que
+nada**: o banner sumiria da tela e o acesso continuaria, porque quem decide o
+acesso é a âncora. Esconder o aviso mantendo o acesso é a pior combinação das
+duas.
+
+Então o prazo desfaz a troca da âncora. `encerra_impersonacoes_vencidas()`
+restaura `profiles.clinic_id` a partir de `original_clinic_id`, fecha a sessão e
+audita a saída como qualquer outra. Duas horas de prazo, e a função é chamada no
+`layout` do painel, que é a porta de entrada de todas as rotas.
+
+**A dívida, dita na cara:** se o operador nunca mais voltar, ninguém chama a
+função. Fechar de vez exige `pg_cron`, e não há nenhuma extensão de cron nas 64
+migrações deste banco, ou fazer `get_my_clinic_id()` consultar a sessão, que é a
+função que **toda** policy chama. Errar nela derruba o sistema inteiro, não uma
+tela.
+
+O que entrou reduz "para sempre" a "até a próxima vez que o operador abrir o
+painel". É a diferença entre um problema permanente e um transitório, e não é a
+mesma coisa que resolver.
+
+**Ao aplicar, olhe o número que a função devolve.** Maior que zero significa que
+havia perfil de operador apontando para a clínica de um cliente sem ninguém
+saber. Isso é achado, não detalhe.
 
 ### F3.3b, e por que eu parei em vez de mexer
 
@@ -126,5 +167,19 @@ marcar como pronto o que ninguém executou.
    painel do Supabase. `last_sign_in_at` continua vazio, ou seja, **o
    superadmin da stack nova nunca logou.** Enquanto isso não acontecer, os
    itens 1 a 4 não têm como ser executados.
+
+   **Virou urgente em 26/08:** a senha da conta-mestra foi exposta em texto puro
+   num chat, pela segunda vez nesta mesma conta. Registro em
+   `docs/seguranca/credencial-exposta-2026-08-26.md`. A troca por recovery
+   resolve as duas coisas de uma vez: fecha o vazamento e destrava a spec.
+
+6. **Rodar a limpeza de impersonação uma vez**, depois de aplicar a migração do
+   prazo, e **olhar o número devolvido**:
+
+   ```sql
+   SELECT public.encerra_impersonacoes_vencidas();
+   ```
+
+   Zero é o esperado. Maior que zero é achado, não detalhe.
 
 O item 5 é o gargalo de todos os outros, e é uma tarefa de cinco minutos.
