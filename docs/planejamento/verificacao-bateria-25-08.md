@@ -139,14 +139,55 @@ chamam a mesma função, então nada mais muda.
 
 ## O que fazer, em ordem de retorno
 
-1. **Publicar.** Três commits (`ae2b37d`, `a356057`, `5a229f1`). Sem isso, nada
-   acima existe para o Vinícius.
-2. **Aplicar as migrações.** `20260825080000` destrava o "sem permissão para
-   convidar", que é o único item ainda sem efeito. `20260825090000` fecha a
-   metade de "editável pelo criador ou pelo master".
-3. **Decidir sobre o dado já gravado.** Se o reteste for sobre a base atual, ele
-   vai reencontrar os centavos e as datas antigas. Ou lança tudo de novo, ou
-   precisamos de uma migração de correção de dado — que não foi escrita.
+**Atualizado no fim de 25/08, depois de o Arthur responder o questionário.** Os
+três primeiros itens deixaram de ser pergunta e viraram procedimento escrito, em
+`docs/ponte/blocos-25-08/README.md`.
+
+1. **Publicar.** Seis commits agora, não três: `ae2b37d`, `a356057`, `5a229f1`,
+   `e7b5101`, `3d1bb78`, `d07b74f`. Os três últimos entraram depois da primeira
+   publicação, e um deles conserta um item que a primeira publicação não
+   fechou (abaixo).
+2. **Aplicar as migrações, bloco a bloco.** Quatro blocos, na ordem do roteiro.
+   `20260825080000` destrava o "sem permissão para convidar", que era o único
+   item da bateria ainda sem efeito nenhum.
+3. **Zerar a base.** A dúvida sobre corrigir dado gravado morreu: tudo que está
+   lá é teste. Não existe erro a consertar em linha nenhuma, existe base a
+   esvaziar. O `TRUNCATE` preserva conta, acesso e configuração, então ninguém
+   reconfigura nada para retestar.
 4. **Conferir primeiro o que ele elogiou.** FIN-5, FIN-6 e ORC-1 tocaram o
    caminho da entrada da consulta indo para o caixa, que ele validou como
    correto. É o primeiro lugar a olhar depois de publicar.
+
+## O item 3 foi reaberto, e o relato estava certo
+
+Depois do primeiro Publish, o Arthur testou o campo de horário: *"eu escrevo dez
+e se eu colocar os outros trinta minutos ele apaga o dez e resta zero"*.
+
+Minha correção tinha ficado pela metade. Troquei o gatilho da **data** por um
+campo com máscara e deixei a **hora** no `<input type="time">` nativo. Esse
+elemento devolve string **vazia** enquanto hora e minuto não estiverem os dois
+completos. O `onChange` disparava com vazio, o código lia esse vazio, caía no
+padrão `08:00` e reescrevia o campo. Digitar o segundo par de dígitos apagava o
+primeiro.
+
+Corrigido em `e7b5101`: os dois campos de hora passaram a ter máscara e estado
+local, a mesma disciplina que já resolvia a data. Enquanto se digita, o texto na
+tela é nosso, e só vira valor quando estiver completo.
+
+**A lição, e ela é sobre a verificação e não sobre o campo.** Eu provei o
+*parser* em 12 casos e dei o item por fechado. O parser estava certo; o defeito
+estava no elemento que alimentava o parser. Provar a função pura não prova a
+tela: o item só fecha quando alguém digita.
+
+## O que mudou depois da primeira publicação
+
+| Commit | O quê |
+|---|---|
+| `e7b5101` | O campo de hora aceita digitação. Reabertura do item 3. |
+| `3d1bb78` | Tarefa editável pelo criador ou pelo master, fechando a metade que faltava do 14b. Provada em 6 casos. |
+| `d07b74f` | Excluir paciente marca em vez de apagar, preparando o Bloco 5. |
+
+Os dois últimos funcionam **nos dois estados do banco**: tentam a coluna nova e,
+se ela ainda não existir, caem no comportamento de hoje. Publicar não depende de
+migrar antes, e migrar não depende de publicar antes. É o que permitiu a
+sequência de blocos ser feita com calma, em vez de numa janela apertada.
