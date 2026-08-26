@@ -1,4 +1,5 @@
--- BLOCO 6. Zera o movimento. NÃO TEM VOLTA sem o export do Bloco 0.
+-- BLOCO 6. Zera o movimento. Só volta pelo backup anotado no Bloco 0, e
+-- restaurar leva junto TUDO que foi feito depois dele, migrações inclusive.
 --
 -- # O que sai
 --

@@ -4,8 +4,8 @@
 -- Bloco 6 pode zerar tudo ou se alguma clínica precisa ser poupada.
 --
 -- Se aparecer mais de uma clínica com movimento, PARE e me diga antes de
--- seguir. Zerar a base é o único passo desta sequência que não tem volta sem
--- o export.
+-- seguir. Zerar a base é o único passo desta sequência sem volta, e a volta
+-- possível é restaurar o backup do dia, que leva junto tudo o que veio depois.
 
 SELECT
   c.id,

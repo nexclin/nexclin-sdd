@@ -25,7 +25,8 @@ schema pela metade.
 
 | Bloco | O quê | Muda dado? |
 |---|---|---|
-| 0 | Export | não |
+| 0 | Anotar o backup mais recente | não |
+| 0B | Ler as policies de `team_members` | não, só lê |
 | 1 e 1B | Inventário e quem existe | não, só lê |
 | 2 | EQP-1: clínica nasce com assinatura | sim, repara |
 | 3 | Tarefas ganham autor e origem | sim, repara |
@@ -38,15 +39,38 @@ schema pela metade.
 
 ---
 
-## Bloco 0. Export
+## Bloco 0. O ponto de retorno, e ele não é o que eu escrevi antes
 
-Pela função de exportar dados da plataforma. É instantâneo e repetível, sem
-limite e sem e-mail, e é o único ponto de retorno da sequência inteira.
+> **Correção de 25/08.** A primeira versão deste bloco mandava exportar o banco
+> "pela função de exportar dados da plataforma". **Essa função não existe neste
+> projeto.** Procurei em Cloud → Database, Cloud → Overview, no menu do projeto
+> e nas Configurações do projeto; a busca de configurações por "export" devolve
+> *"No matching settings"*.
+>
+> O que existe e se parece com export é o **Export CSV** do painel de resultados
+> do SQL editor, que exporta o resultado de UMA consulta. Não é backup de banco,
+> e eu apoiei um passo irreversível num artefato que não estava lá.
 
-**Guarde o arquivo fora do repositório.** Dump de banco com dado de saúde não
-entra em `git`, nem mesmo ignorado.
+**O ponto de retorno real são os Backups da plataforma.**
 
-Só siga para o Bloco 1 com o arquivo salvo e o tamanho conferido.
+Onde: **Cloud → Database → botão Backups**, no canto superior direito. São
+pontos de restauração diários automáticos, um por dia, cada um com um botão
+"Restore to this backup".
+
+**O que fazer no Bloco 0, então:**
+
+1. Abra Backups e **anote a data e a hora do mais recente**, com fuso.
+2. Confirme que ele é de hoje. Se o mais recente for de ontem, tudo que foi
+   feito hoje está fora da rede.
+3. No fim da sequência, confira que ele continua na lista.
+
+**A diferença que isso faz, e ela é grande.** Restaurar não é seletivo:
+o banco inteiro volta para aquele horário, e **tudo que veio depois se perde**,
+inclusive as migrações desta sequência. O custo de errar deixou de ser
+"restauro o arquivo" e passou a ser "perco o dia".
+
+Como a base é toda de teste, isso é suficiente. Mas é diferente do que estava
+escrito aqui, e você precisa saber disso antes do Bloco 6, não depois.
 
 ---
 
@@ -158,6 +182,21 @@ quebra nada**.
 ---
 
 ## Bloco 5B. Ninguém muda a própria permissão
+
+> **Rode o `bloco-0-policies-de-team-members.sql` antes deste.**
+>
+> Em 25/08 o agente do Lovable afirmou, no painel de chat, ter feito a mesma
+> correção: *"substituí a política aberta da equipe por regras granulares
+> (leitura para a clínica, gestão só para administradores, autoedição sem poder
+> alterar cargo/permissões/repasse)"*.
+>
+> Se aquilo rodou, este bloco pode ser redundante ou conflitar. Duas camadas
+> checando a mesma coisa por caminhos diferentes é como nasce o bug em que uma
+> delas é afrouxada e ninguém percebe, porque a outra ainda segura.
+>
+> O 0B devolve as policies, os triggers e os GRANTs de coluna que existem hoje.
+> Mais de uma policy na tabela, ou trigger com nome parecido, significa **pare e
+> me mande o resultado**.
 
 Cole o conteúdo de
 `supabase/migrations/20260825100000_ninguem_muda_a_propria_permissao.sql`.
