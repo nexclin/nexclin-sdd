@@ -147,7 +147,7 @@ export default async function CatalogoPage({
 
         {/*
           A sequência. Ideia importada do INI, registrada em
-          `docs/planejamento/pesquisa-ini-2026-08-25.md`: configuração deixa de
+          `docs/planejamento/modelagem-ini.md`: configuração deixa de
           ser gaveta e vira corrente, e quem está numa tela sabe qual é a
           seguinte sem voltar ao índice.
 

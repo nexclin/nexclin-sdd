@@ -47,15 +47,14 @@ export interface DefinicaoDeCatalogo {
    * gaveta e virar uma corrente de consequência.
    *
    * Vem da pesquisa de 25/08 sobre o INI, em
-   * `docs/planejamento/pesquisa-ini-2026-08-25.md`. Lá, cada cartão de cadastro
+   * `docs/planejamento/modelagem-ini.md`. Lá, cada cartão de cadastro
    * diz o que alimenta ("estas são as colunas do Kanban", "isto alimenta o
    * Imobilizado"), e foi o item de maior retorno por menor custo da pesquisa
    * inteira.
    *
-   * O achado que sustenta a decisão: **na conta do próprio Arthur no INI, o
-   * planejamento estava em 0 de 28 itens.** Profundidade de configuração
-   * encanta na demonstração e é abandonada no uso. Dizer para que serve é o que
-   * dá motivo para preencher.
+   * A razão é do nosso projeto, e não do INI: o onboarding tem 12 passos, e o
+   * critério da §2.5 é o que o cliente fundador consegue operar. Dizer para que
+   * serve é o que dá motivo para preencher agora em vez de depois.
    */
   alimenta: readonly string[];
   /**

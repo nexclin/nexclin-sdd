@@ -197,7 +197,7 @@ describe("registro de catálogos", () => {
 });
 
 describe("a sequência de configuração", () => {
-  // Importada do INI, registrada em `docs/planejamento/pesquisa-ini-2026-08-25.md`.
+  // Importada do INI, registrada em `docs/planejamento/modelagem-ini.md`.
   //
   // O que se testa aqui não é a ordem "certa" — ordem é decisão de produto e
   // pode mudar. O que se testa é que a ESTRUTURA da sequência não tem buraco,

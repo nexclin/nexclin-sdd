@@ -1,47 +1,53 @@
-# O que o INI faz, o que serve para clínica, e o que não serve
+# Modelagem INI
 
-> Escrito em 25/08/2026, a pedido do Arthur, depois de navegar o
-> **https://ini.app.br** logado na conta dele e cruzar com pesquisa de mercado
-> sobre gestão de clínica. O INI é um software de gestão para gráficas de
-> comunicação visual, e o pedido foi: *"veja quais funcionalidades tem, o que
-> você acha que dá para importar de útil"*.
+> **O que é este arquivo:** o inventário do que o INI (https://ini.app.br) faz,
+> o veredito item a item sobre o que serve para clínica, e o destino de cada
+> coisa. É a base da spec de modelagem.
+>
+> Escrito em 25/08/2026 depois de navegar o sistema logado, e cruzar com
+> pesquisa de mercado sobre gestão de clínica. O INI é um software de gestão
+> para gráficas de comunicação visual, com mais de trinta empresas usando.
+>
+> **Por que "modelagem" e não "inspiração":** o layout está pronto, a
+> funcionalidade está de pé e o comportamento pode ser aberto no navegador e
+> conferido. Não se está desenhando do zero contra um requisito imaginado: se
+> está modelando em cima de algo validado em uso real. O que muda é o domínio,
+> e a tradução de cada peça está na tabela de veredito.
 >
 > Faixa B pela §2.5 do `CLAUDE.md`: nada aqui é correção na plataforma ao vivo.
-> É **requisito da stack nova**, e o artefato durável é esta regra escrita. Onde
-> couber na SPEC 005, que já está em execução, está marcado.
+> É **requisito da stack nova**, e o artefato durável é esta regra escrita.
 
 ---
 
-## O achado que muda a conclusão, e ele veio da sua própria conta
+## Uma correção minha, registrada porque a conclusão dependia dela
 
-Antes da lista, o dado que reordena tudo o mais.
+A primeira versão deste documento abria com um "achado": a conta que naveguei
+estava com o planejamento em 0 de 28 itens, metas não configuradas e 1 dia
+preenchido de 21 dias úteis. Concluí daí que profundidade de configuração é
+abandonada no uso.
 
-A conta do Arthur no INI está, em agosto de 2026:
+**A conta é de teste, com configuração inicial apenas.** O Arthur corrigiu, e a
+correção derruba a evidência: base de teste vazia não é sinal de abandono, é
+sinal de base de teste. O sistema tem mais de trinta empresas usando de fato, e
+nenhum dado que eu tenha visto diz o que acontece nelas.
 
-| Onde | Estado |
-|---|---|
-| Planejamento Estratégico Guiado | **0 de 28 itens, 0 de 8 estágios** |
-| Metas do mês | **não configuradas** |
-| Acompanhamento diário de agosto | **1 dia preenchido de 21 dias úteis** |
-| Alocação de mão de obra | 0% produtiva contra meta de 60%, marcado "fora do esperado" |
+Fica registrado porque o erro tem uma forma reconhecível: **eu li o estado de um
+ambiente e tratei como comportamento de usuário.** É o mesmo tipo de engano do
+campo de horário desta semana, onde provei a função pura e dei a tela por
+fechada. Ambiente não é uso.
 
-O INI é a ferramenta que impressionou pela quantidade de opção, e é a mesma
-ferramenta em que quase nada foi configurado.
+**O que sobrevive à correção, por mérito próprio e não por aquela evidência:**
 
-**Isso não é crítica ao INI, é o dado mais útil da pesquisa inteira.**
-Profundidade de configuração encanta na demonstração e é abandonada no uso. As
-28 telas de cadastro do INI são um pedágio: a clínica que precisa preencher 28
-telas antes de operar não preenche nenhuma.
+> Toda configuração que entrar deve nascer com um padrão que já funciona, e a
+> tela existe para *ajustar* o padrão, não para *criar* do zero.
 
-A conclusão que sai daí, e ela vale para todas as recomendações abaixo:
+Isso continua valendo por uma razão independente, e ela é do nosso projeto e não
+do INI: o onboarding do NexClin tem 12 passos derivados, e o critério da §2.5 é
+o que o cliente fundador consegue operar. Configuração obrigatória para começar
+atrasa a primeira consulta lançada.
 
-> **Importar a ideia, não a quantidade.** Toda configuração que entrar tem de
-> nascer com um padrão que já funciona, e a tela existe para *ajustar* o padrão,
-> não para *criar* do zero. Configuração obrigatória para começar é o caminho
-> mais rápido para o cliente fundador não voltar.
-
-Vale lembrar que a clínica do Vinícius já disse por onde opera: pelos
-**relatórios**, toda semana. Não pelo painel de configuração.
+E vale lembrar por onde a clínica do Vinícius opera: pelos **relatórios**, toda
+semana. O painel de configuração é meio, não fim.
 
 ---
 
