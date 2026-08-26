@@ -1,60 +1,168 @@
+import Link from "next/link";
+
 import { RequirePermission } from "@/lib/auth/guards";
 import { lerContextoDoUsuario } from "@/lib/auth/servidor";
 import { PASSOS_ONBOARDING } from "@/lib/auth/onboarding";
+import { catalogosEmOrdem } from "@/lib/config/catalogo";
+import { lerRegras } from "@/lib/config/servidor";
+import { RegrasForm } from "./regras-form";
 
 /**
- * SPEC 001 / T026 — placeholder de Configurações, e destino do onboarding.
+ * SPEC 005 / T016 — o índice de Configurações.
  *
- * Os onze diálogos de configuração são a **SPEC 004**, primeira da fila da
- * Onda 1. Esta tela existe agora por dois motivos concretos:
- *
- * 1. é para onde o `OnboardingGuard` manda a clínica incompleta, e mandar para
- *    uma rota que não existe seria trocar um desvio por um 404;
- * 2. é o primeiro consumidor real de `RequirePermission`, o que prova o guard
- *    numa rota de verdade em vez de só no teste.
+ * Duas coisas, e as duas vêm do banco: **onde configurar cada coisa**, e
+ * **quanto falta** da configuração inicial.
  *
  * O `RequirePermission` aqui é redundante com o gate do layout, e a redundância
  * é o ponto: o layout depende de um cabeçalho vindo do middleware, e cabeçalho
  * perdido não pode virar módulo liberado.
  */
 export default async function ConfiguracoesPage() {
-  const ctx = await lerContextoDoUsuario();
+  const [ctx, regras] = await Promise.all([lerContextoDoUsuario(), lerRegras()]);
 
   return (
     <RequirePermission module="configuracoes">
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-semibold">Configurações</h1>
-          <p className="mt-1 text-sm text-[#3A4A5C]">
-            Os catálogos e regras de negócio da clínica entram na SPEC 004. Esta
-            tela mostra o que falta configurar.
+          <p className="mt-1 max-w-2xl text-sm text-[#3A4A5C]">
+            Os catálogos e as regras que os outros módulos leem. Pacientes,
+            consultas, tarefas e anamnese dependem do que está aqui.
           </p>
         </div>
 
-        <section className="rounded-lg border border-[#3A4A5C]/15 bg-white p-5">
-          <h2 className="font-medium">
-            Configuração inicial: {ctx.onboarding.passoAtual} de{" "}
-            {ctx.onboarding.total}
+        {!ctx.onboarding.concluido && (
+          <section className="rounded-lg border border-[#1F8C8C]/30 bg-white p-5">
+            <h2 className="font-medium">
+              Configuração inicial: {ctx.onboarding.passoAtual} de{" "}
+              {ctx.onboarding.total}
+            </h2>
+            <p className="mt-1 text-sm text-[#3A4A5C]">
+              Nada aqui bloqueia o uso do sistema. A clínica opera melhor com os
+              catálogos preenchidos, e alguns módulos ficam sem opção para
+              oferecer enquanto eles estiverem vazios.
+            </p>
+            <ul className="mt-3 grid gap-1 text-sm sm:grid-cols-2">
+              {PASSOS_ONBOARDING.map((p) => (
+                <li key={p} className="flex items-center gap-2">
+                  <span
+                    aria-hidden
+                    className={
+                      ctx.onboarding.passos[p]
+                        ? "inline-block h-2 w-2 rounded-full bg-[#1F8C8C]"
+                        : "inline-block h-2 w-2 rounded-full bg-[#3A4A5C]/30"
+                    }
+                  />
+                  <span className={ctx.onboarding.passos[p] ? "" : "text-[#3A4A5C]"}>
+                    {p}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Catálogos
           </h2>
-          <ul className="mt-3 space-y-1 text-sm">
-            {PASSOS_ONBOARDING.map((p) => (
-              <li key={p} className="flex items-center gap-2">
-                <span
-                  aria-hidden
-                  className={
-                    ctx.onboarding.passos[p]
-                      ? "inline-block h-2 w-2 rounded-full bg-[#1F8C8C]"
-                      : "inline-block h-2 w-2 rounded-full bg-[#3A4A5C]/30"
-                  }
-                />
-                <span>{p}</span>
-                <span className="text-xs text-[#3A4A5C]">
-                  {ctx.onboarding.passos[p] ? "pronto" : "pendente"}
-                </span>
-              </li>
+          <p className="mb-3 max-w-2xl text-xs text-[#3A4A5C]">
+            Estão na ordem sugerida, que é a ordem de dependência: o serviço
+            carrega o preço que o recebível usa, e a origem pertence a um canal.
+            Preencher fora de ordem funciona, e só custa voltar. Cada tela tem
+            um botão Avançar para a seguinte.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {catalogosEmOrdem().map((c, i) => (
+              <Link
+                key={c.slug}
+                href={`/app/configuracoes/${c.slug}`}
+                className="rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
+              >
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xs tabular-nums text-[#3A4A5C]/60">
+                    {i + 1}
+                  </span>
+                  <span className="font-medium">{c.rotulo}</span>
+                </div>
+                <p className="mt-1 text-xs text-[#3A4A5C]">{c.descricao}</p>
+                <p className="mt-2 text-xs text-[#3A4A5C]/80">
+                  <span className="font-medium">Usado em:</span>{" "}
+                  {c.alimenta.join(", ")}
+                </p>
+              </Link>
             ))}
-          </ul>
+          </div>
         </section>
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Modelo de anamnese
+          </h2>
+          <Link
+            href="/app/configuracoes/anamnese"
+            className="mt-2 block rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
+          >
+            <div className="font-medium">Modelos de anamnese</div>
+            <p className="mt-1 text-xs text-[#3A4A5C]">
+              O que o paciente responde antes da consulta, em seções e campos.
+            </p>
+            <p className="mt-2 text-xs text-[#3A4A5C]/80">
+              <span className="font-medium">Usado em:</span> Anamnese, Consultas
+            </p>
+          </Link>
+        </section>
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Plano de contas
+          </h2>
+          <Link
+            href="/app/configuracoes/plano-de-contas"
+            className="mt-2 block rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
+          >
+            <div className="font-medium">Plano de contas</div>
+            <p className="mt-1 text-xs text-[#3A4A5C]">
+              A estrutura contábil, em árvore. Fica fora da lista acima porque é
+              o único catálogo com hierarquia.
+            </p>
+            <p className="mt-2 text-xs text-[#3A4A5C]/80">
+              <span className="font-medium">Usado em:</span> Contas a pagar, Contas a receber, Fluxo de caixa
+            </p>
+          </Link>
+        </section>
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Metas do mês
+          </h2>
+          <Link
+            href="/app/configuracoes/metas"
+            className="mt-2 block rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
+          >
+            <div className="font-medium">Metas mensais</div>
+            <p className="mt-1 text-xs text-[#3A4A5C]">
+              A meta do mês, e o que ela significa por dia útil. Os feriados
+              nacionais já entram na conta.
+            </p>
+            <p className="mt-2 text-xs text-[#3A4A5C]/80">
+              <span className="font-medium">Usado em:</span> Dashboard, Relatório de vendas
+            </p>
+          </Link>
+        </section>
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Regras de negócio
+          </h2>
+          <p className="mb-3 max-w-2xl text-xs text-[#3A4A5C]">
+            Estas não são listas: são os números que decidem quando a esteira de
+            tarefas dispara e o que o cadastro exige para salvar. Cada campo diz
+            o que muda quando você mexe nele.
+          </p>
+          <RegrasForm regras={regras} />
+        </section>
+
       </div>
     </RequirePermission>
   );
