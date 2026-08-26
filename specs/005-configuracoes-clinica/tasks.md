@@ -62,7 +62,7 @@ Sem tela nenhuma. É o que permite testar a regra sem navegador.
       registro** ✅ Catálogo fora da lista é 404. Coberto em duas camadas: teste
       de unidade sobre `catalogoPorSlug` (com `patients`, `profiles` e
       `../services` entre os casos) e teste de navegador sobre a rota.
-- [ ] **T011** Tela de regras de negócio (`business_rules`)
+- [x] **T011** Tela de regras de negócio (`business_rules`) ✅ Fechada em 26/08. Seis prazos, o sábado e as duas listas de campos obrigatórios, com `salvarRegras` fazendo INSERT no primeiro salvamento e UPDATE depois. Dois desenhos que valem registro: **cada campo diz o que muda quando você mexe nele**, e **o piso aparece marcado e travado em vez de escondido**, porque esconder faria parecer que o nome do paciente é opcional. `lib/config/rotulos.ts` é um `Record` completo, então campo novo sem rótulo é erro de compilação, e não um `zip_code` cru vazando para a tela.
 - [ ] **T012** [P] Tela de plano de contas (árvore, `parent_id`/`level`)
 - [ ] **T013** [P] Tela de contas bancárias
 - [ ] **T014** [P] Tela de metas (upsert por mês e ano)

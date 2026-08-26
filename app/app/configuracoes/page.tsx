@@ -5,7 +5,7 @@ import { lerContextoDoUsuario } from "@/lib/auth/servidor";
 import { PASSOS_ONBOARDING } from "@/lib/auth/onboarding";
 import { catalogosEmOrdem } from "@/lib/config/catalogo";
 import { lerRegras } from "@/lib/config/servidor";
-import { horasParaDias } from "@/lib/config/regras";
+import { RegrasForm } from "./regras-form";
 
 /**
  * SPEC 005 / T016 — o índice de Configurações.
@@ -96,67 +96,18 @@ export default async function ConfiguracoesPage() {
         </section>
 
         <section>
-          <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
             Regras de negócio
           </h2>
-          <div className="rounded-lg border border-[#3A4A5C]/15 bg-white p-5">
-            <dl className="grid gap-2 text-sm sm:grid-cols-2">
-              <Regra
-                rotulo="Confirmar a consulta com antecedência de"
-                valor={`${horasParaDias(regras.confirmation_hours)} dia(s)`}
-                nota="Exibido em dias, armazenado em horas."
-              />
-              <Regra rotulo="Follow-up após" valor={`${regras.followup_days} dia(s)`} />
-              <Regra rotulo="Recaptação após" valor={`${regras.recapture_days} dia(s)`} />
-              <Regra rotulo="Recall após" valor={`${regras.recall_days} dia(s)`} />
-              <Regra
-                rotulo="Pesquisa de satisfação após"
-                valor={`${regras.satisfaction_survey_days} dia(s)`}
-              />
-              <Regra
-                rotulo="Enviar anamnese com"
-                valor={`${regras.anamnesis_send_days} dia(s)`}
-              />
-              <Regra
-                rotulo="Trabalha aos sábados"
-                valor={regras.work_saturday ? "Sim" : "Não"}
-                nota="Decide se a tarefa cai no sábado ou é empurrada para o dia útil seguinte."
-              />
-            </dl>
-
-            {regras.id === null && (
-              <p className="mt-3 text-xs text-amber-700">
-                Esta clínica ainda não tem regras gravadas. Os valores acima são
-                os padrões, e passam a valer de fato no primeiro salvamento.
-              </p>
-            )}
-
-            <p className="mt-3 text-xs text-[#3A4A5C]">
-              A edição das regras entra na próxima tarefa desta spec. A conversão
-              de dias para horas já está escrita e testada, com a ida e volta
-              conferida para 1 a 30 dias.
-            </p>
-          </div>
+          <p className="mb-3 max-w-2xl text-xs text-[#3A4A5C]">
+            Estas não são listas: são os números que decidem quando a esteira de
+            tarefas dispara e o que o cadastro exige para salvar. Cada campo diz
+            o que muda quando você mexe nele.
+          </p>
+          <RegrasForm regras={regras} />
         </section>
+
       </div>
     </RequirePermission>
-  );
-}
-
-function Regra({
-  rotulo,
-  valor,
-  nota,
-}: {
-  rotulo: string;
-  valor: string;
-  nota?: string;
-}) {
-  return (
-    <div className="flex flex-col">
-      <dt className="text-[#3A4A5C]">{rotulo}</dt>
-      <dd className="font-medium">{valor}</dd>
-      {nota && <p className="text-xs text-[#3A4A5C]/80">{nota}</p>}
-    </div>
   );
 }
