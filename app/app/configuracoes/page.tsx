@@ -97,6 +97,24 @@ export default async function ConfiguracoesPage() {
 
         <section>
           <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Modelo de anamnese
+          </h2>
+          <Link
+            href="/app/configuracoes/anamnese"
+            className="mt-2 block rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
+          >
+            <div className="font-medium">Modelos de anamnese</div>
+            <p className="mt-1 text-xs text-[#3A4A5C]">
+              O que o paciente responde antes da consulta, em seções e campos.
+            </p>
+            <p className="mt-2 text-xs text-[#3A4A5C]/80">
+              <span className="font-medium">Usado em:</span> Anamnese, Consultas
+            </p>
+          </Link>
+        </section>
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
             Plano de contas
           </h2>
           <Link

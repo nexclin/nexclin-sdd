@@ -35,6 +35,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { catalogoPorSlug } from "./catalogo";
 import { nivelPeloPai, paisPossiveis, type ContaCrua } from "./arvore";
+import { normalizaParaSecoes, paraJsonb, problemasDoModelo } from "./anamnese";
 import { interpretaNumero, normalizaEntradaDeCatalogo } from "./entrada";
 import {
   CAMPOS_DE_AGENDAMENTO,
@@ -388,5 +389,91 @@ export async function salvarConta(form: FormData): Promise<ResultadoDeAcao> {
   }
 
   revalidatePath("/app/configuracoes/plano-de-contas");
+  return { ok: true };
+}
+
+/**
+ * T015 — grava o modelo de anamnese.
+ *
+ * # Por que o formulário manda o modelo inteiro em JSON
+ *
+ * O modelo é uma árvore de seções com campos, e campos com opções. Espalhar
+ * isso em `name="secao[0].campo[2].opcao[1]"` produziria um analisador de nomes
+ * de campo aqui dentro, que é código para reconstruir uma estrutura que o
+ * cliente já tinha montada.
+ *
+ * O que **não** muda por isso: o JSON recebido passa pela mesma normalização
+ * que a leitura usa, e depois pela validação. O cliente manda a estrutura; quem
+ * decide o que é válido continua sendo o servidor.
+ *
+ * # O `id` do campo nunca é regerado
+ *
+ * As respostas do paciente são gravadas com a chave sendo o `id` do campo.
+ * Regenerar um id não dá erro em lugar nenhum: a anamnese antiga só perde
+ * aquela resposta, em silêncio. É histórico clínico, e por isso há um teste
+ * provando a preservação na ida e volta.
+ */
+export async function salvarModeloDeAnamnese(form: FormData): Promise<ResultadoDeAcao> {
+  const t = comoTexto(form);
+
+  const titulo = (t.title ?? "").trim();
+  if (titulo === "") return { ok: false, mensagem: "O título do modelo é obrigatório." };
+
+  let bruto: unknown;
+  try {
+    bruto = JSON.parse(t.modelo ?? "[]");
+  } catch {
+    return { ok: false, mensagem: "O modelo chegou corrompido. Recarregue a tela e tente de novo." };
+  }
+
+  const secoes = normalizaParaSecoes(bruto);
+  const problemas = problemasDoModelo(secoes);
+  if (problemas.length > 0) {
+    return {
+      ok: false,
+      mensagem: problemas.map((p) => `${p.onde}: ${p.mensagem}`).join(" · "),
+    };
+  }
+
+  const valores = {
+    title: titulo,
+    specialty: (t.specialty ?? "").trim(),
+    fields: paraJsonb(secoes),
+    is_default: t.is_default === "on" || t.is_default === "true",
+  };
+
+  const id = (t.id ?? "").trim();
+
+  try {
+    const supabase = await createClient();
+
+    // Só um modelo pode ser o padrão. Sem isto, dois padrões fariam a tela de
+    // consulta escolher um deles por ordem de leitura, que muda sem aviso.
+    if (valores.is_default) {
+      await supabase
+        .from("anamnesis_config")
+        .update({ is_default: false } as never)
+        .neq("id", id || "00000000-0000-0000-0000-000000000000");
+    }
+
+    if (id === "") {
+      const { error } = await supabase.from("anamnesis_config").insert(valores as never);
+      if (error) return { ok: false, mensagem: error.message };
+    } else {
+      const { data, error } = await supabase
+        .from("anamnesis_config")
+        .update(valores as never)
+        .eq("id", id)
+        .select("id");
+      if (error) return { ok: false, mensagem: error.message };
+      if (!data || data.length === 0) {
+        return { ok: false, mensagem: "Nada foi alterado. O modelo pode não existir mais." };
+      }
+    }
+  } catch {
+    return { ok: false, mensagem: "Não foi possível salvar o modelo." };
+  }
+
+  revalidatePath("/app/configuracoes/anamnese");
   return { ok: true };
 }
