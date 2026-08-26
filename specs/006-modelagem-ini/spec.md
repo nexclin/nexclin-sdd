@@ -227,6 +227,61 @@ Paulo. `hoje.ts` faz a ponte, e nenhuma função pura precisou mudar.
 
 ---
 
+## As quatro perguntas que as decisões deixaram, e as respostas
+
+Cada decisão de arquitetura fechou uma porta e deixou outra aberta. As quatro
+foram levantadas e respondidas em 26/08.
+
+### Q1. As provas não moravam no repositório
+
+As 46 provas rodavam por script montado, executado e apagado. A próxima pessoa
+que mexesse em `precificacao.ts` quebraria a aritmética e nada acusaria: `tsc`
+passa, build passa, e o preço sai errado em silêncio.
+
+**Resposta: versionar.** O repositório já tinha `vitest` e um teste de exemplo.
+Agora são **76 testes** em quatro arquivos, e cada um explica o que protege.
+
+### Q2. Quem via o custo da clínica
+
+Precificação e Insumos estavam sob `configuracoes` por consequência de não criar
+chave nova, não por decisão de produto. Quem cadastra serviço, tipicamente a
+secretária, passava a ver hora clínica, margem alvo e repasse padrão.
+
+**Resposta: mover para `contas_pagar`**, que já protege o que a clínica gasta.
+Sem chave nova, sem emenda.
+
+### Q3. O fuso é fixo em São Paulo
+
+Clínica em Manaus está a uma hora, em Rio Branco a duas. No Acre, das 19h à
+meia-noite, o código já virou o dia: é o mesmo defeito que ele conserta,
+deslocado.
+
+**Resposta: São Paulo agora, configurável depois.** O cliente fundador e o time
+que testa estão em Brasília. A dívida está escrita dentro de `hoje.ts`, e quando
+entrar a coluna de fuso o único lugar a mudar é a própria função.
+
+### Q4. Os avisos de tabela faltando
+
+Eram recado amigável porque as migrações ainda não tinham sido coladas. Depois de
+coladas, tabela faltando deixa de ser estado normal e passa a ser defeito.
+
+**Resposta: viram alerta**, dizendo qual migração falta e o que está errado por
+causa dela. "A hora clínica abaixo está errada para menos" é mais útil que "o
+cadastro ainda não existe".
+
+### A quinta, que ficou como dívida e não como pergunta
+
+**D-006.4 sob impersonação.** O `DEFAULT` chama `get_my_clinic_id()`, que durante
+uma sessão de suporte devolve a clínica do cliente. Está certo tecnicamente, e
+significa que o suporte pode cadastrar um bem ou um insumo dentro da conta do
+cliente, indistinguível do que o cliente cadastrou.
+
+A auditoria registra a entrada e a saída do suporte, **não o que foi criado no
+meio**. Fica anotado para a spec de auditoria de dado, que já existe como
+`data_audit_log` na SPEC 002 e hoje cobre só `patients`.
+
+---
+
 ## O que esta spec deliberadamente NÃO faz
 
 - **Não cria ModuleKey.** Ver D-006.3.
