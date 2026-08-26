@@ -221,6 +221,32 @@ O item 5 é o gargalo de todos os outros, e é uma tarefa de cinco minutos.
 
 ---
 
+## O banco da stack nova está atrás, e isso foi medido em 26/08
+
+Consultado no painel do Supabase do projeto `bfkghwkhzkimzyiovotj`, que é o que
+o app da stack nova usa:
+
+| Objeto | Estado |
+|---|---|
+| `plans` com default `{}` | ✅ aplicado em 26/08 |
+| `tasks.created_by` e `tasks.origem` | ✅ aplicado em 26/08 |
+| `data_audit_log` e `patients.deleted_at` | ❌ falta |
+| `cria_assinatura_de_trial` | ❌ falta |
+| `barra_autoconcessao_em_team_members` | ❌ falta |
+| `espelha_auditoria_na_timeline` | ❌ falta |
+| `encerra_impersonacoes_vencidas` | ❌ falta |
+
+**A causa é simples e vale registrar:** os blocos de 25/08 foram colados no
+banco da **Lovable**, que é outro projeto. As migrações moram neste repositório
+porque ele é a fonte de verdade do schema, e ninguém as aplicou aqui.
+
+**O que isso quebra hoje, e o que não quebra.** Criar plano, criar conta, mudar
+plano, situação e data de cobrança funcionam: essas escrevem em tabelas que já
+existem. O que não funciona é o **passo 6 do roteiro abaixo**, a linha do tempo
+da conta, porque quem a alimenta é a trigger que ainda não está aqui. A chamada
+de limpeza de impersonação também não existe, e o layout a ignora de propósito
+em vez de derrubar a página.
+
 ## O roteiro de teste do painel, para a bateria
 
 Na ordem, porque cada passo alimenta o seguinte.
