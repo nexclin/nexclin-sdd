@@ -57,6 +57,13 @@ export function FormularioDeCatalogo({
   const emEdicao =
     aberto && aberto !== "novo" ? linhas.find((l) => l.id === aberto) : null;
 
+  // Nem todo catálogo chama a coluna de nome de `name`: `bank_accounts` usa
+  // `bank_name`. Em vez de acrescentar mais um campo à definição, a lista usa a
+  // PRIMEIRA coluna marcada como `naLista`, que é sempre a que identifica a
+  // linha. Assumir `name` funcionava para nove catálogos e quebrava no décimo,
+  // e é assim que uma abstração declarativa começa a ganhar exceções.
+  const colunaDeRotulo = definicao.campos.find((c) => c.naLista)?.coluna ?? "name";
+
   function fechar() {
     setAberto(null);
     setErros({});
@@ -172,7 +179,7 @@ export function FormularioDeCatalogo({
                 }}
                 className="flex-1 text-left hover:underline"
               >
-                {String(linha.name ?? "(sem nome)")}
+                {String(linha[colunaDeRotulo] ?? "(sem nome)")}
               </button>
 
               <button

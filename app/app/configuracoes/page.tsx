@@ -97,6 +97,25 @@ export default async function ConfiguracoesPage() {
 
         <section>
           <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Plano de contas
+          </h2>
+          <Link
+            href="/app/configuracoes/plano-de-contas"
+            className="mt-2 block rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
+          >
+            <div className="font-medium">Plano de contas</div>
+            <p className="mt-1 text-xs text-[#3A4A5C]">
+              A estrutura contábil, em árvore. Fica fora da lista acima porque é
+              o único catálogo com hierarquia.
+            </p>
+            <p className="mt-2 text-xs text-[#3A4A5C]/80">
+              <span className="font-medium">Usado em:</span> Contas a pagar, Contas a receber, Fluxo de caixa
+            </p>
+          </Link>
+        </section>
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
             Metas do mês
           </h2>
           <Link

@@ -91,7 +91,7 @@ const NOME: CampoDeCatalogo = {
 export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   {
     slug: "canais",
-    ordem: 7,
+    ordem: 8,
     alimenta: ["Leads", "Relatório de leads", "Dashboard"],
     tabela: "channels",
     rotulo: "Canais",
@@ -102,7 +102,7 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "origens",
-    ordem: 8,
+    ordem: 9,
     alimenta: ["Leads", "Relatório de leads"],
     tabela: "origins",
     rotulo: "Origens",
@@ -113,7 +113,7 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "objecoes",
-    ordem: 9,
+    ordem: 10,
     alimenta: ["Leads", "Relatório de leads"],
     tabela: "objections",
     rotulo: "Objeções",
@@ -162,7 +162,7 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
   },
   {
     slug: "categorias-de-despesa",
-    ordem: 6,
+    ordem: 7,
     alimenta: ["Contas a pagar", "Fluxo de caixa"],
     tabela: "expense_categories",
     rotulo: "Categorias de despesa",
@@ -175,8 +175,37 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
     ],
   },
   {
-    slug: "tipos-de-fechamento",
+    slug: "contas-bancarias",
     ordem: 5,
+    alimenta: ["Fluxo de caixa", "Contas a pagar", "Contas a receber"],
+    tabela: "bank_accounts",
+    rotulo: "Contas bancárias",
+    rotuloSingular: "Conta bancária",
+    descricao:
+      "Onde o dinheiro entra e sai. É a conta que o fluxo de caixa concilia.",
+    campos: [
+      {
+        coluna: "bank_name",
+        rotulo: "Banco",
+        tipo: "texto",
+        obrigatorio: true,
+        naLista: true,
+      },
+      { coluna: "bank_code", rotulo: "Código do banco", tipo: "texto", naLista: true },
+      { coluna: "agency", rotulo: "Agência", tipo: "texto", naLista: true },
+      { coluna: "account", rotulo: "Conta", tipo: "texto", naLista: true },
+      {
+        coluna: "account_type",
+        rotulo: "Tipo",
+        tipo: "texto",
+        naLista: true,
+        ajuda: "corrente, poupanca ou pagamento.",
+      },
+    ],
+  },
+  {
+    slug: "tipos-de-fechamento",
+    ordem: 6,
     alimenta: ["Acompanhamento", "Relatório de vendas"],
     tabela: "closing_types",
     rotulo: "Tipos de fechamento",

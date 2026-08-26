@@ -34,6 +34,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { catalogoPorSlug } from "./catalogo";
+import { nivelPeloPai, paisPossiveis, type ContaCrua } from "./arvore";
 import { interpretaNumero, normalizaEntradaDeCatalogo } from "./entrada";
 import {
   CAMPOS_DE_AGENDAMENTO,
@@ -294,5 +295,98 @@ export async function salvarRegras(form: FormData): Promise<ResultadoDeAcao> {
   }
 
   revalidatePath("/app/configuracoes");
+  return { ok: true };
+}
+
+/**
+ * T012 — grava uma conta do plano de contas.
+ *
+ * # As duas coisas que esta função garante, e a RLS não
+ *
+ * **O nível é derivado do pai**, nunca aceito do formulário. `level` é uma
+ * coluna que repete o que a estrutura já diz, e coluna assim sai do lugar na
+ * primeira movimentação. Deixar a tela mandar o nível seria dar ao cliente o
+ * direito de mentir sobre a própria hierarquia.
+ *
+ * **O pai é validado contra a lista de pais possíveis.** `parent_id` é uma FK
+ * para a mesma tabela, e FK aceita qualquer id de lá, inclusive um que feche um
+ * ciclo. Uma vez formado o ciclo, toda leitura recursiva trava. A tela já
+ * oferece só os pais válidos; aqui se confere, porque tela é conveniência e não
+ * fronteira.
+ */
+export async function salvarConta(form: FormData): Promise<ResultadoDeAcao> {
+  const t = comoTexto(form);
+
+  const code = (t.code ?? "").trim();
+  const name = (t.name ?? "").trim();
+  if (code === "") return { ok: false, mensagem: "O código é obrigatório." };
+  if (name === "") return { ok: false, mensagem: "O nome é obrigatório." };
+
+  const id = (t.id ?? "").trim();
+  const parentId = (t.parent_id ?? "").trim() || null;
+
+  try {
+    const supabase = await createClient();
+
+    const { data: existentes } = await supabase
+      .from("chart_of_accounts")
+      .select("id, code, name, parent_id, active");
+
+    const contas = (existentes ?? []) as unknown as ContaCrua[];
+
+    if (parentId) {
+      const permitidos = new Set(paisPossiveis(contas, id || null).map((c) => c.id));
+      if (!permitidos.has(parentId)) {
+        return {
+          ok: false,
+          mensagem:
+            "Esse pai não é válido: ele é a própria conta ou está abaixo dela. A hierarquia ficaria circular.",
+        };
+      }
+    }
+
+    const valores = {
+      code,
+      name,
+      parent_id: parentId,
+      level: nivelPeloPai(contas, parentId),
+    };
+
+    if (id === "") {
+      const { error } = await supabase
+        .from("chart_of_accounts")
+        .insert(valores as never);
+      if (error) {
+        // `UNIQUE(clinic_id, code)`. A mensagem crua do Postgres não ajuda quem
+        // está preenchendo um plano de contas.
+        if (error.code === "23505") {
+          return { ok: false, mensagem: `Já existe uma conta com o código ${code}.` };
+        }
+        return { ok: false, mensagem: error.message };
+      }
+    } else {
+      const { data, error } = await supabase
+        .from("chart_of_accounts")
+        .update(valores as never)
+        .eq("id", id)
+        .select("id");
+      if (error) {
+        if (error.code === "23505") {
+          return { ok: false, mensagem: `Já existe uma conta com o código ${code}.` };
+        }
+        return { ok: false, mensagem: error.message };
+      }
+      if (!data || data.length === 0) {
+        return {
+          ok: false,
+          mensagem: "Nada foi alterado. A conta pode ser do sistema, ou pode não existir mais.",
+        };
+      }
+    }
+  } catch {
+    return { ok: false, mensagem: "Não foi possível salvar a conta." };
+  }
+
+  revalidatePath("/app/configuracoes/plano-de-contas");
   return { ok: true };
 }

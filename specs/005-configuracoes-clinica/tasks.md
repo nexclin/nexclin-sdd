@@ -63,8 +63,8 @@ Sem tela nenhuma. É o que permite testar a regra sem navegador.
       de unidade sobre `catalogoPorSlug` (com `patients`, `profiles` e
       `../services` entre os casos) e teste de navegador sobre a rota.
 - [x] **T011** Tela de regras de negócio (`business_rules`) ✅ Fechada em 26/08. Seis prazos, o sábado e as duas listas de campos obrigatórios, com `salvarRegras` fazendo INSERT no primeiro salvamento e UPDATE depois. Dois desenhos que valem registro: **cada campo diz o que muda quando você mexe nele**, e **o piso aparece marcado e travado em vez de escondido**, porque esconder faria parecer que o nome do paciente é opcional. `lib/config/rotulos.ts` é um `Record` completo, então campo novo sem rótulo é erro de compilação, e não um `zip_code` cru vazando para a tela.
-- [ ] **T012** [P] Tela de plano de contas (árvore, `parent_id`/`level`)
-- [ ] **T013** [P] Tela de contas bancárias
+- [x] **T012** Tela de plano de contas ✅ 26/08. O unico catalogo fora do registro declarativo, porque e arvore.  com 19 testes: ordenacao por codigo entendendo numero (1.10 depois de 1.9), corte de ciclo, e , que impede o ciclo antes de ele existir. O nivel e DERIVADO do pai na gravacao, nunca aceito do formulario.
+- [x] **T013** Tela de contas bancárias ✅ 26/08, e saiu quase de graca: virou a decima entrada do registro declarativo. Ela pos o desenho a prova e achou uma suposicao, porque  chama a coluna de nome de . A lista passou a usar a primeira coluna  em vez de assumir , e o teste que exigia  foi corrigido para exigir a REGRA e nao o nome.
 - [x] **T014** Tela de metas ✅ Fechada em 26/08, e ela virou mais que upsert: traz dias uteis, feriados nacionais calculados e quanto falta POR DIA UTIL. E o item 1 da modelagem do INI. Os feriados moveis saem da Pascoa, com o algoritmo conferido contra oito anos reais e uma varredura de 200 anos. Provado por mutacao: deslocar a Pascoa em um dia derruba 11 testes.
 - [ ] **T015** Tela de modelo de anamnese (`fields` jsonb) — a mais cara
 - [~] **T016** O índice de Configurações ✅ escrito, com os catálogos, o progresso dos doze passos e as regras em leitura. **Código lido, não comportamento provado.**

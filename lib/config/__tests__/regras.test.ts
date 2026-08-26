@@ -158,11 +158,24 @@ describe("registro de catálogos", () => {
     }
   });
 
-  it("todo catálogo tem exatamente um campo obrigatório de nome", () => {
+  it("todo catálogo tem exatamente um campo obrigatório, e ele identifica a linha", () => {
+    // A versão anterior deste teste exigia que a coluna se chamasse `name`, e
+    // ela quebrou ao entrar `bank_accounts`, que chama de `bank_name`. O teste
+    // estava certo em existir e errado no que checava: a regra não é o NOME da
+    // coluna, é que exista **uma** coluna obrigatória e que ela seja a que
+    // aparece primeiro na lista, porque é por ela que a pessoa reconhece a
+    // linha na tela.
+    //
+    // Corrigido em 26/08. Fica registrado porque é o momento em que uma
+    // abstração declarativa ou ganha uma exceção ou fica mais geral, e aqui
+    // ficou mais geral.
     for (const c of CATALOGOS) {
       const obrigatorios = c.campos.filter((f) => f.obrigatorio);
-      expect(obrigatorios).toHaveLength(1);
-      expect(obrigatorios[0].coluna).toBe("name");
+      expect(obrigatorios, c.slug).toHaveLength(1);
+
+      const primeiroDaLista = c.campos.find((f) => f.naLista);
+      expect(primeiroDaLista, `${c.slug} não tem coluna na lista`).toBeDefined();
+      expect(obrigatorios[0].coluna, c.slug).toBe(primeiroDaLista?.coluna);
     }
   });
 
