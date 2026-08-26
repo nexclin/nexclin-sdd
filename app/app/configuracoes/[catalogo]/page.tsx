@@ -8,6 +8,7 @@ import {
   vizinhosDoCatalogo,
 } from "@/lib/config/catalogo";
 import { lerCatalogo } from "@/lib/config/servidor";
+import { FormularioDeCatalogo, type LinhaEditavel } from "./formulario";
 
 /**
  * SPEC 005 / T010 — a rota genérica de catálogo.
@@ -140,10 +141,10 @@ export default async function CatalogoPage({
           </div>
         )}
 
-        <p className="text-xs text-[#3A4A5C]">
-          A edição entra na próxima tarefa desta spec. Esta tela já lê do banco,
-          com as colunas nomeadas e a permissão do módulo <code>configuracoes</code>.
-        </p>
+        <FormularioDeCatalogo
+          definicao={definicao}
+          linhas={linhas as unknown as LinhaEditavel[]}
+        />
 
         {/*
           A sequência. Ideia importada do INI, registrada em

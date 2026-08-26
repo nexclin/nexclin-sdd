@@ -57,7 +57,7 @@ Sem tela nenhuma. É o que permite testar a regra sem navegador.
 
 ## Fase 3 — As telas
 
-- [~] **T009** A camada de dados (`lib/config/servidor.ts`) e a listagem única ✅ escritas. **Falta o formulário de edição.** Nunca lança: falha vira lista vazia, porque tela de configuração que estoura impede a clínica de configurar o resto.
+- [x] **T009** A camada de dados, a listagem e **o formulário** ✅ Fechado em 25/08. A escrita ficou em três peças: `entrada.ts` (pura, decide o que o formulário produziu), `acoes.ts` (grava) e `formulario.tsx` (um formulário para os nove catálogos, com os campos vindo da definição). 26 testes novos, provados por mutação: o `Number()` ingênuo derruba 11, a fronteira de coluna aberta derruba 1. Nunca lança: falha vira lista vazia, porque tela de configuração que estoura impede a clínica de configurar o resto.
 - [x] **T010** [P] Rota `[catalogo]` com o parâmetro **validado contra o
       registro** ✅ Catálogo fora da lista é 404. Coberto em duas camadas: teste
       de unidade sobre `catalogoPorSlug` (com `patients`, `profiles` e
