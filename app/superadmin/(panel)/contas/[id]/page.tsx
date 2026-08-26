@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { MODULE_KEYS } from "@/lib/auth/modulos";
 import { Cabecalho, Td, Th, Vazio, dataCurta, moeda } from "../../_ui";
 import { AcoesDePerfil } from "./acoes-de-perfil";
+import { AssinaturaForm } from "./assinatura-form";
 
 /**
  * SPEC 001 / T023 e T024 — detalhe da conta.
@@ -33,12 +34,18 @@ export default async function DetalheDaContaPage({
 
   if (!clinica) notFound();
 
-  const [{ data: assinatura }, { data: membros }, { data: perfis }, { data: linhaDoTempo }] =
+  const [
+    { data: assinatura },
+    { data: membros },
+    { data: perfis },
+    { data: linhaDoTempo },
+    { data: planosDisponiveis },
+  ] =
     await Promise.all([
       supabase
         .from("account_subscriptions")
         .select(
-          "status, trial_start, trial_end, started_at, current_period_end, cancelled_at, cancel_reason, plans(id, name, monthly_price, max_users, enabled_modules)",
+          "id, plan_id, status, trial_start, trial_end, started_at, current_period_end, cancelled_at, cancel_reason, plans(id, name, monthly_price, max_users, enabled_modules)",
         )
         .eq("clinic_id", id)
         .order("created_at", { ascending: false })
@@ -59,6 +66,11 @@ export default async function DetalheDaContaPage({
         .eq("clinic_id", id)
         .order("created_at", { ascending: false })
         .limit(30),
+      supabase
+        .from("plans")
+        .select("id, name, monthly_price")
+        .eq("status", "active")
+        .order("monthly_price", { ascending: true }),
     ]);
 
   const plano = assinatura?.plans as
@@ -140,6 +152,30 @@ export default async function DetalheDaContaPage({
           </div>
         )}
       </section>
+
+      {/*
+        SPEC 003: a escrita que faltava. Ate 26/08 o painel inteiro era somente
+        leitura, e a unica escrita em `app/superadmin/` era a impersonacao. Dava
+        para ver plano e cobranca, e nao dava para mudar nada.
+
+        O formulario cria a assinatura quando a conta ainda nao tem, e por isso
+        aparece mesmo com `assinatura` nula.
+      */}
+      <AssinaturaForm
+        assinatura={{
+          id: (assinatura?.id as string | undefined) ?? null,
+          clinic_id: id,
+          plan_id: (assinatura?.plan_id as string | undefined) ?? null,
+          status: (assinatura?.status as string | undefined) ?? "trial",
+          current_period_end:
+            (assinatura?.current_period_end as string | undefined) ?? null,
+        }}
+        planos={(planosDisponiveis ?? []) as unknown as {
+          id: string;
+          name: string;
+          monthly_price: number | null;
+        }[]}
+      />
 
       {plano && (
         <section className="rounded-lg border border-white/10 bg-slate-900 p-5">

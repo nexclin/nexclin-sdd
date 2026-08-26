@@ -48,11 +48,19 @@ export default async function ContasPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">Contas</h1>
-        <p className="mt-1 text-sm text-slate-400">
-          {rows.length} clínica(s) cadastrada(s)
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold">Contas</h1>
+          <p className="mt-1 text-sm text-slate-400">
+            {rows.length} clínica(s) cadastrada(s)
+          </p>
+        </div>
+        <Link
+          href="/superadmin/contas/nova"
+          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-500"
+        >
+          Nova conta
+        </Link>
       </div>
 
       <div className="overflow-x-auto rounded-lg border border-white/10">

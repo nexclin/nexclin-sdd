@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { MODULE_KEYS } from "@/lib/auth/modulos";
 import { Cabecalho, Vazio, moeda } from "../_ui";
+import { PlanoForm, type PlanoEditavel } from "./plano-form";
 
 /**
  * SPEC 001 / T023 — Planos.
@@ -11,10 +12,16 @@ import { Cabecalho, Vazio, moeda } from "../_ui";
  * e desligadas, em vez de listar só as ligadas. Ver uma chave faltando é o que
  * denuncia plano mal configurado, e uma lista só das ligadas esconderia isso.
  *
- * Leitura por enquanto. A escrita depende de fechar o formato de
- * `enabled_modules`: o default do MVP é array e o uso é de objeto. A decisão
- * está no BACKLOG e pertence à SPEC 004. Salvar antes de decidir gravaria os
- * dois formatos na mesma coluna.
+ * # A escrita entrou em 26/08, e o que a destravou
+ *
+ * Aqui estava escrito "leitura por enquanto", porque salvar dependia de fechar
+ * o formato de `enabled_modules`: o default do MVP é array e o uso é de objeto,
+ * e gravar antes de decidir poria os dois formatos na mesma coluna.
+ *
+ * **A decisão saiu em 25/08**, na migração
+ * `20260825070000_corrige_default_de_enabled_modules.sql`: é objeto, o default
+ * foi alinhado e uma constraint impede que volte a ser array. Sem ambiguidade,
+ * gravar deixou de ser arriscado, e o editor entrou.
  */
 export default async function PlanosPage() {
   const supabase = await createClient();
@@ -32,13 +39,21 @@ export default async function PlanosPage() {
         subtitulo="O plano é o teto de acesso. A permissão individual distribui abaixo dele e nunca o excede."
       />
 
+      <div className="rounded-lg border border-white/10 bg-slate-900 p-4">
+        <p className="mb-2 text-sm text-slate-400">
+          Criar um plano novo, com mensalidade e módulos.
+        </p>
+        <PlanoForm />
+      </div>
+
       {(planos ?? []).length === 0 && <Vazio>Nenhum plano cadastrado.</Vazio>}
 
       <div className="space-y-4">
         {(planos ?? []).map((p) => {
           // A coluna chega como objeto ou como array, dependendo de quando a
-          // linha foi criada. Os dois formatos são lidos aqui; padronizar é
-          // decisão da SPEC 004, e ler os dois evita tela em branco no meio.
+          // linha foi criada. A migração de 25/08 padronizou o default e
+          // normalizou as linhas existentes, e a leitura dos dois formatos fica
+          // como rede: linha gravada antes dela ainda pode estar em array.
           const bruto = p.enabled_modules as unknown;
           const ligado = (k: string) =>
             Array.isArray(bruto)
@@ -87,6 +102,10 @@ export default async function PlanosPage() {
                     {k}
                   </span>
                 ))}
+              </div>
+
+              <div className="mt-4 border-t border-white/10 pt-3">
+                <PlanoForm plano={p as unknown as PlanoEditavel} />
               </div>
             </section>
           );
