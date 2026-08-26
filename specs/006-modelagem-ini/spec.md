@@ -1,4 +1,4 @@
-# SPEC 006 — Modelagem INI
+# SPEC 006, Modelagem INI
 
 **Feature Branch**: `main` (implantada direto, ver a nota abaixo)
 
