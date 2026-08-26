@@ -31,6 +31,7 @@ schema pela metade.
 | 3 | Tarefas ganham autor e origem | sim, repara |
 | 4 | Default de `enabled_modules` | sim, normaliza |
 | 5 | Auditoria de dado e exclusão que marca | sim, estrutura |
+| 5B | Ninguém muda a própria permissão | sim, estrutura |
 | 6 | Zera o movimento | **sim, e sem volta** |
 | 6B | Zera a configuração (opcional) | **sim, e sem volta** |
 | 7 | Conferência final | não, só lê |
@@ -153,6 +154,40 @@ Por isso o commit `d07b74f` inverteu a ordem: a tela marca `deleted_at`
 primeiro, e só cai no `DELETE` antigo se a coluna ainda não existir. Funciona
 antes e depois deste bloco, então **nenhuma ordem entre publicar e migrar
 quebra nada**.
+
+---
+
+## Bloco 5B. Ninguém muda a própria permissão
+
+Cole o conteúdo de
+`supabase/migrations/20260825100000_ninguem_muda_a_propria_permissao.sql`.
+
+**Entrou depois, por decisão do Arthur em 25/08.** O documento de segurança
+encaminhava esta correção para depois do lançamento; ele decidiu fechar antes
+de 08/09.
+
+O buraco: existe uma policy só em `team_members`, `FOR ALL`, com a condição
+sendo apenas o `clinic_id`. Qualquer membro dá UPDATE em qualquer linha da
+própria clínica, inclusive na dele. Uma secretária se promove a `master`, e um
+profissional aumenta o próprio percentual de repasse.
+
+É trigger e não policy porque a regra é sobre a **mudança de coluna**, não sobre
+quem escreve na linha, e um `WITH CHECK` não enxerga o valor anterior.
+
+**Não toca em nada que hoje funciona.** O admin continua editando a permissão
+dos outros pela tela de Equipe, o cadastro de clínica continua criando o time, e
+o convite continua funcionando: esses caminhos não têm `auth.uid()`, e o
+trigger os deixa passar de propósito.
+
+**O que provar depois, e são quatro passos, não um:**
+
+1. Membro não administrador tentando mudar a própria permissão: tem de recusar.
+2. **Administrador mudando a permissão de outra pessoa: tem de salvar.** É o
+   teste que mais importa, porque diz que a correção não trancou a clínica fora
+   da própria equipe.
+3. Administrador tentando mudar a própria: recusa também. Não tira acesso
+   nenhum, porque o papel global de admin já dá `full` em todo módulo.
+4. Não administrador tentando mexer em repasse de qualquer pessoa: recusa.
 
 ---
 
