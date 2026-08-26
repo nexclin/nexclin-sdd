@@ -65,7 +65,7 @@ Sem tela nenhuma. É o que permite testar a regra sem navegador.
 - [x] **T011** Tela de regras de negócio (`business_rules`) ✅ Fechada em 26/08. Seis prazos, o sábado e as duas listas de campos obrigatórios, com `salvarRegras` fazendo INSERT no primeiro salvamento e UPDATE depois. Dois desenhos que valem registro: **cada campo diz o que muda quando você mexe nele**, e **o piso aparece marcado e travado em vez de escondido**, porque esconder faria parecer que o nome do paciente é opcional. `lib/config/rotulos.ts` é um `Record` completo, então campo novo sem rótulo é erro de compilação, e não um `zip_code` cru vazando para a tela.
 - [ ] **T012** [P] Tela de plano de contas (árvore, `parent_id`/`level`)
 - [ ] **T013** [P] Tela de contas bancárias
-- [ ] **T014** [P] Tela de metas (upsert por mês e ano)
+- [x] **T014** Tela de metas ✅ Fechada em 26/08, e ela virou mais que upsert: traz dias uteis, feriados nacionais calculados e quanto falta POR DIA UTIL. E o item 1 da modelagem do INI. Os feriados moveis saem da Pascoa, com o algoritmo conferido contra oito anos reais e uma varredura de 200 anos. Provado por mutacao: deslocar a Pascoa em um dia derruba 11 testes.
 - [ ] **T015** Tela de modelo de anamnese (`fields` jsonb) — a mais cara
 - [~] **T016** O índice de Configurações ✅ escrito, com os catálogos, o progresso dos doze passos e as regras em leitura. **Código lido, não comportamento provado.**
 - [ ] **T017** [aceite] O roteiro de `quickstart.md`, executado por Arthur

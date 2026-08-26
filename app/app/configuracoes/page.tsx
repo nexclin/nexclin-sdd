@@ -97,6 +97,25 @@ export default async function ConfiguracoesPage() {
 
         <section>
           <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
+            Metas do mês
+          </h2>
+          <Link
+            href="/app/configuracoes/metas"
+            className="mt-2 block rounded-lg border border-[#3A4A5C]/15 bg-white p-4 transition hover:border-[#1F8C8C]/50"
+          >
+            <div className="font-medium">Metas mensais</div>
+            <p className="mt-1 text-xs text-[#3A4A5C]">
+              A meta do mês, e o que ela significa por dia útil. Os feriados
+              nacionais já entram na conta.
+            </p>
+            <p className="mt-2 text-xs text-[#3A4A5C]/80">
+              <span className="font-medium">Usado em:</span> Dashboard, Relatório de vendas
+            </p>
+          </Link>
+        </section>
+
+        <section>
+          <h2 className="mb-1 text-sm font-medium uppercase tracking-wide text-[#3A4A5C]">
             Regras de negócio
           </h2>
           <p className="mb-3 max-w-2xl text-xs text-[#3A4A5C]">

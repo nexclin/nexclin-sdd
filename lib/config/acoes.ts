@@ -34,7 +34,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { catalogoPorSlug } from "./catalogo";
-import { normalizaEntradaDeCatalogo } from "./entrada";
+import { interpretaNumero, normalizaEntradaDeCatalogo } from "./entrada";
 import {
   CAMPOS_DE_AGENDAMENTO,
   CAMPOS_DE_PACIENTE,
@@ -153,6 +153,70 @@ export async function alternarAtivoDeCatalogo(
   }
 
   revalidatePath(`/app/configuracoes/${definicao.slug}`);
+  return { ok: true };
+}
+
+/**
+ * T014 — grava a meta de um mês.
+ *
+ * `goals` tem `UNIQUE(clinic_id, month, year)`, então existe no máximo uma linha
+ * por mês. O `id` decide entre criar e atualizar, e ele vem da leitura da
+ * própria tela.
+ *
+ * Números vazios viram `0`, e não `null`: a coluna já tem `DEFAULT 0`, e meta
+ * não informada é meta zero, não meta desconhecida. A diferença aparece na hora
+ * de somar: `null` propaga para o total e some com o número.
+ */
+export async function salvarMeta(form: FormData): Promise<ResultadoDeAcao> {
+  const t = comoTexto(form);
+
+  const ano = Math.floor(Number(t.ano));
+  const mes = Math.floor(Number(t.mes));
+  if (!Number.isFinite(ano) || ano < 2000 || ano > 2100) {
+    return { ok: false, mensagem: "Ano inválido." };
+  }
+  if (!Number.isFinite(mes) || mes < 1 || mes > 12) {
+    return { ok: false, mensagem: "Mês inválido." };
+  }
+
+  const numero = (chave: string) => {
+    const n = interpretaNumero(t[chave] ?? "");
+    return n === null || n < 0 ? 0 : n;
+  };
+
+  const valores = {
+    year: ano,
+    month: mes,
+    revenue_target: Number(numero("revenue_target").toFixed(2)),
+    new_patients_target: Math.floor(numero("new_patients_target")),
+    closings_target: Math.floor(numero("closings_target")),
+    conversion_target: Math.min(100, Number(numero("conversion_target").toFixed(2))),
+  };
+
+  const id = (t.id ?? "").trim();
+
+  try {
+    const supabase = await createClient();
+
+    if (id === "") {
+      const { error } = await supabase.from("goals").insert(valores as never);
+      if (error) return { ok: false, mensagem: error.message };
+    } else {
+      const { data, error } = await supabase
+        .from("goals")
+        .update(valores as never)
+        .eq("id", id)
+        .select("id");
+      if (error) return { ok: false, mensagem: error.message };
+      if (!data || data.length === 0) {
+        return { ok: false, mensagem: "Nada foi alterado." };
+      }
+    }
+  } catch {
+    return { ok: false, mensagem: "Não foi possível salvar a meta." };
+  }
+
+  revalidatePath("/app/configuracoes/metas");
   return { ok: true };
 }
 
