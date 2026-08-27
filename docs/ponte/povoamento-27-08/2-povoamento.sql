@@ -21,7 +21,8 @@
 DO $$
 DECLARE
   -- ============ PARAMETROS. Trocar aqui. ============
-  alvo             uuid := '00000000-0000-0000-0000-000000000000';
+  -- O nome exato da clinica, o mesmo que voce usou no expurgo.
+  nome_alvo        text := 'NexClin';
   qtd_pacientes    int  := 180;
   qtd_leads        int  := 240;
   qtd_consultas    int  := 420;   -- nos dois meses
@@ -30,6 +31,7 @@ DECLARE
   -- =================================================
 
   ultimo_dia   date := (date_trunc('month', current_date) + interval '1 month - 1 day')::date;
+  alvo         uuid;
   nome_clinica text;
 
   -- ids de catalogo, preenchidos ao longo do bloco
@@ -47,13 +49,16 @@ DECLARE
 
 
 BEGIN
-  IF alvo = '00000000-0000-0000-0000-000000000000'::uuid THEN
-    RAISE EXCEPTION 'Troque o UUID do alvo antes de rodar. Nada foi inserido.';
-  END IF;
-  SELECT name INTO nome_clinica FROM public.clinics WHERE id = alvo;
-  IF nome_clinica IS NULL THEN
-    RAISE EXCEPTION 'Nao existe clinica com id %.', alvo;
-  END IF;
+  BEGIN
+    SELECT id, name INTO STRICT alvo, nome_clinica
+      FROM public.clinics WHERE name = nome_alvo;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      RAISE EXCEPTION 'Nao existe clinica chamada "%". Nada foi inserido.', nome_alvo;
+    WHEN TOO_MANY_ROWS THEN
+      RAISE EXCEPTION 'Existe mais de uma clinica chamada "%". Nada foi inserido.', nome_alvo;
+  END;
+
   IF EXISTS (SELECT 1 FROM public.patients WHERE clinic_id = alvo) THEN
     RAISE EXCEPTION 'A clinica % ja tem pacientes. Rode 1-expurgo.sql antes.', nome_clinica;
   END IF;

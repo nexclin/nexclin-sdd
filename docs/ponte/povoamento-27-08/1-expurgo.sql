@@ -15,19 +15,25 @@
 -- clinica, os perfis, os membros de equipe, a assinatura e os papeis. A conta
 -- continua existindo e continua logando. So o conteudo some.
 --
--- COMO USAR: troque o UUID na linha do `alvo`, rode, e leia o aviso que ele
--- imprime com a contagem por tabela.
+-- COMO USAR: troque o NOME da clinica na linha do `nome_alvo`, rode, e leia o
+-- aviso com a contagem por tabela.
 --
--- Para descobrir o UUID:
---   select id, name from public.clinics order by created_at;
+-- Por que nome e nao UUID: a versao anterior pedia um UUID colado a mao, e
+-- UUID copiado errado num script que apaga dado apaga a clinica errada. O
+-- nome e conferivel a olho. A busca e exata e usa INTO STRICT, entao nome que
+-- nao existe ou que casa com duas clinicas para tudo antes de apagar.
+--
+-- Para ver os nomes:
+--   select name, created_at from public.clinics order by created_at;
 -- =====================================================================
 
 DO $$
 DECLARE
   -- >>>>>>>>>>>>>>>> TROQUE AQUI, E SO AQUI <<<<<<<<<<<<<<<<
-  alvo uuid := '00000000-0000-0000-0000-000000000000';
+  nome_alvo text := 'NexClin';
   -- >>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+  alvo uuid;
   nome_da_clinica text;
   t text;
   n bigint;
@@ -77,14 +83,17 @@ DECLARE
     'anamnesis_config'
   ];
 BEGIN
-  IF alvo = '00000000-0000-0000-0000-000000000000'::uuid THEN
-    RAISE EXCEPTION 'Troque o UUID do alvo antes de rodar. Nada foi apagado.';
-  END IF;
-
-  SELECT name INTO nome_da_clinica FROM public.clinics WHERE id = alvo;
-  IF nome_da_clinica IS NULL THEN
-    RAISE EXCEPTION 'Nao existe clinica com id %. Nada foi apagado.', alvo;
-  END IF;
+  -- INTO STRICT: zero linhas e mais de uma linha viram excecao. E o que
+  -- garante que um nome ambiguo pare aqui, e nao apague duas clinicas.
+  BEGIN
+    SELECT id, name INTO STRICT alvo, nome_da_clinica
+      FROM public.clinics WHERE name = nome_alvo;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      RAISE EXCEPTION 'Nao existe clinica chamada "%". Nada foi apagado.', nome_alvo;
+    WHEN TOO_MANY_ROWS THEN
+      RAISE EXCEPTION 'Existe mais de uma clinica chamada "%". Nada foi apagado.', nome_alvo;
+  END;
 
   RAISE NOTICE 'Expurgando a clinica: % (%)', nome_da_clinica, alvo;
 
@@ -107,10 +116,11 @@ BEGIN
   RAISE NOTICE 'Total apagado: % linhas. Clinica, perfis, equipe e assinatura intactos.', total;
 END $$;
 
--- Conferencia. Tudo tem de voltar zero, menos a propria clinica e a equipe.
--- Troque o UUID aqui tambem.
-SELECT 'patients'     AS tabela, count(*) FROM public.patients     WHERE clinic_id = '00000000-0000-0000-0000-000000000000'
-UNION ALL SELECT 'appointments',  count(*) FROM public.appointments  WHERE clinic_id = '00000000-0000-0000-0000-000000000000'
-UNION ALL SELECT 'receivables',   count(*) FROM public.receivables   WHERE clinic_id = '00000000-0000-0000-0000-000000000000'
-UNION ALL SELECT 'expenses',      count(*) FROM public.expenses      WHERE clinic_id = '00000000-0000-0000-0000-000000000000'
-UNION ALL SELECT 'team_members (NAO deve zerar)', count(*) FROM public.team_members WHERE clinic_id = '00000000-0000-0000-0000-000000000000';
+-- Conferencia. Rode junto, e troque o nome no `WHERE c.name` se trocou acima.
+-- Tudo tem de voltar zero, menos `team_members`, que nao e apagado de proposito.
+WITH c AS (SELECT id FROM public.clinics WHERE name = 'NexClin')
+SELECT 'patients' AS tabela, count(*) FROM public.patients     WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'appointments',  count(*) FROM public.appointments  WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'receivables',   count(*) FROM public.receivables   WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'expenses',      count(*) FROM public.expenses      WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'team_members (NAO deve zerar)', count(*) FROM public.team_members WHERE clinic_id = (SELECT id FROM c);
