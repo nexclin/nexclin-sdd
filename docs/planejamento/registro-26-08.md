@@ -131,7 +131,7 @@ caminho é arquivo, não `-c`.
 
 | Pendência | Depende de |
 |---|---|
-| **Seis migrações não aplicadas** | Arthur, colar. Blocos prontos em `docs/ponte/blocos-26-08/` |
+| ~~Seis migrações não aplicadas~~ | **Aplicadas em 27/08.** Detalhe abaixo |
 | Apontamentos do Erick | Arthur, transcrever o vídeo |
 | Reteste do Vinícius | Vinícius. Os 23 itens estão corrigidos e publicados desde 25/08 |
 | SMTP (Resend) | Arthur. Sem ele não sai reset de senha nem convite |
@@ -142,3 +142,41 @@ caminho é arquivo, não `-c`.
 
 **O gargalo real são as seis migrações.** Sem elas, metade do que está publicado
 é uma tela que avisa o que falta em vez de fazer o que promete.
+
+---
+
+## Adendo de 27/08: as seis migrações entraram
+
+Aplicadas por colagem no editor de SQL da plataforma. A conferência final
+devolveu **`true` nas onze linhas**.
+
+**Duas coisas aprendidas na aplicação, e as duas são sobre o documento e não
+sobre o banco.**
+
+A primeira tentativa devolveu `false` nas onze, e não porque alguma migração
+falhou: o que foi colado foram as **consultas de conferência** do roteiro. O
+engano é razoável e a culpa é do documento: as conferências eram o único
+conteúdo em bloco de código, e as migrações apareciam só como caminho de
+arquivo. Quem copia do que está à vista copia a conferência.
+
+Corrigido com `docs/ponte/blocos-26-08/TUDO-EM-UM.sql`, um arquivo gerado com as
+seis concatenadas na ordem, para uma colagem só. A fonte de verdade continua
+sendo `supabase/migrations/`.
+
+**A segunda é o resultado que interessa.**
+`SELECT public.encerra_impersonacoes_vencidas();` devolveu **0**. Não havia
+nenhuma sessão de suporte aberta com a âncora trocada, ou seja, o furo existia e
+nunca foi acionado. A partir de agora ele tem prazo.
+
+E o reparo da linha do tempo tinha **27 ações auditadas** sem linha
+correspondente, que é o tamanho do histórico que a tela de detalhe da conta
+mostrava vazio.
+
+### O que passou a funcionar
+
+| Tela | Antes | Depois |
+|---|---|---|
+| Precificação | depreciação zero, parâmetros se perdiam | conta completa, parâmetros gravados |
+| Precificação, ocupação | estimada pela duração média | **medida** por consulta |
+| Informativos, Insumos, Salas | alerta de tabela faltando | funcionam |
+| Detalhe da conta | linha do tempo vazia | alimentada por trigger |
