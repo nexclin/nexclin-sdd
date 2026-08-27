@@ -15,6 +15,30 @@ diferente da que está na tela** quando é dirigido por automação. Registro em
 `docs/seguranca/nota-sql-editor-lovable-2026-08-19.md`. Desde então nenhum
 agente aplica migração ali.
 
+## O caminho curto: um arquivo, uma colagem
+
+**Se quiser resolver de uma vez, abra `TUDO-EM-UM.sql` nesta mesma pasta, copie
+o arquivo inteiro e cole no editor de SQL.** São as seis migrações
+concatenadas na ordem certa, e é seguro rodar mais de uma vez.
+
+Depois, rode a conferência final que está no fim deste documento. Ela devolve
+onze linhas, e todas têm de vir `true`.
+
+### O erro que este atalho existe para evitar
+
+Em 27/08 as onze linhas vieram `false`, porque o que foi colado foram as
+**consultas de conferência** deste documento, e não as migrações. É um engano
+razoável: as consultas são o que aparece em bloco de código aqui, e as migrações
+aparecem só como caminho de arquivo.
+
+**Conferência confere, migração aplica.** Se a conferência devolve `false`, ela
+está funcionando: está dizendo que a migração ainda não entrou.
+
+O resto do documento explica bloco a bloco, para quem quiser aplicar um por vez e
+entender o que cada um faz.
+
+---
+
 ## O ponto de retorno, antes de qualquer coisa
 
 **Cloud → Database → Backups**, e anote a data e a hora do mais recente. Confirme
