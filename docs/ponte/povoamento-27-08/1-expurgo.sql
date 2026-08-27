@@ -82,6 +82,15 @@ DECLARE
     'business_rules',
     'anamnesis_config'
   ];
+  -- Estas tabelas fazem parte do ESQUELETO que `handle_new_user` cria junto com
+  -- a clinica, e nao de dado de operacao. Elas continuam sendo apagadas acima,
+  -- porque simulacao suja o catalogo tambem, mas o esqueleto e RECRIADO no fim,
+  -- por `semear_clinica`.
+  --
+  -- Isto foi aprendido errando em 27/08. A primeira versao apagava e nao
+  -- recriava, e a clinica ficava num estado em que nenhuma clinica real nasce:
+  -- sem `business_rules`, sem plano de contas, sem forma de pagamento. O
+  -- sintoma foi o onboarding travar no passo 2 para sempre.
 BEGIN
   -- INTO STRICT: zero linhas e mais de uma linha viram excecao. E o que
   -- garante que um nome ambiguo pare aqui, e nao apague duas clinicas.
@@ -114,6 +123,17 @@ BEGIN
   END LOOP;
 
   RAISE NOTICE 'Total apagado: % linhas. Clinica, perfis, equipe e assinatura intactos.', total;
+
+  -- Recompoe o esqueleto. Sem isto a clinica fica pior que nova, e o onboarding
+  -- nao tem como ser concluido. Ver a migracao 20260827020000.
+  IF to_regclass('public.clinics') IS NOT NULL
+     AND EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+                  WHERE n.nspname = 'public' AND p.proname = 'semear_clinica') THEN
+    PERFORM public.semear_clinica(alvo);
+    RAISE NOTICE 'Esqueleto recriado: regras, plano de contas, catalogos e conta caixa.';
+  ELSE
+    RAISE WARNING 'A funcao semear_clinica NAO existe. Aplique a migracao 20260827020000 e rode-a para esta clinica, senao o onboarding trava no passo 2.';
+  END IF;
 END $$;
 
 -- Conferencia. Rode junto, e troque o nome no `WHERE c.name` se trocou acima.
