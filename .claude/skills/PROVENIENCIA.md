@@ -65,3 +65,44 @@ comparação seja possível.
 junto e o commit registrado aqui.**
 **Licença copyleft (GPL, AGPL, CC-BY-SA): nunca copia. Referencia por
 marketplace, ou reescreve do zero.**
+
+### skills, de Matt Pocock
+
+- **Origem:** `github.com/mattpocock/skills`
+- **Commit:** `6654f6b60cd9d5be8b54c6fafe44346dabeb3b76`
+- **Data da copia:** 27/08/2026
+- **Licenca:** MIT, em [`LICENSE-mattpocock-skills`](LICENSE-mattpocock-skills)
+- **Total:** 5 skills, de 22 disponiveis
+
+| Skill | Por que esta |
+|---|---|
+| `grilling` | entrevista que testa uma decisao antes de ela virar codigo. Entra porque decisoes deste projeto se reverteram em horas: a D-1 foi revogada no mesmo dia pela D-7, e a prioridade inverteu em 26/08 |
+| `to-questionnaire` | transforma decisao que nao e minha em questionario para outra pessoa. E literalmente o que `docs/planejamento/perguntas-vinicius-20-08.md` faz a mao |
+| `writing-for-agents` | como escrever documento que agente consome. Conversa direto com `.claude/rules/escrita.md` e com a estrutura de harness inteira |
+| `wait-what` | pedir que a ultima mensagem seja reformulada quando ela nao chegou |
+| `codebase-design` | vocabulario de modulo profundo, para a reescrita em Next.js de outubro |
+
+**O que foi DEIXADO DE FORA, e por que:**
+
+- `to-spec`, `to-tickets`, `implement`, `wayfinder`, `triage`,
+  `setup-matt-pocock-skills`: sao o processo ponta a ponta do autor, e ele
+  **compete com o Spec Kit**, que a regra (h) da constituicao torna
+  obrigatorio. O proprio README dele diz que existe como alternativa a
+  "GSD, BMAD e Spec-Kit". Duas metodologias na mesma pasta e pior que uma.
+  Alem disso, `triage` colidiria com `nx-apontamento`, que ja faz a triagem
+  das baterias no formato do Notion.
+- `tdd`, `code-review`, `diagnosing-bugs`, `handoff`,
+  `resolving-merge-conflicts`: ja temos equivalente vindo do superpowers, e
+  handoff ja e convencao em `docs/planejamento/handoffs/`.
+- `git-guardrails-claude-code`: **a ideia foi adotada, o arquivo nao.** Ele
+  bloqueia `git push`, que e exatamente como este projeto entrega correcao ao
+  cliente pela ponte inversa. Copiar a lista dele quebraria a entrega. O que
+  se aproveitou foi a forma, e o conteudo virou a falha real daqui, em
+  `.claude/hooks/guarda-ponte.mjs`.
+
+**Instalado por copia, nao pelo plugin.** O README do autor oferece
+`claude plugins install mattpocock-skills`, que atualiza sozinho. Ficou de
+fora pela mesma razao ja registrada acima para o superpowers: copia funciona
+em qualquer sessao, inclusive nao interativa, sem passo manual. O custo e o
+mesmo: copia nao recebe atualizacao, e o commit acima existe para que a
+comparacao com o upstream seja possivel.

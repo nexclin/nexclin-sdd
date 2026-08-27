@@ -2,10 +2,16 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
-      "source": { "source": "github", "repo": "obra/superpowers-marketplace" }
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
     },
     "skills-curated": {
-      "source": { "source": "github", "repo": "trailofbits/skills-curated" }
+      "source": {
+        "source": "github",
+        "repo": "trailofbits/skills-curated"
+      }
     }
   },
   "enabledPlugins": {
@@ -21,6 +27,19 @@
             "command": "node .claude/hooks/guarda-constituicao.mjs",
             "timeout": 15,
             "statusMessage": "Guarda da Constituição"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/guarda-ponte.mjs",
+            "timeout": 10,
+            "statusMessage": "Guarda da Ponte"
           }
         ]
       }
