@@ -9,7 +9,7 @@
 > as migrações deste repositório.
 >
 > **Lei:** `docs/constituicao.md` · **Critério:** `CLAUDE.md` §2.5 ·
-> **Origem:** `docs/seguranca/revisao-2026-08-16.md`, Achados 1 e 2. Convertida
+> **Origem:** `../historico/2026-08-16-revisao-de-seguranca.md`, Achados 1 e 2. Convertida
 > da SPEC 002 em 27/08/2026, formato de sete seções.
 
 ---
@@ -110,7 +110,7 @@ e o resultado esperado. O bloco 4, que troca as policies de `patients`, tem
 reversão palavra por palavra logo abaixo dele.
 
 **Por que colado à mão, e não por automação:**
-`docs/seguranca/nota-sql-editor-lovable-2026-08-19.md` provou que o SQL editor da
+`../ponte/nota-sql-editor.md` provou que o SQL editor da
 Lovable, dirigido por automação, executa uma consulta diferente da que está na
 tela. Contra produção, isso é inaceitável.
 
@@ -140,7 +140,7 @@ tela. Contra produção, isso é inaceitável.
 
 - **Gate absoluto:** export do banco antes de qualquer escrita em produção. Feito
   em 25/08 (`nexclin_260825.backup.zip`, sha256 `b56d8d5f...`, registrado em
-  `docs/seguranca/registro-exports-banco.md`). **Falta a cópia em nuvem** exigida
+  `../ponte/registro-exports-banco.md`). **Falta a cópia em nuvem** exigida
   por aquele registro: enquanto ela não existir há **um** ponto de retorno, num
   disco só.
 - **Procedimento da ponte** (`docs/ponte/ponte-inversa.md`) para qualquer
@@ -183,7 +183,7 @@ O que está em jogo está no FR-004: o risco não é adivinhação, é vazamento
 link. Entrada da decisão: a plataforma vive cerca de um mês, e a mudança toca
 migração, edge function e front ao mesmo tempo, o que pela armadilha conhecida
 exige a function antes do Publish. Saída: decisão registrada em
-`docs/seguranca/`, com data.
+`docs/historico/`, com a data no nome do arquivo.
 
 **Sem essa decisão, o trabalho do FR-004 não abre.** A decisão é a issue
 [#37](https://github.com/nexclin/nexclin-sdd/issues/37); a implementação que

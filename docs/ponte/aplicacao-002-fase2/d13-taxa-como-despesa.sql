@@ -6,7 +6,7 @@
 --   2. decisao sobre o backfill historico (ver secao no fim);
 --   3. a mudanca do DRE (receita bruta) tem de ir JUNTO — ver "dupla contagem".
 --
--- Regra (docs/planejamento/triagem-baterias-18-19.md, D-13):
+-- Regra (../../historico/2026-08-20-triagem-baterias-vinicius.md, D-13):
 --   "Ja e descontado na fonte, mas e uma despesa."  — Arthur
 --   "Na DRE tem um campo especifico de taxas, custos bancarios."  — Vinicius
 --

@@ -1,7 +1,7 @@
 ---
 status: partial
 phase: micro-spec-arthur-16-08
-source: docs/planejamento/micro-spec-arthur-16-08.md
+source: 2026-08-16-micro-spec-arthur.md
 started: 2026-08-16T21:05:00Z
 updated: 2026-08-17T01:50:00Z
 ---
@@ -68,7 +68,7 @@ expected: |
 result: pass
 reason: |
   Ambas executadas ao vivo em 16/08 — registro completo em
-  docs/planejamento/verificacoes-tecnicas-16-08.md.
+  2026-08-16-verificacoes-tecnicas.md.
   **A: PASSA** pelas três condições. Commit f8b8578 chegou íntegro ao editor
   (diff conferido no próprio editor: BrandPanel.tsx:77, v2.4.1 → v2.4.2), o
   site publicado passou a exibir V2.4.2 após clique manual em Publish → Update,
@@ -99,7 +99,7 @@ reason: |
   20260723211722, que derruba as três policies.
   **Achado 2: VIVO** — `patients.deleted_at` ausente e `data_audit_log` NULL.
   **Canal de correção** registrado (B passa; A pendente).
-  Registro completo em docs/seguranca/confirmacao-fase0-2026-08-16.md.
+  Registro completo em 2026-08-16-confirmacao-fase0.md.
   O gap apontado na revisão (falta do caso de drift no guia) foi resolvido
   pelo próprio resultado e está documentado.
 

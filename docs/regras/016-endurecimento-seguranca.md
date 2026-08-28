@@ -7,7 +7,8 @@
 > **Quando algum item virar trabalho, ele nasce como regra nova no formato de
 > sete seções.**
 >
-> Onde se lê `specs/`, leia `docs/regras/`. O item 5 deste documento foi
+> Onde se lê `specs/`, leia `docs/regras/`; onde se lê `docs/seguranca/`, leia
+> `docs/historico/`, com a data no nome do arquivo. O item 5 deste documento foi
 > decidido e vive em
 > [`../adr/0002-sem-cifra-em-coluna-por-enquanto.md`](../adr/0002-sem-cifra-em-coluna-por-enquanto.md).
 
@@ -54,7 +55,7 @@ Cada verdito abaixo tem evidência. Onde diz "verificado", foi rodado comando.
 | 5 | Criptografia de dados | ⚠️ | Em trânsito, TLS pela Supabase e pela Vercel. Em repouso, o disco da Supabase. **Nenhuma coluna cifrada na aplicação**: zero uso de `pgcrypto` ou `pgsodium`. Para dado de saúde, é decisão a tomar, não omissão a corrigir às cegas. |
 | 6 | Auth Server side | ✅ | Fechado em 25/08 com o T020. Os guards são Server Components e usam `getUser()`, que valida o token no servidor, e não `getSession()`, que confia no cookie. |
 | 7 | Restringir acessos | ✅ | Cascata de `my_permission` no banco, RLS por `clinic_id`, e fallback `none`. 80 testes de unidade e 15 de navegador. |
-| 8 | Bloquear Mass Assignment | ❌ | **Gap sistêmico, com exemplo provado.** 42 policies `FOR ALL` usam a mesma condição para leitura e escrita. Só **uma** tabela tem `GRANT` por coluna. O caso concreto: `team_members` deixa qualquer membro alterar as próprias permissões e o próprio percentual de repasse (`docs/seguranca/autoconcessao-team-members-2026-08-25.md`). |
+| 8 | Bloquear Mass Assignment | ❌ | **Gap sistêmico, com exemplo provado.** 42 policies `FOR ALL` usam a mesma condição para leitura e escrita. Só **uma** tabela tem `GRANT` por coluna. O caso concreto: `team_members` deixa qualquer membro alterar as próprias permissões e o próprio percentual de repasse (`../historico/2026-08-25-autoconcessao-team-members.md`). |
 | 9 | Proteger cookies | ⚠️ | Usa o padrão do `@supabase/ssr`, que é `httpOnly` e `sameSite`. Não há configuração explícita nem verificação. Padrão bom não conferido é suposição. |
 | 10 | Hash nas senhas | ✅ | Supabase Auth. E nenhum caminho do sistema define senha de terceiro: removido da edge function, bloqueado pelo hook, e coberto por um teste e2e que falha se o botão voltar. |
 | 11 | Rate limit | ❌ | Nada na aplicação, nada nas edge functions. A Supabase Auth tem limites próprios, configuráveis no painel, que **não foram revisados**. |
@@ -253,7 +254,7 @@ obter nota A, com CSP sem `unsafe-eval`.
 ## Relação com a régua NGS1 da certificação
 
 Sete destes vinte itens são também requisitos da certificação SBIS, mapeados na
-análise do OpenClinic (`docs/planejamento/openclinic-analise-2026-08-25.md`
+análise do OpenClinic (`../historico/2026-08-25-openclinic-analise.md`
 §3.1): `NGS1.02.13` (tentativas de login), `NGS1.02.20` (bloqueio por
 inatividade), `NGS1.03.11` (autoconcessão), `NGS1.05.01` (comunicação cifrada),
 `NGS1.06.03` (validação de entrada), `NGS1.06.01` (anexo fora do banco com nome

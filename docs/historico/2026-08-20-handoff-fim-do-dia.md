@@ -10,10 +10,10 @@
 
 1. **`CLAUDE.md` §2.5** — o critério que decide o que se corrige. Sem ele você
    vai polir código que será descartado em outubro.
-2. **`docs/planejamento/triagem-baterias-18-19.md`** — os 33 apontamentos, as
+2. **`2026-08-20-triagem-baterias-vinicius.md`** — os 33 apontamentos, as
    decisões D-1 a D-12, e a classificação em faixas A/B/C. É o documento de
    trabalho.
-3. **`docs/planejamento/calendario-20-08-a-01-09.md`** — quem faz o quê, por dia.
+3. **`2026-08-20-calendario-ate-o-lancamento.md`** — quem faz o quê, por dia.
 4. **`docs/ponte/ponte-inversa.md`** — **obrigatório antes de mexer na
    plataforma.** Tem três armadilhas que custaram tempo real em 20/08.
 5. **`specs/002-seguranca-anamnese-auditoria/tasks.md`** — a Fase 2, que é o
@@ -102,7 +102,7 @@ libera SELECT em `plans` para planos `active` + `public`.
 
 **Isso muda a ação A-SEC:** deixou de ser "descobrir se há vazamento" e passou a
 ser "conferir se a correção do bot está mesmo aplicada no banco". A consulta em
-`docs/seguranca/storage-objects-2026-08-20.md` continua servindo — só muda o que
+`2026-08-20-storage-objects.md` continua servindo — só muda o que
 se espera ver.
 
 **Ressalva que o bot não viu:** as policies **não filtram por `bucket_id`**,
@@ -133,7 +133,7 @@ Investigado por leitura de código, **não corrigido**:
 
 ### Bloqueio: achado crítico de segurança — agora é CONFERIR, não descobrir
 
-`docs/seguranca/storage-objects-2026-08-20.md`.
+`2026-08-20-storage-objects.md`.
 
 O scanner da Lovable reporta `storage.objects` sem policies de RLS — e é num
 bucket de Storage que vive o **dump completo do banco** (export de 18/08).
@@ -159,7 +159,7 @@ que é lido **sem autenticação nenhuma**. A consulta cobre isso.
 | **A-SEC** | Rodar a consulta de `storage.objects` | Decide se há vazamento de dado de saúde. **Primeiro de tudo.** |
 | **A3** | Consulta do V-24 (plano de contas) — está na triagem, seção c-2 | Decide sozinha se V-24 é faixa A ou C. Três hipóteses já descartadas por leitura de código. |
 | **A4** | **Reteste do convite de equipe** | Item mais barato da trava: fecha sem uma linha de código, e é o único jeito de provar o T017. |
-| **A1** | Mover o export para `C:\Users\ahifr\NexClin-Backups\` + `sha256sum` + cópia em nuvem | Se o Cloud da Lovable for desabilitado, os exports somem. Registrar em `docs/seguranca/registro-exports-banco.md`. |
+| **A1** | Mover o export para `C:\Users\ahifr\NexClin-Backups\` + `sha256sum` + cópia em nuvem | Se o Cloud da Lovable for desabilitado, os exports somem. Registrar em `../ponte/registro-exports-banco.md`. |
 | **A6** | Novo export **na manhã de 22/08**, minutos antes das escritas da Fase 2 | O último é de 18/08. É 1 a cada 24h. ⚠️ "Remove Lovable Cloud" fica logo abaixo do botão e apaga o banco. |
 | **A11** | (Erick) Conta para movimentação — 26/08 | **Sem ela não há como cobrar em 01/09.** Gargalo comercial, não técnico. |
 | **A13** | Definir canal e tempo de resposta do suporte | Sem dono e sem data desde 13/08. |

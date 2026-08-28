@@ -23,7 +23,7 @@ agosto. Regra nova continua a partir de 017.
 | [016](016-endurecimento-seguranca.md) | Endurecimento de segurança pré-lançamento | auditoria · formato antigo |
 
 Os números 007 a 012, 014 e 015 seguem reservados à fila em
-`../planejamento/fila-especificacoes.md`.
+`fila-de-regras.md`.
 
 ## O formato, em sete seções
 

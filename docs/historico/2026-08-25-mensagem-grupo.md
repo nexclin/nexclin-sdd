@@ -1,7 +1,7 @@
 # Mensagem para o grupo, 25/08/2026
 
 > Rascunho para o Arthur enviar. Não foi enviada por mim.
-> Anexar junto: `docs/planejamento/openclinic-analise-2026-08-25.md`.
+> Anexar junto: `2026-08-25-openclinic-analise.md`.
 
 ---
 

@@ -118,6 +118,6 @@ pode ser regra funcionando, não defeito:
 - `INVENTARIO-UI.md` — como cada tela se comporta hoje
 - `INVENTARIO.md` §3.4 — regras de negócio embutidas (dias úteis,
   idempotência de recebíveis, confirmação em horas exibida em dias)
-- `docs/planejamento/bateria-testes-vinicius-17-21.md` — o roteiro da bateria
+- `../../../docs/historico/2026-08-17-bateria-testes-vinicius.md` — o roteiro da bateria
 
 Mas o padrão é registrar. Quem testa não precisa provar que achou um bug.

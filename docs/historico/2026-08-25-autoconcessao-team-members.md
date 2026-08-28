@@ -1,7 +1,7 @@
 # Autoconcessão de permissão em `team_members` — 25/08/2026
 
 > Achado por leitura de migração, ao usar a régua NGS1 da certificação SBIS
-> como espelho (ver `docs/planejamento/openclinic-analise-2026-08-25.md` §3.1,
+> como espelho (ver `2026-08-25-openclinic-analise.md` §3.1,
 > requisito `NGS1.03.11` — "ninguém altera as permissões do próprio usuário").
 > **Não foi explorado em ambiente ao vivo.** É leitura de código, e precisa de
 > confirmação prática antes de virar correção.

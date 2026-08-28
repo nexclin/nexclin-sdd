@@ -7,7 +7,7 @@
 > e o substrato de todas as outras. Alvo: a stack Next.js deste repositório.
 >
 > **Lei:** `docs/constituicao.md` · **Contexto:** `CLAUDE.md` ·
-> **Fila:** `docs/planejamento/fila-especificacoes.md` ·
+> **Fila:** `fila-de-regras.md` ·
 > **Origem:** convertida da SPEC 005 em 27/08/2026, formato de sete seções.
 
 ---

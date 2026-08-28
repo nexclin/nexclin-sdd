@@ -305,6 +305,6 @@ A política de rede deste ambiente bloqueia `nexclin.lovable.app` **e**
 o pacote não sai daqui. Testado duas vezes, em momentos diferentes.
 
 Então V-21.6 e V-21.2 não têm como ser provados por mim. O que entrego no lugar
-é `docs/planejamento/roteiro-verificacao-23-08.md`: sete testes com números
+é `2026-08-23-roteiro-verificacao.md`: sete testes com números
 esperados e tabela de interpretação — inclusive o que cada resultado
 *significa*, para o teste não virar "apareceu / não apareceu".

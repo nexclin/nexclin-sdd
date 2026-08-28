@@ -17,7 +17,7 @@ zero crédito.
 
 **A rota das etapas seguintes está decidida: repositório, não prompt.** A
 Verificação A passou — commit no GitHub chega ao editor e publica sem consumir
-crédito (ver `verificacoes-tecnicas-16-08.md`). Portanto **os prompts abaixo
+crédito (ver `2026-08-16-verificacoes-tecnicas.md`). Portanto **os prompts abaixo
 não devem ser usados**; valem como especificação da tarefa para quem for
 escrever o código.
 

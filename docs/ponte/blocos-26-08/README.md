@@ -5,14 +5,14 @@
 >
 > **Destino: o banco da Lovable.** É onde o cliente fundador entra em 08/09, e a
 > prioridade invertida de 26/08 diz que a stack nova espera
-> (`docs/planejamento/inversao-de-prioridade-26-08.md`). As mesmas migrações vão
+> (`../../historico/2026-08-26-inversao-de-prioridade.md`). As mesmas migrações vão
 > para o projeto próprio na migração de setembro e outubro.
 
 ## Por que sou eu que escrevo e você que cola
 
 Em 19/08 ficou provado que o editor de SQL da plataforma **executa uma consulta
 diferente da que está na tela** quando é dirigido por automação. Registro em
-`docs/seguranca/nota-sql-editor-lovable-2026-08-19.md`. Desde então nenhum
+`../nota-sql-editor.md`. Desde então nenhum
 agente aplica migração ali.
 
 ## O caminho curto: um arquivo, uma colagem

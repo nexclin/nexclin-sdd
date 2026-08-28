@@ -31,11 +31,11 @@ O que **lança** é o Lovable. A stack nova segue em paralelo, sem pressa.
   observação).
 - **Fase 0 da SPEC 002 confirmada no banco ao vivo.** Achado 1 (policies `anon`
   em anamnese) **corrigido**. Achado 2 (ação sobre `patients` não deixa rastro)
-  **vivo**. Registro em `docs/seguranca/confirmacao-fase0-2026-08-16.md`.
+  **vivo**. Registro em `2026-08-16-confirmacao-fase0.md`.
 - **Auditoria de RLS nas duas plataformas** — zero tabelas sem RLS, zero
   policies `anon`, zero triggers desabilitados, âncora `prevent_clinic_id_change`
   ativa nos dois. **44 tabelas em cada banco**, paridade.
-  Ver `docs/seguranca/auditoria-rls-2026-08-17.md`.
+  Ver `2026-08-17-auditoria-rls.md`.
 - **Seed idempotente funcionando** (`npm run seed`, roda 2x sem duplicar).
 - **Fluxo de recuperação de senha construído** na stack nova:
   `/esqueci-senha`, `/auth/callback`, `/nova-senha`.

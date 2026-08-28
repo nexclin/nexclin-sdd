@@ -7,14 +7,14 @@
 > linhas que ninguém vai reler antes disso não paga. **Quando ele voltar à fila,
 > reescreva no formato de sete seções antes de executar.**
 >
-> A lei mudou de endereço: onde se lê `.specify/memory/constitution.md`, leia
+> A lei mudou de endereço: onde se lê `../constituicao.md`, leia
 > `docs/constituicao.md`. Onde se lê `specs/`, leia `docs/regras/`.
 
 > **Status:** proposta · **Executor:** Claude Code · **Aprovador:** Arthur Hideo
 > **Estende:** SPEC 001, Fase 4 (painel superadmin em Next.js)
 > **Referência funcional:** `../nexclin-lovable` (SOMENTE LEITURA) +
-> `INVENTARIO-UI.md` (o que existe de fato) + `docs/seguranca/revisao-2026-08-16.md`
-> **Lei:** `.specify/memory/constitution.md` · **Contexto:** `CLAUDE.md`
+> `INVENTARIO-UI.md` (o que existe de fato) + `../historico/2026-08-16-revisao-de-seguranca.md`
+> **Lei:** `../constituicao.md` · **Contexto:** `CLAUDE.md`
 > **Método:** SDD — plano por fases, PARADA para aprovação antes de cada fase.
 
 ---

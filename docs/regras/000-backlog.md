@@ -31,7 +31,7 @@
 ## Candidatos a módulo novo (levantados em 25/08/2026)
 
 Registrados na leitura do repositório OpenClinic — análise completa em
-[`docs/planejamento/openclinic-analise-2026-08-25.md`](../planejamento/openclinic-analise-2026-08-25.md).
+[`../historico/2026-08-25-openclinic-analise.md`](../historico/2026-08-25-openclinic-analise.md).
 
 - **Estoque + pacote de sessões com saldo** — o procedimento realizado baixa o
   kit de material; a venda de pacote gera saldo de sessões que cada atendimento

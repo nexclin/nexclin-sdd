@@ -15,18 +15,18 @@ respondida em `docs/` ou `specs/`. Abra o arquivo, não reconstrua o raciocínio
 Migração gradual em setembro, oficial em outubro.
 
 Isso contraria o que a §2.5 do `CLAUDE.md` vinha orientando na prática. A razão e
-o custo estão em `docs/planejamento/inversao-de-prioridade-26-08.md`. **Não
+o custo estão em `2026-08-26-inversao-de-prioridade.md`. **Não
 reabra essa discussão.**
 
 ## Onde ler, em ordem
 
 | Arquivo | Para quê |
 |---|---|
-| `docs/planejamento/registro-26-08.md` | O que foi feito em 26/08, commit a commit |
-| `docs/planejamento/inversao-de-prioridade-26-08.md` | Por que a Lovable passou na frente |
+| `2026-08-26-registro-do-dia.md` | O que foi feito em 26/08, commit a commit |
+| `2026-08-26-inversao-de-prioridade.md` | Por que a Lovable passou na frente |
 | `specs/006-modelagem-ini/spec.md` | Os dez requisitos implantados e por que cada decisão foi tomada |
 | `docs/ponte/blocos-26-08/README.md` | As seis migrações a colar, bloco a bloco |
-| `docs/planejamento/verificacao-modelagem-26-08.md` | A bateria de verificação e os três defeitos que ela achou |
+| `2026-08-26-verificacao-modelagem.md` | A bateria de verificação e os três defeitos que ela achou |
 | `.claude/rules/escrita.md` | Como este projeto escreve. Travessão proibido |
 
 ## O que o Arthur tem de executar, e ele já está em casa
@@ -48,7 +48,7 @@ nas onze linhas. Dois resultados que valem saber:
 
 **3. Trocar a senha da conta-mestra** por recovery no painel do Supabase. Foi
 exposta em chat pela segunda vez. Registro em
-`docs/seguranca/credencial-exposta-2026-08-26.md`.
+`2026-08-26-credencial-exposta.md`.
 
 **4. Ligar SMTP (Resend)** em Authentication → Emails → SMTP Settings. Sem ele
 não sai reset de senha nem convite de equipe, e o superadmin da stack nova nunca

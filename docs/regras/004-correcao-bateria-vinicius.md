@@ -8,7 +8,7 @@
 > só de atos do Arthur. Alvo: a plataforma Lovable, via ponte inversa.
 >
 > **Lei:** `docs/constituicao.md` · **Critério:** `CLAUDE.md` §2.5 ·
-> **Fonte dos itens:** `docs/planejamento/triagem-baterias-18-19.md` (V-01 a
+> **Fonte dos itens:** `../historico/2026-08-20-triagem-baterias-vinicius.md` (V-01 a
 > V-33, D-1 a D-13) · **Narrativa da execução:**
 > [`../historico/2026-08-23-execucao-bateria-vinicius.md`](../historico/2026-08-23-execucao-bateria-vinicius.md) ·
 > **Procedimento:** `docs/ponte/ponte-inversa.md`, skill `nx-ponte` ·

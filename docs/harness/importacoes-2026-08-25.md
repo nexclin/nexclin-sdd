@@ -59,7 +59,7 @@ Outros plugins do mesmo marketplace que valem avaliação:
   de subagentes. Avaliar depois do lançamento; em Windows o tmux é atrito.
 - **`episodic-memory`**: busca semântica nas conversas passadas do Claude Code.
   Este projeto sofre de perda de contexto entre sessões, tanto que mantém
-  `docs/planejamento/handoffs/` escritos à mão. Candidato forte.
+  `docs/historico/` escritos à mão. Candidato forte.
 - **`double-shot-latte`**: elimina as interrupções de "quer que eu continue?".
   Relevante para execução longa e autônoma.
 

@@ -1,5 +1,12 @@
 # Mapa de execução: o que está pendente, em que ordem, e o que roda em paralelo
 
+> **Aviso, 27/08/2026. Este documento ficou para trás, e é registro.** Ele conta
+> tarefas dentro dos arquivos `tasks.md` das specs, e esses arquivos foram
+> apagados na reorganização de 27/08: o estado de execução passou para as issues
+> do GitHub. Os números abaixo valiam em 25/08. Quem responde *"o que faço
+> agora"* hoje é o handoff mais recente em `docs/historico/`, mais as issues
+> abertas em `nexclin/nexclin-sdd`.
+
 > **O que é este arquivo:** o inventário completo do trabalho pendente, o grafo
 > de dependências entre ele, e as raias que podem correr ao mesmo tempo sem
 > colidir. É o documento de orquestração do projeto.

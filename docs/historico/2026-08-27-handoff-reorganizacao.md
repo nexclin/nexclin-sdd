@@ -26,7 +26,7 @@ Leia também, nesta ordem, e só depois de terminar aqui:
 |---|---|
 | `docs/harness/sdd-ferramentas-e-avaliacao.md` | por que o Spec Kit saiu, com os números |
 | `.claude/skills/PROVENIENCIA.md` | o que entrou, o que saiu, e sob qual licença |
-| `docs/planejamento/pendencias-27-08.md` | o trabalho de produto que continua correndo em paralelo |
+| `2026-08-27-pendencias.md` | o trabalho de produto que continua correndo em paralelo |
 
 ---
 
@@ -102,7 +102,7 @@ no meio dos requisitos. A seção 7 foi o que impediu a SPEC 005 de travar.
 | # | Decisão | Razão |
 |---|---|---|
 | 10 | **Sete pastas**, uma pergunta cada: `regras/` `historico/` `adr/` `dominio/` `ponte/` `harness/` `referencia/` | `orquestracao`, `arquitetura` e `compartilhavel` têm 1 arquivo cada; `planejamento` tem 32. Elas existem por assunto, não por uso, e é isso que faz escolher errado onde escrever |
-| 3 | `docs/decisions/` → `docs/adr/`, e nasce `CONTEXT.md` | É o caminho que as skills novas esperam. Ensinar as duas coisas, o caminho e a skill |
+| 3 | `../adr/` → `docs/adr/`, e nasce `CONTEXT.md` | É o caminho que as skills novas esperam. Ensinar as duas coisas, o caminho e a skill |
 | 12 | Data **`AAAA-MM-DD` no início** do nome | Único formato que ordena sozinho, e `historico/` depende disso. Os handoffs já usam |
 | 14 | Constituição vai para `docs/constituicao.md`. **`.specify/` some** (16 MB) | Só `memory/constitution.md` tem uso. Manter a pasta deixa no repositório o nome de um método que não é mais nosso |
 | 32 | **Emendar a constituição no mesmo trabalho**: linha 131 e linhas 260-261 | Emenda de endereço, não de princípio. Os cinco princípios ficam intactos. Lei apontando para pasta inexistente corrói as outras linhas |
@@ -215,7 +215,7 @@ resultado de alternativa real recusada com razão declarada.
 
 ## O que continua correndo em paralelo, e não é desta reorganização
 
-Pendências de produto, em `docs/planejamento/pendencias-27-08.md`. As que estão
+Pendências de produto, em `2026-08-27-pendencias.md`. As que estão
 com o Arthur:
 
 - **Publicar na Lovable** o commit `0feb8b0` (tour não paira sobre o formulário,

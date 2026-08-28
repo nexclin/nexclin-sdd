@@ -1,6 +1,6 @@
 # `storage.objects`: o achado do scanner é falso. Fechado em 27/08/2026
 
-> Fecha a pendência aberta em `storage-objects-2026-08-20.md`, que estava
+> Fecha a pendência aberta em `2026-08-20-storage-objects.md`, que estava
 > parada há sete dias esperando a consulta. Executada em 27/08 no editor de SQL
 > da plataforma, com o Arthur presente, sem escrever nada no banco.
 

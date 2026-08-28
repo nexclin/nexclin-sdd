@@ -222,7 +222,7 @@ framework**: LangGraph e companhia seguem fora, porque nada aqui exige estado
 compartilhado entre nós. O que mudou é que o grafo saiu do implícito e virou
 artefato:
 
-- [`docs/orquestracao/mapa-de-execucao.md`](../orquestracao/mapa-de-execucao.md)
+- [`../historico/2026-08-25-mapa-de-execucao.md`](../historico/2026-08-25-mapa-de-execucao.md)
   tem o grafo de dependências das 27 tarefas pendentes e as raias que podem
   correr juntas.
 - `nx-paralelo` diz **como** despachar, com o único teste que importa: mesma

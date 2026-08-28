@@ -18,7 +18,7 @@ cada uma consome o artefato que a anterior escreveu.
 
 | Ordem | Skill | O que faz | Quando usar |
 |---|---|---|---|
-| 0 | `speckit-constitution` | Cria ou emenda `.specify/memory/constitution.md` | Uma vez por projeto, e depois só para emendar. Aqui já rodou: a constituição está em v1.0.0 |
+| 0 | `speckit-constitution` | Cria ou emenda `../constituicao.md` | Uma vez por projeto, e depois só para emendar. Aqui já rodou: a constituição está em v1.0.0 |
 | 1 | `speckit-specify` | Descrição em linguagem natural vira `spec.md`, com requisitos numerados | No começo de toda feature. É o artefato que a regra (h) exige |
 | 2 | `speckit-clarify` | Acha o que ficou vago e faz **até 5 perguntas**, gravando as respostas de volta na spec | Logo depois de escrever a spec, antes do plano. Foi ele que produziu a decisão D-005.5 |
 | 3 | `speckit-plan` | Spec vira `plan.md`, mais `research.md`, `data-model.md` e `contracts/` | Depois da spec estar clara. É onde a decisão técnica é registrada com alternativa recusada |

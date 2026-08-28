@@ -8,7 +8,7 @@
 > aceite**, a pedido do Arthur em 26/08.
 >
 > **Lei:** `docs/constituicao.md` · **Entrada:**
-> `docs/planejamento/modelagem-ini.md` ·
+> `../referencia/modelagem-ini.md` ·
 > **Origem:** convertida da SPEC 006 em 27/08/2026, formato de sete seções.
 
 ---

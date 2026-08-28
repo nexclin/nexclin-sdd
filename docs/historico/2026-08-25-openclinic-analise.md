@@ -112,7 +112,7 @@ exercício:
 
 | Requisito | O que exige | Situação no NexClin |
 |---|---|---|
-| `NGS1.03.11` | Ninguém altera as próprias permissões | **Falha confirmada por leitura de migração.** A policy de `team_members` é `FOR ALL` checando só `clinic_id` — qualquer membro altera o próprio `permission_level`, `permissions` e `repasse_percent`. Detalhe e limites em [`docs/seguranca/autoconcessao-team-members-2026-08-25.md`](../seguranca/autoconcessao-team-members-2026-08-25.md). |
+| `NGS1.03.11` | Ninguém altera as próprias permissões | **Falha confirmada por leitura de migração.** A policy de `team_members` é `FOR ALL` checando só `clinic_id` — qualquer membro altera o próprio `permission_level`, `permissions` e `repasse_percent`. Detalhe e limites em [`2026-08-25-autoconcessao-team-members.md`](2026-08-25-autoconcessao-team-members.md). |
 | `NGS1.03.06` | Perfil de TI **sem** acesso a dado clínico real | **Conflito conhecido.** Nossa impersonação dá escrita total dentro da conta — é auditada, mas é acesso a dado clínico por operador de SaaS. |
 | `NGS1.02.13` | Bloqueio após N tentativas de login | Não implementado. |
 | `NGS1.02.20` | Bloqueio de sessão por inatividade, tempo configurável | Não implementado. |
@@ -152,7 +152,7 @@ da SPEC 013**. É também o antídoto contra o discurso do vídeo de resíduos
 
 ### 3.3 ADR numerado, com as alternativas descartadas e por quê
 
-Eles mantêm `docs/decisions/NNNN-titulo.md`, uma decisão por arquivo, com
+Eles mantêm `../adr/NNNN-titulo.md`, uma decisão por arquivo, com
 contexto, consequências assumidas e — obrigatoriamente — **o que foi descartado
 e o motivo**. Três regras de governança acompanham, e as três são boas:
 argumento é assinado; tese vencida não é apagada; **decisão não se fecha com
@@ -163,7 +163,7 @@ da triagem, `BACKLOG.md`, os handoffs e o `CLAUDE.md`. Funciona, mas já
 produziu retrabalho — a §2.5 do `CLAUDE.md` teve de ser escrita porque o
 critério anterior não estava registrado em lugar nenhum com data.
 
-**Encaminhamento barato:** criar `docs/decisions/` e migrar para lá as decisões
+**Encaminhamento barato:** criar `../adr/` e migrar para lá as decisões
 que já foram tomadas e são caras de reverter (§2.5, a régua "dado atravessa /
 cálculo de tela não", D-12, D-13, a escolha de stack). Não precisa ser hoje.
 
@@ -193,7 +193,7 @@ Eles organizam a V1 em quatro camadas — transversal (identidade, auditoria,
 terminologias) → estrutura (organização, pessoas, catálogo, convênios) →
 operação (agenda, prontuário) → apoio (estoque, financeiro) — com a regra de
 que **cada camada só depende das de baixo**. É o mesmo raciocínio da nossa
-`fila-especificacoes.md`, que ordena por dependência de dado. Convergência,
+`../regras/fila-de-regras.md`, que ordena por dependência de dado. Convergência,
 não novidade.
 
 A lição que **não** é arquitetura está no `prd.md` deles, sobre a agenda:
@@ -264,7 +264,7 @@ roadmap.
 
 Três posturas possíveis, da mais barata à mais cara:
 
-**(a) Observar — recomendado agora.** Custo zero. Acompanhar `docs/decisions/`
+**(a) Observar — recomendado agora.** Custo zero. Acompanhar `../adr/`
 e o roadmap deles. O que produzirem de mapeamento regulatório é insumo gratuito
 para a nossa régua de certificação.
 
@@ -297,7 +297,7 @@ ler **hoje**; o software deles não deve entrar em nenhum plano nosso com data.
 | OC-2 | `docs/seguranca/regua-ngs1.md` — nossa matriz NGS1 escrita do zero, com coluna de situação | antes de falar em certificação com cliente | Claude |
 | OC-3 | Corrigir a autoconcessão de permissão em `team_members` (faixa A, **não** na semana do lançamento) | spec 005 / SPEC 002 | Claude |
 | OC-3b | Verificar os outros buracos da tabela da §3.1 (`.02.13` tentativas, `.02.20` inatividade, `.02.03` senha, `.11.01` termo) | pós-lançamento | Claude + Arthur |
-| OC-4 | `docs/decisions/` com as decisões caras já tomadas | quando houver folga | Claude |
+| OC-4 | `../adr/` com as decisões caras já tomadas | quando houver folga | Claude |
 | OC-5 | Registrar "estoque + pacote de sessões" como candidato a módulo, à frente de resíduos | agora | Claude |
 | OC-6 | Conferir a Resolução CFM nº 2.454/2026 (IA na medicina) na fonte antes de material de venda que cite IA | antes do go-to-market | Erick |
 | OC-7 | Decidir participação no projeto (postura **b**) | **depois de 08/09** | Arthur + Vinícius |

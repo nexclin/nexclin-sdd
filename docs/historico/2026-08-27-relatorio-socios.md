@@ -203,10 +203,10 @@ clínicas lançarem lá vem junto para a estrutura nova.**
 Tudo o que está acima tem registro em arquivo, e nada depende da memória de
 ninguém:
 
-- `docs/planejamento/registro-26-08.md`: cada alteração com o motivo
+- `2026-08-26-registro-do-dia.md`: cada alteração com o motivo
 - `specs/006-modelagem-ini/spec.md`: as dez funcionalidades e por que cada
   decisão foi tomada
-- `docs/planejamento/verificacao-modelagem-26-08.md`: a bateria e os três
+- `2026-08-26-verificacao-modelagem.md`: a bateria e os três
   defeitos
 - `docs/seguranca/`: os achados de segurança, um arquivo por achado
 - `docs/ponte/blocos-26-08/`: o passo a passo das seis alterações de banco

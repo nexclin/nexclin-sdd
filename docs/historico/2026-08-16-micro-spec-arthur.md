@@ -134,7 +134,7 @@ Quando **todos** voltarem e forem revisados um a um, e só então:
 ## Kickoff (colar no novo chat, mesma pasta)
 
 ```
-Leia docs/planejamento/micro-spec-arthur-16-08.md e execute o time de agentes
+Leia 2026-08-16-micro-spec-arthur.md e execute o time de agentes
 exatamente como descrito: A1, A3, A4, A5 em paralelo (Agent tool, não Workflow),
 A2 após A1, cada um limitado à sua seção. Revise cada retorno individualmente.
 Ao final, pare na barreira e rode /gsd-verify-work por item contra o critério de

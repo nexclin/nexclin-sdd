@@ -3,7 +3,7 @@
 **Data:** 20/08/2026 · **Referência estudada:** INI (`ini.app.br`), software de
 gestão que o Arthur usa. **O que foi copiado: o padrão de interação e a
 geometria. Não a identidade visual** — cor, tipografia e ícones seguem
-`docs/marca/tokens.md`.
+`marca-marca-tokens.md`.
 
 ## O que faz a barra parecer "leve"
 

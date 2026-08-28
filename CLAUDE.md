@@ -176,7 +176,7 @@ Regra de bolso que sai daí: **antes de classificar em faixa, pergunte por onde
 o cliente realmente opera.** A intuição de quem constrói (dashboard é a cara do
 produto) não bateu com a de quem usa (a cara é o relatório).
 
-**Onde isso já está aplicado:** `docs/planejamento/triagem-baterias-18-19.md`
+**Onde isso já está aplicado:** `docs/historico/2026-08-20-triagem-baterias-vinicius.md`
 (33 apontamentos das baterias do Vinícius, classificados nas três faixas, com as
 decisões de regra datadas). É o modelo para triar a bateria do Erick e o que
 vier depois.
@@ -346,7 +346,7 @@ registro em superadmin_operators. Rodar 2x sem duplicar.
     esqueleto do app da clínica)
 [ ] Critérios de aceite da SPEC 001 executados por Arthur
 [ ] Senha nova da conta-mestra via reset no painel (pós Fase 2)
-[x] Constitution formal do Spec Kit (.specify/memory/constitution.md, v1.0.0)
+[x] Constitution formal do Spec Kit (docs/constituicao.md, v1.0.0)
 [ ] SPEC 002+ : módulos do escopo de lançamento do 1º cliente
 [>] SPEC 013 (specs/013-residuos-conformidade/) — resíduos/MTR/DMR/CDF.
     Escrita em 25/08, **parada de propósito**: depende de decisão comercial
@@ -374,9 +374,9 @@ que se corrige e do que não se corrige.
       provado.
 - [x] Triagem das baterias do Vinícius (18–19/08): 33 apontamentos, 25 bugs,
       classificados nas 3 faixas da §2.5 →
-      `docs/planejamento/triagem-baterias-18-19.md`
+      `docs/historico/2026-08-20-triagem-baterias-vinicius.md`
 - [ ] Quatro perguntas devolvidas ao Vinícius, prazo 21/08 →
-      `docs/planejamento/perguntas-vinicius-20-08.md`
+      `docs/historico/2026-08-20-perguntas-vinicius.md`
 - [ ] Bateria do Erick (24–26/08) — triar no mesmo documento, numeração E-01
       em diante já reservada
 - [ ] Janela 22–23/08: faixa A da bateria + **Fase 2 da SPEC 002**, que tem
@@ -391,10 +391,10 @@ que se corrige e do que não se corrige.
       ponto de retorno importa; só deixou de ser caro.
 
 > **Retomando em sessão nova?** Comece por
-> `docs/planejamento/handoffs/2026-08-20-fim-do-dia.md` — ele diz o que ler, em
+> `docs/historico/2026-08-20-handoff-fim-do-dia.md` — ele diz o que ler, em
 > que ordem, o que está publicado, o que falta, e as armadilhas do procedimento.
 > A primeira ação pendente é uma consulta de segurança em `storage.objects`
-> (`docs/seguranca/storage-objects-2026-08-20.md`), que só o Arthur pode rodar.
+> (`docs/historico/2026-08-20-storage-objects.md`), que só o Arthur pode rodar.
 
 **Armadilha de procedimento aprendida em 20/08:** o Publish do Lovable **não**
 redeploya edge function, e o CLI do Supabase responde **403** no projeto
@@ -425,16 +425,16 @@ peça rastreia a uma falha real do projeto (princípio da catraca) — leia
   `nx-paralelo` (decidir o que roda ao mesmo tempo sem colidir), mais 11 skills
   incorporadas do `superpowers` sob MIT. Proveniência e licença de cada uma em
   `.claude/skills/PROVENIENCIA.md`.
-- **`docs/orquestracao/mapa-de-execucao.md`** — o grafo de dependências das
+- **`docs/historico/2026-08-25-mapa-de-execucao.md`** — o grafo de dependências das
   tarefas pendentes, as raias paralelas e o calendário até 08/09. **É por onde
   se começa quando a pergunta é "o que faço agora".**
 - **`docs/README.md`** — índice da árvore de documentação e a tabela de onde
   cada tipo de artefato deve nascer.
 - **`docs/dominio/`** — as 15 ModuleKeys × ondas, e os 4 verticais
   (médico ativo; psicologia/estética na fila; odonto fechado).
-- **`docs/marca/tokens.md`** — paleta e tipografia da identidade.
+- **`docs/referencia/marca-tokens.md`** — paleta e tipografia da identidade.
 - **`docs/seguranca/`** — revisões de segurança datadas.
 
 A regra de bolso: "toda vez que X" → hook; restrição de área → rule;
 procedimento longo → skill; trabalho paralelo → agente. A constituição
-(`.specify/memory/constitution.md`) vence qualquer uma delas.
+(`docs/constituicao.md`) vence qualquer uma delas.

@@ -1,6 +1,6 @@
 # Auditoria dos 33 apontamentos — corte de 23/08, fim do dia
 
-Cruzamento item a item entre `triagem-baterias-18-19.md` e os commits que
+Cruzamento item a item entre `2026-08-20-triagem-baterias-vinicius.md` e os commits que
 estão de fato na `main` de `nexclin/nexclin`. **Não é estimativa** — cada
 "corrigido" tem commit ao lado.
 
@@ -110,4 +110,4 @@ O reteste são 8 passos e não consome crédito. É o item mais barato da trava 
 **Nenhum item foi provado na tela por mim** — a política de rede deste ambiente
 bloqueia `nexclin.lovable.app` (`ERR_TUNNEL_CONNECTION_FAILED` no proxy).
 Tudo acima é "código enviado", não "comportamento provado". O roteiro de prova
-está em `roteiro-verificacao-23-08.md`.
+está em `2026-08-23-roteiro-verificacao.md`.

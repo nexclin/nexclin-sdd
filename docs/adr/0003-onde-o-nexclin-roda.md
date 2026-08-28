@@ -1,6 +1,13 @@
-# Onde o NexClin roda — decisão de arquitetura
+# 0003 · Onde o NexClin roda
 
-**Data:** 23/08/2026 · **Revisar em:** 30/09/2026 (junto do plano de cópia de dados)
+**Situação:** Aceita · **Data:** 23/08/2026 · **Decide:** Arthur Hideo
+**Revisar em:** 30/09/2026, junto do plano de cópia de dados
+
+> Este documento nasceu em `docs/arquitetura/hospedagem-2026-08-23.md` e virou
+> ADR em 27/08/2026, na reorganização. O corpo é o mesmo, palavra por palavra: só
+> o cabeçalho e o endereço mudaram. A constituição exige que a escolha de
+> hospedagem viva em documento datado, com o critério e a data da última revisão,
+> e o formato ADR é exatamente isso.
 **Origem:** Arthur levantou que "a melhor hospedagem hoje não seria Vercel e
 Supabase — as pessoas têm falado em Railway, Cloudflare, AWS".
 **Exigido por:** constituição v2.0.0, *Restrições Técnicas* — a escolha de

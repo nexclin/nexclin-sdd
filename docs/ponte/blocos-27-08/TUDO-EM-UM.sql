@@ -38,7 +38,7 @@
 -- quatro politicas, todas restritas a `bucket_id LIKE 'database_export%'`. Um
 -- bucket novo com outro nome nao casa com nenhuma delas, e com RLS ligada isso
 -- NEGA TUDO. Ou seja, criar o bucket sem escrever politica nao vaza: quebra.
--- Ver `docs/seguranca/storage-objects-2026-08-27-resolvido.md`.
+-- Ver `../../historico/2026-08-27-storage-objects-resolvido.md`.
 --
 -- O caminho de cada arquivo e `<clinic_id>/<user_id>.<ext>`. Com o clinic_id
 -- como primeira pasta, a politica de leitura vira uma comparacao direta com

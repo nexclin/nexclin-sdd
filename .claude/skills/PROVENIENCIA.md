@@ -18,7 +18,7 @@
 `speckit-*`, onze skills. Vieram com a instalação do GitHub Spec Kit e foram o
 fluxo canônico do método SDD deste projeto até 27/08/2026, quando **saíram
 junto com a pasta `.specify/`**. O motivo está em
-`docs/adr/0003-o-spec-kit-sai.md`.
+`docs/adr/0004-o-spec-kit-sai.md`.
 
 ## De terceiros, incorporadas
 
@@ -79,7 +79,7 @@ marketplace, ou reescreve do zero.**
 | Skill | Por que esta |
 |---|---|
 | `grilling` | entrevista que testa uma decisao antes de ela virar codigo. Entra porque decisoes deste projeto se reverteram em horas: a D-1 foi revogada no mesmo dia pela D-7, e a prioridade inverteu em 26/08 |
-| `to-questionnaire` | transforma decisao que nao e minha em questionario para outra pessoa. E literalmente o que `docs/planejamento/perguntas-vinicius-20-08.md` faz a mao |
+| `to-questionnaire` | transforma decisao que nao e minha em questionario para outra pessoa. E literalmente o que `../../docs/historico/2026-08-20-perguntas-vinicius.md` faz a mao |
 | `writing-for-agents` | como escrever documento que agente consome. Conversa direto com `.claude/rules/escrita.md` e com a estrutura de harness inteira |
 | `wait-what` | pedir que a ultima mensagem seja reformulada quando ela nao chegou |
 | `codebase-design` | vocabulario de modulo profundo, para a reescrita em Next.js de outubro |
@@ -95,7 +95,7 @@ marketplace, ou reescreve do zero.**
   das baterias no formato do Notion.
 - `tdd`, `code-review`, `diagnosing-bugs`, `handoff`,
   `resolving-merge-conflicts`: ja temos equivalente vindo do superpowers, e
-  handoff ja e convencao em `docs/planejamento/handoffs/`.
+  handoff ja e convencao em `docs/historico/`.
 - `git-guardrails-claude-code`: **a ideia foi adotada, o arquivo nao.** Ele
   bloqueia `git push`, que e exatamente como este projeto entrega correcao ao
   cliente pela ponte inversa. Copiar a lista dele quebraria a entrega. O que

@@ -25,15 +25,15 @@ ele descobrir pode virar registro no repositório na hora.
 
 - [x] **Canal de registro** — resolvido de outro jeito: em vez da planilha do
       Google Sheets, os apontamentos vão para a base **Apontamentos** no Notion,
-      com uma página por rodada de teste. O `planilha-apontamentos-baterias.xlsx`
+      com uma página por rodada de teste. O `2026-08-19-planilha-apontamentos-baterias.xlsx`
       fica como registro histórico, não é mais o canal.
 - [ ] **Avisar dos três não-bugs** — o rascunho da mensagem está pronto e
       aguarda revisão do Arthur. Sem ele, a bateria gera falso-positivo.
-- [ ] **Confirmar que ele viu** `bateria-testes-vinicius-17-21.md`. O arquivo
+- [ ] **Confirmar que ele viu** `2026-08-17-bateria-testes-vinicius.md`. O arquivo
       chega pelo clone do repositório, mas vale apontar onde está.
 
 ## O que ele faz no primeiro dia
 
 Cria uma clínica nova pelo cadastro — não testa no dado antigo — e roda a
 rotina de ponta a ponta. O roteiro completo, dia a dia, está em
-[bateria-testes-vinicius-17-21.md](bateria-testes-vinicius-17-21.md).
+[2026-08-17-bateria-testes-vinicius.md](2026-08-17-bateria-testes-vinicius.md).

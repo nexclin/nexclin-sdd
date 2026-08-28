@@ -52,7 +52,7 @@ Onde o vídeo diz "zero risco de multa", esta spec diz outra coisa, e a
 diferença é deliberada: **o NexClin não promete conformidade — o NexClin
 organiza a prova.** Quem responde legalmente é sempre a clínica. Essa
 formulação é emprestada, com crédito, do `compliance.md` do projeto OpenClinic
-(ver `docs/planejamento/openclinic-analise-2026-08-25.md`).
+(ver `../historico/2026-08-25-openclinic-analise.md`).
 
 ---
 
@@ -371,7 +371,7 @@ Registradas porque são pré-requisitos reais, não avisos genéricos:
    incomoda porque só existe o bucket de export. **Este é o primeiro módulo com
    upload de arquivo pela clínica** — e, do jeito que está, o upload falharia
    sem explicação, ou só o superadmin leria os documentos. A dívida está
-   registrada em `docs/planejamento/handoffs/2026-08-20-fim-do-dia.md` §2.5(b) e
+   registrada em `../historico/2026-08-20-handoff-fim-do-dia.md` §2.5(b) e
    vira **bloqueio** aqui.
 2. **Emenda à constituição (Princípio III)** — `residuos` seria a **16ª
    ModuleKey**. O contrato hoje declara 15 strings exatas, o trigger de

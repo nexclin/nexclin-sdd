@@ -2,7 +2,7 @@
 
 > **Origem:** `specs/002-seguranca-anamnese-auditoria/spec.md` (Fase 0) e
 > `quickstart.md`. **Achados sob confirmação:** Achado 1 e Achado 2 de
-> `docs/seguranca/revisao-2026-08-16.md`.
+> `2026-08-16-revisao-de-seguranca.md`.
 > **Autor deste registro:** agente A4 (auditor-multitenant), preparando as
 > queries e o guia de interpretação. **Execução real das queries: Arthur, no
 > SQL do Lovable/Supabase (projeto `xbnffervqqphgsyeffdz`).**
@@ -14,8 +14,8 @@
 
 ## Contexto
 
-Achado 1 (`docs/seguranca/revisao-2026-08-16.md:42`) e Achado 2
-(`docs/seguranca/revisao-2026-08-16.md:87`) foram levantados por auditoria
+Achado 1 (`2026-08-16-revisao-de-seguranca.md:42`) e Achado 2
+(`2026-08-16-revisao-de-seguranca.md:87`) foram levantados por auditoria
 estática das migrações portadas (réplica), que pode ter divergido do banco ao
 vivo do Lovable. Antes de tratar qualquer um como tarefa de correção, a Fase 0
 da SPEC 002 exige confirmar os dois, ao vivo, com leitura pura.
@@ -170,7 +170,7 @@ Database (45 tabelas), Users, Edge functions (4), SQL editor, Logs, e
 banco e backup prévio, portanto, **não dependem de crédito**.
 
 **Verificação A: passa.** Executada na mesma sessão (ver
-`docs/planejamento/verificacoes-tecnicas-16-08.md`). O commit `f8b8578`
+`2026-08-16-verificacoes-tecnicas.md`). O commit `f8b8578`
 enviado ao GitHub chegou íntegro ao editor, publicou no site após um clique
 manual em *Publish → Update*, e o saldo de crédito ficou em **5 antes e 5
 depois** — zero consumo. O canal de correção de **código** é o repositório.

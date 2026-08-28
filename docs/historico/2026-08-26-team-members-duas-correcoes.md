@@ -5,7 +5,7 @@
 ## O que existe
 
 O furo de autoconcessão em `team_members` (registro em
-`autoconcessao-team-members-2026-08-25.md`) recebeu **duas** correções
+`2026-08-25-autoconcessao-team-members.md`) recebeu **duas** correções
 independentes:
 
 | Origem | Onde está | Estado |

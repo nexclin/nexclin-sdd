@@ -5,7 +5,7 @@
 > execução"*.
 >
 > Montado lendo o repositório, os `tasks.md` e os registros datados, não de
-> memória. Substitui o `docs/orquestracao/mapa-de-execucao.md` de 25/08 onde
+> memória. Substitui o `2026-08-25-mapa-de-execucao.md` de 25/08 onde
 > houver divergência: aquele foi escrito antes da inversão de prioridade de
 > 26/08 e antes das seis migrações entrarem em 27/08.
 
@@ -22,7 +22,7 @@
 **A coisa que pode reordenar tudo:** o segundo vídeo do Erick não foi
 transcrito. Se ele contiver bateria de bugs, ela tem precedência sobre toda
 funcionalidade nova desta lista, e os níveis 1 e 2 mudam de ordem. O primeiro
-vídeo tem **zero bugs** (`triagem-erick-27-08.md`), então essa precedência ainda
+vídeo tem **zero bugs** (`2026-08-27-triagem-erick.md`), então essa precedência ainda
 não foi acionada.
 
 ---
@@ -124,7 +124,7 @@ Não compete por tempo agora. Listado para não sumir.
 - **O mesmo defeito de fuso horário existe em `lib/superadmin/acoes.ts`**, que
   chama `proximaCobranca(dia, new Date())`. Encontrado em 26/08 e não corrigido,
   porque corrigir código congelado sem poder testá-lo acrescenta risco sem
-  retorno. Está anotado em `verificacao-modelagem-26-08.md` para não se perder.
+  retorno. Está anotado em `2026-08-26-verificacao-modelagem.md` para não se perder.
 - **SPECs 007 a 012 não escritas**: pacientes, consultas, tarefas, leads,
   anamnese, contas a receber, dashboard.
 - **SPEC 016**, endurecimento de segurança: escrita, sem `tasks.md`.

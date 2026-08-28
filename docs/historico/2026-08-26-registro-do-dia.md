@@ -15,7 +15,7 @@
 que atravessa e construir o novo na stack nova. Em 26/08 o Arthur inverteu: toda
 especificação já definida é implementada **na Lovable**, e a stack nova espera. A
 razão é o lançamento em 08/09, e o custo (retrabalho na reescrita de outubro)
-está anotado em `docs/planejamento/inversao-de-prioridade-26-08.md`.
+está anotado em `2026-08-26-inversao-de-prioridade.md`.
 
 **A migração para a stack nova passou a ser setembro e outubro**, com a
 formalização em outubro.

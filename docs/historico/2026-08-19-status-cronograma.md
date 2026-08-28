@@ -15,16 +15,16 @@
 
 | Tarefa (origem no plano) | Prazo | Evidência |
 |---|---|---|
-| Rodar as duas verificações da seção 08 | 16/08 · Arthur | [verificacoes-tecnicas-16-08.md](verificacoes-tecnicas-16-08.md) — **as duas passam**: correção pela ponte custa R$ 0 e o banco do Lovable tem *Export project data* |
+| Rodar as duas verificações da seção 08 | 16/08 · Arthur | [2026-08-16-verificacoes-tecnicas.md](2026-08-16-verificacoes-tecnicas.md) — **as duas passam**: correção pela ponte custa R$ 0 e o banco do Lovable tem *Export project data* |
 | Destravar a carga inicial | 16/08 · Arthur | commit `86a66d3` (senha aleatória de 74 chars estourava o limite de 72 do GoTrue) + `specs/001-fundacao-superadmin/tasks.md` T011: **seed rodado 2× em 18/08 sem duplicar** |
 | Criar acesso superadmin | 16/08 · Arthur | tasks.md T009/T011 — usuário em `auth.users` + `superadmin_operators` na stack nova. **Ressalva:** T012 (senha real por recovery) segue pendente — `last_sign_in_at` nunca preenchido |
-| Publicar a fila de especificações | 23/08 · Arthur | [fila-especificacoes.md](fila-especificacoes.md), commit `f1539d0` — entregue em 18/08, **5 dias antes** |
-| Preços aprovados viram configuração | 14/08 · Arthur | [precos-viram-configuracao.md](precos-viram-configuracao.md) — 3 planos criados no banco do Lovable, `trial_days=30`, `max_users` 3/5/8. **Ainda `hidden`** (ver §2) |
+| Publicar a fila de especificações | 23/08 · Arthur | [../regras/fila-de-regras.md](../regras/fila-de-regras.md), commit `f1539d0` — entregue em 18/08, **5 dias antes** |
+| Preços aprovados viram configuração | 14/08 · Arthur | [2026-08-16-precos-viram-configuracao.md](2026-08-16-precos-viram-configuracao.md) — 3 planos criados no banco do Lovable, `trial_days=30`, `max_users` 3/5/8. **Ainda `hidden`** (ver §2) |
 | Fechar planos e preços | 13/08 · Erick | tabela aprovada: Essencial R$ 249 / Clínica R$ 399 / Corpo Clínico R$ 599; anual = 11 meses |
-| Planilha de apontamentos distribuída | 14/08 · Arthur | **substituída pelo Notion** — base *Apontamentos*, uma página por rodada. Materiais: [bateria-testes-vinicius-17-21.md](bateria-testes-vinicius-17-21.md), [guia-bateria-vinicius.html](guia-bateria-vinicius.html), [vinicius-orientacao.txt](vinicius-orientacao.txt), skill `nx-apontamento` |
+| Planilha de apontamentos distribuída | 14/08 · Arthur | **substituída pelo Notion** — base *Apontamentos*, uma página por rodada. Materiais: [2026-08-17-bateria-testes-vinicius.md](2026-08-17-bateria-testes-vinicius.md), [2026-08-17-guia-bateria-vinicius.html](2026-08-17-guia-bateria-vinicius.html), [2026-08-17-vinicius-orientacao.txt](2026-08-17-vinicius-orientacao.txt), skill `nx-apontamento` |
 | Bateria de testes do Vinícius | 17–21/08 · Vinícius | **em andamento** — roteiro dia a dia, guia visual e canal de registro entregues; vídeo de 2min30 (16/08) ensina o clone + Claude Code na pasta |
-| Auditoria de RLS nas duas plataformas | extra | [auditoria-rls-2026-08-17.md](../seguranca/auditoria-rls-2026-08-17.md) — 44 tabelas em cada banco, zero sem RLS, zero policy `anon`, âncora ativa nos dois |
-| Fase 0 da SPEC 002 confirmada ao vivo | extra | [confirmacao-fase0-2026-08-16.md](../seguranca/confirmacao-fase0-2026-08-16.md) — Achado 1 corrigido, Achado 2 vivo |
+| Auditoria de RLS nas duas plataformas | extra | [auditoria-rls-2026-08-17.md](2026-08-17-auditoria-rls.md) — 44 tabelas em cada banco, zero sem RLS, zero policy `anon`, âncora ativa nos dois |
+| Fase 0 da SPEC 002 confirmada ao vivo | extra | [confirmacao-fase0-2026-08-16.md](2026-08-16-confirmacao-fase0.md) — Achado 1 corrigido, Achado 2 vivo |
 
 ---
 

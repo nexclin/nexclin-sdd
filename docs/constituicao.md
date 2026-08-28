@@ -17,7 +17,7 @@ Linhas alteradas:
   - Fluxo de Desenvolvimento: "spec ou task" vira "regra ou issue".
 
 Este arquivo mudou de lugar no mesmo trabalho: era `.specify/memory/
-constitution.md`, agora é `docs/constituicao.md`. Lei que aponta para pasta
+constituicao.md`, agora é `docs/constituicao.md`. Lei que aponta para pasta
 inexistente corrói as outras linhas.
 
 Princípios modificados: nenhum
@@ -292,7 +292,7 @@ chama essa implementação.
 - Ordem canônica: `grill-with-docs` (interrogar a ideia) → `nx-regra` (escrever
   a regra viva em `docs/regras/`) → `to-tickets` (abrir as issues) →
   `implement` (executar por fases). O Spec Kit saiu do projeto em 27/08/2026;
-  o motivo está em `docs/adr/0003-o-spec-kit-sai.md`.
+  o motivo está em `docs/adr/0004-o-spec-kit-sai.md`.
 - Cada regra produz execução por fases, com aceite manual antes de avançar.
 - Toda alteração de banco entra por migração; seeds são idempotentes.
 - Correção na plataforma ao vivo segue `docs/ponte/ponte-inversa.md`: gate de

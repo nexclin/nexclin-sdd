@@ -1,7 +1,7 @@
 # Senha da conta-mestra exposta em chat, 26/08/2026
 
 > Segundo registro do mesmo tipo em dois dias. O primeiro é
-> `credencial-exposta-2026-08-25.md`, sobre a senha do Vinícius.
+> `2026-08-25-credencial-exposta.md`, sobre a senha do Vinícius.
 
 ## O que aconteceu
 

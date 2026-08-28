@@ -2,7 +2,7 @@
 
 > Base **Apontamentos**, página da rodada
 > `Bateria de testes — Vinícius — 17 a 21/08 — pré-lançamento`.
-> Gerado em 20/08/2026 a partir de [triagem-baterias-18-19.md](triagem-baterias-18-19.md),
+> Gerado em 20/08/2026 a partir de [2026-08-20-triagem-baterias-vinicius.md](2026-08-20-triagem-baterias-vinicius.md),
 > no formato da skill `nx-apontamento`. **Um registro por problema.**
 
 O campo **Tipo** aqui é o da triagem, não o rótulo original do relato —

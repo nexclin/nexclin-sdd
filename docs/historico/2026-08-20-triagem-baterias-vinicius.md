@@ -15,7 +15,7 @@ reproduzido em lugar nenhum deste documento.
 
 **Contexto usado para separar desvio de regra funcionando:**
 `INVENTARIO-UI.md` (comportamento real das telas), `INVENTARIO.md §3.4`
-(regras de negócio embutidas), `docs/planejamento/bateria-testes-vinicius-17-21.md`
+(regras de negócio embutidas), `2026-08-17-bateria-testes-vinicius.md`
 (o plano da bateria) e `docs/ponte/ponte-inversa.md` (canais de correção).
 
 ## DECISÕES DO ARTHUR — 20/08/2026
@@ -31,7 +31,7 @@ divergência, **vale o que está aqui**.
 | **D-3** | **FIN-1 → fix mínimo agora.** Nesta janela: a entrada deixa de virar desconto da prescrição e passa a abater a consulta; o adiantamento para de contar como venda; o total a receber soma consulta + prescrição. | O redesenho em dois blocos com pagamento independente por bloco **não entra antes de 01/09** — vira backlog imediato pós-lançamento, com data. Fecha a trava sem mexer em recebível a 12 dias da abertura, que é onde erro custa dinheiro do cliente. |
 | **D-4** | **V-10 (agenda) → avisar, não bloquear.** Ao marcar em horário já ocupado do mesmo profissional, o sistema alerta e permite confirmar. | Cobre o encaixe e o overbooking, que clínica real faz de propósito. Bloqueio duro faria o usuário burlar criando consulta em horário falso — o que corromperia a agenda em vez de protegê-la. |
 | **D-5** | **V-22/V-23 (crédito) → antecipação é configuração da clínica.** Um ajuste em Configurações, junto das taxas que já existem: "antecipa recebimento de crédito?". | Vale para todas as vendas, sem clique extra por lançamento e sem mexer no cadastro de taxas agora. A escolha por venda e a escolha por bandeira ficam registradas como evolução possível, não como escopo. |
-| **D-6** | **DASH-1 (ticket médio) → BLOQUEADO, pergunta devolvida ao Vinícius.** O relato dele se contradiz: diz "por itens vendidos, não por paciente" e, na sequência, "levasse em consideração a quantidade de orçamentos". | **V-13 e V-21 não começam** até a resposta. A pergunta está escrita em `docs/planejamento/perguntas-vinicius-20-08.md`, pronta para enviar. É o único item da trava parado por dependência externa. |
+| **D-6** | **DASH-1 (ticket médio) → BLOQUEADO, pergunta devolvida ao Vinícius.** O relato dele se contradiz: diz "por itens vendidos, não por paciente" e, na sequência, "levasse em consideração a quantidade de orçamentos". | **V-13 e V-21 não começam** até a resposta. A pergunta está escrita em `2026-08-20-perguntas-vinicius.md`, pronta para enviar. É o único item da trava parado por dependência externa. |
 
 ### D-7 — O critério que substitui a trava de lançamento (20/08/2026)
 
@@ -1496,7 +1496,7 @@ delas. Onde divergir, vale o que está abaixo:
   ordem original não previa.
 - **Continua bloqueado, agora por dependência externa e não por decisão
   interna (D-6):** V-13 e V-21 na parte de ticket médio. A pergunta está
-  pronta em `perguntas-vinicius-20-08.md` e precisa de resposta até
+  pronta em `2026-08-20-perguntas-vinicius.md` e precisa de resposta até
   **21/08**. As outras facetas do V-21 (total de consultas zerado, taxa de
   conversão, tops zerados, gráfico do fluxo de caixa) seguem liberadas.
 - **Entra fora da trava, por decisão menor:** V-03 (botão de ver senha no
@@ -1522,5 +1522,5 @@ menos V-04 (reteste de edge function) e qualquer correção que toque
 — e o deploy de function não é gratuito (consome crédito diário de build,
 não o mensal). A janela de 22–23/08 também compete com a Fase 2 da SPEC 002
 e outras pendências técnicas já registradas em
-`docs/planejamento/status-cronograma-19-08.md` — vale confirmar prioridade
+`2026-08-19-status-cronograma.md` — vale confirmar prioridade
 relativa antes de começar.

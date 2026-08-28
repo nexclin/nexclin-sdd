@@ -2,7 +2,7 @@
 
 > **Para o Arthur executar à mão, no SQL editor da Lovable.**
 > Escrito em 25/08/2026, com o export do dia já feito e conferido
-> (`b56d8d5f…`, registrado em `docs/seguranca/registro-exports-banco.md`).
+> (`b56d8d5f…`, registrado em `../registro-exports-banco.md`).
 
 ---
 
@@ -12,7 +12,7 @@ Não é preguiça nem cautela genérica. Em 19/08 ficou **provado** que o SQL ed
 da Lovable, dirigido por automação de navegador, executa uma consulta diferente
 da que está na tela: a consulta-canário nunca apareceu no painel de resultados,
 que continuou mostrando o resultado da consulta anterior. Está em
-`docs/seguranca/nota-sql-editor-lovable-2026-08-19.md`.
+`../nota-sql-editor.md`.
 
 **Divergência entre o exibido e o executado é inaceitável contra produção.** Não
 dá para afirmar o que o banco recebeu, e toda a disciplina de "implementado ≠

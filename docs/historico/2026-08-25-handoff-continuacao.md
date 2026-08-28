@@ -24,8 +24,8 @@ importado junto. Erro que é só de exibição morre com a Lozable.
 
 ## 1. Leia nesta ordem
 
-1. `.specify/memory/constitution.md` — **v2.0.0**, de 23/08. Nove princípios.
-2. `docs/orquestracao/mapa-de-execucao.md` — o grafo, as raias, o calendário.
+1. `../constituicao.md` — **v2.0.0**, de 23/08. Nove princípios.
+2. `2026-08-25-mapa-de-execucao.md` — o grafo, as raias, o calendário.
 3. `docs/ponte/ponte-inversa.md` — **obrigatório** antes de tocar a plataforma.
 4. Este arquivo, da §3 em diante.
 
@@ -40,7 +40,7 @@ Dia longo. Em ordem:
   80 testes de unidade e 15 de navegador, todos passando.
 - PR #33 **mergeado** na `main`.
 - Constituição v2.0.0 veio da `main` no merge, e foi conferida: compatível.
-- Duas decisões viraram ADR (`docs/decisions/0001` e `0002`).
+- Duas decisões viraram ADR (`../adr/0001` e `0002`).
 - Chegou a **bateria de 25/08 do Vinícius**, com triagem completa por outra
   sessão. **Onze correções foram feitas e commitadas no clone da plataforma**,
   com tipo e build verdes. **O push não saiu** — ver §3.
@@ -144,7 +144,7 @@ Estão em `supabase/migrations/`, prontas, **não aplicadas em banco nenhum**:
   é `'[]'` e o trigger exige objeto. **Todo `INSERT` em `plans` sem informar a
   coluna falha.**
 
-**Por que não apliquei:** `docs/seguranca/nota-sql-editor-lovable-2026-08-19.md`
+**Por que não apliquei:** `../ponte/nota-sql-editor.md`
 provou que o SQL editor da Lovable, dirigido por automação, **executa consulta
 diferente da que está na tela**. Contra produção isso é inaceitável. É limitação
 de capacidade, não de permissão.
@@ -182,7 +182,7 @@ antes de corrigir, e traz as três consultas que dizem qual elo quebrou.
 | # | O quê | Por que importa |
 |---|---|---|
 | **1** | **Empurrar E publicar `ae2b37d`** | Onze correções verificadas, paradas num diretório local. Ver §3 |
-| **2** | **Trocar a senha do Vinícius** | Veio em texto claro no `.txt` da bateria. `docs/seguranca/credencial-exposta-2026-08-25.md`. É o mesmo erro da conta-mestra, três semanas depois |
+| **2** | **Trocar a senha do Vinícius** | Veio em texto claro no `.txt` da bateria. `2026-08-25-credencial-exposta.md`. É o mesmo erro da conta-mestra, três semanas depois |
 | **3** | Aplicar as três migrações, pelos blocos guiados | Destrava EQP-1, a Fase 2 e o editor de planos |
 | **4** | T012, senha do superadmin por recovery | O superadmin nunca logou |
 | **5** | Credenciais de e2e (`.env.example` tem a receita) | Destrava os 5 testes que faltam |
