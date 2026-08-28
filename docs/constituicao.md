@@ -1,6 +1,34 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.0.0 → 2.0.1
+Data: 2026-08-27
+
+PATCH: emenda de endereço, não de princípio. Os nove princípios ficam intactos,
+palavra por palavra. Mudou onde as coisas moram, porque o Spec Kit saiu do
+projeto e as specs viraram regras vivas em `docs/regras/`.
+
+Linhas alteradas:
+  - IV. SDD com Parada Humana: `specs/` vira `docs/regras/`, e o artefato ganha
+        o nome que já tinha na prática, regra viva.
+  - Fluxo de Desenvolvimento: a ordem canônica deixa de citar comandos
+        `/speckit-*`, que não existem mais aqui, e passa a citar a cadeia real
+        (`grill-with-docs`, `nx-regra`, `to-tickets`, `implement`).
+  - Fluxo de Desenvolvimento: "spec ou task" vira "regra ou issue".
+
+Este arquivo mudou de lugar no mesmo trabalho: era `.specify/memory/
+constitution.md`, agora é `docs/constituicao.md`. Lei que aponta para pasta
+inexistente corrói as outras linhas.
+
+Princípios modificados: nenhum
+Princípios adicionados: nenhum
+Templates a revisar: nenhum, os do Spec Kit foram apagados junto com `.specify/`
+TODOs adiados: nenhum
+
+--- histórico ---
+
+SYNC IMPACT REPORT
+==================
 Version change: 1.0.0 → 2.0.0
 Data: 2026-08-23
 
@@ -128,7 +156,11 @@ autorização e navegação — a fonte mais comum de brechas de acesso.
 
 Nenhuma feature nasce de código; nasce de spec aprovada.
 
-- Nenhuma feature **MUST** ser implementada sem spec aprovada em `specs/`.
+- Nenhuma feature **MUST** ser implementada sem **regra viva** aprovada em
+  `docs/regras/`. Regra viva é o documento que nasce antes da execução, guia a
+  execução, e **MUST** ser corrigido no mesmo commit em que a execução o
+  contradiz. Onde este texto diz *spec*, leia *regra viva*: o artefato é o
+  mesmo, o endereço mudou em 27/08/2026.
 - O executor gera plano por fases e **MUST** PARAR para aprovação humana antes
   de iniciar cada fase.
 - **"Implementado ≠ funciona":** toda fase **MUST** fechar com critérios de
@@ -257,13 +289,15 @@ chama essa implementação.
 
 ## Fluxo de Desenvolvimento
 
-- Ordem canônica: `/speckit-specify` → (`/speckit-clarify`) → `/speckit-plan` →
-  `/speckit-tasks` → (`/speckit-analyze`) → `/speckit-implement`.
-- Cada spec produz plano por fases, com aceite manual antes de avançar.
+- Ordem canônica: `grill-with-docs` (interrogar a ideia) → `nx-regra` (escrever
+  a regra viva em `docs/regras/`) → `to-tickets` (abrir as issues) →
+  `implement` (executar por fases). O Spec Kit saiu do projeto em 27/08/2026;
+  o motivo está em `docs/adr/0003-o-spec-kit-sai.md`.
+- Cada regra produz execução por fases, com aceite manual antes de avançar.
 - Toda alteração de banco entra por migração; seeds são idempotentes.
 - Correção na plataforma ao vivo segue `docs/ponte/ponte-inversa.md`: gate de
   tipos, `main`, sem `--force`, function antes do front, e `conferir` ao fim.
-- Nenhuma credencial em PR, spec ou task.
+- Nenhuma credencial em PR, regra ou issue.
 
 ## Governance
 
@@ -280,4 +314,4 @@ chama essa implementação.
   mundo, **a constituição MUST ser corrigida** — foi assim que a cláusula de
   somente leitura sobreviveu seis dias além da sua validade.
 
-**Version**: 2.0.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-23
+**Version**: 2.0.1 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-27

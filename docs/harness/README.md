@@ -71,7 +71,7 @@ Code, adaptada ao que este repositório já tinha (Spec Kit + constituição).
 | Peça | Serve para | Carrega quando | Aqui |
 |---|---|---|---|
 | `CLAUDE.md` | contexto sempre presente | toda sessão | já existia — contexto do produto |
-| `.specify/memory/constitution.md` | a lei | referenciada | já existia — 6 princípios |
+| `docs/constituicao.md` | a lei | referenciada | v2.0.1, nove princípios |
 | `.claude/rules/*.md` | restrição por área do código | ao tocar os `paths` | banco, app, marca, **escrita** |
 | `.claude/skills/*/SKILL.md` | procedimento de várias etapas | quando invocada | 4 nossas, 11 do Spec Kit, **11 incorporadas** |
 | `.claude/agents/*.md` | trabalho paralelo com contexto próprio | quando delegado | 4 agentes |

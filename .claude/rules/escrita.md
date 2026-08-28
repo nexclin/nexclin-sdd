@@ -2,9 +2,7 @@
 paths:
   - "**/*.md"
   - "docs/**"
-  - "specs/**"
   - "CLAUDE.md"
-  - ".specify/**"
 ---
 
 # Escrita: como este projeto escreve

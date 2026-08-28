@@ -6,7 +6,7 @@ paths:
 
 # Banco — regras que valem em toda migração, função e seed
 
-A constituição (`.specify/memory/constitution.md`) é a lei; isto é o que ela
+A constituição (`docs/constituicao.md`) é a lei; isto é o que ela
 significa na prática, dentro de `supabase/`.
 
 ## Antes de escrever a migração

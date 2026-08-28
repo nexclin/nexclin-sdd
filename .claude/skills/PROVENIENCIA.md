@@ -134,7 +134,9 @@ repositorios do Arthur. Desfazer e mover de volta.
 
 ### O que sobreviveu, e por que
 
-**A constituicao.** `.specify/memory/constitution.md` continua onde estava. Ela
+**A constituicao.** Mudou de endereco em 27/08/2026: era `.specify/memory/
+constitution.md`, agora e `docs/constituicao.md`, e a pasta `.specify/` foi
+apagada junto com o Spec Kit. Ela
 guarda os cinco principios (RLS, negacao por padrao, senha, segredo, testes
 minimos), que **nao sao do Spec Kit**: sao as regras de seguranca do produto, e
 `.claude/hooks/guarda-constituicao.mjs` ainda as le a cada escrita. Apagar o
