@@ -18,9 +18,11 @@
 >
 > Catálogos, regras de negócio, metas, anamnese, plano de contas
 > e o progresso do onboarding estão em pé em `app/app/configuracoes/`, sobre
-> `lib/config/`, com 156 testes. **Continuam abertos o FR-005 em parte, o FR-006
-> por inteiro, a segunda metade do FR-010 e o consumo do FR-016**, detalhados na
-> seção 7. Falta também
+> `lib/config/`, com 157 testes. **Continuam abertos o FR-005 em parte, a
+> segunda metade do FR-010 e o consumo do FR-016**, detalhados na seção 7. **O
+> FR-006 saiu do impasse em 28/08**, com a decisão do Arthur, e tem migração
+> escrita: `20260828030000`. Ela **não foi aplicada a banco nenhum**, então vale
+> a regra (j), *código lido, não comportamento provado*. Falta também
 > o aceite na tela, que é do Arthur. Alvo: a stack Next.js deste repositório.
 >
 > **Duas correções de cabeçalho em dois dias, e as duas são a regra (l) em
@@ -230,7 +232,7 @@ As entidades, e o que cada grupo carrega:
 - **SC-008**: Alterar a taxa de uma forma de pagamento deixa linha em
   `data_audit_log` com autor, hora e o valor **anterior** da taxa.
 
-**Prova automatizada:** 156 testes em Vitest sobre `lib/config/`, e entre eles
+**Prova automatizada:** 157 testes em Vitest sobre `lib/config/`, e entre eles
 `__tests__/auditoria.test.ts`, que é **contrato, não lógica**. Ele lê os `.sql`
 de `supabase/migrations/` e o `acoes.ts`, e falha quando os dois discordam.
 
@@ -255,7 +257,36 @@ banco, e é o SC-008, que é aceite manual.
 **Uma, e ela destrava o FR-006.** Levantada pela revisão de código de 28/08,
 que mediu os catorze requisitos contra o que existe.
 
-### A decisão: `is_system` bloqueia o quê, exatamente?
+### O FR-006 saiu do impasse: `is_system` deixa só `active` mudar
+
+**Decisão do Arthur em 28/08/2026**, entre as três saídas abaixo: a **segunda**.
+Nega a exclusão, e no update exige que todas as demais colunas fiquem iguais.
+Entrega o FR-006 e o FR-005 juntos, e é a mais cara de escrever, que era o preço
+conhecido.
+
+Virou a migração `20260828030000`, com três decisões que valem registro:
+
+**Gatilho, e não `WITH CHECK`.** A regra é "as demais colunas ficam iguais", e
+isso é comparação com o valor anterior. `WITH CHECK` não enxerga `OLD`, só a
+linha resultante. Esta regra dizia "por `WITH CHECK` ou trigger"; ao escrever,
+só o gatilho serve. Fica corrigido aqui.
+
+**Uma função para as três tabelas.** `chart_of_accounts`, `closing_types` e
+`bank_accounts` carregam `is_system`. Listar as colunas protegidas tabela a
+tabela apodreceria no primeiro `ADD COLUMN`, porque ninguém lembraria de voltar.
+A função compara `to_jsonb` da linha inteira menos as colunas liberadas, então
+coluna nova já nasce protegida. É o Princípio VIII.
+
+**Exclusão por policy restritiva**, e não reescrevendo a permissiva que já
+existe. Restritiva entra em E lógico com as demais, então subtrai permissão sem
+que eu precise saber o que a outra concede, e sem risco de afrouxar o isolamento
+por `clinic_id` ao reescrever.
+
+**O que ainda falta:** aplicar a migração e provar na tela que a clínica
+consegue desativar um tipo de fechamento e não consegue renomeá-lo. Enquanto
+isso não acontecer, o FR-006 é código lido.
+
+### As três saídas que estavam sobre a mesa
 
 **O estado hoje viola a regra (c) da constituição.** O FR-006 diz que entrada
 `is_system` **MUST NOT** ser editável nem removível pela clínica, e isso existe
@@ -283,8 +314,8 @@ São três saídas, e a escolha é de produto:
    livre, e o selo na tela vira aviso, não trava. A mais barata, e a que menos
    entrega o que o FR-006 diz hoje.
 
-**Sem essa escolha o FR-006 não abre.** Qualquer uma delas é migração, faixa A, e
-atravessa para outubro.
+Qualquer uma delas era migração, faixa A, e atravessa para outubro. A escolhida
+foi a segunda.
 
 ### O FR-016, com a gaveta pronta e ninguém guardando nada nela
 
@@ -357,9 +388,11 @@ correspondente já nasça citando-as.
 
 ### Dois defeitos menores que a mesma revisão achou, e não dependem de decisão
 
-- **`bank_accounts` tem `is_system`** desde `20260510231935`, e a definição
-  `contas-bancarias` em `catalogo.ts` não marca `temIsSystem`. A conta semeada
-  é editável e nem exibe o selo. Entra junto com a decisão acima.
+- **`bank_accounts` tem `is_system`**, e `contas-bancarias` em `catalogo.ts` não
+  marcava `temIsSystem`: a conta "Caixa (dinheiro)", semeada em toda clínica
+  nova, aparecia sem selo e parecia editável. **Corrigido em 28/08**, junto com
+  o FR-006, porque trava no banco sem selo na tela produz erro sem explicação.
+  Há teste travando isso, e ele cobre os dois catálogos com `is_system`.
 - **FR-005 está parcial em `chart_of_accounts`.** A tela lê `active`
   (`plano-de-contas/page.tsx`), e nenhuma action escreve: não há como desativar
   uma conta. É trabalho de app, não decisão.

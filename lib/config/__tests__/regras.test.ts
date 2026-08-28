@@ -191,6 +191,21 @@ describe("registro de catálogos", () => {
     expect(catalogoPorSlug("formas-de-pagamento")?.tabela).toBe("payment_methods");
   });
 
+  // Regra 005, FR-006. `bank_accounts` e `closing_types` carregam `is_system`,
+  // e o gatilho `protege_linha_de_sistema` (20260828030000) impede que a
+  // clinica edite qualquer coluna dessas linhas alem de `active`. Se a tela
+  // nao pedir `is_system` na consulta, ela nao mostra o selo, e o usuario leva
+  // um erro do banco sem entender por que. Foi o que acontecia com contas
+  // bancarias ate 28/08.
+  it("pede is_system nos catalogos que o tem, para o selo aparecer", () => {
+    for (const slug of ["contas-bancarias", "tipos-de-fechamento"]) {
+      const c = catalogoPorSlug(slug);
+      expect(c, `catalogo ${slug} sumiu`).toBeDefined();
+      expect(c!.temIsSystem, `${slug} precisa marcar temIsSystem`).toBe(true);
+      expect(colunasParaConsulta(c!)).toContain("is_system");
+    }
+  });
+
   it("a consulta pede colunas nomeadas, nunca asterisco", () => {
     for (const c of CATALOGOS) {
       const cols = colunasParaConsulta(c);
