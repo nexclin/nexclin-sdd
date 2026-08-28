@@ -3,17 +3,21 @@
 > **Regra viva.** Nasceu antes da execução, e é corrigida no mesmo commit em que
 > a execução a contradiz.
 >
-> **Estado em 27/08/2026:** **executada, e sem aceite manual.** Catálogos,
-> regras de negócio, metas, anamnese, plano de contas e o progresso do
-> onboarding estão em pé em `app/app/configuracoes/`, sobre `lib/config/`, com
-> 143 testes. Falta o aceite na tela, que é do Arthur. Alvo: a stack Next.js
-> deste repositório.
+> **Estado em 28/08/2026:** **executada em doze dos catorze requisitos, e sem
+> aceite manual.** Catálogos, regras de negócio, metas, anamnese, plano de contas
+> e o progresso do onboarding estão em pé em `app/app/configuracoes/`, sobre
+> `lib/config/`, com 142 testes. **Continuam abertos o FR-005 em parte, o FR-006
+> por inteiro e a segunda metade do FR-010**, detalhados na seção 7. Falta também
+> o aceite na tela, que é do Arthur. Alvo: a stack Next.js deste repositório.
 >
-> **Correção de 27/08, e é a regra (l) em ação:** este cabeçalho dizia "escrita,
-> não executada", herdado do `Status: Draft` da SPEC 005. Estava errado desde que
-> foi convertido: o código já existia, com o comentário `SPEC 005 / T016` dentro
-> dele. Regra que descreve estado que não é o real é exatamente o que o termo
-> *regra viva* existe para impedir.
+> **Duas correções de cabeçalho em dois dias, e as duas são a regra (l) em
+> ação.** Em 27/08 ele dizia "escrita, não executada", herdado do `Status: Draft`
+> da SPEC 005, e estava errado desde a conversão: o código já existia, com o
+> comentário `SPEC 005, T016` dentro dele. A correção daquele dia então errou
+> para o outro lado, dizendo "executada" sem qualificar, e a revisão de código
+> pegou. Regra que descreve estado que não é o real é exatamente o que o termo
+> *regra viva* existe para impedir, e errar nas duas direções em 24 horas mostra
+> que o cabeçalho é a linha mais fácil de deixar mentindo.
 >
 > **Lei:** `docs/constituicao.md` · **Contexto:** `CLAUDE.md` ·
 > **Fila:** `fila-de-regras.md` ·
@@ -195,21 +199,72 @@ As entidades, e o que cada grupo carrega:
 - **SC-008**: Alterar a taxa de uma forma de pagamento deixa linha em
   `data_audit_log` com autor, hora e o valor **anterior** da taxa.
 
-**Prova automatizada:** 143 testes em Vitest sobre `lib/config/`, e entre eles
+**Prova automatizada:** 142 testes em Vitest sobre `lib/config/`, e entre eles
 `__tests__/auditoria.test.ts`, que é **contrato, não lógica**. Ele lê os `.sql`
-de `supabase/migrations/` e falha se uma tabela de configuração não tiver
-trigger. Provado por mutação nas duas direções: removido o trigger de
-`payment_methods` da migração, um teste falha; acrescentado um catálogo em
-`CATALOGOS` sem trigger correspondente, um teste falha. É a catraca que impede
-a auditoria de ficar para trás em silêncio, porque esquecer o trigger não quebra
-`tsc` nem build.
+de `supabase/migrations/` e o `acoes.ts`, e falha quando os dois discordam.
+
+Provado por mutação em três direções: removido o trigger de `payment_methods` da
+migração, um teste falha; acrescentado um catálogo em `CATALOGOS` sem trigger, um
+teste falha; trocada uma action para escrever numa tabela fora da lista, um teste
+falha. É a catraca que impede a auditoria de ficar para trás em silêncio, porque
+esquecer o trigger não quebra `tsc` nem build.
+
+**A revisão de código derrubou dois testes que não podiam falhar**, e vale
+registrar por que: conferir a lista de tabelas auditadas contra `CATALOGOS` é
+tautologia, porque a lista é *construída* de `CATALOGOS`. O que pode falhar, e
+por isso ficou, é conferi-la contra o que as **actions** de fato escrevem. Ela
+também derrubou o casamento de `CREATE TRIGGER` dentro de comentário de bloco,
+que satisfazia o contrato sem criar trigger nenhum.
 
 **O que a prova automatizada NÃO cobre:** que o trigger de fato grava. Isso exige
 banco, e é o SC-008, que é aceite manual.
 
 ## 7. A decisão que falta
 
-**Nenhuma.**
+**Uma, e ela destrava o FR-006.** Levantada pela revisão de código de 28/08,
+que mediu os catorze requisitos contra o que existe.
+
+### A decisão: `is_system` bloqueia o quê, exatamente?
+
+**O estado hoje viola a regra (c) da constituição.** O FR-006 diz que entrada
+`is_system` **MUST NOT** ser editável nem removível pela clínica, e isso existe
+**só na tela**: `formulario.tsx` desabilita o botão e `page.tsx` mostra o selo,
+mas a policy é `FOR ALL USING (clinic_id = get_my_clinic_id())` e nenhuma action
+lê `is_system`. Uma chamada direta à API edita e apaga linha de sistema. Pior, as
+mensagens de erro em `acoes.ts` já descrevem um bloqueio que não existe.
+
+Segurança que mora na tela não é segurança, e é literalmente a regra (c).
+
+**Por que isto não foi corrigido junto:** a correção óbvia, uma policy que negue
+`UPDATE` e `DELETE` onde `is_system = true`, **conflita com o FR-005**. A
+desativação é lógica, ou seja, é um `UPDATE` de `active`. Negar todo `UPDATE`
+impediria a clínica de **desativar** um tipo de fechamento que ela não usa, e
+esconder da lista o que não se oferece é justamente o que o FR-005 pede.
+
+São três saídas, e a escolha é de produto:
+
+1. **Sistema é intocável.** Nega `UPDATE` e `DELETE` na linha `is_system`. Mais
+   simples de garantir no banco, e a clínica convive com catálogo poluído.
+2. **Só `active` é editável em linha de sistema.** Nega `DELETE`, e no `UPDATE`
+   exige que as demais colunas fiquem iguais, por `WITH CHECK` ou trigger.
+   Entrega os dois requisitos, e é a mais cara de escrever.
+3. **`is_system` protege só contra exclusão.** Nega `DELETE`, deixa `UPDATE`
+   livre, e o selo na tela vira aviso, não trava. A mais barata, e a que menos
+   entrega o que o FR-006 diz hoje.
+
+**Sem essa escolha o FR-006 não abre.** Qualquer uma delas é migração, faixa A, e
+atravessa para outubro.
+
+### Dois defeitos menores que a mesma revisão achou, e não dependem de decisão
+
+- **`bank_accounts` tem `is_system`** desde `20260510231935`, e a definição
+  `contas-bancarias` em `catalogo.ts` não marca `temIsSystem`. A conta semeada
+  é editável e nem exibe o selo. Entra junto com a decisão acima.
+- **FR-005 está parcial em `chart_of_accounts`.** A tela lê `active`
+  (`plano-de-contas/page.tsx`), e nenhuma action escreve: não há como desativar
+  uma conta. É trabalho de app, não decisão.
+
+### O que já estava fechado, e continua
 
 A ambiguidade da ModuleKey `consultas`, que era a pergunta aberta desta regra
 quando ela foi escrita em 25/08, **foi decidida** e vive em
@@ -217,3 +272,7 @@ quando ela foi escrita em 25/08, **foi decidida** e vive em
 As quatro decisões próprias da regra (o formato objeto de `enabled_modules`, o
 default `'{}'`, a desativação lógica e o componente único de período) estão
 fechadas nos requisitos acima.
+
+A segunda metade do **FR-010**, que manda os formulários dos módulos posteriores
+obedecerem a `patient_required_fields`, não é decisão nem defeito: os módulos que
+a cumpririam ainda não existem. Ela fecha com eles.

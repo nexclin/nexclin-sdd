@@ -18,13 +18,22 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { CATALOGOS } from "../catalogo";
-import {
-  TABELAS_AUDITADAS_DE_CONFIGURACAO,
-  TABELAS_DE_CONFIGURACAO_COM_TELA_PROPRIA,
-} from "../auditoria";
+import { TABELAS_AUDITADAS_DE_CONFIGURACAO } from "../auditoria";
 
 const DIR_MIGRACOES = join(process.cwd(), "supabase", "migrations");
+const ARQUIVO_DE_ACOES = join(process.cwd(), "lib", "config", "acoes.ts");
+
+/**
+ * Tira comentário de SQL, de linha e de bloco.
+ *
+ * Sem isto, um `CREATE TRIGGER` **comentado** satisfaz o contrato, e o teste
+ * passa a atestar intenção em vez de comportamento. Comentar para depurar e
+ * esquecer de descomentar é rotina; foi por isso que este passo existe.
+ */
+function semComentarios(sql: string): string {
+  // `.` não casa quebra de linha em JS, então `/--.*/` para no fim da linha.
+  return sql.replace(/\/\*[\s\S]*?\*\//g, " ").replace(/--.*/g, " ");
+}
 
 /**
  * Todo o SQL versionado, concatenado.
@@ -61,16 +70,20 @@ function temTriggerDeAuditoria(sql: string, tabela: string): boolean {
 }
 
 describe("a lista de tabelas auditadas", () => {
-  it("cobre toda tabela de catálogo, sem exceção", () => {
-    // Se este teste falhar, alguém acrescentou catálogo e não pensou no rastro.
-    // A correção é acrescentar o trigger na migração, não remover a tabela daqui.
-    for (const c of CATALOGOS) {
-      expect(TABELAS_AUDITADAS_DE_CONFIGURACAO).toContain(c.tabela);
-    }
-  });
+  it("cobre toda tabela que as telas de configuração escrevem", () => {
+    // ESTE é o contrato que pode falhar. Conferir a lista contra `CATALOGOS`
+    // seria tautologia, porque ela é construída de `CATALOGOS`; conferi-la
+    // contra o que as **actions** de fato escrevem, não. Tela nova que escreva
+    // numa tabela nova quebra aqui, que é exatamente o risco.
+    const acoes = readFileSync(ARQUIVO_DE_ACOES, "utf8");
+    const escritas = [
+      ...new Set([...acoes.matchAll(/\.from\("([a-z_]+)"\)/g)].map((m) => m[1])),
+    ];
 
-  it("cobre as quatro tabelas de configuração com tela própria", () => {
-    for (const t of TABELAS_DE_CONFIGURACAO_COM_TELA_PROPRIA) {
+    // Se isto der vazio, o regex parou de casar e o teste viraria vácuo.
+    expect(escritas.length).toBeGreaterThan(0);
+
+    for (const t of escritas) {
       expect(TABELAS_AUDITADAS_DE_CONFIGURACAO).toContain(t);
     }
   });
@@ -98,6 +111,16 @@ describe("as migrações", () => {
       expect(temTriggerDeAuditoria(sql, tabela)).toBe(true);
     },
   );
+
+  it("não aceitam trigger comentado como cumprido", () => {
+    // A prova de que `semComentarios` faz o que promete. Sem ela, esta suíte
+    // atestaria intenção em vez de comportamento.
+    const comentado =
+      "/* CREATE TRIGGER x AFTER INSERT OR UPDATE OR DELETE ON public.channels" +
+      " FOR EACH ROW EXECUTE FUNCTION public.audita_mudanca_de_dado(); */";
+    expect(temTriggerDeAuditoria(semComentarios(comentado), "channels")).toBe(false);
+    expect(temTriggerDeAuditoria(comentado, "channels")).toBe(true);
+  });
 
   it("mantêm o trigger de patients, que veio da regra 002", () => {
     // Guarda de regressão: a migração desta regra mexe na mesma função, e não
