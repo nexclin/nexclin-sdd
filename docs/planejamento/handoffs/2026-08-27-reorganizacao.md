@@ -204,11 +204,11 @@ de produto.
 Ambos passam nos três testes: caros de reverter, surpreendentes sem contexto, e
 resultado de alternativa real recusada com razão declarada.
 
-- **`0003-o-spec-kit-sai.md`** — registra que a recomendação foi **manter** o
+- **`0003-o-spec-kit-sai.md`**: registra que a recomendação foi **manter** o
   Spec Kit, com o dado de 72 tarefas concluídas por ele, e que a decisão
   contrária foi do Arthur por bagunça e custo de token. A discordância fica
   visível de propósito.
-- **`0004-bifurcar-o-to-spec.md`** — com o dado das user stories da SPEC 005 que
+- **`0004-bifurcar-o-to-spec.md`**: com o dado das user stories da SPEC 005 que
   custaram 80 linhas e não entraram em nenhum commit.
 
 ---
