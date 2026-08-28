@@ -1,8 +1,14 @@
 # Proveniência das skills desta pasta
 
-> Atualizado em 25/08/2026. Quem adicionar skill de terceiro **atualiza esta
+> Atualizado em 27/08/2026. Quem adicionar skill de terceiro **atualiza esta
 > tabela no mesmo commit**. Sem isso, em três meses ninguém sabe o que é nosso,
 > o que é de fora, e sob qual licença.
+>
+> **Em 27/08 a pasta foi de 43 skills para 22.** As 22 que saíram foram
+> **movidas** para `.claude/skills-fora/`, que o git ignora: elas continuam no
+> disco e voltam movendo de volta. A razão é carga de contexto: cada descrição de
+> skill é lida a todo turno, e 43 delas somavam 7.213 bytes por turno. Ver
+> `docs/adr/0004-o-spec-kit-sai.md`.
 
 ## Nossas, escritas neste projeto
 
@@ -12,6 +18,7 @@
 | `nx-modulo` | porta um dos 15 módulos para a stack nova |
 | `nx-ponte` | corrige bug na plataforma ao vivo sem consumir crédito |
 | `nx-paralelo` | decide o que roda em paralelo e como isolar |
+| `nx-regra` | escreve a regra viva em `docs/regras/`, nas sete seções. **Obra derivada do `to-spec` do Matt Pocock, sob MIT.** Ver abaixo |
 
 ## Do Spec Kit
 
@@ -84,18 +91,25 @@ marketplace, ou reescreve do zero.**
 | `wait-what` | pedir que a ultima mensagem seja reformulada quando ela nao chegou |
 | `codebase-design` | vocabulario de modulo profundo, para a reescrita em Next.js de outubro |
 
-**O que foi DEIXADO DE FORA, e por que:**
+**A avaliacao acima virou de cabeca para baixo em 27/08, e a razao foi o Spec
+Kit sair.** O que era "compete com o Spec Kit" virou "e o processo que ficou":
+`to-tickets`, `implement`, `wayfinder` e `setup-matt-pocock-skills` **entraram**,
+e com eles `code-review`, `diagnosing-bugs`, `handoff` e `ask-matt`. `triage`
+continua fora, porque colide com `nx-apontamento`, que ja faz a triagem das
+baterias no formato do Notion.
 
-- `to-spec`, `to-tickets`, `implement`, `wayfinder`, `triage`,
-  `setup-matt-pocock-skills`: sao o processo ponta a ponta do autor, e ele
-  **compete com o Spec Kit**, que a regra (h) da constituicao torna
-  obrigatorio. O proprio README dele diz que existe como alternativa a
-  "GSD, BMAD e Spec-Kit". Duas metodologias na mesma pasta e pior que uma.
-  Alem disso, `triage` colidiria com `nx-apontamento`, que ja faz a triagem
-  das baterias no formato do Notion.
-- `tdd`, `code-review`, `diagnosing-bugs`, `handoff`,
-  `resolving-merge-conflicts`: ja temos equivalente vindo do superpowers, e
-  handoff ja e convencao em `docs/historico/`.
+**`to-spec` foi BIFURCADO, nao adotado.** Ele exige *"A LONG, numbered list"* de
+user stories, que o formato de sete secoes removeu, e publica em issue em vez de
+escrever arquivo. Nasceu `nx-regra` a partir dele, e o original saiu. E obra
+derivada de codigo MIT, e o aviso de copyright em
+[`LICENSE-mattpocock-skills`](LICENSE-mattpocock-skills) cobre os dois. Motivo
+completo em `docs/adr/0005-bifurcar-o-to-spec.md`.
+
+**Nos pares sobrepostos, quem ficou:** superpowers no teste
+(`test-driven-development`, que ja produziu os 90 testes), Pocock no bug
+(`diagnosing-bugs`, com fases travadas). Na revisao ficaram **os dois**, porque
+`code-review` revisa e `receiving-code-review` ensina a receber critica, que nao
+e a mesma coisa. Saiu so `requesting-code-review`.
 - `git-guardrails-claude-code`: **a ideia foi adotada, o arquivo nao.** Ele
   bloqueia `git push`, que e exatamente como este projeto entrega correcao ao
   cliente pela ponte inversa. Copiar a lista dele quebraria a entrega. O que
@@ -125,6 +139,7 @@ contexto.
 | O que | Quantidade | Para onde foi |
 |---|---:|---|
 | Skills do Spec Kit (`speckit-*`) | 10 | apagadas do repositorio, no historico do git |
+| Skills de terceiros tiradas de circulacao | 22 | `.claude/skills-fora/`, ignorado pelo git. Voltar e mover de volta |
 | Skills do GSD | 67 | `~/.claude/desativado-27-08/skills/` |
 | Agentes do GSD | 33 | `~/.claude/desativado-27-08/agents/` |
 | Perfil do GSD | 1 | `~/.claude/desativado-27-08/.gsd-profile` |

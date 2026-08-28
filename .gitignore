@@ -55,3 +55,8 @@ strix/
 dump-*.sql
 backups/
 dumps/
+
+# Skills tiradas de circulacao em 27/08/2026, para cortar carga de contexto.
+# Ficam no disco para poderem voltar; nao vao para o repositorio.
+# Ver docs/adr/0004-o-spec-kit-sai.md e .claude/skills/PROVENIENCIA.md.
+.claude/skills-fora/
