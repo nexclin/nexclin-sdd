@@ -131,6 +131,11 @@ tela. Contra produção, isso é inaceitável.
 - **O escopo desta regra é `patients`, e só.** Estender a auditoria a consultas,
   recebíveis e anamnese é backlog explícito, com a mesma mecânica. Não entra
   agora para não competir com a trava.
+- **A mecânica já foi reusada uma vez, e isso valida o desenho.** Em 27/08 o
+  FR-013 da regra 005 pendurou as catorze tabelas de configuração na mesma
+  função `audita_mudanca_de_dado()`, sem uma linha nova de plpgsql (migração
+  `20260827030000`). A função ter nascido genérica, lendo `TG_TABLE_NAME`, foi o
+  que tornou isso uma migração de triggers em vez de um segundo mecanismo.
 - **Sob impersonação, o suporte grava indistinguível do cliente.** A auditoria
   registra a entrada e a saída da sessão de suporte, **não o que foi criado no
   meio**. Dívida herdada da regra 006, D-006.4, e é aqui que ela se resolve

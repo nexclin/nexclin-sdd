@@ -3,8 +3,17 @@
 > **Regra viva.** Nasceu antes da execução, e é corrigida no mesmo commit em que
 > a execução a contradiz.
 >
-> **Estado em 27/08/2026:** escrita, não executada. É a primeira regra da Onda 1
-> e o substrato de todas as outras. Alvo: a stack Next.js deste repositório.
+> **Estado em 27/08/2026:** **executada, e sem aceite manual.** Catálogos,
+> regras de negócio, metas, anamnese, plano de contas e o progresso do
+> onboarding estão em pé em `app/app/configuracoes/`, sobre `lib/config/`, com
+> 143 testes. Falta o aceite na tela, que é do Arthur. Alvo: a stack Next.js
+> deste repositório.
+>
+> **Correção de 27/08, e é a regra (l) em ação:** este cabeçalho dizia "escrita,
+> não executada", herdado do `Status: Draft` da SPEC 005. Estava errado desde que
+> foi convertido: o código já existia, com o comentário `SPEC 005 / T016` dentro
+> dele. Regra que descreve estado que não é o real é exatamente o que o termo
+> *regra viva* existe para impedir.
 >
 > **Lei:** `docs/constituicao.md` · **Contexto:** `CLAUDE.md` ·
 > **Fila:** `fila-de-regras.md` ·
@@ -102,14 +111,25 @@ que alguém criar um plano pela tela.
 ## 3. O que muda no banco
 
 **Nenhuma tabela nova.** As treze de catálogo e `business_rules` já foram
-portadas nas 55 migrações. Esta regra liga o app ao que existe e corrige um
-default.
+portadas nas 55 migrações. Esta regra liga o app ao que existe, corrige um
+default e acrescenta rastro.
 
-| Objeto | Mudança |
-|---|---|
-| `plans.enabled_modules` | default de `'[]'::jsonb` para `'{}'::jsonb` |
-| `plans` (linhas existentes) | normalização de array para objeto, na mesma migração |
-| as 14 tabelas de catálogo e regra | nenhuma alteração de schema; RLS já ativa, verificada por varredura em 25/08 |
+| Objeto | Mudança | Onde |
+|---|---|---|
+| `plans.enabled_modules` | default de `'[]'::jsonb` para `'{}'::jsonb` | `20260825070000` |
+| `plans` (linhas existentes) | normalização de array para objeto, na mesma migração | `20260825070000` |
+| 14 tabelas de configuração | trigger `AFTER INSERT OR UPDATE OR DELETE` chamando `audita_mudanca_de_dado()` | `20260827030000` |
+| as mesmas 14 tabelas | nenhuma alteração de schema; RLS já ativa, verificada por varredura em 25/08 | |
+
+**O trigger de auditoria não trouxe função nova.** `audita_mudanca_de_dado()`,
+da regra 002, já lê `TG_TABLE_NAME`, `clinic_id` e `id`, então serve a qualquer
+tabela de negócio. Uma segunda função seria a divergência que a 002 evitou.
+
+**As três operações, inclusive INSERT.** `previous_state` fica `NULL` no INSERT,
+e a linha ainda serve: ela responde **quem** criou a forma de pagamento com 15%
+de taxa, e quando. Consequência aceita: o onboarding roda os seeds e escreve
+algumas dezenas de linhas de uma vez, o que é ruído barato e distingue o que o
+sistema semeou do que a clínica cadastrou depois.
 
 As entidades, e o que cada grupo carrega:
 
@@ -172,6 +192,20 @@ As entidades, e o que cada grupo carrega:
   nome da chave inválida na mensagem, por qualquer caminho de escrita.
 - **SC-007**: Um plano com `contas_pagar` desligado esconde o item do menu e nega
   a URL direta, mesmo para admin da clínica.
+- **SC-008**: Alterar a taxa de uma forma de pagamento deixa linha em
+  `data_audit_log` com autor, hora e o valor **anterior** da taxa.
+
+**Prova automatizada:** 143 testes em Vitest sobre `lib/config/`, e entre eles
+`__tests__/auditoria.test.ts`, que é **contrato, não lógica**. Ele lê os `.sql`
+de `supabase/migrations/` e falha se uma tabela de configuração não tiver
+trigger. Provado por mutação nas duas direções: removido o trigger de
+`payment_methods` da migração, um teste falha; acrescentado um catálogo em
+`CATALOGOS` sem trigger correspondente, um teste falha. É a catraca que impede
+a auditoria de ficar para trás em silêncio, porque esquecer o trigger não quebra
+`tsc` nem build.
+
+**O que a prova automatizada NÃO cobre:** que o trigger de fato grava. Isso exige
+banco, e é o SC-008, que é aceite manual.
 
 ## 7. A decisão que falta
 
