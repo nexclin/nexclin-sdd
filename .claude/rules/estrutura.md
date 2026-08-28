@@ -67,8 +67,15 @@ mais olhou nenhuma delas.
 
 ## A raiz do repositório é fechada
 
-Ficam lá `README.md`, que é a porta de entrada de quem clona, e `CLAUDE.md`, que
-é lido a todo turno. Documento novo na raiz vai para `docs/`.
+Ficam lá três arquivos, e só: `README.md`, a porta de entrada de quem clona;
+`CLAUDE.md`, lido a todo turno; e `CONTEXT.md`, o glossário, que mora na raiz
+porque é onde as skills o procuram. Documento novo na raiz vai para `docs/`.
+
+**`CONTEXT.md` tem teto de 60 linhas, e ele é a regra.** Entra só termo que **já
+causou confusão real**, com uma linha de definição e um exemplo de uso errado.
+Termo que nunca foi mal-entendido custa token e não evita nada. É o princípio da
+catraca aplicado ao vocabulário. Ele é glossário, e não spec, rascunho nem
+depósito de decisão de implementação.
 
 ## Quando você move ou renomeia
 

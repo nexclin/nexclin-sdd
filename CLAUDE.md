@@ -20,6 +20,11 @@
 | 4 | [`docs/ponte/ponte-inversa.md`](docs/ponte/ponte-inversa.md) | **obrigatório** antes de tocar a plataforma ao vivo |
 | 5 | [`docs/constituicao.md`](docs/constituicao.md) | a lei, vence qualquer preferência |
 
+**[`CONTEXT.md`](CONTEXT.md)** é o glossário, 58 linhas, só termo que já causou
+confusão real. Leia antes de usar palavra do domínio com significado próprio:
+âncora, recebível, repasse, faixa, ponte, atravessar, ModuleKey, impersonação,
+apontamento, regra viva.
+
 **Se o handoff mais recente não existir**, a sessão anterior não o escreveu, e
 você está mais cego do que o normal. Reconstrua pelas issues abertas e pelo
 `git log`, e escreva o handoff no fim.
