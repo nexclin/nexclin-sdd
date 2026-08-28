@@ -1,5 +1,14 @@
 # Feature Specification: Resíduos e Conformidade Documental
 
+> **Aviso, 27/08/2026. Movido, não reescrito.** Este documento está no formato
+> antigo de spec, e não nas sete seções da regra viva. Foi mantido como estava
+> porque está **parado de propósito**: depende de decisão comercial do grupo e de
+> emenda à constituição, para a 16ª ModuleKey. Ver a seção de decisões pendentes
+> dentro do próprio documento. **Quando a decisão sair, reescreva no formato de
+> sete seções antes de executar.**
+>
+> Onde se lê `specs/`, leia `docs/regras/`.
+
 **Feature Branch**: `013-residuos-conformidade`
 
 **Created**: 2026-08-25

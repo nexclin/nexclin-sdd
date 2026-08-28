@@ -15,9 +15,10 @@
 
 ## Do Spec Kit
 
-`speckit-*`, onze skills. Vieram com a instalação do GitHub Spec Kit
-(`.specify/`), são o fluxo canônico do método SDD deste projeto, e a
-constituição as referencia por nome.
+`speckit-*`, onze skills. Vieram com a instalação do GitHub Spec Kit e foram o
+fluxo canônico do método SDD deste projeto até 27/08/2026, quando **saíram
+junto com a pasta `.specify/`**. O motivo está em
+`docs/adr/0003-o-spec-kit-sai.md`.
 
 ## De terceiros, incorporadas
 
@@ -142,15 +143,17 @@ minimos), que **nao sao do Spec Kit**: sao as regras de seguranca do produto, e
 `.claude/hooks/guarda-constituicao.mjs` ainda as le a cada escrita. Apagar o
 metodo nao apaga as regras.
 
-**As specs.** `specs/` inteiro fica. Sao 8 pastas com spec, plano e tarefas, e
-72 tarefas ja concluidas por elas. A §2.5 do `CLAUDE.md` diz que o que atravessa
-para outubro e a regra escrita: essas pastas SAO essa regra. Sai a ferramenta,
-nao o que ela escreveu.
+**As specs viraram regras vivas.** Em 27/08/2026 `specs/` foi convertido em
+`docs/regras/`, um arquivo por regra, com o numero preservado. Cinco foram
+reescritas no formato de sete secoes; tres foram movidas como estavam, com aviso
+no topo; `plan.md` e `tasks.md` foram apagados, e o estado de execucao virou
+issue no GitHub. A §2.5 do `CLAUDE.md` diz que o que atravessa para outubro e a
+regra escrita: e ela que sobreviveu. Saiu a ferramenta, nao o que ela escreveu.
 
-**A regra (h) da constituicao ficou desatualizada.** Ela exige "spec aprovada em
-`specs/`" e nomeia o fluxo do Spec Kit. O fluxo mudou; a exigencia de spec
-antes de feature, nao. Emendar quando houver calma, e ate la vale o espirito:
-nada de feature sem documento aprovado antes.
+**A regra (h) da constituicao foi emendada no mesmo trabalho.** Ela exigia "spec
+aprovada em `specs/`" e nomeava o fluxo do Spec Kit; hoje exige regra viva
+aprovada em `docs/regras/` e nomeia a cadeia real. Constituicao em v2.0.1, e a
+emenda e de endereco: os nove principios ficaram intactos.
 
 ### `git-guardrails-claude-code` continua fora
 

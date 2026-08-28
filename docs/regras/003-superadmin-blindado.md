@@ -1,5 +1,15 @@
 # SPEC 003 — Super Admin finalizado e blindado (stack nova)
 
+> **Aviso, 27/08/2026. Movido, não reescrito.** Este documento está no formato
+> antigo de spec, e não nas sete seções da regra viva. Foi mantido como estava
+> porque **nunca começou**: é proposta que estende a Fase 4 da regra 001, e a
+> própria 001 ainda tem três provas de comportamento abertas. Reescrever 124
+> linhas que ninguém vai reler antes disso não paga. **Quando ele voltar à fila,
+> reescreva no formato de sete seções antes de executar.**
+>
+> A lei mudou de endereço: onde se lê `.specify/memory/constitution.md`, leia
+> `docs/constituicao.md`. Onde se lê `specs/`, leia `docs/regras/`.
+
 > **Status:** proposta · **Executor:** Claude Code · **Aprovador:** Arthur Hideo
 > **Estende:** SPEC 001, Fase 4 (painel superadmin em Next.js)
 > **Referência funcional:** `../nexclin-lovable` (SOMENTE LEITURA) +

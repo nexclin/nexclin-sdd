@@ -68,7 +68,7 @@ Valem porque o projeto tem três sócios e nem sempre os três estão na convers
 | 0005 | As 15 ModuleKeys são contrato único | Aceita | constituição, Princípio III |
 | 0006 | Nada de terceiro sob licença copyleft entra no repositório | Aceita | análise do OpenClinic §2 |
 | 0007 | Cobrança por faixa de usuário, e não por profissional de saúde | Aceita | pesquisa de precificação §10.2 |
-| 0008 | 16ª ModuleKey `residuos` exige emenda à constituição | **Em aberto** | `specs/013-residuos-conformidade/spec.md` |
+| 0008 | 16ª ModuleKey `residuos` exige emenda à constituição | **Em aberto** | `docs/regras/013-residuos-conformidade.md` |
 
 > A numeração acima era um **índice de onde cada decisão vive**, montado antes de
 > existir arquivo. Os arquivos começaram a ser escritos em 25/08 e usam a sua

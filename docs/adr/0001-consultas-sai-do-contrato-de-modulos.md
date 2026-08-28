@@ -91,7 +91,7 @@ Sair do contrato altera o trigger que valida `enabled_modules` na plataforma que
 recebe cliente em 08/09, e o ganho é higiene, não correção de falha.
 
 **O que existe hoje:** este documento, e a migração preparada em
-`specs/005-configuracoes-clinica/preparado/` quando ela for escrita.
+`docs/regras/005-configuracoes-clinica.md` quando ela for executada.
 
 **Quando aplicar:** junto com a emenda de `residuos`, depois de 08/09.
 

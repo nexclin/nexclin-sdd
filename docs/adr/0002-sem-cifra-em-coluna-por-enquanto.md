@@ -9,7 +9,7 @@
 
 ## Contexto
 
-O item 5 da auditoria de segurança (`specs/016-endurecimento-seguranca/spec.md`)
+O item 5 da auditoria de segurança (`docs/regras/016-endurecimento-seguranca.md`)
 ficou em ⚠️: existe cifra em trânsito (TLS, pela Supabase e pela Vercel) e cifra
 em repouso (o disco da Supabase), e **nenhuma coluna é cifrada pela aplicação**.
 Zero uso de `pgcrypto` ou `pgsodium`, verificado por varredura nas 55 migrações.

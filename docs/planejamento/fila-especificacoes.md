@@ -4,9 +4,9 @@
 > portam para a stack nova (Next.js + Supabase próprio) os módulos da Onda 1 —
 > as 7 áreas que o primeiro cliente usa de fato no dia 01/09.
 >
-> A numeração começa em 004 porque `specs/001-fundacao-superadmin/`,
-> `specs/002-seguranca-anamnese-auditoria/` e
-> `specs/003-superadmin-blindado/` já existem no repositório. O briefing
+> A numeração começa em 004 porque `docs/regras/001-fundacao-superadmin.md`,
+> `docs/regras/002-seguranca-anamnese-auditoria.md` e
+> `docs/regras/003-superadmin-blindado.md` já existem no repositório. O briefing
 > desta sessão dizia "começar em 003"; corrigido pela evidência do repo.
 >
 > Regra: nenhuma spec começa sem que os pré-requisitos técnicos estejam
@@ -37,16 +37,15 @@
 > **A lição, que vale mais que a renumeração:** número de spec é alocado por
 > quem escreve, e duas frentes em paralelo colidem. O `create-new-feature.ps1`
 > só enxerga o disco local, não a `main`. **Antes de criar spec nova, dê
-> `git fetch` e confira `git ls-tree -d --name-only origin/main specs/`.**
+> `git fetch` e confira `git ls-tree --name-only origin/main docs/regras/`.**
 > Custa cinco segundos e evita o que aconteceu aqui.
 >
 > A numeração desta fila deixa de ser promessa e passa a ser **ordem de
 > execução**. O número sai na hora de escrever.
 >
-> Esta fila é um **índice**. Os `spec.md` propriamente ditos são escritos
-> um por vez, na hora de começar cada um, seguindo o modelo de
-> `specs/001-fundacao-superadmin/` (spec + plan + tasks + contracts +
-> data-model + quickstart + research).
+> Esta fila é um **índice**. As regras vivas propriamente ditas são escritas
+> uma por vez, na hora de começar cada uma, no formato de sete seções de
+> `docs/regras/`, pela skill `nx-regra`.
 
 ---
 
@@ -262,10 +261,10 @@ existente e adicionam colunas/policies pontuais quando necessário.
   - 006 (respostas ligam a `patient_id`).
   - **Dívidas de pré-requisito para a parte pública:**
     - Edge function `anamnesis-public` está no
-      [`specs/BACKLOG.md`](../../specs/BACKLOG.md#edge-functions-não-portadas-na-spec-001) —
+      [`docs/regras/000-backlog.md`](../regras/000-backlog.md) —
       não foi portada em 001.
     - Redesenho do `public_token` com rastro em `patients` é a Fase 2
-      da [SPEC 002](../../specs/002-seguranca-anamnese-auditoria/tasks.md)
+      da [regra 002](../regras/002-seguranca-anamnese-auditoria.md)
       e não está pronta. O fluxo público só entra depois que essa
       dívida for paga.
 - **Por que agora:** a parte interna (templates + visualização das
@@ -344,7 +343,7 @@ Não entram nesta fila: `contas_pagar`, `fluxo_caixa`,
 Motivo:
 
 - **`insights`** depende de provedor de IA externo (a edge function
-  `generate-insights` está no [BACKLOG](../../specs/BACKLOG.md) — usava
+  `generate-insights` está no [backlog](../regras/000-backlog.md) — usava
   o gateway do Lovable e precisa ser re-especificada com provedor
   próprio).
 - **Repasse** tem imposto fixo em zero e atribuição de profissional

@@ -99,7 +99,7 @@ substituto dele**. Trocar por um fluxo sem esse artefato obrigatório é vender 
 
 ### Três razões menores, mas concretas
 
-1. **A constituição.** A regra (h) exige spec aprovada em `specs/`, e o guarda
+1. **A constituição.** A regra (h) exige regra viva aprovada em `docs/regras/`, e o guarda
    em `.claude/hooks/guarda-constituicao.mjs` aplica outras regras dela. Trocar
    o método é emenda constitucional, não escolha de ferramenta.
 2. **A numeração é referência viva.** "SPEC 006", "T017", "D-005.5" aparecem em

@@ -30,7 +30,7 @@ existe "provavelmente dá certo".
 |---|---|---|
 | **P** Ponte | `../nexclin-lovable/src` | 08/09 |
 | **B** Banco | `supabase/migrations` nos dois repositórios | 08/09 |
-| **N1** Spec | `specs/` | sem prazo |
+| **N1** Regra viva | `docs/regras/` | sem prazo |
 | **N2** App novo | `app/`, `lib/` | sem prazo |
 | **D** Documento | `docs/` | sem prazo |
 | **H** Arthur | painel Supabase, plataforma ao vivo | varia |

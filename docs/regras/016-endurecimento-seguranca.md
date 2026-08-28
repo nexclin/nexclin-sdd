@@ -1,5 +1,16 @@
 # Feature Specification: Endurecimento de segurança pré-lançamento
 
+> **Aviso, 27/08/2026. Movido, não reescrito.** Este documento está no formato
+> antigo de spec, e não nas sete seções da regra viva. Foi mantido como estava
+> porque é **auditoria de 20 itens contra o código, não plano de execução**, e
+> nunca virou execução. O placar que ele traz continua valendo como leitura.
+> **Quando algum item virar trabalho, ele nasce como regra nova no formato de
+> sete seções.**
+>
+> Onde se lê `specs/`, leia `docs/regras/`. O item 5 deste documento foi
+> decidido e vive em
+> [`../adr/0002-sem-cifra-em-coluna-por-enquanto.md`](../adr/0002-sem-cifra-em-coluna-por-enquanto.md).
+
 **Feature Branch**: `016-endurecimento-seguranca`
 
 **Created**: 2026-08-25
