@@ -1,4 +1,4 @@
--- Regra 005 / FR-013 — a edição de configuração passa a deixar rastro.
+-- Regra 005, FR-013: a edição de configuração passa a deixar rastro.
 --
 -- POR QUE ESTA MIGRAÇÃO EXISTE
 --
@@ -129,9 +129,12 @@ CREATE TRIGGER anamnesis_config_audita_mudanca
   AFTER INSERT OR UPDATE OR DELETE ON public.anamnesis_config
   FOR EACH ROW EXECUTE FUNCTION public.audita_mudanca_de_dado();
 
--- O plano de contas é hierárquico: apagar um pai move os filhos e os
--- lançamentos pendurados. `previous_state` guarda `parent_id` e `level`, que é
--- o que permite remontar a árvore de antes.
+-- O plano de contas é hierárquico, e `parent_id` tem `ON DELETE CASCADE`
+-- (migração 20260322185846): apagar um pai **apaga** os filhos, não os move. Um
+-- clique destrói um galho inteiro. Cada filho derrubado em cascata dispara o seu
+-- próprio trigger, então a trilha guarda uma linha por conta destruída, com
+-- `parent_id` e `level` em `previous_state`. É o que permite remontar a árvore
+-- de antes.
 DROP TRIGGER IF EXISTS chart_of_accounts_audita_mudanca ON public.chart_of_accounts;
 CREATE TRIGGER chart_of_accounts_audita_mudanca
   AFTER INSERT OR UPDATE OR DELETE ON public.chart_of_accounts

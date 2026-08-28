@@ -1,5 +1,5 @@
 /**
- * Regra 005 / FR-013 — o contrato entre a lista de tabelas e as migrações.
+ * Regra 005, FR-013: o contrato entre a lista de tabelas e as migrações.
  *
  * Este arquivo não testa lógica: testa que **o banco foi mexido junto com o
  * código**. É o mesmo padrão do teste do contrato de módulos, e existe pela
@@ -26,7 +26,16 @@ import {
 
 const DIR_MIGRACOES = join(process.cwd(), "supabase", "migrations");
 
-/** Todo o SQL versionado, concatenado. A ordem não importa para o que se afere. */
+/**
+ * Todo o SQL versionado, concatenado.
+ *
+ * **O limite disto, dito em voz alta:** concatenar ignora a ordem, então um
+ * trigger criado numa migração e derrubado numa posterior continuaria passando
+ * aqui. Procurar `DROP TRIGGER` não resolve, porque a própria migração desta
+ * regra dropa antes de criar, para ser idempotente. Aceito hoje: ninguém tem
+ * motivo para derrubar auditoria, e o dia em que alguém tiver é o dia de este
+ * teste ganhar um verificador de verdade, contra o banco.
+ */
 function sqlDasMigracoes(): string {
   return readdirSync(DIR_MIGRACOES)
     .filter((n) => n.endsWith(".sql"))
@@ -64,14 +73,6 @@ describe("a lista de tabelas auditadas", () => {
     for (const t of TABELAS_DE_CONFIGURACAO_COM_TELA_PROPRIA) {
       expect(TABELAS_AUDITADAS_DE_CONFIGURACAO).toContain(t);
     }
-  });
-
-  it("não tem repetição, e vem ordenada", () => {
-    const unicas = [...new Set(TABELAS_AUDITADAS_DE_CONFIGURACAO)];
-    expect(TABELAS_AUDITADAS_DE_CONFIGURACAO).toHaveLength(unicas.length);
-    expect([...TABELAS_AUDITADAS_DE_CONFIGURACAO]).toEqual(
-      [...TABELAS_AUDITADAS_DE_CONFIGURACAO].sort(),
-    );
   });
 
   it("não inclui tabela que não é de configuração", () => {

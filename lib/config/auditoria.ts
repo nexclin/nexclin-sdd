@@ -1,5 +1,5 @@
 /**
- * Regra 005 / FR-013 — quais tabelas de configuração deixam rastro.
+ * Regra 005, FR-013: quais tabelas de configuração deixam rastro.
  *
  * A regra diz: *"A edição de catálogo e de regra de negócio MUST gerar registro
  * de auditoria, pelo mecanismo da regra 002."* O mecanismo é o trigger
@@ -12,10 +12,17 @@
  * ganhar trigger quebra o teste, de propósito, e é essa quebra que impede a
  * auditoria de ficar para trás em silêncio.
  *
- * **Por que a lista não é só `CATALOGOS.map(c => c.tabela)`:** quatro tabelas
- * de configuração não são catálogo genérico e têm tela própria
- * (`business_rules`, `goals`, `anamnesis_config`, `chart_of_accounts`). Elas
- * mudam número que o resto do sistema lê, então precisam do mesmo rastro.
+ * **Por que a lista não é só `CATALOGOS.map(c => c.tabela)`:** `CATALOGOS` traz
+ * as **dez** tabelas servidas pela tela genérica de catálogo, e quatro tabelas de
+ * configuração ficam de fora dela por terem tela própria (`business_rules`,
+ * `goals`, `anamnesis_config`, `chart_of_accounts`). Elas mudam número que o
+ * resto do sistema lê, então precisam do mesmo rastro. Dez mais quatro é o
+ * **catorze** desta lista.
+ *
+ * As contas do FR-004 e desta lista batem, e é fácil ler errado: o FR-004 fala
+ * em **treze catálogos**, que são estas dez mais `chart_of_accounts`, `goals` e
+ * `anamnesis_config`. Treze catálogos mais `business_rules`, que não é catálogo,
+ * dá os mesmos catorze.
  */
 
 import { CATALOGOS } from "./catalogo";
