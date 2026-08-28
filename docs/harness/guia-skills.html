@@ -1,0 +1,698 @@
+<title>Estante de Skills NexClin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;800&family=Manrope:wght@300;400;500;700&display=swap">
+
+<style>
+  :root {
+    --ground:      #F4F1EC;
+    --surface:     #FAF8F4;
+    --surface-alt: #EFEBE3;
+    --ink:         #0E1620;
+    --ink-soft:    #3A4A5C;
+    --ink-faint:   #6B7A8C;
+    --line:        #E5E0D8;
+    --line-strong: #D4CEC2;
+    --accent:      #1F8C8C;
+    --accent-soft: rgba(31, 140, 140, 0.10);
+    --warn:        #B88940;
+    --warn-soft:   rgba(184, 137, 64, 0.12);
+
+    --display: 'Outfit', 'Segoe UI', system-ui, sans-serif;
+    --body: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:      #141C28;
+      --surface:     #1E2A3A;
+      --surface-alt: #182233;
+      --ink:         #F4F1EC;
+      --ink-soft:    #B6C0CC;
+      --ink-faint:   #8494A4;
+      --line:        rgba(244, 241, 236, 0.11);
+      --line-strong: rgba(244, 241, 236, 0.20);
+      --accent:      #2BA8A8;
+      --accent-soft: rgba(43, 168, 168, 0.14);
+      --warn:        #D9A85C;
+      --warn-soft:   rgba(217, 168, 92, 0.14);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:      #141C28;
+    --surface:     #1E2A3A;
+    --surface-alt: #182233;
+    --ink:         #F4F1EC;
+    --ink-soft:    #B6C0CC;
+    --ink-faint:   #8494A4;
+    --line:        rgba(244, 241, 236, 0.11);
+    --line-strong: rgba(244, 241, 236, 0.20);
+    --accent:      #2BA8A8;
+    --accent-soft: rgba(43, 168, 168, 0.14);
+    --warn:        #D9A85C;
+    --warn-soft:   rgba(217, 168, 92, 0.14);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-weight: 400;
+    line-height: 1.55;
+    margin: 0;
+    padding: 0 24px 96px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  /* ---------- topo ---------- */
+  header { padding: 56px 0 32px; border-bottom: 1px solid var(--line); }
+
+  .eyebrow {
+    font-family: var(--display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 14px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 200;
+    font-size: clamp(34px, 6vw, 54px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  h1 strong { font-weight: 600; }
+
+  .lede {
+    max-width: 62ch;
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* ---------- contagem ---------- */
+  .tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tally div { display: flex; flex-direction: column; }
+  .tally .n {
+    font-family: var(--display);
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .tally .k {
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 6px;
+  }
+
+  /* ---------- busca ---------- */
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--ground);
+    padding: 18px 0 14px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+  #busca {
+    width: 100%;
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 11px 14px;
+  }
+  #busca::placeholder { color: var(--ink-faint); }
+  #busca:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: var(--accent);
+  }
+  .vazio {
+    display: none;
+    padding: 40px 0;
+    color: var(--ink-faint);
+    font-size: 15px;
+  }
+
+  /* ---------- seções ---------- */
+  section { margin-top: 44px; }
+  section > h2 {
+    font-family: var(--display);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 4px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  section > h2::before {
+    content: "";
+    width: 22px;
+    height: 2px;
+    background: var(--accent);
+    flex: none;
+    transform: translateY(-4px);
+  }
+  section > p.sub {
+    margin: 0 0 18px;
+    color: var(--ink-faint);
+    font-size: 14px;
+    max-width: 62ch;
+  }
+
+  /* ---------- cartões ---------- */
+  .grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+  }
+
+  article {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cab { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  code.cmd {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: none;
+    padding: 0;
+  }
+  code.cmd::before { content: "/"; color: var(--accent); }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .tag.nx { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+
+  article p { margin: 0; font-size: 14px; color: var(--ink-soft); }
+
+  .quando {
+    font-size: 13px;
+    color: var(--ink);
+    border-top: 1px dashed var(--line-strong);
+    padding-top: 8px;
+    margin-top: 2px;
+  }
+  .quando b {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  /* ---------- avisos ---------- */
+  .nota {
+    background: var(--warn-soft);
+    border-left: 3px solid var(--warn);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin: 18px 0 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .nota b { color: var(--ink); font-weight: 700; }
+
+  /* ---------- fluxo ---------- */
+  .fluxo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-alt);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 18px;
+  }
+  .fluxo span.p {
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 13.5px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 6px 11px;
+  }
+  .fluxo span.p::before { content: "/"; color: var(--accent); }
+  .fluxo span.seta { color: var(--ink-faint); font-size: 15px; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 14px;
+  }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th {
+    font-family: var(--display);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 600;
+  }
+  .tabela-rolagem { overflow-x: auto; }
+
+  footer {
+    margin-top: 64px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-faint);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">NexClin · harness</p>
+    <h1>Quarenta e três skills, e <strong>quando chamar cada uma</strong></h1>
+    <p class="lede">
+      Organizado pelo momento do trabalho, não por quem escreveu. Todas são
+      invocáveis por você: digite a barra e o nome. O que está aqui é o que
+      existe em <code>.claude/skills/</code> depois da troca de método de
+      27/08/2026.
+    </p>
+    <ul class="tally">
+      <li><div><span class="n">43</span><span class="k">skills</span></div></li>
+      <li><div><span class="n">4</span><span class="k">nossas</span></div></li>
+      <li><div><span class="n">11</span><span class="k">superpowers</span></div></li>
+      <li><div><span class="n">28</span><span class="k">matt pocock</span></div></li>
+      <li><div><span class="n">0</span><span class="k">spec kit · gsd</span></div></li>
+    </ul>
+  </header>
+
+  <div class="toolbar">
+    <input id="busca" type="search" placeholder="Filtrar por nome ou situação. Ex: bug, plano, revisão, banco" aria-label="Filtrar skills">
+  </div>
+  <p class="vazio" id="vazio">Nada com esse termo. Tente “bug”, “plano”, “revisão”, “ponte”.</p>
+
+  <section data-sec>
+    <h2>O fluxo, do começo ao fim</h2>
+    <p class="sub">A ordem que substitui o Spec Kit. Cada passo produz o que o seguinte consome.</p>
+    <div class="fluxo">
+      <span class="p">grill-with-docs</span><span class="seta">→</span>
+      <span class="p">to-spec</span><span class="seta">→</span>
+      <span class="p">to-tickets</span><span class="seta">→</span>
+      <span class="p">implement</span><span class="seta">→</span>
+      <span class="p">code-review</span><span class="seta">→</span>
+      <span class="p">verification-before-completion</span>
+    </div>
+    <div class="nota">
+      <b>Rode <code>/setup-matt-pocock-skills</code> uma vez, antes de tudo.</b>
+      Ele pergunta onde ficam os tickets, quais rótulos você usa e onde salvar os
+      documentos. Sem isso, <code>/to-tickets</code> e <code>/triage</code> não
+      sabem para onde escrever.
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>1 · Antes de decidir</h2>
+    <p class="sub">O buraco que o Spec Kit tinha. Aqui se aperta a ideia até ela parar de mudar de forma.</p>
+    <div class="grade">
+      <article data-busca="grill-with-docs alinhar entrevista decisão adr contexto glossário">
+        <div class="cab"><code class="cmd">grill-with-docs</code><span class="tag">pocock</span></div>
+        <p>Entrevista implacável que também escreve ADRs e o glossário do projeto enquanto conversa.</p>
+        <p class="quando"><b>Quando</b>A porta de entrada padrão. Toda mudança que ainda não está clara começa aqui.</p>
+      </article>
+      <article data-busca="grilling entrevista árvore de decisão fronteira rodadas">
+        <div class="cab"><code class="cmd">grilling</code><span class="tag">pocock</span></div>
+        <p>Trabalha uma árvore de decisões em rodadas e só para quando a fronteira esvazia.</p>
+        <p class="quando"><b>Quando</b>A versão sem documentos. Use quando quiser só pensar junto, sem gerar arquivo.</p>
+      </article>
+      <article data-busca="grill-me plano ideia não código">
+        <div class="cab"><code class="cmd">grill-me</code><span class="tag">pocock</span></div>
+        <p>O mesmo, para assunto que não é código.</p>
+        <p class="quando"><b>Quando</b>Decisão comercial, preço, escopo de sociedade.</p>
+      </article>
+      <article data-busca="ask-matt roteador qual skill usar dúvida">
+        <div class="cab"><code class="cmd">ask-matt</code><span class="tag">pocock</span></div>
+        <p>Roteador: diz qual skill serve à sua situação.</p>
+        <p class="quando"><b>Quando</b>Você não souber qual chamar. É o índice vivo desta página.</p>
+      </article>
+      <article data-busca="to-questionnaire pergunta terceiro vinícius erick decisão de outro">
+        <div class="cab"><code class="cmd">to-questionnaire</code><span class="tag">pocock</span></div>
+        <p>Vira uma decisão que não é sua num questionário para outra pessoa responder.</p>
+        <p class="quando"><b>Quando</b>Precisar devolver perguntas ao Vinícius ou ao Erick, como em 20/08.</p>
+      </article>
+      <article data-busca="research pesquisa fonte primária mercado concorrente documentação">
+        <div class="cab"><code class="cmd">research</code><span class="tag">pocock</span></div>
+        <p>Investiga contra fontes primárias e grava o achado como markdown no repositório.</p>
+        <p class="quando"><b>Quando</b>Levantar norma, concorrente ou API. Foi o que gerou a análise do OpenClinic.</p>
+      </article>
+      <article data-busca="prototype protótipo descartável dúvida de desenho ui estado">
+        <div class="cab"><code class="cmd">prototype</code><span class="tag">pocock</span></div>
+        <p>Protótipo descartável para responder uma dúvida de desenho.</p>
+        <p class="quando"><b>Quando</b>Não souber se um modelo de estado ou uma tela fecha. Joga fora depois.</p>
+      </article>
+      <article data-busca="domain-modeling vocabulário contexto termos linguagem compartilhada">
+        <div class="cab"><code class="cmd">domain-modeling</code><span class="tag">pocock</span></div>
+        <p>Constrói o vocabulário do projeto num <code>CONTEXT.md</code>.</p>
+        <p class="quando"><b>Quando</b>Termos como recebível, repasse e fechamento significarem coisas diferentes para cada um.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>2 · Planejar</h2>
+    <p class="sub">Do entendimento fechado para o trabalho picado em pedaços executáveis.</p>
+    <div class="grade">
+      <article data-busca="to-spec especificação spec conversa vira documento">
+        <div class="cab"><code class="cmd">to-spec</code><span class="tag">pocock</span></div>
+        <p>Transforma a conversa atual em spec, sem nova entrevista. Só sintetiza.</p>
+        <p class="quando"><b>Quando</b>Logo depois do grill. É o substituto direto do <code>speckit-specify</code>.</p>
+      </article>
+      <article data-busca="to-tickets tarefas tickets dependências bloqueio tracer bullet">
+        <div class="cab"><code class="cmd">to-tickets</code><span class="tag">pocock</span></div>
+        <p>Quebra o plano em tickets, cada um declarando o que o bloqueia.</p>
+        <p class="quando"><b>Quando</b>Substitui o <code>speckit-tasks</code>. É onde a ordem de execução nasce.</p>
+      </article>
+      <article data-busca="wayfinder trabalho grande mapa várias sessões migração outubro">
+        <div class="cab"><code class="cmd">wayfinder</code><span class="tag">pocock</span></div>
+        <p>Planeja trabalho grande demais para uma sessão, como mapa de tickets de decisão.</p>
+        <p class="quando"><b>Quando</b>A migração de outubro. É o único desta lista feito para essa escala.</p>
+      </article>
+      <article data-busca="writing-plans plano escrito antes de codar">
+        <div class="cab"><code class="cmd">writing-plans</code><span class="tag">superpowers</span></div>
+        <p>Plano escrito antes de tocar em código.</p>
+        <p class="quando"><b>Quando</b>Tarefa de vários passos que você quer revisar antes de começar.</p>
+      </article>
+      <article data-busca="nx-paralelo paralelo raias colisão duas frentes">
+        <div class="cab"><code class="cmd">nx-paralelo</code><span class="tag nx">nossa</span></div>
+        <p>Decide o que roda ao mesmo tempo sem colidir, e como isolar.</p>
+        <p class="quando"><b>Quando</b>Houver duas frentes na fila. Chame antes de disparar qualquer subagente.</p>
+      </article>
+      <article data-busca="dispatching-parallel-agents subagentes paralelo domínios independentes">
+        <div class="cab"><code class="cmd">dispatching-parallel-agents</code><span class="tag">superpowers</span></div>
+        <p>Um agente por domínio independente.</p>
+        <p class="quando"><b>Quando</b>O <code>nx-paralelo</code> disser que as tarefas não colidem.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>3 · Construir</h2>
+    <p class="sub">Onde o código aparece. Duas skills daqui são específicas do NexClin.</p>
+    <div class="grade">
+      <article data-busca="implement executar spec tickets construir">
+        <div class="cab"><code class="cmd">implement</code><span class="tag">pocock</span></div>
+        <p>Executa o trabalho a partir da spec ou dos tickets.</p>
+        <p class="quando"><b>Quando</b>Substitui o <code>speckit-implement</code>.</p>
+      </article>
+      <article data-busca="nx-ponte lovable plataforma ao vivo correção cliente publicar">
+        <div class="cab"><code class="cmd">nx-ponte</code><span class="tag nx">nossa</span></div>
+        <p>Corrige bug na plataforma Lovable que está no ar, pelo repositório.</p>
+        <p class="quando"><b>Quando</b>Qualquer conserto que precise chegar ao cliente antes da migração.</p>
+      </article>
+      <article data-busca="nx-modulo módulo portar next.js stack nova">
+        <div class="cab"><code class="cmd">nx-modulo</code><span class="tag nx">nossa</span></div>
+        <p>Reconstrói um dos 15 módulos na stack Next.js, do levantamento ao aceite.</p>
+        <p class="quando"><b>Quando</b>Outubro, na migração. Hoje ainda não.</p>
+      </article>
+      <article data-busca="test-driven-development tdd teste primeiro vermelho verde">
+        <div class="cab"><code class="cmd">test-driven-development</code><span class="tag">superpowers</span></div>
+        <p>Teste antes do código.</p>
+        <p class="quando"><b>Quando</b>Módulo puro, como os de <code>src/lib/</code>. Foi assim que os 90 testes nasceram.</p>
+      </article>
+      <article data-busca="tdd red green refactor teste integração pocock">
+        <div class="cab"><code class="cmd">tdd</code><span class="tag">pocock</span></div>
+        <p>A versão dele: vermelho, verde, refatora, com guia do que é bom teste.</p>
+        <p class="quando"><b>Quando</b>Sobrepõe a de cima. Escolha uma e fique nela.</p>
+      </article>
+      <article data-busca="subagent-driven-development subagente por tarefa revisão">
+        <div class="cab"><code class="cmd">subagent-driven-development</code><span class="tag">superpowers</span></div>
+        <p>Um subagente novo por tarefa, com revisão depois de cada uma.</p>
+        <p class="quando"><b>Quando</b>Plano com tarefas independentes na mesma sessão.</p>
+      </article>
+      <article data-busca="executing-plans executar plano checkpoint">
+        <div class="cab"><code class="cmd">executing-plans</code><span class="tag">superpowers</span></div>
+        <p>Executa um plano escrito, com pontos de revisão.</p>
+        <p class="quando"><b>Quando</b>O plano veio de outra sessão.</p>
+      </article>
+      <article data-busca="using-git-worktrees worktree isolamento branch">
+        <div class="cab"><code class="cmd">using-git-worktrees</code><span class="tag">superpowers</span></div>
+        <p>Área de trabalho isolada, com detecção do que já está isolado.</p>
+        <p class="quando"><b>Quando</b>Mexer nos dois repositórios ao mesmo tempo.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>4 · Verificar</h2>
+    <p class="sub">A regra (j) da constituição vive aqui: implementado não é o mesmo que funciona.</p>
+    <div class="grade">
+      <article data-busca="verification-before-completion provar funciona antes de dizer pronto evidência">
+        <div class="cab"><code class="cmd">verification-before-completion</code><span class="tag">superpowers</span></div>
+        <p>Exige rodar a verificação e olhar a saída antes de dizer que está pronto.</p>
+        <p class="quando"><b>Quando</b>Sempre, antes de fechar qualquer fase. É a regra (j) em forma de skill.</p>
+      </article>
+      <article data-busca="code-review revisão de código padrões correção pocock">
+        <div class="cab"><code class="cmd">code-review</code><span class="tag">pocock</span></div>
+        <p>Revisa o que mudou desde um ponto fixo, em dois eixos: padrões e correção.</p>
+        <p class="quando"><b>Quando</b>Antes de publicar na Lovable ou abrir PR.</p>
+      </article>
+      <article data-busca="requesting-code-review pedir revisão">
+        <div class="cab"><code class="cmd">requesting-code-review</code><span class="tag">superpowers</span></div>
+        <p>Pede revisão de forma estruturada.</p>
+        <p class="quando"><b>Quando</b>Sobrepõe a de cima.</p>
+      </article>
+      <article data-busca="receiving-code-review receber crítica verificar antes de aceitar">
+        <div class="cab"><code class="cmd">receiving-code-review</code><span class="tag">superpowers</span></div>
+        <p>Como receber crítica: verificar antes de concordar, não obedecer por educação.</p>
+        <p class="quando"><b>Quando</b>Chegar feedback que parece errado ou vago.</p>
+      </article>
+      <article data-busca="diagnosing-bugs diagnóstico bug lento regressão performance">
+        <div class="cab"><code class="cmd">diagnosing-bugs</code><span class="tag">pocock</span></div>
+        <p>Laço de diagnóstico para bug difícil e queda de desempenho, com fases travadas.</p>
+        <p class="quando"><b>Quando</b>Algo quebrou e a causa não é óbvia.</p>
+      </article>
+      <article data-busca="systematic-debugging depuração método científico hipótese">
+        <div class="cab"><code class="cmd">systematic-debugging</code><span class="tag">superpowers</span></div>
+        <p>Método para caçada longa, por hipótese.</p>
+        <p class="quando"><b>Quando</b>Sobrepõe a de cima. Foi a que resolveu o V-26.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>5 · Arquitetura</h2>
+    <p class="sub">Para outubro, quando o front for reescrito e as decisões de módulo passarem a valer por anos.</p>
+    <div class="grade">
+      <article data-busca="codebase-design módulo profundo interface seam testável">
+        <div class="cab"><code class="cmd">codebase-design</code><span class="tag">pocock</span></div>
+        <p>Vocabulário de módulo profundo: muita função atrás de interface simples.</p>
+        <p class="quando"><b>Quando</b>Desenhar módulo da stack nova, ou decidir onde cortar uma fronteira.</p>
+      </article>
+      <article data-busca="improve-codebase-architecture varredura relatório html oportunidades">
+        <div class="cab"><code class="cmd">improve-codebase-architecture</code><span class="tag">pocock</span></div>
+        <p>Varre o código atrás de oportunidades e entrega um relatório visual.</p>
+        <p class="quando"><b>Quando</b>De tempos em tempos. É levantamento, não resgate: não desembola sozinho.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>6 · Processo e comunicação</h2>
+    <p class="sub">O que acontece entre as pessoas, e o que o projeto escreve sobre si mesmo.</p>
+    <div class="grade">
+      <article data-busca="nx-apontamento notion bateria teste sócio relato falado vinícius erick">
+        <div class="cab"><code class="cmd">nx-apontamento</code><span class="tag nx">nossa</span></div>
+        <p>Vira relato falado de sócio em registro pronto para a base do Notion.</p>
+        <p class="quando"><b>Quando</b>Alguém descrever um problema testando. É a nossa, e ganha do <code>triage</code>.</p>
+      </article>
+      <article data-busca="triage issues pull request rótulos estado">
+        <div class="cab"><code class="cmd">triage</code><span class="tag">pocock</span></div>
+        <p>Move issues por uma máquina de estados de triagem.</p>
+        <p class="quando"><b>Quando</b>Trabalhar com issues do GitHub. Para as baterias, use o <code>nx-apontamento</code>.</p>
+      </article>
+      <article data-busca="handoff passar bastão outra sessão compactar contexto">
+        <div class="cab"><code class="cmd">handoff</code><span class="tag">pocock</span></div>
+        <p>Compacta a conversa num documento para outro agente continuar.</p>
+        <p class="quando"><b>Quando</b>Fim de sessão. Salve em <code>docs/planejamento/handoffs/</code>.</p>
+      </article>
+      <article data-busca="writing-for-agents escrever skill claude.md regra documento para agente">
+        <div class="cab"><code class="cmd">writing-for-agents</code><span class="tag">pocock</span></div>
+        <p>Como escrever documento que agente consome, e o custo de cada linha sempre carregada.</p>
+        <p class="quando"><b>Quando</b>Editar <code>CLAUDE.md</code>, uma regra ou uma skill.</p>
+      </article>
+      <article data-busca="wait-what não entendi reformular repitch mensagem">
+        <div class="cab"><code class="cmd">wait-what</code><span class="tag">pocock</span></div>
+        <p>Manda refazer a última mensagem que não chegou.</p>
+        <p class="quando"><b>Quando</b>Eu explicar mal. Mais rápido que reformular a pergunta.</p>
+      </article>
+      <article data-busca="teach ensinar aprender conceito">
+        <div class="cab"><code class="cmd">teach</code><span class="tag">pocock</span></div>
+        <p>Ensina um conceito dentro do contexto deste repositório.</p>
+        <p class="quando"><b>Quando</b>Quiser entender RLS, trigger ou React Query no código que já existe.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>7 · Encanamento</h2>
+    <p class="sub">Coisas de git e de máquina. Você chama raramente, e é bom que seja assim.</p>
+    <div class="grade">
+      <article data-busca="finishing-a-development-branch fechar branch merge integrar">
+        <div class="cab"><code class="cmd">finishing-a-development-branch</code><span class="tag">superpowers</span></div>
+        <p>Decide como integrar quando a implementação terminou e os testes passam.</p>
+        <p class="quando"><b>Quando</b>Fechar a branch de trabalho.</p>
+      </article>
+      <article data-busca="resolving-merge-conflicts conflito merge rebase">
+        <div class="cab"><code class="cmd">resolving-merge-conflicts</code><span class="tag">pocock</span></div>
+        <p>Resolve conflito de merge ou rebase em andamento.</p>
+        <p class="quando"><b>Quando</b>O git parar no meio.</p>
+      </article>
+      <article data-busca="wizard assistente bash passo manual credencial infraestrutura">
+        <div class="cab"><code class="cmd">wizard</code><span class="tag">pocock</span></div>
+        <p>Gera um assistente que conduz um humano por passos que só ele pode dar.</p>
+        <p class="quando"><b>Quando</b>SMTP, domínio, senha da conta-mestra. É a forma certa do que hoje eu te mando em lista.</p>
+      </article>
+      <article data-busca="setup-pre-commit husky lint-staged prettier hook commit">
+        <div class="cab"><code class="cmd">setup-pre-commit</code><span class="tag">pocock</span></div>
+        <p>Instala Husky com lint-staged, checagem de tipo e testes no commit.</p>
+        <p class="quando"><b>Quando</b>Quiser o gate de tipos rodando sozinho antes de cada commit.</p>
+      </article>
+      <article data-busca="setup-matt-pocock-skills configurar uma vez tracker rótulos">
+        <div class="cab"><code class="cmd">setup-matt-pocock-skills</code><span class="tag">pocock</span></div>
+        <p>Configura o repositório: onde ficam os tickets, os rótulos, os documentos.</p>
+        <p class="quando"><b>Quando</b>Uma vez, agora. Nada do fluxo funciona direito antes dele.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>8 · Não servem a este projeto</h2>
+    <p class="sub">Vieram no pacote. Ficam listadas para você não perder tempo abrindo.</p>
+    <div class="grade">
+      <article data-busca="migrate-to-shoehorn typescript teste as assertion">
+        <div class="cab"><code class="cmd">migrate-to-shoehorn</code><span class="tag">pocock</span></div>
+        <p>Migra testes de <code>as</code> para a biblioteca shoehorn.</p>
+        <p class="quando"><b>Quando</b>Nunca. Não usamos shoehorn.</p>
+      </article>
+      <article data-busca="scaffold-exercises curso exercícios aulas">
+        <div class="cab"><code class="cmd">scaffold-exercises</code><span class="tag">pocock</span></div>
+        <p>Monta estrutura de exercícios de curso.</p>
+        <p class="quando"><b>Quando</b>Nunca. É da operação de cursos do autor.</p>
+      </article>
+    </div>
+  </section>
+
+  <section data-sec>
+    <h2>Sobreposições, ditas de uma vez</h2>
+    <p class="sub">Três pares fazem a mesma coisa com nomes diferentes. Escolha um lado e fique nele.</p>
+    <div class="tabela-rolagem">
+      <table>
+        <thead><tr><th>Assunto</th><th>Superpowers</th><th>Pocock</th><th>Sugestão</th></tr></thead>
+        <tbody>
+          <tr><td>Teste primeiro</td><td><code>test-driven-development</code></td><td><code>tdd</code></td><td>Superpowers: já produziu os 90 testes daqui</td></tr>
+          <tr><td>Caçar bug</td><td><code>systematic-debugging</code></td><td><code>diagnosing-bugs</code></td><td>Pocock: as fases travadas são mais rígidas</td></tr>
+          <tr><td>Revisão</td><td><code>requesting</code> e <code>receiving-code-review</code></td><td><code>code-review</code></td><td>Pocock para revisar, superpowers para receber</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="nota">
+      <b>O que saiu em 27/08:</b> as 10 skills do Spec Kit, e 67 skills mais 33
+      agentes do GSD. O GSD estava instalado no seu usuário, valendo para todos
+      os seus projetos, e foi <b>movido, não apagado</b>, para
+      <code>~/.claude/desativado-27-08/</code>. Voltar é mover de volta.
+      A constituição em <code>.specify/memory/constitution.md</code> continua
+      valendo: ela guarda RLS, negação por padrão e senha, que não são do Spec
+      Kit, e o hook do projeto ainda a lê.
+    </div>
+  </section>
+
+  <footer>
+    Gerado em 27/08/2026 a partir de <code>.claude/skills/</code>. Marca conforme
+    <code>docs/marca/tokens.md</code>. Quando uma skill entrar ou sair, esta
+    página fica velha: peça para regerar.
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var campo = document.getElementById('busca');
+    var vazio = document.getElementById('vazio');
+    var cartoes = Array.prototype.slice.call(document.querySelectorAll('article[data-busca]'));
+    var secoes = Array.prototype.slice.call(document.querySelectorAll('section[data-sec]'));
+
+    function normalizar(t) {
+      return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    }
+
+    cartoes.forEach(function (c) {
+      c._chave = normalizar(c.getAttribute('data-busca') + ' ' + c.textContent);
+    });
+
+    campo.addEventListener('input', function () {
+      var termo = normalizar(campo.value.trim());
+      var achou = 0;
+
+      cartoes.forEach(function (c) {
+        var bate = termo === '' || c._chave.indexOf(termo) !== -1;
+        c.style.display = bate ? '' : 'none';
+        if (bate) achou++;
+      });
+
+      secoes.forEach(function (s) {
+        var visiveis = s.querySelectorAll('article[data-busca]:not([style*="display: none"])').length;
+        var temCartao = s.querySelector('article[data-busca]') !== null;
+        s.style.display = (termo === '' || !temCartao || visiveis > 0) ? '' : 'none';
+      });
+
+      vazio.style.display = (termo !== '' && achou === 0) ? 'block' : 'none';
+    });
+  })();
+</script>

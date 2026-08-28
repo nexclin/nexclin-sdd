@@ -72,7 +72,8 @@ marketplace, ou reescreve do zero.**
 - **Commit:** `6654f6b60cd9d5be8b54c6fafe44346dabeb3b76`
 - **Data da copia:** 27/08/2026
 - **Licenca:** MIT, em [`LICENSE-mattpocock-skills`](LICENSE-mattpocock-skills)
-- **Total:** 5 skills, de 22 disponiveis
+- **Total:** 27 skills. Em 27/08, `git-guardrails-claude-code` ficou de fora
+  (ver abaixo); todas as outras entraram.
 
 | Skill | Por que esta |
 |---|---|
@@ -106,3 +107,74 @@ fora pela mesma razao ja registrada acima para o superpowers: copia funciona
 em qualquer sessao, inclusive nao interativa, sem passo manual. O custo e o
 mesmo: copia nao recebe atualizacao, e o commit acima existe para que a
 comparacao com o upstream seja possivel.
+
+---
+
+## Adendo de 27/08/2026: a troca de metodo
+
+Decisao do Arthur, tomada depois da avaliacao em
+`docs/harness/sdd-ferramentas-e-avaliacao.md`. Eu havia recomendado manter o
+Spec Kit; ele reafirmou a troca com uma razao diferente da que eu tinha
+respondido: **orientacao bagunçada e consumo de token desotimizado**. Fica
+registrado assim, com a discordancia visivel, para ninguem reabrir sem
+contexto.
+
+### O que saiu
+
+| O que | Quantidade | Para onde foi |
+|---|---:|---|
+| Skills do Spec Kit (`speckit-*`) | 10 | apagadas do repositorio, no historico do git |
+| Skills do GSD | 67 | `~/.claude/desativado-27-08/skills/` |
+| Agentes do GSD | 33 | `~/.claude/desativado-27-08/agents/` |
+| Perfil do GSD | 1 | `~/.claude/desativado-27-08/.gsd-profile` |
+
+**O GSD foi MOVIDO, nao apagado, e a razao importa:** ele estava instalado no
+usuario (`~/.claude/`), nao neste projeto, entao valia para todos os
+repositorios do Arthur. Desfazer e mover de volta.
+
+### O que sobreviveu, e por que
+
+**A constituicao.** `.specify/memory/constitution.md` continua onde estava. Ela
+guarda os cinco principios (RLS, negacao por padrao, senha, segredo, testes
+minimos), que **nao sao do Spec Kit**: sao as regras de seguranca do produto, e
+`.claude/hooks/guarda-constituicao.mjs` ainda as le a cada escrita. Apagar o
+metodo nao apaga as regras.
+
+**As specs.** `specs/` inteiro fica. Sao 8 pastas com spec, plano e tarefas, e
+72 tarefas ja concluidas por elas. A §2.5 do `CLAUDE.md` diz que o que atravessa
+para outubro e a regra escrita: essas pastas SAO essa regra. Sai a ferramenta,
+nao o que ela escreveu.
+
+**A regra (h) da constituicao ficou desatualizada.** Ela exige "spec aprovada em
+`specs/`" e nomeia o fluxo do Spec Kit. O fluxo mudou; a exigencia de spec
+antes de feature, nao. Emendar quando houver calma, e ate la vale o espirito:
+nada de feature sem documento aprovado antes.
+
+### `git-guardrails-claude-code` continua fora
+
+Unica excecao ao "importar tudo". Ela instala um hook que bloqueia envio ao
+remoto, e envio ao remoto e exatamente como este projeto entrega correcao ao
+cliente pela ponte inversa. Invoca-la quebraria a entrega. A ideia ja foi
+aproveitada em `.claude/hooks/guarda-ponte.mjs`, com o conteudo trocado pela
+falha real daqui.
+
+### Tres sobreposicoes, e nao ha como remove-las sem escolher
+
+Superpowers e Pocock cobrem o mesmo assunto em tres pares. Ambos os conjuntos
+ficaram por decisao do Arthur, entao a escolha e de uso, nao de instalacao:
+
+| Assunto | Superpowers | Pocock |
+|---|---|---|
+| Teste primeiro | `test-driven-development` | `tdd` |
+| Cacar bug | `systematic-debugging` | `diagnosing-bugs` |
+| Revisao | `requesting-` e `receiving-code-review` | `code-review` |
+
+A sugestao de qual usar em cada par esta no guia visual.
+
+### O guia
+
+`docs/harness/guia-skills.html`, publicado tambem como artefato. Agrupa as 43
+pelo momento do trabalho, com busca. **Ele fica velho quando uma skill entra ou
+sai:** quem mexer em `.claude/skills/` regera o guia no mesmo commit, que e a
+mesma regra desta tabela.
+
