@@ -42,9 +42,20 @@ arquivo diferentes. É paralelismo de graça, e é onde começar.
 **P com P exige conferir o arquivo.** Duas correções de relatório de vendas
 tocam o mesmo `.tsx` e vão brigar. Duas correções em telas diferentes, não.
 
-**B não começa antes do export.** O `T004` da SPEC 002 é gate absoluto: o
-export é assíncrono, chega por e-mail e só pode ser pedido **uma vez a cada
-24 horas**. Escrever no banco antes dele é apostar sem ponto de retorno.
+**B não começa antes do export.** O `T004` da SPEC 002 é gate absoluto, e
+escrever no banco antes dele é apostar sem ponto de retorno.
+
+**Corrigido em 28/08/2026, contra o comportamento observado.** Esta skill dizia
+que o export "é assíncrono, chega por e-mail e só pode ser pedido uma vez a cada
+24 horas". **Nada disso é verdade.** Em `Cloud → Overview → Advanced settings →
+Export project data`, o clique **salva o arquivo direto na máquina**, na hora, e
+sem limite diário. Relato do Arthur no dia: *"na verdade não chega o e-mail,
+clico em export data e ele salva diretamente no meu computador."*
+
+A correção importa porque a informação errada **custou tempo real**: eu segurei o
+clique do export com medo de gastar uma janela de 24 horas que não existe, e a
+raia B ficou parada à toa. Regra que sai daí: **limite operacional que ninguém
+verificou não vira gate.**
 
 ## Passo 3: escolher o isolamento
 

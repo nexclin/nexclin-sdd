@@ -3,9 +3,9 @@
 > **Regra viva.** Nasceu antes da execução, guiou a execução, e é corrigida no
 > mesmo commit em que a execução a contradiz.
 >
-> **Estado em 28/08/2026:** trava com **22 de 23 fechados**. Resta **um**, o
-> V-24, e ele tem causa provada e conserto definido, esperando escrita em
-> produção. Alvo: a plataforma Lovable, via ponte inversa.
+> **Estado em 28/08/2026:** **trava zerada, 23 de 23 fechados.** O V-24 caiu no
+> fim do dia, com a migração aplicada em produção e o resultado provado na tela.
+> Alvo: a plataforma Lovable, via ponte inversa.
 >
 > **A trava caiu de 3 para 1 em 28/08**, com o app finalmente acessível: o V-21
 > foi reconferido na tela com base povoada e fechou, e o V-04 saiu por não
@@ -150,9 +150,9 @@ apontamento marcado no Notion.
 
 ## 7. A decisão que falta
 
-**Uma, e é uma escrita em produção que precisa da sua mão.**
+**Nenhuma.** A trava fechou em 28/08/2026.
 
-### V-24, o único aberto: causa provada em 28/08
+### V-24, fechado: da causa provada ao conserto aplicado
 
 A bifurcação que esta regra deixou em aberto (*"sem linha `level = 3` é SQL; com
 linhas de nível 3 é front"*) **foi resolvida na tela, sem precisar da consulta**.
@@ -187,10 +187,40 @@ o que o lançamento exige, em vez de por linha qualquer. Algo como `NOT EXISTS
 (... WHERE clinic_id = _clinic_id AND level = 3 AND active)`. Requer migração, e
 por isso está aqui e não foi feita.
 
-**A decisão que é sua:** corrigir o guarda e rodar `semear_clinica`, ou rodar
-`seed_chart_of_accounts` direto nesta clínica e deixar o guarda para depois. A
-primeira conserta a próxima clínica também; a segunda destrava hoje e deixa a
-armadilha de pé.
+**A decisão do Arthur, 28/08:** corrigir o guarda, porque conserta a próxima
+clínica também. Virou a migração `20260828010000`, aplicada em produção no mesmo
+dia.
+
+### O que a leitura do banco revelou antes da escrita
+
+São **18 clínicas**, e o estrago era muito menor do que parecia:
+
+| Estado | Quantas |
+|---|---|
+| Saudáveis, 104 contas e 79 analíticas | **16**, inclusive a Clínica VB |
+| Vazia de propósito, zero contas | 1 |
+| Quebrada pela metade, 1 conta e 0 analíticas | **1**, a conta mestra NexClin |
+
+**A Clínica VB estava íntegra**, então nenhum cliente foi afetado. E a "Clínica
+Vazia" não dependia deste conserto: com zero linhas, o guarda antigo já a
+semearia. O bug do guarda atingia exatamente uma clínica. **O defeito de
+idempotência, esse sim, era latente para todas as 18.**
+
+### Como foi provado
+
+1. **Sintaxe**, com a migração inteira dentro de `BEGIN … ROLLBACK`: rodou de
+   verdade e foi desfeita. "Query succeeded."
+2. **Aplicação real** das duas funções. "Query succeeded."
+3. **`semear_clinica`** na conta mestra, e a contagem passou de `1 / 0` para
+   **`104 / 79`**, o mesmo número das outras 16.
+4. **Na tela**, que é o que a regra (j) exige: o diálogo de despesa avulsa, que
+   dizia *"Nenhuma conta analítica disponível"*, agora lista 1.1.1 Simples
+   Nacional, 1.1.2 ICMS, 1.1.3 ISS, 1.1.4 PIS, 1.1.5 COFINS, 1.1.6 IRPJ,
+   1.1.7 IRs Diversos, 1.1.8 CSLL, 1.2.1 REFIS.
+
+**O nó `1 nexclin` continua lá, com o nome dele**, e agora é o pai da subárvore
+semeada. Foi decisão de projeto: sobrescrever dado que a clínica pode ter
+digitado não é trabalho de migração, e a tela renomeia em dois cliques.
 
 ### V-21, fechado em 28/08 na tela
 
