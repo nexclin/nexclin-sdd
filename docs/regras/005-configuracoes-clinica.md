@@ -4,13 +4,23 @@
 > a execução a contradiz.
 >
 > **Estado em 28/08/2026:** **executada em doze dos dezesseis requisitos, e sem
-> aceite manual.** O FR-015 está corrigido na plataforma Lovable e aguarda
-> publicação; o FR-016 é dívida declarada.
+> aceite manual.** O FR-015 está corrigido e publicado na plataforma Lovable,
+> provado na tela de lá. **O FR-010 e o FR-016 continuam PARCIAIS**, e pela
+> mesma razão: o mecanismo durável existe, o consumidor não. A seção 7 detalha.
+>
+> **Terceira correção deste cabeçalho em três dias, e a mais constrangedora.**
+> A versão anterior de hoje dizia "o FR-016 fechou". Os dois eixos da revisão de
+> código derrubaram junto: a coluna nasceu, mas nenhum arquivo em `app/` a lê ou
+> grava, então o que fechou foi a gaveta, não a persistência. Pela regra (j),
+> isto é *código lido, não comportamento provado*. O parágrafo abaixo já
+> advertia que esta é a linha mais fácil de deixar mentindo, e ela mentiu de
+> novo na linha seguinte à advertência.
 >
 > Catálogos, regras de negócio, metas, anamnese, plano de contas
 > e o progresso do onboarding estão em pé em `app/app/configuracoes/`, sobre
-> `lib/config/`, com 142 testes. **Continuam abertos o FR-005 em parte, o FR-006
-> por inteiro, a segunda metade do FR-010 e o FR-016**, detalhados na seção 7. Falta também
+> `lib/config/`, com 156 testes. **Continuam abertos o FR-005 em parte, o FR-006
+> por inteiro, a segunda metade do FR-010 e o consumo do FR-016**, detalhados na
+> seção 7. Falta também
 > o aceite na tela, que é do Arthur. Alvo: a stack Next.js deste repositório.
 >
 > **Duas correções de cabeçalho em dois dias, e as duas são a regra (l) em
@@ -220,7 +230,7 @@ As entidades, e o que cada grupo carrega:
 - **SC-008**: Alterar a taxa de uma forma de pagamento deixa linha em
   `data_audit_log` com autor, hora e o valor **anterior** da taxa.
 
-**Prova automatizada:** 142 testes em Vitest sobre `lib/config/`, e entre eles
+**Prova automatizada:** 156 testes em Vitest sobre `lib/config/`, e entre eles
 `__tests__/auditoria.test.ts`, que é **contrato, não lógica**. Ele lê os `.sql`
 de `supabase/migrations/` e o `acoes.ts`, e falha quando os dois discordam.
 
@@ -276,12 +286,74 @@ São três saídas, e a escolha é de produto:
 **Sem essa escolha o FR-006 não abre.** Qualquer uma delas é migração, faixa A, e
 atravessa para outubro.
 
-### A dívida do FR-016, que não é decisão, é trabalho
+### O FR-016, com a gaveta pronta e ninguém guardando nada nela
 
-A marca de "já viu a apresentação" vive no `localStorage` na Lovable. Na stack
-nova ela **MUST** virar coluna por usuário. Não há pergunta aberta aqui: a
-escolha do navegador foi para destravar a conta mestra no mesmo dia, e está
-escrita no próprio código como dívida.
+A dívida foi contraída e quitada no mesmo dia. A marca de "já viu a
+apresentação" ficou no `localStorage` na Lovable porque coluna nova exigiria o
+export do banco e a mão do Arthur no SQL editor **enquanto a conta mestra estava
+trancada fora do sistema**. Aqui ela é `profiles.onboarding_tour_seen_at`,
+migração `20260828020000`.
+
+**`timestamptz`, não `boolean`:** um booleano responde "viu?"; um carimbo
+responde "viu?" e "quando?", pelo mesmo espaço. O "quando" serve ao suporte,
+para saber se a pessoa passou pela apresentação antes ou depois de uma mudança
+de tela, e ao produto, para decidir se um redesenho grande justifica
+reapresentar. `NULL` é "nunca viu".
+
+**Em `profiles`, sem policy nova:** a policy *"Users can update their own
+profile"* (`20260817021500`) já usa `USING (user_id = auth.uid())`, então cada
+um escreve a própria marca e a de mais ninguém. Tabela nova custaria RLS,
+policy e um join para guardar um carimbo.
+
+**Fora da auditoria, de propósito:** a regra (d) cobre ação administrativa sobre
+dado de cliente. Marcar que se viu a própria apresentação não é nenhuma das
+três, e auditar isso encheria a trilha de ruído.
+
+**O que o código garante, e é a lição do defeito:** `lib/config/apresentacao.ts`
+decide olhando **só** o carimbo do usuário. O defeito de 28/08 não foi de
+armazenamento, foi de lógica: a apresentação consultava `isComplete`, derivado
+de doze contagens, e uma clínica sem formulário de anamnese ficava incompleta
+para sempre. **Quem garante isso é a assinatura da função, que não aceita outra
+entrada.** Houve aqui a alegação de que um teste travava a reintrodução; a
+revisão derrubou, o teste foi retirado, e a razão está escrita no arquivo de
+teste. Teste que dá segurança falsa é pior que teste nenhum.
+
+**O que falta para o FR-016 fechar:** alguém que leia e grave a coluna. A
+apresentação inicial não existe nesta stack, então não há tela que dispense nem
+que marque. O requisito fecha junto com ela.
+
+**Sem backfill, de propósito.** A revisão apontou que todo usuário existente
+fica `NULL` e veria a apresentação de novo. A objeção valeria para uma coluna
+que descreve algo já acontecido, e esta não descreve: ninguém viu a apresentação
+desta stack, porque ela não foi construída. `NULL` é o valor verdadeiro para
+todos hoje, e preencher com `now()` é que criaria o defeito, afirmando que
+dezessete pessoas viram uma tela que não existe.
+
+### O FR-010 continua parcial, e o que falta não dá para escrever hoje
+
+O requisito tem duas metades. **A primeira está de pé:** a tela configura
+`patient_required_fields` e `appointment_required_fields`, e `lerRegras()` as
+traz. **A segunda diz que os formulários dos módulos posteriores obedecem sem
+lista fixa em código, e esses formulários não existem nesta stack.** `app/app/`
+tem `configuracoes` e `conta-suspensa`, e mais nada. Não há o que fazer
+obedecer.
+
+**O que foi feito em 28/08, depois de a revisão cortar o excesso:** o par
+(catálogo, piso) passou a ser escrito num lugar só. `normalizaCamposObrigatorios`
+pede três argumentos, e dois deles andam sempre juntos; esse par aparecia à mão
+em quatro lugares, e um catálogo novo obrigaria a lembrar dos quatro.
+`lib/config/campos-obrigatorios.ts` o fixa, e **`acoes.ts` já grava por ele**,
+o que dá à peça um chamador real hoje.
+
+**A primeira versão foi maior, e era especulativa.** Ela tinha também
+`camposObrigatoriosDePaciente(regras)` e `faltamNoPaciente(dados, regras)`, para
+consumidores que não existem, e a segunda ia além do FR-010: validar cadastro é
+do módulo que tiver o formulário, não deste arquivo. O eixo Spec da revisão
+chamou de abstração especulativa, com razão, e as quatro funções viraram duas.
+
+**O FR-010 só fecha quando os módulos de pacientes e de consultas nascerem e
+usarem essas funções.** Fica registrado aqui para que a regra do módulo
+correspondente já nasça citando-as.
 
 ### Dois defeitos menores que a mesma revisão achou, e não dependem de decisão
 
