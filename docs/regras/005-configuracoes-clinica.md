@@ -3,11 +3,14 @@
 > **Regra viva.** Nasceu antes da execução, e é corrigida no mesmo commit em que
 > a execução a contradiz.
 >
-> **Estado em 28/08/2026:** **executada em doze dos catorze requisitos, e sem
-> aceite manual.** Catálogos, regras de negócio, metas, anamnese, plano de contas
+> **Estado em 28/08/2026:** **executada em doze dos dezesseis requisitos, e sem
+> aceite manual.** O FR-015 está corrigido na plataforma Lovable e aguarda
+> publicação; o FR-016 é dívida declarada.
+>
+> Catálogos, regras de negócio, metas, anamnese, plano de contas
 > e o progresso do onboarding estão em pé em `app/app/configuracoes/`, sobre
 > `lib/config/`, com 142 testes. **Continuam abertos o FR-005 em parte, o FR-006
-> por inteiro e a segunda metade do FR-010**, detalhados na seção 7. Falta também
+> por inteiro, a segunda metade do FR-010 e o FR-016**, detalhados na seção 7. Falta também
 > o aceite na tela, que é do Arthur. Alvo: a stack Next.js deste repositório.
 >
 > **Duas correções de cabeçalho em dois dias, e as duas são a regra (l) em
@@ -111,6 +114,24 @@ que alguém criar um plano pela tela.
   e **MUST NOT** bloquear o uso do sistema enquanto eles não fecharem. *Porquê:*
   os passos são derivados destas mesmas tabelas, e bloquear quem ainda não
   configurou tudo impede exatamente quem mais precisa entrar para configurar.
+  **Este requisito foi violado em produção, e o custo foi total:** ver FR-015.
+- **FR-015**: A apresentação inicial **MUST** ser dispensável a qualquer momento,
+  **MUST NOT** redirecionar a navegação por conta própria, e **MUST** rodar uma
+  vez por usuário, na primeira entrada. *Porquê:* em 28/08/2026 a conta mestra
+  ficou **trancada fora do sistema**, e a causa foi a apresentação depender de
+  `isComplete`, que é derivado de doze contagens no banco. Sem formulário de
+  anamnese cadastrado, a clínica ficava incompleta para sempre, a apresentação
+  renascia a cada carga de página e um `useEffect` devolvia qualquer rota para a
+  do passo corrente. **A condição de exibição MUST NOT consultar o progresso da
+  configuração:** apresentação e progresso são duas perguntas, e juntá-las foi o
+  defeito. Decisão do Arthur no mesmo dia: *"não tem que ser obrigatória a
+  execução, é só pra mostrar a etapa inicial, e isso só roda uma vez"*.
+- **FR-016**: A marca de "já viu a apresentação" **MUST** ser persistida por
+  usuário, em coluna do banco. *Porquê:* na plataforma Lovable ela ficou no
+  `localStorage` do navegador, e a escolha foi deliberada, porque coluna nova
+  exigiria o export do banco e a mão do Arthur no SQL editor enquanto a conta
+  estava trancada. O custo aceito é ver a apresentação uma vez a mais num
+  navegador novo. **Na stack nova isso é dívida a pagar, não padrão a copiar.**
 
 ## 3. O que muda no banco
 
@@ -254,6 +275,13 @@ São três saídas, e a escolha é de produto:
 
 **Sem essa escolha o FR-006 não abre.** Qualquer uma delas é migração, faixa A, e
 atravessa para outubro.
+
+### A dívida do FR-016, que não é decisão, é trabalho
+
+A marca de "já viu a apresentação" vive no `localStorage` na Lovable. Na stack
+nova ela **MUST** virar coluna por usuário. Não há pergunta aberta aqui: a
+escolha do navegador foi para destravar a conta mestra no mesmo dia, e está
+escrita no próprio código como dívida.
 
 ### Dois defeitos menores que a mesma revisão achou, e não dependem de decisão
 
