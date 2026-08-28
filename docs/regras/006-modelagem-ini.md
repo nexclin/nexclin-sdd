@@ -214,4 +214,11 @@ cliente, **indistinguível do que o cliente cadastrou**. A auditoria registra a
 entrada e a saída do suporte, **não o que foi criado no meio**.
 
 Isso se resolve quando a auditoria da regra 002 passar de `patients` para as
-demais tabelas. Fica anotado aqui para não se perder no caminho.
+demais tabelas.
+
+**Parcialmente fechado em 27/08**, pelo FR-013 da regra 005: as catorze tabelas
+de configuração ganharam trigger de auditoria, então mexer em preço, taxa ou
+parâmetro sob impersonação passa a gravar linha com o `auth.uid()` do suporte.
+**O que continua aberto** é exatamente o caso desta dívida: `imobilizado` e
+`insumos` ainda não têm trigger, e são tabelas desta regra. Elas entram quando o
+módulo delas tiver regra própria.

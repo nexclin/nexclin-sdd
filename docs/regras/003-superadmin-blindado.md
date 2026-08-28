@@ -1,11 +1,21 @@
 # SPEC 003 — Super Admin finalizado e blindado (stack nova)
 
-> **Aviso, 27/08/2026. Movido, não reescrito.** Este documento está no formato
-> antigo de spec, e não nas sete seções da regra viva. Foi mantido como estava
-> porque **nunca começou**: é proposta que estende a Fase 4 da regra 001, e a
-> própria 001 ainda tem três provas de comportamento abertas. Reescrever 124
-> linhas que ninguém vai reler antes disso não paga. **Quando ele voltar à fila,
-> reescreva no formato de sete seções antes de executar.**
+> **Aviso, 28/08/2026. Movido, não reescrito, e o motivo escrito em 27/08
+> estava errado.** Este documento está no formato antigo de spec, e não nas sete
+> seções da regra viva.
+>
+> Em 27/08 o aviso dizia que ele **nunca começou**. Não é verdade, e a auditoria
+> do dia seguinte mediu: existem `lib/superadmin/assinatura.ts`,
+> `lib/superadmin/acoes.ts`, **22 testes** em `__tests__/assinatura.test.ts`, e
+> seis telas sob `app/superadmin/(panel)/` marcadas `SPEC 003` no comentário,
+> além da migração `20260826020000_impersonacao_com_prazo.sql`. Ele começou, e
+> boa parte dele está de pé.
+>
+> **Continua sem reescrever por outra razão:** ninguém mediu quanto do documento
+> a implementação cobre, e reescrever no formato novo sem essa medida produziria
+> um cabeçalho de estado tão errado quanto o que acabou de ser corrigido. **A
+> primeira coisa a fazer quando ele voltar à fila é o levantamento item a item;
+> a reescrita vem depois dele.**
 >
 > A lei mudou de endereço: onde se lê `../constituicao.md`, leia
 > `docs/constituicao.md`. Onde se lê `specs/`, leia `docs/regras/`.

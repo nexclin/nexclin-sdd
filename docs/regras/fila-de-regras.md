@@ -74,7 +74,7 @@ Consequências práticas dessa regra:
 
 Todas as tabelas citadas abaixo (`patients`, `leads`, `appointments`,
 `tasks`, `receivables`, `business_rules`, `team_members`, catálogos)
-**já existem na fundação** — foram portadas nas 55 migrações da SPEC 001
+**já existem na fundação**, foram portadas nas 56 migrações da regra 001
 ([`supabase/migrations/`](../../supabase/migrations)). Nenhuma spec desta
 fila cria essas tabelas do zero; todas apenas ligam o app à estrutura já
 existente e adicionam colunas/policies pontuais quando necessário.
