@@ -14,7 +14,7 @@
 
 Em 19/08 ficou provado que o editor de SQL da plataforma **executa uma consulta
 diferente da que está na tela** quando é dirigido por automação. Registro em
-`docs/seguranca/nota-sql-editor-lovable-2026-08-19.md`. Desde então, nenhum
+`../nota-sql-editor.md`. Desde então, nenhum
 agente aplica migração ali. Eu escrevo e confiro o retorno; a colagem é sua.
 
 ## A ordem, e a razão dela
@@ -285,7 +285,7 @@ esperado ao lado. Qualquer coisa fora, me mande o resultado inteiro.
 O que fica pronto para o reteste do Vinícius:
 
 - Os 23 itens da bateria corrigidos no código, publicados
-  (`docs/planejamento/verificacao-bateria-25-08.md`).
+  (`../../historico/2026-08-25-verificacao-bateria.md`).
 - O convite de equipe funcionando, que era o único item ainda sem efeito.
 - Tarefa editável pelo criador ou pelo master, com a coluna que sustenta a
   regra.
@@ -297,7 +297,7 @@ reteste é o que fecha.
 
 E um item continua aberto de propósito, fora desta sequência: o furo de
 autoconcessão em `team_members`
-(`docs/seguranca/autoconcessao-team-members-2026-08-25.md`). Qualquer membro
+(`../../historico/2026-08-25-autoconcessao-team-members.md`). Qualquer membro
 pode alterar as próprias permissões e o próprio percentual de repasse. É faixa
 A, atravessa, e não entra na semana do lançamento porque mexer na policy de
 equipe às vésperas de abrir é trocar um risco conhecido por um desconhecido.

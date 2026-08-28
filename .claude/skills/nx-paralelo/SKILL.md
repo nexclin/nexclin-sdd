@@ -30,7 +30,7 @@ existe "provavelmente dá certo".
 |---|---|---|
 | **P** Ponte | `../nexclin-lovable/src` | 08/09 |
 | **B** Banco | `supabase/migrations` nos dois repositórios | 08/09 |
-| **N1** Spec | `specs/` | sem prazo |
+| **N1** Regra viva | `docs/regras/` | sem prazo |
 | **N2** App novo | `app/`, `lib/` | sem prazo |
 | **D** Documento | `docs/` | sem prazo |
 | **H** Arthur | painel Supabase, plataforma ao vivo | varia |
@@ -101,7 +101,7 @@ Cada raia fecha com três coisas, na ordem:
 1. **O que foi feito**, em uma linha, no commit.
 2. **A prova**, que é a saída do teste ou o passo manual executado, nunca
    "deve funcionar".
-3. **A linha atualizada** em `docs/orquestracao/mapa-de-execucao.md`, no mesmo
+3. **A linha atualizada** em `docs/historico/2026-08-25-mapa-de-execucao.md`, no mesmo
    commit. Mapa desatualizado dá confiança falsa, que é pior que mapa nenhum.
 
 ---
@@ -109,7 +109,7 @@ Cada raia fecha com três coisas, na ordem:
 ## Onde isto veio de
 
 O grafo de dependências e as raias vivem em
-`docs/orquestracao/mapa-de-execucao.md`. Consulte-o antes de decidir a ordem;
+`docs/historico/2026-08-25-mapa-de-execucao.md`. Consulte-o antes de decidir a ordem;
 esta skill diz **como** despachar, ele diz **o quê**.
 
 A técnica de despacho paralelo e de worktree tem versão madura e de licença

@@ -46,7 +46,7 @@ Módulo novo exige emenda à constituição (Princípio III).
 
 ## Dívidas conhecidas da referência — não replique
 
-Levantadas no walkthrough de 16/08 (`INVENTARIO-UI.md`, seção 5):
+Levantadas no walkthrough de 16/08 (`docs/referencia/INVENTARIO-UI.md`, seção 5):
 
 - **Um** componente de período para todo o app. A referência tem três
   vocabulários diferentes convivendo.

@@ -42,5 +42,5 @@ dois deles não são técnicos. O relatório existe para responder uma pergunta:
 5. **Decisões esperando os sócios** — lista curta, cada uma com o custo de
    continuar esperando.
 
-Escreva em `RELATORIO-SEMANAL.md`, substituindo o anterior. O histórico fica
+Escreva em `docs/historico/2026-08-03-relatorio-semanal.md`, substituindo o anterior. O histórico fica
 no git — não acumule versões no mesmo arquivo.

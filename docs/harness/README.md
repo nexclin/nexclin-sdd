@@ -71,9 +71,9 @@ Code, adaptada ao que este repositório já tinha (Spec Kit + constituição).
 | Peça | Serve para | Carrega quando | Aqui |
 |---|---|---|---|
 | `CLAUDE.md` | contexto sempre presente | toda sessão | já existia — contexto do produto |
-| `.specify/memory/constitution.md` | a lei | referenciada | já existia — 6 princípios |
-| `.claude/rules/*.md` | restrição por área do código | ao tocar os `paths` | banco, app, marca, **escrita** |
-| `.claude/skills/*/SKILL.md` | procedimento de várias etapas | quando invocada | 4 nossas, 11 do Spec Kit, **11 incorporadas** |
+| `docs/constituicao.md` | a lei | referenciada | v2.0.1, nove princípios |
+| `.claude/rules/*.md` | restrição por área do código | ao tocar os `paths` | banco, app, marca, escrita, **estrutura** |
+| `.claude/skills/*/SKILL.md` | procedimento de várias etapas | quando invocada | **22 em circulação**: 5 nossas, 17 incorporadas. 22 fora, em `.claude/skills-fora/` |
 | `.claude/agents/*.md` | trabalho paralelo com contexto próprio | quando delegado | 4 agentes |
 | `.claude/settings.json` | automação determinística | evento de ciclo de vida | 1 hook, permissões, **marketplaces** |
 
@@ -222,7 +222,7 @@ framework**: LangGraph e companhia seguem fora, porque nada aqui exige estado
 compartilhado entre nós. O que mudou é que o grafo saiu do implícito e virou
 artefato:
 
-- [`docs/orquestracao/mapa-de-execucao.md`](../orquestracao/mapa-de-execucao.md)
+- [`../historico/2026-08-25-mapa-de-execucao.md`](../historico/2026-08-25-mapa-de-execucao.md)
   tem o grafo de dependências das 27 tarefas pendentes e as raias que podem
   correr juntas.
 - `nx-paralelo` diz **como** despachar, com o único teste que importa: mesma

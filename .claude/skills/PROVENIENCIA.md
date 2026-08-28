@@ -1,8 +1,14 @@
 # Proveniência das skills desta pasta
 
-> Atualizado em 25/08/2026. Quem adicionar skill de terceiro **atualiza esta
+> Atualizado em 27/08/2026. Quem adicionar skill de terceiro **atualiza esta
 > tabela no mesmo commit**. Sem isso, em três meses ninguém sabe o que é nosso,
 > o que é de fora, e sob qual licença.
+>
+> **Em 27/08 a pasta foi de 43 skills para 22.** As 22 que saíram foram
+> **movidas** para `.claude/skills-fora/`, que o git ignora: elas continuam no
+> disco e voltam movendo de volta. A razão é carga de contexto: cada descrição de
+> skill é lida a todo turno, e 43 delas somavam 7.213 bytes por turno. Ver
+> `docs/adr/0004-o-spec-kit-sai.md`.
 
 ## Nossas, escritas neste projeto
 
@@ -12,12 +18,14 @@
 | `nx-modulo` | porta um dos 15 módulos para a stack nova |
 | `nx-ponte` | corrige bug na plataforma ao vivo sem consumir crédito |
 | `nx-paralelo` | decide o que roda em paralelo e como isolar |
+| `nx-regra` | escreve a regra viva em `docs/regras/`, nas sete seções. **Obra derivada do `to-spec` do Matt Pocock, sob MIT.** Ver abaixo |
 
 ## Do Spec Kit
 
-`speckit-*`, onze skills. Vieram com a instalação do GitHub Spec Kit
-(`.specify/`), são o fluxo canônico do método SDD deste projeto, e a
-constituição as referencia por nome.
+`speckit-*`, onze skills. Vieram com a instalação do GitHub Spec Kit e foram o
+fluxo canônico do método SDD deste projeto até 27/08/2026, quando **saíram
+junto com a pasta `.specify/`**. O motivo está em
+`docs/adr/0004-o-spec-kit-sai.md`.
 
 ## De terceiros, incorporadas
 
@@ -78,23 +86,30 @@ marketplace, ou reescreve do zero.**
 | Skill | Por que esta |
 |---|---|
 | `grilling` | entrevista que testa uma decisao antes de ela virar codigo. Entra porque decisoes deste projeto se reverteram em horas: a D-1 foi revogada no mesmo dia pela D-7, e a prioridade inverteu em 26/08 |
-| `to-questionnaire` | transforma decisao que nao e minha em questionario para outra pessoa. E literalmente o que `docs/planejamento/perguntas-vinicius-20-08.md` faz a mao |
+| `to-questionnaire` | transforma decisao que nao e minha em questionario para outra pessoa. E literalmente o que `docs/historico/2026-08-20-perguntas-vinicius.md` faz a mao |
 | `writing-for-agents` | como escrever documento que agente consome. Conversa direto com `.claude/rules/escrita.md` e com a estrutura de harness inteira |
 | `wait-what` | pedir que a ultima mensagem seja reformulada quando ela nao chegou |
 | `codebase-design` | vocabulario de modulo profundo, para a reescrita em Next.js de outubro |
 
-**O que foi DEIXADO DE FORA, e por que:**
+**A avaliacao acima virou de cabeca para baixo em 27/08, e a razao foi o Spec
+Kit sair.** O que era "compete com o Spec Kit" virou "e o processo que ficou":
+`to-tickets`, `implement`, `wayfinder` e `setup-matt-pocock-skills` **entraram**,
+e com eles `code-review`, `diagnosing-bugs`, `handoff` e `ask-matt`. `triage`
+continua fora, porque colide com `nx-apontamento`, que ja faz a triagem das
+baterias no formato do Notion.
 
-- `to-spec`, `to-tickets`, `implement`, `wayfinder`, `triage`,
-  `setup-matt-pocock-skills`: sao o processo ponta a ponta do autor, e ele
-  **compete com o Spec Kit**, que a regra (h) da constituicao torna
-  obrigatorio. O proprio README dele diz que existe como alternativa a
-  "GSD, BMAD e Spec-Kit". Duas metodologias na mesma pasta e pior que uma.
-  Alem disso, `triage` colidiria com `nx-apontamento`, que ja faz a triagem
-  das baterias no formato do Notion.
-- `tdd`, `code-review`, `diagnosing-bugs`, `handoff`,
-  `resolving-merge-conflicts`: ja temos equivalente vindo do superpowers, e
-  handoff ja e convencao em `docs/planejamento/handoffs/`.
+**`to-spec` foi BIFURCADO, nao adotado.** Ele exige *"A LONG, numbered list"* de
+user stories, que o formato de sete secoes removeu, e publica em issue em vez de
+escrever arquivo. Nasceu `nx-regra` a partir dele, e o original saiu. E obra
+derivada de codigo MIT, e o aviso de copyright em
+[`LICENSE-mattpocock-skills`](LICENSE-mattpocock-skills) cobre os dois. Motivo
+completo em `docs/adr/0005-bifurcar-o-to-spec.md`.
+
+**Nos pares sobrepostos, quem ficou:** superpowers no teste
+(`test-driven-development`, que ja produziu os 90 testes), Pocock no bug
+(`diagnosing-bugs`, com fases travadas). Na revisao ficaram **os dois**, porque
+`code-review` revisa e `receiving-code-review` ensina a receber critica, que nao
+e a mesma coisa. Saiu so `requesting-code-review`.
 - `git-guardrails-claude-code`: **a ideia foi adotada, o arquivo nao.** Ele
   bloqueia `git push`, que e exatamente como este projeto entrega correcao ao
   cliente pela ponte inversa. Copiar a lista dele quebraria a entrega. O que
@@ -124,6 +139,7 @@ contexto.
 | O que | Quantidade | Para onde foi |
 |---|---:|---|
 | Skills do Spec Kit (`speckit-*`) | 10 | apagadas do repositorio, no historico do git |
+| Skills de terceiros tiradas de circulacao | 22 | `.claude/skills-fora/`, ignorado pelo git. Voltar e mover de volta |
 | Skills do GSD | 67 | `~/.claude/desativado-27-08/skills/` |
 | Agentes do GSD | 33 | `~/.claude/desativado-27-08/agents/` |
 | Perfil do GSD | 1 | `~/.claude/desativado-27-08/.gsd-profile` |
@@ -134,21 +150,25 @@ repositorios do Arthur. Desfazer e mover de volta.
 
 ### O que sobreviveu, e por que
 
-**A constituicao.** `.specify/memory/constitution.md` continua onde estava. Ela
+**A constituicao.** Mudou de endereco em 27/08/2026: era `.specify/memory/
+constitution.md`, agora e `docs/constituicao.md`, e a pasta `.specify/` foi
+apagada junto com o Spec Kit. Ela
 guarda os cinco principios (RLS, negacao por padrao, senha, segredo, testes
 minimos), que **nao sao do Spec Kit**: sao as regras de seguranca do produto, e
 `.claude/hooks/guarda-constituicao.mjs` ainda as le a cada escrita. Apagar o
 metodo nao apaga as regras.
 
-**As specs.** `specs/` inteiro fica. Sao 8 pastas com spec, plano e tarefas, e
-72 tarefas ja concluidas por elas. A §2.5 do `CLAUDE.md` diz que o que atravessa
-para outubro e a regra escrita: essas pastas SAO essa regra. Sai a ferramenta,
-nao o que ela escreveu.
+**As specs viraram regras vivas.** Em 27/08/2026 `specs/` foi convertido em
+`docs/regras/`, um arquivo por regra, com o numero preservado. Cinco foram
+reescritas no formato de sete secoes; tres foram movidas como estavam, com aviso
+no topo; `plan.md` e `tasks.md` foram apagados, e o estado de execucao virou
+issue no GitHub. A §2.5 do `CLAUDE.md` diz que o que atravessa para outubro e a
+regra escrita: e ela que sobreviveu. Saiu a ferramenta, nao o que ela escreveu.
 
-**A regra (h) da constituicao ficou desatualizada.** Ela exige "spec aprovada em
-`specs/`" e nomeia o fluxo do Spec Kit. O fluxo mudou; a exigencia de spec
-antes de feature, nao. Emendar quando houver calma, e ate la vale o espirito:
-nada de feature sem documento aprovado antes.
+**A regra (h) da constituicao foi emendada no mesmo trabalho.** Ela exigia "spec
+aprovada em `specs/`" e nomeava o fluxo do Spec Kit; hoje exige regra viva
+aprovada em `docs/regras/` e nomeia a cadeia real. Constituicao em v2.0.1, e a
+emenda e de endereco: os nove principios ficaram intactos.
 
 ### `git-guardrails-claude-code` continua fora
 

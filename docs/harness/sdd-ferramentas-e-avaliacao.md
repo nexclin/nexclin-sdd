@@ -18,7 +18,7 @@ cada uma consome o artefato que a anterior escreveu.
 
 | Ordem | Skill | O que faz | Quando usar |
 |---|---|---|---|
-| 0 | `speckit-constitution` | Cria ou emenda `.specify/memory/constitution.md` | Uma vez por projeto, e depois só para emendar. Aqui já rodou: a constituição está em v1.0.0 |
+| 0 | `speckit-constitution` | Cria ou emenda `../constituicao.md` | Uma vez por projeto, e depois só para emendar. Aqui já rodou: a constituição está em v1.0.0 |
 | 1 | `speckit-specify` | Descrição em linguagem natural vira `spec.md`, com requisitos numerados | No começo de toda feature. É o artefato que a regra (h) exige |
 | 2 | `speckit-clarify` | Acha o que ficou vago e faz **até 5 perguntas**, gravando as respostas de volta na spec | Logo depois de escrever a spec, antes do plano. Foi ele que produziu a decisão D-005.5 |
 | 3 | `speckit-plan` | Spec vira `plan.md`, mais `research.md`, `data-model.md` e `contracts/` | Depois da spec estar clara. É onde a decisão técnica é registrada com alternativa recusada |
@@ -99,7 +99,7 @@ substituto dele**. Trocar por um fluxo sem esse artefato obrigatório é vender 
 
 ### Três razões menores, mas concretas
 
-1. **A constituição.** A regra (h) exige spec aprovada em `specs/`, e o guarda
+1. **A constituição.** A regra (h) exige regra viva aprovada em `docs/regras/`, e o guarda
    em `.claude/hooks/guarda-constituicao.mjs` aplica outras regras dela. Trocar
    o método é emenda constitucional, não escolha de ferramenta.
 2. **A numeração é referência viva.** "SPEC 006", "T017", "D-005.5" aparecem em

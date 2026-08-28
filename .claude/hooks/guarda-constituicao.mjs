@@ -179,7 +179,7 @@ process.stdout.write(JSON.stringify({
   decision: 'block',
   reason:
     `Guarda da Constituição bloqueou ${caminho}:\n\n${relatorio}\n\n` +
-    `Corrija antes de seguir. A constituição está em .specify/memory/constitution.md — ` +
-    `se a regra é que está errada, emende a constituição primeiro, não o guarda.`,
+    `Corrija antes de seguir. A constituição está em docs/constituicao.md. ` +
+    `Se a regra é que está errada, emende a constituição primeiro, não o guarda.`,
   systemMessage: `⛔ Guarda da Constituição: ${achados.length} violação(ões) em ${caminho.split(/[/\\]/).pop()}`,
 }));

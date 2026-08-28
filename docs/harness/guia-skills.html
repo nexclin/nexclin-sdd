@@ -319,18 +319,19 @@
 
   <header>
     <p class="eyebrow">NexClin · harness</p>
-    <h1>Quarenta e três skills, e <strong>quando chamar cada uma</strong></h1>
+    <h1>Vinte e duas skills, e <strong>quando chamar cada uma</strong></h1>
     <p class="lede">
       Organizado pelo momento do trabalho, não por quem escreveu. Todas são
       invocáveis por você: digite a barra e o nome. O que está aqui é o que
-      existe em <code>.claude/skills/</code> depois da troca de método de
-      27/08/2026.
+      existe em <code>.claude/skills/</code> depois do corte de 27/08/2026, que
+      levou a pasta de 43 para 22. As 22 que saíram não foram apagadas: estão em
+      <code>.claude/skills-fora/</code>, que o git ignora, e voltam movendo de
+      volta. A razão é carga de contexto: cada descrição é lida a todo turno.
     </p>
     <ul class="tally">
-      <li><div><span class="n">43</span><span class="k">skills</span></div></li>
-      <li><div><span class="n">4</span><span class="k">nossas</span></div></li>
-      <li><div><span class="n">11</span><span class="k">superpowers</span></div></li>
-      <li><div><span class="n">28</span><span class="k">matt pocock</span></div></li>
+      <li><div><span class="n">22</span><span class="k">em circulação</span></div></li>
+      <li><div><span class="n">5</span><span class="k">nossas</span></div></li>
+      <li><div><span class="n">22</span><span class="k">fora, no disco</span></div></li>
       <li><div><span class="n">0</span><span class="k">spec kit · gsd</span></div></li>
     </ul>
   </header>
@@ -342,10 +343,10 @@
 
   <section data-sec>
     <h2>O fluxo, do começo ao fim</h2>
-    <p class="sub">A ordem que substitui o Spec Kit. Cada passo produz o que o seguinte consome.</p>
+    <p class="sub">A ordem canônica desde 27/08, e é a que a constituição nomeia. Cada passo produz o que o seguinte consome.</p>
     <div class="fluxo">
       <span class="p">grill-with-docs</span><span class="seta">→</span>
-      <span class="p">to-spec</span><span class="seta">→</span>
+      <span class="p">nx-regra</span><span class="seta">→</span>
       <span class="p">to-tickets</span><span class="seta">→</span>
       <span class="p">implement</span><span class="seta">→</span>
       <span class="p">code-review</span><span class="seta">→</span>
@@ -354,8 +355,8 @@
     <div class="nota">
       <b>Rode <code>/setup-matt-pocock-skills</code> uma vez, antes de tudo.</b>
       Ele pergunta onde ficam os tickets, quais rótulos você usa e onde salvar os
-      documentos. Sem isso, <code>/to-tickets</code> e <code>/triage</code> não
-      sabem para onde escrever.
+      documentos. Sem isso, <code>/to-tickets</code> não sabe para onde escrever.
+      A regra, essa, sempre nasce em <code>docs/regras/</code>.
     </div>
   </section>
 
@@ -367,16 +368,6 @@
         <div class="cab"><code class="cmd">grill-with-docs</code><span class="tag">pocock</span></div>
         <p>Entrevista implacável que também escreve ADRs e o glossário do projeto enquanto conversa.</p>
         <p class="quando"><b>Quando</b>A porta de entrada padrão. Toda mudança que ainda não está clara começa aqui.</p>
-      </article>
-      <article data-busca="grilling entrevista árvore de decisão fronteira rodadas">
-        <div class="cab"><code class="cmd">grilling</code><span class="tag">pocock</span></div>
-        <p>Trabalha uma árvore de decisões em rodadas e só para quando a fronteira esvazia.</p>
-        <p class="quando"><b>Quando</b>A versão sem documentos. Use quando quiser só pensar junto, sem gerar arquivo.</p>
-      </article>
-      <article data-busca="grill-me plano ideia não código">
-        <div class="cab"><code class="cmd">grill-me</code><span class="tag">pocock</span></div>
-        <p>O mesmo, para assunto que não é código.</p>
-        <p class="quando"><b>Quando</b>Decisão comercial, preço, escopo de sociedade.</p>
       </article>
       <article data-busca="ask-matt roteador qual skill usar dúvida">
         <div class="cab"><code class="cmd">ask-matt</code><span class="tag">pocock</span></div>
@@ -393,11 +384,6 @@
         <p>Investiga contra fontes primárias e grava o achado como markdown no repositório.</p>
         <p class="quando"><b>Quando</b>Levantar norma, concorrente ou API. Foi o que gerou a análise do OpenClinic.</p>
       </article>
-      <article data-busca="prototype protótipo descartável dúvida de desenho ui estado">
-        <div class="cab"><code class="cmd">prototype</code><span class="tag">pocock</span></div>
-        <p>Protótipo descartável para responder uma dúvida de desenho.</p>
-        <p class="quando"><b>Quando</b>Não souber se um modelo de estado ou uma tela fecha. Joga fora depois.</p>
-      </article>
       <article data-busca="domain-modeling vocabulário contexto termos linguagem compartilhada">
         <div class="cab"><code class="cmd">domain-modeling</code><span class="tag">pocock</span></div>
         <p>Constrói o vocabulário do projeto num <code>CONTEXT.md</code>.</p>
@@ -410,10 +396,10 @@
     <h2>2 · Planejar</h2>
     <p class="sub">Do entendimento fechado para o trabalho picado em pedaços executáveis.</p>
     <div class="grade">
-      <article data-busca="to-spec especificação spec conversa vira documento">
-        <div class="cab"><code class="cmd">to-spec</code><span class="tag">pocock</span></div>
-        <p>Transforma a conversa atual em spec, sem nova entrevista. Só sintetiza.</p>
-        <p class="quando"><b>Quando</b>Logo depois do grill. É o substituto direto do <code>speckit-specify</code>.</p>
+      <article data-busca="nx-regra regra viva especificação conversa vira documento sete seções banco">
+        <div class="cab"><code class="cmd">nx-regra</code><span class="tag">nossa</span></div>
+        <p>A conversa vira <b>regra viva</b> em <code>docs/regras/</code>, nas sete seções: problema, requisitos com o porquê de cada um, o que muda no banco, premissas, dependências, como se prova, e a decisão que falta.</p>
+        <p class="quando"><b>Quando</b>Logo depois do grill, e sempre antes de abrir issue ou escrever migração. Bifurcada do <code>to-spec</code> em 27/08: sem user story, com seção de banco, e escreve arquivo em vez de issue.</p>
       </article>
       <article data-busca="to-tickets tarefas tickets dependências bloqueio tracer bullet">
         <div class="cab"><code class="cmd">to-tickets</code><span class="tag">pocock</span></div>
@@ -425,20 +411,10 @@
         <p>Planeja trabalho grande demais para uma sessão, como mapa de tickets de decisão.</p>
         <p class="quando"><b>Quando</b>A migração de outubro. É o único desta lista feito para essa escala.</p>
       </article>
-      <article data-busca="writing-plans plano escrito antes de codar">
-        <div class="cab"><code class="cmd">writing-plans</code><span class="tag">superpowers</span></div>
-        <p>Plano escrito antes de tocar em código.</p>
-        <p class="quando"><b>Quando</b>Tarefa de vários passos que você quer revisar antes de começar.</p>
-      </article>
       <article data-busca="nx-paralelo paralelo raias colisão duas frentes">
         <div class="cab"><code class="cmd">nx-paralelo</code><span class="tag nx">nossa</span></div>
         <p>Decide o que roda ao mesmo tempo sem colidir, e como isolar.</p>
         <p class="quando"><b>Quando</b>Houver duas frentes na fila. Chame antes de disparar qualquer subagente.</p>
-      </article>
-      <article data-busca="dispatching-parallel-agents subagentes paralelo domínios independentes">
-        <div class="cab"><code class="cmd">dispatching-parallel-agents</code><span class="tag">superpowers</span></div>
-        <p>Um agente por domínio independente.</p>
-        <p class="quando"><b>Quando</b>O <code>nx-paralelo</code> disser que as tarefas não colidem.</p>
       </article>
     </div>
   </section>
@@ -467,26 +443,6 @@
         <p>Teste antes do código.</p>
         <p class="quando"><b>Quando</b>Módulo puro, como os de <code>src/lib/</code>. Foi assim que os 90 testes nasceram.</p>
       </article>
-      <article data-busca="tdd red green refactor teste integração pocock">
-        <div class="cab"><code class="cmd">tdd</code><span class="tag">pocock</span></div>
-        <p>A versão dele: vermelho, verde, refatora, com guia do que é bom teste.</p>
-        <p class="quando"><b>Quando</b>Sobrepõe a de cima. Escolha uma e fique nela.</p>
-      </article>
-      <article data-busca="subagent-driven-development subagente por tarefa revisão">
-        <div class="cab"><code class="cmd">subagent-driven-development</code><span class="tag">superpowers</span></div>
-        <p>Um subagente novo por tarefa, com revisão depois de cada uma.</p>
-        <p class="quando"><b>Quando</b>Plano com tarefas independentes na mesma sessão.</p>
-      </article>
-      <article data-busca="executing-plans executar plano checkpoint">
-        <div class="cab"><code class="cmd">executing-plans</code><span class="tag">superpowers</span></div>
-        <p>Executa um plano escrito, com pontos de revisão.</p>
-        <p class="quando"><b>Quando</b>O plano veio de outra sessão.</p>
-      </article>
-      <article data-busca="using-git-worktrees worktree isolamento branch">
-        <div class="cab"><code class="cmd">using-git-worktrees</code><span class="tag">superpowers</span></div>
-        <p>Área de trabalho isolada, com detecção do que já está isolado.</p>
-        <p class="quando"><b>Quando</b>Mexer nos dois repositórios ao mesmo tempo.</p>
-      </article>
     </div>
   </section>
 
@@ -504,11 +460,6 @@
         <p>Revisa o que mudou desde um ponto fixo, em dois eixos: padrões e correção.</p>
         <p class="quando"><b>Quando</b>Antes de publicar na Lovable ou abrir PR.</p>
       </article>
-      <article data-busca="requesting-code-review pedir revisão">
-        <div class="cab"><code class="cmd">requesting-code-review</code><span class="tag">superpowers</span></div>
-        <p>Pede revisão de forma estruturada.</p>
-        <p class="quando"><b>Quando</b>Sobrepõe a de cima.</p>
-      </article>
       <article data-busca="receiving-code-review receber crítica verificar antes de aceitar">
         <div class="cab"><code class="cmd">receiving-code-review</code><span class="tag">superpowers</span></div>
         <p>Como receber crítica: verificar antes de concordar, não obedecer por educação.</p>
@@ -518,11 +469,6 @@
         <div class="cab"><code class="cmd">diagnosing-bugs</code><span class="tag">pocock</span></div>
         <p>Laço de diagnóstico para bug difícil e queda de desempenho, com fases travadas.</p>
         <p class="quando"><b>Quando</b>Algo quebrou e a causa não é óbvia.</p>
-      </article>
-      <article data-busca="systematic-debugging depuração método científico hipótese">
-        <div class="cab"><code class="cmd">systematic-debugging</code><span class="tag">superpowers</span></div>
-        <p>Método para caçada longa, por hipótese.</p>
-        <p class="quando"><b>Quando</b>Sobrepõe a de cima. Foi a que resolveu o V-26.</p>
       </article>
     </div>
   </section>
@@ -536,11 +482,6 @@
         <p>Vocabulário de módulo profundo: muita função atrás de interface simples.</p>
         <p class="quando"><b>Quando</b>Desenhar módulo da stack nova, ou decidir onde cortar uma fronteira.</p>
       </article>
-      <article data-busca="improve-codebase-architecture varredura relatório html oportunidades">
-        <div class="cab"><code class="cmd">improve-codebase-architecture</code><span class="tag">pocock</span></div>
-        <p>Varre o código atrás de oportunidades e entrega um relatório visual.</p>
-        <p class="quando"><b>Quando</b>De tempos em tempos. É levantamento, não resgate: não desembola sozinho.</p>
-      </article>
     </div>
   </section>
 
@@ -553,30 +494,15 @@
         <p>Vira relato falado de sócio em registro pronto para a base do Notion.</p>
         <p class="quando"><b>Quando</b>Alguém descrever um problema testando. É a nossa, e ganha do <code>triage</code>.</p>
       </article>
-      <article data-busca="triage issues pull request rótulos estado">
-        <div class="cab"><code class="cmd">triage</code><span class="tag">pocock</span></div>
-        <p>Move issues por uma máquina de estados de triagem.</p>
-        <p class="quando"><b>Quando</b>Trabalhar com issues do GitHub. Para as baterias, use o <code>nx-apontamento</code>.</p>
-      </article>
       <article data-busca="handoff passar bastão outra sessão compactar contexto">
         <div class="cab"><code class="cmd">handoff</code><span class="tag">pocock</span></div>
         <p>Compacta a conversa num documento para outro agente continuar.</p>
-        <p class="quando"><b>Quando</b>Fim de sessão. Salve em <code>docs/planejamento/handoffs/</code>.</p>
+        <p class="quando"><b>Quando</b>Fim de sessão. Salve em <code>docs/historico/</code>, com a data no nome.</p>
       </article>
       <article data-busca="writing-for-agents escrever skill claude.md regra documento para agente">
         <div class="cab"><code class="cmd">writing-for-agents</code><span class="tag">pocock</span></div>
         <p>Como escrever documento que agente consome, e o custo de cada linha sempre carregada.</p>
         <p class="quando"><b>Quando</b>Editar <code>CLAUDE.md</code>, uma regra ou uma skill.</p>
-      </article>
-      <article data-busca="wait-what não entendi reformular repitch mensagem">
-        <div class="cab"><code class="cmd">wait-what</code><span class="tag">pocock</span></div>
-        <p>Manda refazer a última mensagem que não chegou.</p>
-        <p class="quando"><b>Quando</b>Eu explicar mal. Mais rápido que reformular a pergunta.</p>
-      </article>
-      <article data-busca="teach ensinar aprender conceito">
-        <div class="cab"><code class="cmd">teach</code><span class="tag">pocock</span></div>
-        <p>Ensina um conceito dentro do contexto deste repositório.</p>
-        <p class="quando"><b>Quando</b>Quiser entender RLS, trigger ou React Query no código que já existe.</p>
       </article>
     </div>
   </section>
@@ -585,26 +511,6 @@
     <h2>7 · Encanamento</h2>
     <p class="sub">Coisas de git e de máquina. Você chama raramente, e é bom que seja assim.</p>
     <div class="grade">
-      <article data-busca="finishing-a-development-branch fechar branch merge integrar">
-        <div class="cab"><code class="cmd">finishing-a-development-branch</code><span class="tag">superpowers</span></div>
-        <p>Decide como integrar quando a implementação terminou e os testes passam.</p>
-        <p class="quando"><b>Quando</b>Fechar a branch de trabalho.</p>
-      </article>
-      <article data-busca="resolving-merge-conflicts conflito merge rebase">
-        <div class="cab"><code class="cmd">resolving-merge-conflicts</code><span class="tag">pocock</span></div>
-        <p>Resolve conflito de merge ou rebase em andamento.</p>
-        <p class="quando"><b>Quando</b>O git parar no meio.</p>
-      </article>
-      <article data-busca="wizard assistente bash passo manual credencial infraestrutura">
-        <div class="cab"><code class="cmd">wizard</code><span class="tag">pocock</span></div>
-        <p>Gera um assistente que conduz um humano por passos que só ele pode dar.</p>
-        <p class="quando"><b>Quando</b>SMTP, domínio, senha da conta-mestra. É a forma certa do que hoje eu te mando em lista.</p>
-      </article>
-      <article data-busca="setup-pre-commit husky lint-staged prettier hook commit">
-        <div class="cab"><code class="cmd">setup-pre-commit</code><span class="tag">pocock</span></div>
-        <p>Instala Husky com lint-staged, checagem de tipo e testes no commit.</p>
-        <p class="quando"><b>Quando</b>Quiser o gate de tipos rodando sozinho antes de cada commit.</p>
-      </article>
       <article data-busca="setup-matt-pocock-skills configurar uma vez tracker rótulos">
         <div class="cab"><code class="cmd">setup-matt-pocock-skills</code><span class="tag">pocock</span></div>
         <p>Configura o repositório: onde ficam os tickets, os rótulos, os documentos.</p>
@@ -614,41 +520,50 @@
   </section>
 
   <section data-sec>
-    <h2>8 · Não servem a este projeto</h2>
-    <p class="sub">Vieram no pacote. Ficam listadas para você não perder tempo abrindo.</p>
-    <div class="grade">
-      <article data-busca="migrate-to-shoehorn typescript teste as assertion">
-        <div class="cab"><code class="cmd">migrate-to-shoehorn</code><span class="tag">pocock</span></div>
-        <p>Migra testes de <code>as</code> para a biblioteca shoehorn.</p>
-        <p class="quando"><b>Quando</b>Nunca. Não usamos shoehorn.</p>
-      </article>
-      <article data-busca="scaffold-exercises curso exercícios aulas">
-        <div class="cab"><code class="cmd">scaffold-exercises</code><span class="tag">pocock</span></div>
-        <p>Monta estrutura de exercícios de curso.</p>
-        <p class="quando"><b>Quando</b>Nunca. É da operação de cursos do autor.</p>
-      </article>
+    <h2>8 · Fora de circulação, e como fazer voltar</h2>
+    <p class="sub">Em 27/08 a pasta foi de 43 para 22. As 22 que saíram estão no disco.</p>
+    <div class="nota">
+      <b>Onde estão:</b> <code>.claude/skills-fora/</code>, ignorado pelo git.
+      <b>Como voltam:</b> <code>mv .claude/skills-fora/nome .claude/skills/</code>.
+      <b>Por que saíram:</b> cada descrição de skill é lida a todo turno, e 43
+      delas somavam 7.213 bytes por turno. Nenhuma delas é ruim; elas apenas não
+      são chamadas com frequência que pague o custo fixo.
+    </div>
+    <div class="tabela-rolagem">
+      <table>
+        <thead><tr><th>Saiu</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td><code>to-spec</code></td><td>bifurcada em <code>nx-regra</code>, que é o que ficou. Ver <code>../adr/0005-bifurcar-o-to-spec.md</code></td></tr>
+          <tr><td><code>tdd</code>, <code>systematic-debugging</code>, <code>requesting-code-review</code></td><td>par sobreposto, e o outro lado ficou. Ver a tabela abaixo</td></tr>
+          <tr><td><code>grilling</code>, <code>grill-me</code></td><td><code>grill-with-docs</code> faz as duas coisas e ainda escreve ADR</td></tr>
+          <tr><td><code>writing-plans</code>, <code>executing-plans</code>, <code>subagent-driven-development</code>, <code>dispatching-parallel-agents</code></td><td>o plano por fases vive na regra viva, e o paralelo em <code>nx-paralelo</code></td></tr>
+          <tr><td><code>prototype</code>, <code>wizard</code>, <code>teach</code>, <code>wait-what</code>, <code>triage</code></td><td>nunca foram chamadas aqui, e <code>triage</code> colide com <code>nx-apontamento</code></td></tr>
+          <tr><td><code>using-git-worktrees</code>, <code>resolving-merge-conflicts</code>, <code>finishing-a-development-branch</code>, <code>setup-pre-commit</code></td><td>encanamento de git que este projeto faz à mão, e raramente</td></tr>
+          <tr><td><code>migrate-to-shoehorn</code>, <code>scaffold-exercises</code>, <code>improve-codebase-architecture</code></td><td>não servem a este projeto: são de outro tipo de repositório</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
   <section data-sec>
     <h2>Sobreposições, ditas de uma vez</h2>
-    <p class="sub">Três pares fazem a mesma coisa com nomes diferentes. Escolha um lado e fique nele.</p>
+    <p class="sub">Três pares faziam a mesma coisa com nomes diferentes. Em 27/08 escolheu-se um lado de cada, e o outro saiu de circulação.</p>
     <div class="tabela-rolagem">
       <table>
         <thead><tr><th>Assunto</th><th>Superpowers</th><th>Pocock</th><th>Sugestão</th></tr></thead>
         <tbody>
-          <tr><td>Teste primeiro</td><td><code>test-driven-development</code></td><td><code>tdd</code></td><td>Superpowers: já produziu os 90 testes daqui</td></tr>
-          <tr><td>Caçar bug</td><td><code>systematic-debugging</code></td><td><code>diagnosing-bugs</code></td><td>Pocock: as fases travadas são mais rígidas</td></tr>
-          <tr><td>Revisão</td><td><code>requesting</code> e <code>receiving-code-review</code></td><td><code>code-review</code></td><td>Pocock para revisar, superpowers para receber</td></tr>
+          <tr><td>Teste primeiro</td><td><code>test-driven-development</code></td><td><code>tdd</code></td><td><b>Superpowers ficou:</b> já produziu os 90 testes daqui</td></tr>
+          <tr><td>Caçar bug</td><td><code>systematic-debugging</code></td><td><code>diagnosing-bugs</code></td><td><b>Pocock ficou:</b> as fases travadas são mais rígidas</td></tr>
+          <tr><td>Revisão</td><td><code>requesting</code> e <code>receiving-code-review</code></td><td><code>code-review</code></td><td><b>Ficaram os dois:</b> <code>code-review</code> revisa, <code>receiving-code-review</code> ensina a receber crítica. Saiu só <code>requesting</code></td></tr>
         </tbody>
       </table>
     </div>
     <div class="nota">
-      <b>O que saiu em 27/08:</b> as 10 skills do Spec Kit, e 67 skills mais 33
-      agentes do GSD. O GSD estava instalado no seu usuário, valendo para todos
+      <b>O que saiu em 27/08:</b> as 10 skills do Spec Kit, 22 skills de terceiros
+      tiradas de circulação, e 67 skills mais 33 agentes do GSD. O GSD estava instalado no seu usuário, valendo para todos
       os seus projetos, e foi <b>movido, não apagado</b>, para
       <code>~/.claude/desativado-27-08/</code>. Voltar é mover de volta.
-      A constituição em <code>.specify/memory/constitution.md</code> continua
+      A constituição em <code>../constituicao.md</code> continua
       valendo: ela guarda RLS, negação por padrão e senha, que não são do Spec
       Kit, e o hook do projeto ainda a lê.
     </div>
@@ -656,7 +571,7 @@
 
   <footer>
     Gerado em 27/08/2026 a partir de <code>.claude/skills/</code>. Marca conforme
-    <code>docs/marca/tokens.md</code>. Quando uma skill entrar ou sair, esta
+    <code>../referencia/marca-tokens.md</code>. Quando uma skill entrar ou sair, esta
     página fica velha: peça para regerar.
   </footer>
 </div>

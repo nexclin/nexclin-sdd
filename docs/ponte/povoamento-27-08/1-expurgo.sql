@@ -3,7 +3,7 @@
 -- =====================================================================
 --
 -- Este arquivo existe antes do povoamento de proposito, e a razao esta em
--- docs/planejamento/triagem-erick-27-08.md, item E-01: o banco da Lovable
+-- ../../historico/2026-08-27-triagem-erick.md, item E-01: o banco da Lovable
 -- migra intacto em outubro, entao dado de simulacao sem expurgo escrito nao
 -- e descartado na migracao, e importado.
 --
