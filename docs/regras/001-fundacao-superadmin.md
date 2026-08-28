@@ -17,7 +17,7 @@
 O MVP construído no Lovable validou um banco inteiro, com isolamento
 multi-tenant, cascata de permissão e painel de suporte, e validou junto uma
 camada de aplicação de qualidade baixa, gerada por crédito. A saída não é
-recomeçar: é levar o banco intacto para um Supabase próprio, onde 55 migrações
+recomeçar: é levar o banco intacto para um Supabase próprio, onde 56 migrações
 já provadas continuam sendo a autoridade sobre quem lê o quê, e reescrever por
 cima só a aplicação. Sem essa fundação de pé, nenhum módulo de negócio tem onde
 nascer, porque todos leem a mesma âncora (`profiles.clinic_id`) e a mesma
@@ -27,9 +27,12 @@ cascata (`my_permission`).
 
 **O banco**
 
-- **FR-001**: As 55 migrações da referência **MUST** ser aplicadas em ordem, sem
+- **FR-001**: As migrações da referência **MUST** ser aplicadas em ordem, sem
   reescrita. *Porquê:* é o único ativo do MVP com qualidade comprovada, e
   reescrever schema validado troca risco conhecido por risco novo.
+  **São 56, contadas em 28/08** pelo nome com hash que o Lovable gera. O número
+  55, repetido no `CLAUDE.md` e em vários documentos desde julho, nunca bateu com
+  o diretório.
 - **FR-002**: O trigger `on_auth_user_created_superadmin` **MUST NOT** ser
   portado, e a função `seed_superadmin_operator` **MUST** ficar. *Porquê:* o
   trigger tem e-mail fixo em código; a função é alvo de um `REVOKE` posterior, e
@@ -104,13 +107,13 @@ trigger.
 
 | Objeto | Ação |
 |---|---|
-| 55 migrações da referência | aplicadas em ordem, intactas |
+| 56 migrações da referência | aplicadas em ordem, intactas |
 | `on_auth_user_created_superadmin` | **dropado** por migração nova (`20260802090000`) |
 | `seed_superadmin_operator` | mantida, preserva o `REVOKE` de `20260802073330` |
 | `plans` (1 linha), `saas_settings` (singleton), `superadmin_operators` (1 linha) | criados pelo seed idempotente |
 
 O inventário completo do schema replicado (44 tabelas, 3 enums, cerca de 40
-funções, triggers e RLS por tabela) vive em
+funções, triggers e RLS por tabela), no estado em que ele foi portado, vive em
 [`../referencia/schema-validado.md`](../referencia/schema-validado.md). As
 assinaturas das RPCs, os contratos dos guards e os das edge functions vivem em
 [`../referencia/contratos-da-fundacao.md`](../referencia/contratos-da-fundacao.md).
@@ -123,8 +126,11 @@ permissão individual distribui abaixo dele, e nunca o excede.
 
 ## 4. Premissas
 
-- **O banco da referência está sem drift.** 55 migrações fiéis, zero objeto
-  órfão, verificado antes de começar.
+- **O banco da referência está sem drift.** 56 migrações fiéis, zero objeto
+  órfão, verificado antes de começar. Hoje o diretório tem **72 arquivos**: as 56
+  portadas mais 16 escritas neste repositório, e as duas famílias se distinguem
+  pelo nome, porque as da referência carregam o hash gerado pelo Lovable e as
+  nossas têm nome em português.
 - **`ALTER TYPE ... ADD VALUE` não roda dentro de transação com uso imediato.**
   A migração `20260725001410` acrescenta `user` a `app_role` e foi isolada.
 - **`clinic_within_user_limit` compara com `<` estrito.** O `<=` deixava entrar

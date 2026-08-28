@@ -115,7 +115,7 @@ que alguém criar um plano pela tela.
 ## 3. O que muda no banco
 
 **Nenhuma tabela nova.** As treze de catálogo e `business_rules` já foram
-portadas nas 55 migrações. Esta regra liga o app ao que existe, corrige um
+portadas nas 56 migrações da fundação. Esta regra liga o app ao que existe, corrige um
 default e acrescenta rastro.
 
 | Objeto | Mudança | Onde |

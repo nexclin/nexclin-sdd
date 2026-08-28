@@ -15,9 +15,9 @@ agosto. Regra nova continua a partir de 017.
 | [000](000-backlog.md) | Backlog: a fila de onde as próximas regras saem | fila |
 | [001](001-fundacao-superadmin.md) | Fundação: banco, auth, multi-tenant e Super Admin | executada, **3 provas abertas** |
 | [002](002-seguranca-anamnese-auditoria.md) | Segurança: anamnese pública e auditoria de paciente | Fase 2 **escrita, não aplicada** |
-| [003](003-superadmin-blindado.md) | Super Admin finalizado e blindado | proposta · formato antigo |
+| [003](003-superadmin-blindado.md) | Super Admin finalizado e blindado | **em execução**, sem levantamento · formato antigo |
 | [004](004-correcao-bateria-vinicius.md) | Correção da 1ª bateria de testes | 20 de 23 fechados |
-| [005](005-configuracoes-clinica.md) | Configurações da clínica | escrita, não executada |
+| [005](005-configuracoes-clinica.md) | Configurações da clínica | 12 de 14 requisitos, sem aceite |
 | [006](006-modelagem-ini.md) | Modelagem INI: cobrança, precificação, ocupação, recall | implantada na Lovable |
 | [013](013-residuos-conformidade.md) | Resíduos e conformidade documental | **parada** · formato antigo |
 | [016](016-endurecimento-seguranca.md) | Endurecimento de segurança pré-lançamento | auditoria · formato antigo |
