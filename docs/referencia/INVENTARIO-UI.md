@@ -10,7 +10,7 @@
 >
 > **Leia com esta ressalva:** o painel superadmin do Lovable **não está
 > terminado**. O que falta lá não é regressão — é obra inacabada. Quem manda na
-> execução é [specs/001-fundacao-superadmin/spec.md](specs/001-fundacao-superadmin/spec.md);
+> execução é [docs/regras/001-fundacao-superadmin.md](../regras/001-fundacao-superadmin.md);
 > este documento serve para mostrar o que existe de fato e onde a spec pede
 > "paridade" com algo que não foi construído (ver D5).
 > **Método:** somente leitura — nenhum registro criado, editado ou excluído.
@@ -234,7 +234,7 @@ Não visitada para não arriscar a sessão ativa.
 
 ## 4. DELTA CONTRA O QUE JÁ FOI PORTADO
 
-O repo tem hoje, em [app/superadmin](app/superadmin): `login/page.tsx`, `(panel)/layout.tsx`, `(panel)/page.tsx` (dashboard) e `(panel)/contas/page.tsx` + `enter-clinic-button.tsx`.
+O repo tem hoje, em [app/superadmin](../../app/superadmin): `login/page.tsx`, `(panel)/layout.tsx`, `(panel)/page.tsx` (dashboard) e `(panel)/contas/page.tsx` + `enter-clinic-button.tsx`.
 
 Portado: **2 de 11** telas do painel. Faltam: detalhe da conta (`contas/:id`, a mais densa), planos, cupons, faturamento, métricas, comunicação, logs, operadores, configurações do SaaS. E o app da clínica inteiro — 12 rotas + 7 sub-relatórios + 11 diálogos de configuração — está em zero.
 
@@ -250,15 +250,15 @@ Como o superadmin do Lovable também está inacabado, a conta é de duas frentes
 
 **D3 — três vocabulários de período convivendo.** Dashboard: `Hoje / Esta Semana / Este Mês / Mês Anterior / Últimos 3 Meses / Personalizado`. Consultas: `Hoje / Últimos 7 dias / Este mês / Mês passado / Último trimestre / Este ano / Personalizado`. Fluxo de Caixa: seletores separados de mês e ano. Na reescrita isso tem de ser **um** componente. Mesmo problema nos rótulos de tipo de tarefa: `confirmacao` (enum cru) ao lado de `Envio de Anamnese` e `Recaptação` (formatados).
 
-**D4 — contador de assentos ausente.** [CLAUDE.md §3.4](CLAUDE.md) afirma que as telas mostram "Acessos: X de Y". Não aparece nem na sidebar nem no diálogo Equipe.
+**D4 — contador de assentos ausente.** [CLAUDE.md §3.4](../../CLAUDE.md) afirma que as telas mostram "Acessos: X de Y". Não aparece nem na sidebar nem no diálogo Equipe.
 
 **D5 — a seção de Perfis não existe no build publicado (esperado: o superadmin do Lovable não está terminado).** Duas contas foram abertas (com e sem responsável) e o painel Ações tem só os 7 botões de assinatura — nada de editar perfil, trocar e-mail ou enviar reset. O audit log, porém, **registra** `profile edit`, `email change` e `password reset sent` em 26–28/07: o backend foi exercitado, a tela é que não ficou pronta. Bate com a ressalva de [INVENTARIO.md §3.6](INVENTARIO.md) sobre a etapa 3c-2.
 
-> **Consequência prática para a execução.** A Fase 4 da spec pede, no item 3, "a seção de Perfis com edição auditada, troca de e-mail e envio de reset — **paridade com a referência**" ([specs/001-fundacao-superadmin/spec.md:87](specs/001-fundacao-superadmin/spec.md#L87)), e o critério de aceite 6 cobra o comportamento. Só que **não há referência visual a copiar** — a tela nunca existiu no build. O executor vai chegar nesse item sem modelo. Ou se define o desenho dessa seção na spec (campos, onde mora no detalhe da conta, confirmação da troca de e-mail), ou se troca "paridade com a referência" por um contrato explícito. Este é o ajuste mais acionável que a passagem produziu.
+> **Consequência prática para a execução.** A Fase 4 da spec pede, no item 3, "a seção de Perfis com edição auditada, troca de e-mail e envio de reset — **paridade com a referência**" ([docs/regras/001-fundacao-superadmin.md, FR-007 e FR-008](../regras/001-fundacao-superadmin.md)), e o critério de aceite 6 cobra o comportamento. Só que **não há referência visual a copiar** — a tela nunca existiu no build. O executor vai chegar nesse item sem modelo. Ou se define o desenho dessa seção na spec (campos, onde mora no detalhe da conta, confirmação da troca de e-mail), ou se troca "paridade com a referência" por um contrato explícito. Este é o ajuste mais acionável que a passagem produziu.
 
-**D6 — `password set` no audit log (histórico; já neutralizado no porte).** Linha de 28/07/2026 15:37, operador Dr. Erick Reis, conta "Clínica Teste Bypass" — prova de que o ambiente Lovable teve um caminho que definia senha diretamente, contra a regra (e) de [CLAUDE.md §4](CLAUDE.md). **Já está resolvido deste lado:** a edge function portada removeu a action explicitamente por conformidade ([supabase/functions/superadmin-manage-user/index.ts:129](supabase/functions/superadmin-manage-user/index.ts#L129)), restando só `update_email` e `send_password_reset`. Fica registrado como evidência de que a trava é necessária — e como lembrete de que a UI nova não pode reintroduzir o caminho.
+**D6 — `password set` no audit log (histórico; já neutralizado no porte).** Linha de 28/07/2026 15:37, operador Dr. Erick Reis, conta "Clínica Teste Bypass" — prova de que o ambiente Lovable teve um caminho que definia senha diretamente, contra a regra (e) de [CLAUDE.md §4](../../CLAUDE.md). **Já está resolvido deste lado:** a edge function portada removeu a action explicitamente por conformidade ([supabase/functions/superadmin-manage-user/index.ts:129](../../supabase/functions/superadmin-manage-user/index.ts#L129)), restando só `update_email` e `send_password_reset`. Fica registrado como evidência de que a trava é necessária — e como lembrete de que a UI nova não pode reintroduzir o caminho.
 
-**D7 — timeline da conta vazia apesar do audit log.** [CLAUDE.md §3.4](CLAUDE.md) diz que toda ação de operador grava duas linhas (`superadmin_audit_log` + `account_timeline`). A conta "Clínica Teste Bypass" tem 9 entradas no audit log e a Timeline do detalhe mostra "Nenhum evento registrado". Ou a dupla escrita não acontece, ou a Timeline lê a fonte errada.
+**D7 — timeline da conta vazia apesar do audit log.** [CLAUDE.md §3.4](../../CLAUDE.md) diz que toda ação de operador grava duas linhas (`superadmin_audit_log` + `account_timeline`). A conta "Clínica Teste Bypass" tem 9 entradas no audit log e a Timeline do detalhe mostra "Nenhum evento registrado". Ou a dupla escrita não acontece, ou a Timeline lê a fonte errada.
 
 **D8 — crash intermitente na carga fria.** O primeiro acesso a `/` renderizou tela branca com `Minified React error #310` (mais hooks renderizados que na renderização anterior) e `#root` vazio. Recarregando, funcionou. Erro de ordem de hooks em algum componente do shell — na reescrita, atenção a hooks depois de early-return em `AppLayout`/guards.
 

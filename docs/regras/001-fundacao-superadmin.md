@@ -183,8 +183,9 @@ supabase db push && npx tsx scripts/seed.ts && supabase functions deploy && npm 
 7. **Idempotência.** `scripts/seed.ts` rodado duas vezes não duplica nada, e
    nenhuma senha aparece em log ou código.
 
-**Prova automatizada, mínimo do Princípio V:** 80 testes em Vitest (19 do hook de
-permissão, 61 dos guards) e 15 testes Playwright passando. **Cinco e2e
+**Prova automatizada, mínimo do Princípio V:** 80 testes em Vitest cobrem o que é
+desta regra (19 do hook de permissão, 61 dos guards), dentro de uma suíte que em
+27/08 tem 225 e roda verde. Mais 15 testes Playwright passando. **Cinco e2e
 continuam pulados**, com motivo explícito, porque exigem login real: menu montado
 por `my_permission`, usuário comum barrado no painel, e módulo negado bloqueando
 por URL direta.

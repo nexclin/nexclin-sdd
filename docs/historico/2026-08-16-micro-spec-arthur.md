@@ -96,7 +96,7 @@ flowchart TD
 
 - **Objetivo:** confirmar, no banco ao vivo, se os Achados 1 e 2 seguem vivos.
 - **Escopo IN:** as **duas queries de leitura** de
-  [quickstart.md](../../specs/002-seguranca-anamnese-auditoria/quickstart.md) +
+  [quickstart.md](../regras/002-seguranca-anamnese-auditoria.md) +
   o guia de interpretação. Agente `auditor-multitenant` revisa a leitura.
 - **Escopo OUT:** **nenhuma escrita.** Não corrigir nada agora — a correção é a
   janela de 22–23/08. Só ler e registrar.

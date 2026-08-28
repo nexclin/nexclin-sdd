@@ -22,7 +22,7 @@ não mexer na plataforma na véspera do teste do Vinícius.
 ## HOJE (16/08) — a lista do Arthur
 
 1. **Rodar a Fase 0 da SPEC 002** — as duas queries de leitura
-   ([quickstart](../../specs/002-seguranca-anamnese-auditoria/quickstart.md)). 30
+   ([quickstart](../regras/002-seguranca-anamnese-auditoria.md)). 30
    segundos, não muda nada. Confirma se os dois achados seguem vivos no banco ao
    vivo. Sem isso, a Trilha S anda no escuro.
 2. **Confirmar acesso do Vinícius** — ele consegue entrar na plataforma e sabe

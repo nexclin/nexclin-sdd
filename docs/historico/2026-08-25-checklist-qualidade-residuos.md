@@ -2,7 +2,7 @@
 
 **Purpose**: Validar completude e qualidade da spec antes de planejar
 **Created**: 2026-08-25
-**Feature**: [spec.md](../spec.md)
+**Feature**: [013-residuos-conformidade.md](../regras/013-residuos-conformidade.md)
 
 ## Content Quality
 
