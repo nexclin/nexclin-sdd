@@ -153,7 +153,8 @@ tela. Contra produção, isso é inaceitável.
 
 ## 6. Como se prova que funciona
 
-Executado por Arthur, na plataforma ao vivo.
+Executado por Arthur, na plataforma ao vivo. O trabalho pendente vive em doze
+issues, sob a milestone [Regra 002](https://github.com/nexclin/nexclin-sdd/milestone/2).
 
 1. **Zero policy `anon` com `qual = true`** em qualquer tabela de anamnese, pela
    consulta a `pg_policies`.
@@ -184,4 +185,6 @@ migração, edge function e front ao mesmo tempo, o que pela armadilha conhecida
 exige a function antes do Publish. Saída: decisão registrada em
 `docs/seguranca/`, com data.
 
-**Sem essa decisão, o trabalho do FR-004 não abre.**
+**Sem essa decisão, o trabalho do FR-004 não abre.** A decisão é a issue
+[#37](https://github.com/nexclin/nexclin-sdd/issues/37); a implementação que
+depende dela é a [#38](https://github.com/nexclin/nexclin-sdd/issues/38).

@@ -195,15 +195,16 @@ outros dois. Teste que não falha quando o código quebra não protege nada.
 
 ## 7. A decisão que falta
 
-Nenhuma decisão de desenho. **Faltam três atos, e os três são do Arthur:**
+Nenhuma decisão de desenho. **Faltam três atos, e os três são do Arthur.** Cada
+um tem issue própria, abertas em 27/08/2026:
 
-1. **Definir a senha real do superadmin**, por recovery no painel do Supabase.
+1. **Definir a senha real do superadmin** ([#48](https://github.com/nexclin/nexclin-sdd/issues/48)), por recovery no painel do Supabase.
    `last_sign_in_at` nunca foi preenchido: o superadmin ainda não logou, e nada
    que dependa de sessão real pode ser provado enquanto isso.
-2. **Provar o diff de `update_email`** em `superadmin_audit_log`. A chamada sem
+2. **Provar o diff de `update_email`** em `superadmin_audit_log` ([#49](https://github.com/nexclin/nexclin-sdd/issues/49)). A chamada sem
    token já devolve 401 nas duas functions, confirmado ao vivo. Falta a metade
    que prova a auditoria.
-3. **Destravar os cinco e2e pulados**: convidar um usuário de teste com permissão
+3. **Destravar os cinco e2e pulados** ([#50](https://github.com/nexclin/nexclin-sdd/issues/50)): convidar um usuário de teste com permissão
    **parcial**, deixando ao menos um módulo negado, e preencher as quatro
    variáveis `E2E_*` (receita em `.env.example`). É o módulo negado que exercita
    o bloqueio; usuário com tudo liberado não prova nada.

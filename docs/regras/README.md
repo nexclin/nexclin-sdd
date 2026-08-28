@@ -42,6 +42,15 @@ uma volta de pergunta, e cada volta é um turno.
 **Decisão fechada não fica aqui.** Ela vira ADR, em `../adr/`. Esta pasta lista
 só o que **falta** decidir.
 
+## Onde mora o estado de execução
+
+Nas **issues do GitHub**, em `nexclin/nexclin-sdd`, não dentro destes arquivos.
+As 28 issues abertas em 03/08 a partir do `tasks.md` da SPEC 001 foram fechadas
+em 27/08, e nasceram 15 no lugar: doze da regra 002 e três da 001. As demais
+tarefas em aberto continuam como **texto dentro da regra**, e viram issue quando
+entrarem em execução. Issue que ninguém toca em duas semanas envelhece igual às
+28 que foram fechadas, e aí ninguém olha mais nenhuma.
+
 ## Quando escrever uma regra nova
 
 Só para o que **atravessa para outubro**: banco, RLS, regra de negócio. Front
