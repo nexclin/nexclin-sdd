@@ -72,8 +72,8 @@ Code, adaptada ao que este repositório já tinha (Spec Kit + constituição).
 |---|---|---|---|
 | `CLAUDE.md` | contexto sempre presente | toda sessão | já existia — contexto do produto |
 | `docs/constituicao.md` | a lei | referenciada | v2.0.1, nove princípios |
-| `.claude/rules/*.md` | restrição por área do código | ao tocar os `paths` | banco, app, marca, **escrita** |
-| `.claude/skills/*/SKILL.md` | procedimento de várias etapas | quando invocada | 4 nossas, 11 do Spec Kit, **11 incorporadas** |
+| `.claude/rules/*.md` | restrição por área do código | ao tocar os `paths` | banco, app, marca, escrita, **estrutura** |
+| `.claude/skills/*/SKILL.md` | procedimento de várias etapas | quando invocada | **22 em circulação**: 5 nossas, 17 incorporadas. 22 fora, em `.claude/skills-fora/` |
 | `.claude/agents/*.md` | trabalho paralelo com contexto próprio | quando delegado | 4 agentes |
 | `.claude/settings.json` | automação determinística | evento de ciclo de vida | 1 hook, permissões, **marketplaces** |
 
