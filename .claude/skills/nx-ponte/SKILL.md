@@ -18,7 +18,7 @@ tudo o que a atual faz.
 - **Nada de refatorar.** Código que vai ser substituído não merece
   investimento. Conserto mínimo, cirúrgico.
 - **Correção via repositório, não pelo chat da plataforma.** Validado em
-  17/08 (ver `../../../docs/historico/2026-08-16-verificacoes-tecnicas.md`): o envio pelo
+  17/08 (ver `docs/historico/2026-08-16-verificacoes-tecnicas.md`): o envio pelo
   git chega ao editor e publica **sem consumir crédito**. O chat é o último
   recurso, não o caminho.
 - **Alteração de banco pelo lado antigo desatualiza os tipos gerados.**

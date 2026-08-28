@@ -110,7 +110,7 @@ expected: |
 result: [pending]
 reason: |
   Primeira metade verificada: os três não-bugs estão cobertos e as descrições
-  batem com INVENTARIO-UI.md (D2:249, D8:263, D3:251). Falta a aprovação do
+  batem com ../referencia/INVENTARIO-UI.md (D2:249, D8:263, D3:251). Falta a aprovação do
   Arthur, que é o critério.
 
 ## Summary

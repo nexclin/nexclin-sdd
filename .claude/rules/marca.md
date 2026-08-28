@@ -7,7 +7,7 @@ paths:
 
 # Marca na interface
 
-Fonte: `nexclin.html` (Brand Concept v1.0). Tokens em `../../docs/referencia/marca-tokens.md`.
+Fonte: `docs/referencia/brand-book.html` (Brand Concept v1.0). Tokens em `docs/referencia/marca-tokens.md`.
 
 > **Marca também é como o projeto escreve.** Esta regra cobre a interface. A voz
 > escrita (travessão proibido, barra como conector, superlativo sem conta,

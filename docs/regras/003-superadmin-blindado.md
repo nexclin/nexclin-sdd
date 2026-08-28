@@ -13,7 +13,7 @@
 > **Status:** proposta · **Executor:** Claude Code · **Aprovador:** Arthur Hideo
 > **Estende:** SPEC 001, Fase 4 (painel superadmin em Next.js)
 > **Referência funcional:** `../nexclin-lovable` (SOMENTE LEITURA) +
-> `INVENTARIO-UI.md` (o que existe de fato) + `../historico/2026-08-16-revisao-de-seguranca.md`
+> `../referencia/INVENTARIO-UI.md` (o que existe de fato) + `../historico/2026-08-16-revisao-de-seguranca.md`
 > **Lei:** `../constituicao.md` · **Contexto:** `CLAUDE.md`
 > **Método:** SDD — plano por fases, PARADA para aprovação antes de cada fase.
 
@@ -34,7 +34,7 @@ Erick), não tela de cliente, e o lançamento ocorre na plataforma Lovable, cujo
 superadmin já opera o essencial. Esta spec é da stack nova e segue o princípio
 "sem pressa, com segurança máxima".
 
-## ESTADO DE PARTIDA (medido em 16/08, `INVENTARIO-UI.md`)
+## ESTADO DE PARTIDA (medido em 16/08, `../referencia/INVENTARIO-UI.md`)
 
 Portado na stack nova: **2 de 11** telas — dashboard e lista de contas
 (`app/superadmin/(panel)`). Faltam 9. E há um item que **nunca existiu no
@@ -68,7 +68,7 @@ O item que a SPEC 001 não pôde copiar. Definir o desenho e implementar.
      (`resetPasswordForEmail`). **NENHUMA opção define senha.** A ausência do
      botão "definir senha" é requisito, não esquecimento.
 2. Toda ação grava **duas linhas**: `superadmin_audit_log` + `account_timeline`
-   (a referência falhava na segunda — ver `INVENTARIO-UI.md` D7; aqui é
+   (a referência falhava na segunda — ver `../referencia/INVENTARIO-UI.md` D7; aqui é
    obrigatória e verificada).
 3. **Verificação:** editar perfil audita `old→new`; auto-edição não audita;
    trocar e-mail muda o login; enviar reset dispara e-mail (via Resend);
@@ -77,7 +77,7 @@ O item que a SPEC 001 não pôde copiar. Definir o desenho e implementar.
 ## FASE 2 — AS 9 TELAS RESTANTES
 
 Reconstruir com paridade de comportamento (regra, não estilo), lendo
-`INVENTARIO-UI.md` para o que cada tela mostra e opera:
+`../referencia/INVENTARIO-UI.md` para o que cada tela mostra e opera:
 
 1. **Detalhe da conta** — a mais densa: cards (cadastrais, responsável,
    assinatura), uso do sistema, painel Ações (Alterar Plano, Estender Trial,

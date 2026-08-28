@@ -39,7 +39,7 @@ Duas colunas porque há dois tipos de trabalho que não se substituem: o que
 | Ordem | Item | Por quê |
 |---|---|---|
 | 1 | V-22/V-23 | Pré-requisito. Base errada ⇒ relatório errado. |
-| 2 | V-17 + V-28B | **São o mesmo bug** — filtro de data (D-11). Duas telas, uma correção. Suspeito: os três vocabulários de período registrados em `INVENTARIO-UI.md §5`. |
+| 2 | V-17 + V-28B | **São o mesmo bug** — filtro de data (D-11). Duas telas, uma correção. Suspeito: os três vocabulários de período registrados em `../referencia/INVENTARIO-UI.md §5`. |
 | 3 | V-26 + V-27 | Prováveis sintomas do V-22; reconferir depois dele. |
 | 4 | V-29 | Separar valor orçado de valor fechado (D-12). |
 | 5 | V-25 | Relatório de vendas linha por item, com as 9 colunas (D-10). O maior dos relatórios. |

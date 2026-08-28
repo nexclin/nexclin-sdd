@@ -14,7 +14,7 @@ credencial de teste no topo do arquivo de 18/08 foi ignorado e não é
 reproduzido em lugar nenhum deste documento.
 
 **Contexto usado para separar desvio de regra funcionando:**
-`INVENTARIO-UI.md` (comportamento real das telas), `INVENTARIO.md §3.4`
+`../referencia/INVENTARIO-UI.md` (comportamento real das telas), `../referencia/INVENTARIO.md §3.4`
 (regras de negócio embutidas), `2026-08-17-bateria-testes-vinicius.md`
 (o plano da bateria) e `docs/ponte/ponte-inversa.md` (canais de correção).
 
@@ -156,7 +156,7 @@ As duas respostas foram idênticas: *"Usei somente o filtro de data, mudando os
 períodos."* Tarefas e relatório de Contas a Receber, mesmo comportamento.
 
 **Dois itens da trava viram uma correção.** E há uma pista forte no próprio
-repositório: `.claude/rules/app.md` e `INVENTARIO-UI.md §5` registram como dívida
+repositório: `.claude/rules/app.md` e `../referencia/INVENTARIO-UI.md §5` registram como dívida
 conhecida que **existem três vocabulários de período convivendo no app**. É o
 suspeito número um — investigar o componente de período antes de olhar cada tela.
 
@@ -578,7 +578,7 @@ Reprodução: 1. Marcar consulta para o Médico A, Paciente 1, num horário X.
 2. Marcar outra consulta para o Médico A, Paciente 2, no mesmo dia e horário X.
 3. Ambas são salvas sem erro.
 Aposta de causa: não investigado; nem front nem banco parecem ter checagem de
-conflito (nenhuma menção a essa validação em `INVENTARIO.md §3.4`).
+conflito (nenhuma menção a essa validação em `../referencia/INVENTARIO.md §3.4`).
 Canal de correção: ponte (validação no salvamento) + SQL editor (constraint/
 trigger de unicidade médico+horário, como segunda camada — mesma filosofia
 de "segurança mora no banco" já usada no resto do produto).
@@ -602,7 +602,7 @@ pelo Atendimentos/funil). 2. Selecionar um paciente já cadastrado. 3. Salvar
 a consulta. 4. Ir em Tarefas e conferir que não aparece `confirmar_agendamento`
 nem `envio_anamnese` para essa consulta.
 Aposta de causa: `createAppointmentTasks` (`lib/tasksAutomation.ts`) é
-disparada pelo `LeadToAppointmentWizard` (`INVENTARIO.md §3.4`); o caminho de
+disparada pelo `LeadToAppointmentWizard` (`../referencia/INVENTARIO.md §3.4`); o caminho de
 "Nova Consulta" avulsa aparentemente não chama essa função.
 Canal de correção: ponte
 Depende de: nada — mas ver ATR-1 (tema "atribuição de tarefa" na seção de
@@ -621,7 +621,7 @@ Comportamento esperado: "Que a quantidade de novos pacientes se refira apenas
 que possuam categoria de 1ª consulta. No quadro de consultas realizadas, o
 mesmo filtro deve ser aplicado para definir a quantidade de novas consultas
 realizadas." (regra completa — bate com a coluna "1ª VEZ?" que já existe no
-relatório de Vendas, `INVENTARIO-UI.md`.)
+relatório de Vendas, `../referencia/INVENTARIO-UI.md`.)
 Comportamento observado: os cards de "novos pacientes" e "novas consultas" do
 Dashboard contam algo diferente do que o relatório de Vendas usa para a mesma
 noção.
@@ -642,7 +642,7 @@ Relato original: "Lancei uma venda de uma consulta com um adiantamento... No
 dashboard, o valor do adiantamento foi atribuído como venda."
 Comportamento esperado: "O correto é que esse valor seja atribuído às
 consultas, não às vendas gerais." (regra completa — coerente com a separação
-Consulta × Prescrição/Venda já documentada em `INVENTARIO.md`, Anexo.)
+Consulta × Prescrição/Venda já documentada em `../referencia/INVENTARIO.md`, Anexo.)
 Comportamento observado: o valor do adiantamento soma no total de "vendas",
 não no total de "consultas".
 Reprodução: 1. Marcar consulta como compareceu. 2. Registrar um adiantamento
@@ -687,7 +687,7 @@ Comportamento esperado: "Deveria ser criada uma tarefa atribuída para o
 responsável pela venda, não ao médico." (mesma regra de V-15.)
 Comportamento observado: idem V-15, mas no caminho de "não comparecida".
 Reprodução: 1. Marcar uma consulta agendada como "não comparecida" (motivo
-≥3 caracteres, per `INVENTARIO.md §3.4`). 2. Conferir o RESPONSÁVEL da tarefa
+≥3 caracteres, per `../referencia/INVENTARIO.md §3.4`). 2. Conferir o RESPONSÁVEL da tarefa
 de remarcação gerada.
 Aposta de causa: mesmo ponto de código de V-15 (provável função única de
 geração de tarefas por status de consulta) — corrigir os dois juntos.
@@ -711,7 +711,7 @@ dados sumiram — tipo, status, responsável ou período? Que valor selecionou
 em cada um? O status padrão da tela já é 'Pendente' — você trocou para outro
 status, ou mudou o período para 'Hoje'?"
 Aposta de causa: não investigado — mesma classe de problema do filtro de
-período que já esconde listas de cadastro (D2 em `INVENTARIO-UI.md`), mas
+período que já esconde listas de cadastro (D2 em `../referencia/INVENTARIO-UI.md`), mas
 essa tela não está na lista de "já sabemos" do plano da bateria, então é caso
 novo.
 Canal de correção: ponte (após a resposta)
@@ -738,7 +738,7 @@ Reprodução: 1. Marcar consulta como compareceu (gera cobrança da consulta).
 financeiro para esse paciente/atendimento.
 Aposta de causa: a tela financeira parece somar só receivables de origem
 `fechamento` (prescrição), ignorando o receivable de origem `consulta`
-gerado no comparecimento/depósito (`INVENTARIO.md §3.4`).
+gerado no comparecimento/depósito (`../referencia/INVENTARIO.md §3.4`).
 Canal de correção: ponte
 Depende de: FIN-1 (decisão de escopo)
 
@@ -793,7 +793,7 @@ aprovar parte dos itens e reprovar outros. 3. Abrir o Dashboard e conferir
 cada um dos 6 pontos acima.
 Aposta de causa: os 6 pontos parecem compartilhar a mesma fonte de
 agregação (`useFinancialBreakdown`/base "fechamentos do período" descrita em
-`INVENTARIO.md §3.4`) — plausível que o fechamento não esteja sendo
+`../referencia/INVENTARIO.md §3.4`) — plausível que o fechamento não esteja sendo
 capturado como deveria nesse cenário. Não investigado item a item.
 Canal de correção: ponte
 Depende de: V-13, V-14 (mesma camada de agregação do Dashboard) e DASH-1
@@ -820,7 +820,7 @@ Reprodução: 1. Vender um item via pix (ou dinheiro). 2. Vender outro via
 débito. 3. Vender outro via crédito parcelado sem antecipação. 4. Conferir em
 Contas a Receber a data de vencimento gerada para cada um.
 Aposta de causa: a geração de `receivables` no fechamento
-(`ClosingDetailDialog`/`computeFeeForMethod`, `INVENTARIO.md §3.4`) já
+(`ClosingDetailDialog`/`computeFeeForMethod`, `../referencia/INVENTARIO.md §3.4`) já
 calcula taxa por método, mas parece não aplicar a regra de prazo automático
 por método — usando sempre o campo manual "primeiro vencimento".
 Canal de correção: ponte
@@ -887,7 +887,7 @@ Reprodução: 1. Aprovar um orçamento com 3 unidades do mesmo item.
 gerou e se há coluna de médico/responsável.
 Aposta de causa: relatório agrupa por linha de recebível/parcela em vez de
 por item aprovado do orçamento; colunas de profissional/responsável nunca
-foram adicionadas à consulta que monta o relatório (`INVENTARIO-UI.md` já
+foram adicionadas à consulta que monta o relatório (`../referencia/INVENTARIO-UI.md` já
 lista as colunas atuais de `/vendas`, sem essas duas).
 Canal de correção: ponte
 Depende de: ATR-1 (mesma definição de "responsável" usada em V-15/V-16)
@@ -952,7 +952,7 @@ simples do relatório." (não especifica qual filtro nem qual valor —
 insuficiente para reproduzir.)
 Comportamento observado: aplicar filtro(s) zera o relatório.
 Reprodução: **não reproduzido** — o relatório tem múltiplos filtros (período,
-por vencimento, status, bancos, +2 outros, conforme `INVENTARIO-UI.md`).
+por vencimento, status, bancos, +2 outros, conforme `../referencia/INVENTARIO-UI.md`).
 Pergunta para devolver: "Qual filtro específico (status, banco, 'por
 vencimento' etc.) você aplicou quando os dados sumiram, e qual valor
 selecionou em cada um?"
@@ -1239,7 +1239,7 @@ mas compete por tempo com os outros ~20 bugs trava desta mesma janela.
 **DASH-1.** V-13 e V-21 pedem que o ticket médio do Dashboard passe a
 considerar "a quantidade de orçamentos", não a quantidade de itens. Só que o
 relatório de Vendas já existente calcula ticket como
-`bruto / pacientes únicos` (`INVENTARIO.md`, Anexo). "Quantidade de
+`bruto / pacientes únicos` (`../referencia/INVENTARIO.md`, Anexo). "Quantidade de
 orçamentos" e "pacientes únicos" **não são a mesma coisa** quando um paciente
 fecha mais de um orçamento no período. Pergunta: o ticket médio do Dashboard
 deve ser

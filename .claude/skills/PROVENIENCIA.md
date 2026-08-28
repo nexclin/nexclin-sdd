@@ -79,7 +79,7 @@ marketplace, ou reescreve do zero.**
 | Skill | Por que esta |
 |---|---|
 | `grilling` | entrevista que testa uma decisao antes de ela virar codigo. Entra porque decisoes deste projeto se reverteram em horas: a D-1 foi revogada no mesmo dia pela D-7, e a prioridade inverteu em 26/08 |
-| `to-questionnaire` | transforma decisao que nao e minha em questionario para outra pessoa. E literalmente o que `../../docs/historico/2026-08-20-perguntas-vinicius.md` faz a mao |
+| `to-questionnaire` | transforma decisao que nao e minha em questionario para outra pessoa. E literalmente o que `docs/historico/2026-08-20-perguntas-vinicius.md` faz a mao |
 | `writing-for-agents` | como escrever documento que agente consome. Conversa direto com `.claude/rules/escrita.md` e com a estrutura de harness inteira |
 | `wait-what` | pedir que a ultima mensagem seja reformulada quando ela nao chegou |
 | `codebase-design` | vocabulario de modulo profundo, para a reescrita em Next.js de outubro |

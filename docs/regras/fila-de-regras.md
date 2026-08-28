@@ -60,7 +60,7 @@ Consequências práticas dessa regra:
 - **`configuracoes` vem antes de `pacientes`** — porque
   `business_rules.patient_required_fields`, `channels`, `origins` e outros
   catálogos são lidos por quase todas as telas clínicas
-  ([INVENTARIO.md §1.3](../../INVENTARIO.md), §3.4). Sem esse substrato,
+  ([../referencia/INVENTARIO.md §1.3](../referencia/INVENTARIO.md), §3.4). Sem esse substrato,
   qualquer outro módulo escreve com dados órfãos.
 - **`consultas` vem antes de `leads`** — porque o Lead→Consulta Wizard
   (`components/lead/LeadToAppointmentWizard.tsx` no MVP) escreve em

@@ -96,7 +96,7 @@ npm test
 - **`CLAUDE.md`** — contexto permanente do projeto (história, regras
   inegociáveis, arquitetura).
 - **`ROADMAP-SPECS.md`** — mapa das specs por setor, com etapas e tasks.
-- **`WORKFLOW-GITHUB.md`** — governança de branches, issues, PRs e merge.
+- **`docs/harness/workflow-github.md`** — governança de branches, issues, PRs e merge.
 - **`specs/`** — uma pasta por spec; cada feature nasce de spec aprovada
   (`/speckit.specify` → `/plan` → `/tasks` → `/analyze` → `/implement`).
 - Toda spec fecha com critérios de aceite executados manualmente:

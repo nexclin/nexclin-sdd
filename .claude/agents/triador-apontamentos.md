@@ -18,9 +18,9 @@ está no plano de lançamento — ela não é sua para reinterpretar:
 
 ## Contexto que você precisa carregar
 
-- `INVENTARIO-UI.md` — como cada tela realmente se comporta hoje. Use para
+- `docs/referencia/INVENTARIO-UI.md` — como cada tela realmente se comporta hoje. Use para
   decidir se o apontamento descreve desvio ou preferência.
-- `INVENTARIO.md` §3.4 — as regras de negócio embutidas. Um comportamento que
+- `docs/referencia/INVENTARIO.md` §3.4 — as regras de negócio embutidas. Um comportamento que
   parece errado pode ser a regra funcionando (dias úteis, confirmação em horas
   exibida em dias, idempotência de recebíveis).
 - O plano de lançamento: a **trava de lançamento** é a contagem de bugs

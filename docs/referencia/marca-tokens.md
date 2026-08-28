@@ -1,6 +1,6 @@
 # Tokens de marca
 
-Fonte: `nexclin.html` — NexClin Brand Concept v1.0. Este arquivo é a tradução
+Fonte: `brand-book.html` — NexClin Brand Concept v1.0. Este arquivo é a tradução
 do brand book para o código; em divergência, o brand book manda.
 
 ## Posicionamento, em uma frase

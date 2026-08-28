@@ -58,10 +58,10 @@ também.** Isso está registrado no walkthrough de 16/08:
 - `/superadmin/planos` — botão "+ Novo Plano", tabela com NOME · MENSAL ·
   ANUAL · TRIAL · STATUS · VISIBILIDADE e ações de editar e duplicar. Hoje há
   um único plano: `Trial Padrão · R$ 0,00 · R$ 0,00 · 14 dias · Ativo ·
-  Interno` ([INVENTARIO-UI.md:199-200](../../INVENTARIO-UI.md)).
+  Interno` ([../referencia/INVENTARIO-UI.md:199-200](../referencia/INVENTARIO-UI.md)).
 - `/superadmin/configuracoes` — bloco "Configurações de Trial" com Duração
   padrão (14), Plano do trial, Máx. extensão e toggle de cartão
-  ([INVENTARIO-UI.md:224-228](../../INVENTARIO-UI.md)).
+  ([../referencia/INVENTARIO-UI.md:224-228](../referencia/INVENTARIO-UI.md)).
 
 **Consequência:** a maior parte desta tarefa é **digitação em tela que já
 existe — zero crédito, zero código, zero prompt.** Escrever prompt para o

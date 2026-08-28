@@ -19,7 +19,7 @@ que **uma delas não tem destino**:
 > por emenda. **Ambiguidade em contrato de permissão é dívida de segurança.**
 
 O mesmo documento registra `consultas` sem rota e sem onda, com um traço nas
-duas colunas. O `INVENTARIO.md` confirma: `Consultas.tsx` é página órfã, não
+duas colunas. O `../referencia/INVENTARIO.md` confirma: `Consultas.tsx` é página órfã, não
 roteada.
 
 Ou seja: **a chave existe no banco, entra no `enabled_modules` de todo plano, é

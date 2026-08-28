@@ -108,7 +108,7 @@ flowchart TD
 ## A5 · Rascunho do aviso ao Vinícius
 
 - **Objetivo:** deixar pronta a mensagem que evita que a bateria dele vire ruído.
-- **Escopo IN:** redigir, a partir de [INVENTARIO-UI.md](../../INVENTARIO-UI.md)
+- **Escopo IN:** redigir, a partir de [../referencia/INVENTARIO-UI.md](../referencia/INVENTARIO-UI.md)
   §5, o aviso dos três "não-bugs" (filtro "Este mês" esvaziando listas — D2; tela
   branca no 1º acesso — D8; seletores de período diferentes — D3) + a orientação
   de testar numa **clínica nova** criada por ele, não no dado de teste sujo.

@@ -143,7 +143,7 @@ não é a mesma coisa. Sai só `requesting-code-review`.
 
 | # | Decisão | Razão |
 |---|---|---|
-| 9 | **GitHub issues**, revivendo o que existe. Fechar as 28 obsoletas | Existem 28 issues abertas desde 03/08, criadas da SPEC 001, e o `tasks.md` diz que 24 daquelas tarefas estão feitas. O `WORKFLOW-GITHUB.md` já descreve o mapeamento |
+| 9 | **GitHub issues**, revivendo o que existe. Fechar as 28 obsoletas | Existem 28 issues abertas desde 03/08, criadas da SPEC 001, e o `tasks.md` diz que 24 daquelas tarefas estão feitas. O `../harness/workflow-github.md` já descreve o mapeamento |
 | 19 | Só **15 issues** nascem agora: as 12 da SPEC 002 e as 3 da 001. As outras 19 ficam como texto na regra | Issue que ninguém toca em duas semanas envelhece igual às 28 que estamos fechando, e aí ninguém olha mais nenhuma. As 16 da bateria do Vinícius dependem do reteste dele |
 
 ### O `CONTEXT.md`
@@ -170,7 +170,7 @@ O passo 0 está feito. Não pule, não reordene.
 | 2 | `specs/` vira `docs/regras/`. 5 reescritas, 3 movidas com aviso, `plan.md` e `tasks.md` apagados, `BACKLOG` vira `000-backlog.md`, `specs/` some | Todo link para `specs/`. **Commits de agosto passam a apontar para caminhos mortos, e isso não tem conserto.** Custo aceito |
 | 3 | Fechar as obsoletas das 28 issues, abrir as 15 | nada |
 | 4 | `docs/` de 10 pastas para 7. Datas renomeadas. `docs/README.md` reescrito | Links entre documentos, muitos. Consertar todos no mesmo commit |
-| 5 | Raiz limpa: apagar 2 HTMLs e o duplicado, mover `INVENTARIO*` e `nexclin.html` e `RELATORIO-SEMANAL` e `WORKFLOW-GITHUB` | Links para a raiz |
+| 5 | Raiz limpa: apagar 2 HTMLs e o duplicado, mover `INVENTARIO*` e `../referencia/brand-book.html` e `RELATORIO-SEMANAL` e `WORKFLOW-GITHUB` | Links para a raiz |
 | 6 | `CLAUDE.md` de 25 KB para ~8 KB | **Sessão nova para de receber o histórico automaticamente.** Mitigar com uma linha nomeando `docs/historico/` e quando abrir |
 | 7 | Skills de 43 para 20. `to-spec` vira `nx-regra`. Guia HTML regerado | `nx-regra` deixa de receber melhoria do upstream |
 | 8 | `.claude/rules/estrutura.md` | nada |

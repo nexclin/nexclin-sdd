@@ -30,7 +30,7 @@ _Notas marcadas "não verificado" = não confirmável no repo/GitHub nesta data.
 **Setup do repositório e método (2026-08-02)**
 - Repositório `nexclin/nexclin-sdd` com **Spec Kit** (método SDD) instalado.
 - **Constituição do projeto v1.0.0** (6 princípios inegociáveis: segurança no banco, LGPD/auditoria, contrato de módulos, aprovação humana por fase, segredos fora do código, valor operacional).
-- Documentos de governança: `WORKFLOW-GITHUB.md`, `README.md`, `CLAUDE.md`.
+- Documentos de governança: `../harness/workflow-github.md`, `README.md`, `CLAUDE.md`.
 
 **Governança no GitHub (2026-08-02)**
 - **20 labels** padronizadas, **1 milestone** (SPEC 001), **28 issues** detalhadas (#1–#28), uma por tarefa das 4 fases.
@@ -65,7 +65,7 @@ _Notas marcadas "não verificado" = não confirmável no repo/GitHub nesta data.
 ## 4. Próximos passos (2 semanas)
 
 > **Não verificado em detalhe:** sem `ROADMAP-SPECS.md` no repo, a fila 002+ não
-> é confirmável. O que segue é o encadeamento já registrado no `WORKFLOW-GITHUB.md`.
+> é confirmável. O que segue é o encadeamento já registrado no `../harness/workflow-github.md`.
 
 - **Fechar a SPEC 001 (Fundação):** superadmin funcionando ponta a ponta + telas do painel + aceites manuais. _Valor: base segura multi-tenant e painel de operação do SaaS._
 - **SPEC 002 — Esteira/CI (próxima da fila, citada no workflow):** automação de testes e do portão de merge. _Valor: deixar de depender de revisão manual a cada entrega._

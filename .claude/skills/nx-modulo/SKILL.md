@@ -39,8 +39,8 @@ que uma spec genérica não cobre.
 **1 · Levantar a regra (não o estilo)**
 
 Três fontes, nesta ordem de autoridade:
-- `INVENTARIO.md` §3.4 — a lógica embutida, já destilada
-- `INVENTARIO-UI.md` — como a tela se comporta e o que ela mostra
+- `docs/referencia/INVENTARIO.md` §3.4 — a lógica embutida, já destilada
+- `docs/referencia/INVENTARIO-UI.md` — como a tela se comporta e o que ela mostra
 - `../nexclin-lovable` — o código, **somente leitura**, quando as duas acima
   não bastarem
 

@@ -101,6 +101,12 @@ apagado, exceto os `plan.md` e `tasks.md` das specs, que viraram issue.
 | `docs/arquitetura/hospedagem-*.md` | `docs/adr/0003-onde-o-nexclin-roda.md` |
 | `docs/marca/` | `docs/referencia/marca-*.md` |
 | `docs/compartilhavel/` | `docs/harness/kit-compartilhavel.md` |
+| `INVENTARIO.md` e `INVENTARIO-UI.md`, na raiz | `docs/referencia/` |
+| `nexclin.html`, na raiz | `docs/referencia/brand-book.html` |
+| `RELATORIO-SEMANAL.md`, na raiz | `docs/historico/2026-08-03-relatorio-semanal.md` |
+| `WORKFLOW-GITHUB.md`, na raiz | `docs/harness/workflow-github.md` |
+| os dois `.html` de pesquisa e de plano, na raiz | **apagados** |
+| `CLAUDE nexclin.md`, na raiz | **apagado**, era cópia de 29/07 |
 
 **Duas exceções, e as duas são deliberadas.** O `docs/seguranca/nota-sql-editor`
 e o `registro-exports-banco` foram para `ponte/`, porque são procedimento da
@@ -117,7 +123,11 @@ acima é a tradução.
   propósito**: ele contava tarefas nos `tasks.md`, que não existem mais. Ficou
   como registro. Quem responde "o que faço agora" hoje é o handoff mais recente,
   mais as issues abertas.
-- `docs/referencia/INVENTARIO.md` e `INVENTARIO-UI.md` são o levantamento do MVP
-  de referência. São grandes, são consulta, e não mudam.
-- Os `.html` de pesquisa de mercado e plano até o lançamento são entregas
-  fechadas, não documentos vivos.
+- [`referencia/INVENTARIO.md`](referencia/INVENTARIO.md) e
+  [`referencia/INVENTARIO-UI.md`](referencia/INVENTARIO-UI.md) são o levantamento
+  do MVP de referência. São grandes, são consulta, e não mudam.
+- **Os dois `.html` da raiz foram apagados em 27/08:** a pesquisa de mercado e o
+  plano até o lançamento. Eram 240 KB de página salva do navegador, com pasta de
+  assets junto, e o conteúdo deles já tinha sido absorvido pelos documentos
+  datados de `historico/`. Continuam no histórico do git. O brand book, esse
+  ficou: virou [`referencia/brand-book.html`](referencia/brand-book.html).

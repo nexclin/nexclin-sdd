@@ -86,7 +86,7 @@ decisões de 20/08, que promoveram o V-11).
 1. Cadastrar/mover pacientes pelo CRM e também lançar consultas avulsas.
 2. Comparar o card do Dashboard com a contagem manual de consultas marcadas como "1ª vez"/vindas do CRM no período.
 **O que aconteceu:** os cards de "novos pacientes" e "novas consultas" do Dashboard contam algo diferente do que o relatório de Vendas usa para a mesma noção.
-**O que eu esperava:** "Que a quantidade de novos pacientes se refira apenas às consultas de 1ª vez, ou seja, aquelas que foram geradas a partir do CRM ou que possuam categoria de 1ª consulta. No quadro de consultas realizadas, o mesmo filtro deve ser aplicado para definir a quantidade de novas consultas realizadas." (regra completa — bate com a coluna "1ª VEZ?" que já existe no relatório de Vendas, `INVENTARIO-UI.md`.)
+**O que eu esperava:** "Que a quantidade de novos pacientes se refira apenas às consultas de 1ª vez, ou seja, aquelas que foram geradas a partir do CRM ou que possuam categoria de 1ª consulta. No quadro de consultas realizadas, o mesmo filtro deve ser aplicado para definir a quantidade de novas consultas realizadas." (regra completa — bate com a coluna "1ª VEZ?" que já existe no relatório de Vendas, `../referencia/INVENTARIO-UI.md`.)
 
 **Tipo:** Bug
 **Atrapalha muito:** sim
@@ -102,7 +102,7 @@ decisões de 20/08, que promoveram o V-11).
 2. Registrar um adiantamento na consulta (sem orçamento de prescrição ainda).
 3. Conferir no Dashboard os cards TOTAL CONSULTAS e TOTAL VENDAS.
 **O que aconteceu:** o valor do adiantamento soma no total de "vendas", não no total de "consultas".
-**O que eu esperava:** "O correto é que esse valor seja atribuído às consultas, não às vendas gerais." (regra completa — coerente com a separação Consulta × Prescrição/Venda já documentada em `INVENTARIO.md`, Anexo.)
+**O que eu esperava:** "O correto é que esse valor seja atribuído às consultas, não às vendas gerais." (regra completa — coerente com a separação Consulta × Prescrição/Venda já documentada em `../referencia/INVENTARIO.md`, Anexo.)
 
 **Tipo:** Bug
 **Atrapalha muito:** sim
@@ -129,7 +129,7 @@ decisões de 20/08, que promoveram o V-11).
 
 **Onde:** `/tarefas` (gerada a partir de `/acompanhamento`, "não comparecida")
 **O que eu fiz:**
-1. Marcar uma consulta agendada como "não comparecida" (motivo ≥3 caracteres, per `INVENTARIO.md §3.4`).
+1. Marcar uma consulta agendada como "não comparecida" (motivo ≥3 caracteres, per `../referencia/INVENTARIO.md §3.4`).
 2. Conferir o RESPONSÁVEL da tarefa de remarcação gerada.
 **O que aconteceu:** idem V-15, mas no caminho de "não comparecida".
 **O que eu esperava:** "Deveria ser criada uma tarefa atribuída para o responsável pela venda, não ao médico." (mesma regra de V-15.)
@@ -313,7 +313,7 @@ decisões de 20/08, que promoveram o V-11).
 
 **Onde:** `/relatorios/contas-receber`
 **O que eu fiz:**
-1. **não reproduzido** — o relatório tem múltiplos filtros (período, por vencimento, status, bancos, +2 outros, conforme `INVENTARIO-UI.md`). Pergunta para devolver: "Qual filtro específico (status, banco, 'por vencimento' etc.) você aplicou quando os dados sumiram, e qual valor selecionou em cada um?"
+1. **não reproduzido** — o relatório tem múltiplos filtros (período, por vencimento, status, bancos, +2 outros, conforme `../referencia/INVENTARIO-UI.md`). Pergunta para devolver: "Qual filtro específico (status, banco, 'por vencimento' etc.) você aplicou quando os dados sumiram, e qual valor selecionou em cada um?"
 **O que aconteceu:** aplicar filtro(s) zera o relatório.
 **O que eu esperava:** "Que os filtros permitissem uma visualização mais simples do relatório." (não especifica qual filtro nem qual valor — insuficiente para reproduzir.)
 
