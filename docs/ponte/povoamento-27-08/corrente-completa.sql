@@ -255,6 +255,12 @@ DECLARE
   conta_id     uuid;
   categoria_ids uuid[];
   servico_ids  uuid[];
+  -- As contas ANALITICAS do plano de contas, para as despesas nascerem
+  -- classificadas. Sem isto o relatorio DFC/DRE agrupa tudo em
+  -- "0 - Outros", que foi o que a bateria de 29/08 achou: 70 despesas,
+  -- ZERO com plano de contas. O relatorio fechava no total e nao servia
+  -- para nada, porque analise de custo se faz pelo agrupamento.
+  plano_ids    uuid[];
   forn_ids     uuid[];
   insumo_ids   uuid[];
 
@@ -511,22 +517,33 @@ BEGIN
     (alvo, 'Sistema de gestao',      280,   10, categoria_ids[7], 'juridica', 'mensal', primeiro_dia, true),
     (alvo, 'Contabilidade',          1200,  10, categoria_ids[7], 'juridica', 'mensal', primeiro_dia, true);
 
+  -- O plano de contas nao e criado por este arquivo: ele vem do gatilho de
+  -- nascimento da clinica, ou do `semear_clinica`. Aqui so se LE, e a ordem
+  -- por codigo mantem a serie estavel entre execucoes.
+  SELECT array_agg(id ORDER BY code) INTO plano_ids
+    FROM public.chart_of_accounts
+   WHERE clinic_id = alvo AND level = 3 AND active;
+
   INSERT INTO public.expenses (clinic_id, description, value, due_date, competence_date, status, paid_at,
-                               category_id, bank_account_id, person_type, origin_type, is_recurring, supplier, conciliated)
+                               category_id, chart_account_id, bank_account_id, person_type, origin_type, is_recurring, supplier, conciliated)
   SELECT alvo, f.description, f.value,
          (d + (f.due_day - 1) * interval '1 day')::date,
          d,
          CASE WHEN (d + (f.due_day - 1) * interval '1 day')::date <= current_date THEN 'pago' ELSE 'pendente' END,
          CASE WHEN (d + (f.due_day - 1) * interval '1 day')::date <= current_date
               THEN (d + (f.due_day - 1) * interval '1 day')::date ELSE NULL END,
-         f.category_id, conta_id, f.person_type, 'fixa', true, 'Fornecedor padrao',
+         f.category_id,
+         -- Espalha as despesas pelas contas analiticas por aritmetica sobre o
+         -- indice, e nao por random: rodar de novo produz a mesma base.
+         plano_ids[1 + (abs(hashtext(f.description)) % array_length(plano_ids, 1))],
+         conta_id, f.person_type, 'fixa', true, 'Fornecedor padrao',
          ((d + (f.due_day - 1) * interval '1 day')::date <= current_date)
   FROM public.fixed_expenses f
   CROSS JOIN generate_series(date_trunc('month', primeiro_dia), date_trunc('month', ultimo_dia), interval '1 month') d
   WHERE f.clinic_id = alvo;
 
   INSERT INTO public.expenses (clinic_id, description, value, due_date, competence_date, status, paid_at,
-                               category_id, bank_account_id, person_type, origin_type, is_recurring, supplier, conciliated)
+                               category_id, chart_account_id, bank_account_id, person_type, origin_type, is_recurring, supplier, conciliated)
   SELECT alvo,
          (ARRAY['Compra de insumos','Campanha de trafego','Manutencao de equipamento','Material de escritorio','Treinamento da equipe'])[1 + (g % 5)],
          round((450 + (g % 13) * 190)::numeric, 2),
@@ -535,6 +552,8 @@ BEGIN
          CASE WHEN (primeiro_dia + ((g * 5) % 60))::date <= current_date THEN 'pago' ELSE 'pendente' END,
          CASE WHEN (primeiro_dia + ((g * 5) % 60))::date <= current_date THEN (primeiro_dia + ((g * 5) % 60))::date ELSE NULL END,
          categoria_ids[1 + (g % array_length(categoria_ids, 1))],
+    -- Mesma regra do insert acima: a conta analitica sai do indice da serie.
+    plano_ids[1 + (g % array_length(plano_ids, 1))],
          conta_id, 'juridica', 'avulsa', false,
          (ARRAY['Dental Cremer','Meta Ads','TecnoMed','Kalunga','Instituto Formar'])[1 + (g % 5)],
          ((primeiro_dia + ((g * 5) % 60))::date <= current_date)
