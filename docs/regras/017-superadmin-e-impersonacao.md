@@ -4,9 +4,9 @@
 > abaixo são a leitura de defeitos encontrados em produção em 28/08/2026, ao
 > povoar uma clínica de teste e operar o painel como o Arthur opera.
 >
-> **Estado em 28/08/2026:** FR-001 e FR-002 corrigidos e provados na tela.
-> FR-003 corrigido, aguardando publicação. FR-004 e FR-005 **abertos**, e o
-> FR-005 depende de decisão do Arthur, na seção 7.
+> **Estado em 29/08/2026:** FR-001, FR-002 e FR-003 corrigidos e **provados na
+> tela**. FR-004 corrigido, aguardando publicação. **FR-005 continua aberto**, e
+> depende de decisão do Arthur, na seção 7.
 >
 > **Lei:** `docs/constituicao.md` · **Contexto:** `CLAUDE.md` ·
 > **Validação de mercado:**
@@ -67,10 +67,21 @@ porcentagem impossível são lidos como fato.
 - **FR-004**: O encerramento da impersonação **MUST** estar alcançável de fora
   do app da clínica.
 
-  *Porquê:* o controle de sair vive dentro do app impersonado. Quando esse app
-  quebrou pelo FR-003, não havia saída: a área de superadmin continuava
-  funcionando e não oferecia nenhum botão de encerrar. A única saída era sair da
-  conta inteira. **Ainda aberto.**
+  *Porquê:* o controle de sair vivia só dentro do app impersonado. Quando esse
+  app quebrou pelo FR-003, não havia saída: a área de superadmin continuava
+  funcionando e não oferecia nenhum botão de encerrar, e sobrava sair da conta
+  inteira.
+
+  **Corrigido em 29/08/2026**, e a correção é uma linha: o `ImpersonationBanner`
+  passou a ser renderizado também no `SuperAdminLayout`. É o **mesmo
+  componente**, e não uma cópia. Ele lê a sessão ativa e chama `exitClinic` por
+  conta própria, então não renderiza nada quando não há impersonação. Duplicar a
+  lógica criaria duas verdades sobre o mesmo estado, e uma delas envelheceria.
+
+  **A lição é maior que o conserto:** o defeito não estava no banner, que sempre
+  funcionou. Estava em ele existir num lugar só, e esse lugar ser justamente o
+  que pode quebrar. Saída de emergência dentro da sala que pega fogo não é
+  saída.
 
 ### Registrar quem viu o quê
 
@@ -123,7 +134,10 @@ dia o suporte deixar de entrar na conta, a trilha de leitura muda de forma.
   seis contagens com número. Provado na Clínica Teste Final, com 180 pacientes.
 - **FR-003:** entrar numa clínica pela impersonação e o app renderizar. Provado
   em 28/08: antes ficava em branco com React #310, depois abriu o dashboard.
-- **FR-004 e FR-005:** sem prova, porque não foram feitos.
+- **FR-004:** entrar numa clínica, ir para `/superadmin` e ver o banner com o
+  botão de encerrar. Aguardando publicação: **código lido, não comportamento
+  provado**, pela regra (j).
+- **FR-005:** sem prova, porque não foi feito.
 
 ---
 
