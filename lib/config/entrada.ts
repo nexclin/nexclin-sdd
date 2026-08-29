@@ -176,3 +176,20 @@ export function normalizaEntradaDeCatalogo(
   if (Object.keys(erros).length > 0) return { ok: false, erros };
   return { ok: true, valores };
 }
+
+/**
+ * O CNPJ como ele deve ser GRAVADO: so digito, no maximo catorze.
+ *
+ * A mascara `00.000.000/0000-00` e da tela. O banco guarda digito, porque e
+ * o que permite buscar, comparar e integrar. Achado em 29/08/2026: a primeira
+ * conta provisionada em producao gravou o CNPJ formatado enquanto uma clinica
+ * antiga tinha so digito, na mesma coluna.
+ *
+ * Devolve string vazia, e nunca `null`, porque a coluna e `text` com default
+ * vazio e devolver nulo obrigaria cada chamador a tratar a ausencia do seu
+ * jeito.
+ */
+export function normalizaCnpj(bruto: string | null | undefined): string {
+  if (!bruto) return "";
+  return bruto.replace(/\D/g, "").slice(0, 14);
+}

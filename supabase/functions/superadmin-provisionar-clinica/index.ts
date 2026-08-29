@@ -121,7 +121,16 @@ Deno.serve(async (req) => {
       email_confirm: true,
       user_metadata: {
         clinic_name: String(clinic_name).trim(),
-        cnpj: String(cnpj ?? "").trim(),
+        // O CNPJ VAI EM DIGITO, e nao com a mascara da tela.
+        //
+        // Achado em 29/08/2026 ao conferir a primeira conta provisionada em
+        // producao: ela gravou `43.243.243/2423-42` enquanto a Barros Clinic
+        // tinha `57314658000154`, na MESMA coluna. Dois formatos convivendo
+        // quebram busca, comparacao e integracao fiscal.
+        //
+        // A mascara e da tela; o banco guarda digito. A mesma regra vive
+        // testada em `lib/config/entrada.ts` na stack nova, como `normalizaCnpj`.
+        cnpj: String(cnpj ?? "").replace(/\D/g, "").slice(0, 14),
         specialty: String(specialty ?? "").trim(),
         full_name: String(owner_name ?? "").trim(),
         phone: String(owner_phone ?? "").trim(),
