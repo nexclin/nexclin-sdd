@@ -192,8 +192,32 @@ dia o suporte deixar de entrar na conta, a trilha de leitura muda de forma.
 - **FR-004:** entrar numa clínica, ir para `/superadmin` e ver o banner com o
   botão de encerrar. Aguardando publicação: **código lido, não comportamento
   provado**, pela regra (j).
-- **FR-005:** ainda sem prova, porque não foi implementado. Os critérios de
-  aceite, quando for:
+- **FR-005: PROVADO NA TELA em 29/08/2026**, três dos cinco critérios, com
+  impersonação viva na Clínica Teste Final. O que saiu:
+
+  | critério | resultado |
+  |---|---|
+  | 1. linha com operador, clínica, paciente, sessão e horário | **provado**: `erpclinicas@gmail.com`, Clínica Teste Final, Lucas Lima, sessão `409d61bf`, 20:37:33 |
+  | 2. mesmo prontuário duas vezes, duas linhas | **provado**: 20:37:33 e 20:40:50, mesmo paciente |
+  | 3. fora de impersonação não grava | **provado**: prontuário aberto sem o banner, trilha continuou em 2 |
+  | 4. escrita direta negada | **estrutura provada**, tentativa real não exercitada |
+  | 5. clínica vê só as linhas dela | **NÃO provado**: exige sessão de usuário de clínica |
+
+  Sobre o 4: as 13 verificações de `fr-005-aceite.sql` provam que não existe
+  policy de INSERT, UPDATE nem DELETE, e que o GRANT concede apenas SELECT.
+  Isso é a estrutura da proibição. **Não é o mesmo que ter tentado e levado
+  403**, e a diferença fica registrada em vez de arredondada.
+
+  Sobre o 5: falta credencial de usuário comum de clínica. É o último item para
+  o FR-005 fechar por inteiro.
+
+  Uma armadilha do próprio aceite, e ela quase virou defeito falso: na primeira
+  passada a trilha tinha UMA linha depois de eu abrir o prontuário duas vezes.
+  A causa era o clique não estar pegando depois de fechar o diálogo, e não o
+  gancho. Refazer confirmando a abertura na tela a cada passo é o que separou
+  as duas hipóteses.
+
+  Os critérios, para quem repetir:
   1. entrar numa clínica por impersonação, abrir um prontuário, e a linha
      aparecer com operador, clínica, paciente, sessão e horário;
   2. abrir o **mesmo** prontuário duas vezes e sair **duas** linhas, porque a
