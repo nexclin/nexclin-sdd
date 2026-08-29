@@ -192,7 +192,7 @@ dia o suporte deixar de entrar na conta, a trilha de leitura muda de forma.
 - **FR-004:** entrar numa clínica, ir para `/superadmin` e ver o banner com o
   botão de encerrar. Aguardando publicação: **código lido, não comportamento
   provado**, pela regra (j).
-- **FR-005: PROVADO NA TELA em 29/08/2026**, três dos cinco critérios, com
+- **FR-005: PROVADO POR INTEIRO em 29/08/2026**, os cinco critérios, com
   impersonação viva na Clínica Teste Final. O que saiu:
 
   | critério | resultado |
@@ -200,16 +200,25 @@ dia o suporte deixar de entrar na conta, a trilha de leitura muda de forma.
   | 1. linha com operador, clínica, paciente, sessão e horário | **provado**: `erpclinicas@gmail.com`, Clínica Teste Final, Lucas Lima, sessão `409d61bf`, 20:37:33 |
   | 2. mesmo prontuário duas vezes, duas linhas | **provado**: 20:37:33 e 20:40:50, mesmo paciente |
   | 3. fora de impersonação não grava | **provado**: prontuário aberto sem o banner, trilha continuou em 2 |
-  | 4. escrita direta negada | **estrutura provada**, tentativa real não exercitada |
-  | 5. clínica vê só as linhas dela | **NÃO provado**: exige sessão de usuário de clínica |
+  | 4. escrita direta negada | **provado**: `ERROR 42501 permission denied for table patient_access_log` |
+  | 5. clínica vê só as linhas dela | **provado**: usuário da Teste Final vê 2, usuário da Barros Clinic vê 0 |
 
-  Sobre o 4: as 13 verificações de `fr-005-aceite.sql` provam que não existe
-  policy de INSERT, UPDATE nem DELETE, e que o GRANT concede apenas SELECT.
-  Isso é a estrutura da proibição. **Não é o mesmo que ter tentado e levado
-  403**, e a diferença fica registrada em vez de arredondada.
+  **Os critérios 4 e 5 não exigiram credencial de ninguém**, e isto vale como
+  técnica para as próximas regras: dentro de `BEGIN` e `ROLLBACK`, dá para
+  assumir o papel e a identidade com
 
-  Sobre o 5: falta credencial de usuário comum de clínica. É o último item para
-  o FR-005 fechar por inteiro.
+  ```sql
+  SET LOCAL ROLE authenticated;
+  SET LOCAL "request.jwt.claims" = '{"sub":"<user_id>","role":"authenticated"}';
+  ```
+
+  e a partir daí `auth.uid()` responde aquele usuário e o RLS decide de
+  verdade. Foi assim que o mesmo `SELECT` devolveu 2 linhas para o usuário da
+  Clínica Teste Final e 0 para o da Barros Clinic.
+
+  Sobre o 4, a mensagem importa: o erro é **42501, permission denied**, e não
+  violação de policy. Quer dizer que o GRANT recusou **antes** de o RLS ser
+  consultado. As duas camadas estão de pé, e a de fora já basta.
 
   Uma armadilha do próprio aceite, e ela quase virou defeito falso: na primeira
   passada a trilha tinha UMA linha depois de eu abrir o prontuário duas vezes.
