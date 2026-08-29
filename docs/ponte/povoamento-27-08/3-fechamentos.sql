@@ -136,11 +136,24 @@ BEGIN
     )
     VALUES (
       alvo, r.id,
-      CASE (i % 4)
-        WHEN 0 THEN 'Plano de acompanhamento'
-        WHEN 1 THEN 'Tratamento restaurador'
-        WHEN 2 THEN 'Profilaxia e orientacao'
-        ELSE 'Avaliacao complementar'
+      -- A DESCRICAO TEM DE SER O NOME EXATO DE UM SERVICO DO CATALOGO.
+      --
+      -- Corrigido em 28/08/2026. Antes eram quatro frases inventadas, e o
+      -- resultado foi "Sem classificacao" liderando o Top Macro-Categorias com
+      -- R$ 67.200. O dashboard resolve a macro-categoria procurando a descricao
+      -- do item entre os NOMES dos servicos (`serviceMacroByName`), entao
+      -- descricao livre nao casa com nada e cai no balde do sem classificacao.
+      --
+      -- Esta lista vem do `2-povoamento.sql`, secao 1, e mistura de proposito
+      -- os dois lados da macro-categoria: consulta e procedimento. Sem essa
+      -- mistura, a divisao entre Total Consultas e Total Vendas nao e
+      -- exercitada, e um erro nela passaria despercebido.
+      CASE (i % 5)
+        WHEN 0 THEN 'Consulta clinica'
+        WHEN 1 THEN 'Procedimento estetico'
+        WHEN 2 THEN 'Limpeza de pele'
+        WHEN 3 THEN 'Avaliacao completa'
+        ELSE 'Aplicacao de toxina'
       END,
       valor + 200,
       CASE WHEN aprova THEN valor ELSE 0 END,

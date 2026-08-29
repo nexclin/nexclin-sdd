@@ -325,9 +325,15 @@ BEGIN
   SELECT array_agg(id ORDER BY name) INTO categoria_ids FROM public.expense_categories WHERE clinic_id = alvo;
 
   INSERT INTO public.services (clinic_id, name, category, macro_category, price, direct_cost, duration_minutes, active) VALUES
-    (alvo, 'Consulta clinica',        'Consulta',      'Servicos', 350,  40,  30, true),
-    (alvo, 'Retorno',                 'Consulta',      'Servicos', 180,  20,  20, true),
-    (alvo, 'Avaliacao completa',      'Consulta',      'Servicos', 250,  30,  40, true),
+    -- macro_category corrigida em 28/08/2026, de 'Servicos' para 'Consulta'.
+    -- O dashboard separa Total Consultas de Total Vendas por ESTA coluna, com
+    -- macro_category = 'consulta'. Com as tres marcadas como 'Servicos',
+    -- nenhum recebivel caia no balde de consulta e o painel mostrava
+    -- TOTAL CONSULTAS R$ 0 ao lado de 78 vendas pagas. O category ja dizia
+    -- 'Consulta', entao as duas colunas se contradiziam.
+    (alvo, 'Consulta clinica',        'Consulta',      'Consulta', 350,  40,  30, true),
+    (alvo, 'Retorno',                 'Consulta',      'Consulta', 180,  20,  20, true),
+    (alvo, 'Avaliacao completa',      'Consulta',      'Consulta', 250,  30,  40, true),
     (alvo, 'Procedimento estetico',   'Procedimento',  'Servicos', 1200, 320, 60, true),
     (alvo, 'Aplicacao de toxina',     'Procedimento',  'Servicos', 1800, 520, 45, true),
     (alvo, 'Preenchimento',           'Procedimento',  'Servicos', 2200, 780, 60, true),
@@ -821,11 +827,24 @@ BEGIN
     )
     VALUES (
       alvo, r.id,
-      CASE (i % 4)
-        WHEN 0 THEN 'Plano de acompanhamento'
-        WHEN 1 THEN 'Tratamento restaurador'
-        WHEN 2 THEN 'Profilaxia e orientacao'
-        ELSE 'Avaliacao complementar'
+      -- A DESCRICAO TEM DE SER O NOME EXATO DE UM SERVICO DO CATALOGO.
+      --
+      -- Corrigido em 28/08/2026. Antes eram quatro frases inventadas, e o
+      -- resultado foi "Sem classificacao" liderando o Top Macro-Categorias com
+      -- R$ 67.200. O dashboard resolve a macro-categoria procurando a descricao
+      -- do item entre os NOMES dos servicos (`serviceMacroByName`), entao
+      -- descricao livre nao casa com nada e cai no balde do sem classificacao.
+      --
+      -- Esta lista vem do `2-povoamento.sql`, secao 1, e mistura de proposito
+      -- os dois lados da macro-categoria: consulta e procedimento. Sem essa
+      -- mistura, a divisao entre Total Consultas e Total Vendas nao e
+      -- exercitada, e um erro nela passaria despercebido.
+      CASE (i % 5)
+        WHEN 0 THEN 'Consulta clinica'
+        WHEN 1 THEN 'Procedimento estetico'
+        WHEN 2 THEN 'Limpeza de pele'
+        WHEN 3 THEN 'Avaliacao completa'
+        ELSE 'Aplicacao de toxina'
       END,
       valor + 200,
       CASE WHEN aprova THEN valor ELSE 0 END,

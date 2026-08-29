@@ -114,9 +114,15 @@ BEGIN
   SELECT array_agg(id ORDER BY name) INTO categoria_ids FROM public.expense_categories WHERE clinic_id = alvo;
 
   INSERT INTO public.services (clinic_id, name, category, macro_category, price, direct_cost, duration_minutes, active) VALUES
-    (alvo, 'Consulta clinica',        'Consulta',      'Servicos', 350,  40,  30, true),
-    (alvo, 'Retorno',                 'Consulta',      'Servicos', 180,  20,  20, true),
-    (alvo, 'Avaliacao completa',      'Consulta',      'Servicos', 250,  30,  40, true),
+    -- macro_category corrigida em 28/08/2026, de 'Servicos' para 'Consulta'.
+    -- O dashboard separa Total Consultas de Total Vendas por ESTA coluna, com
+    -- macro_category = 'consulta'. Com as tres marcadas como 'Servicos',
+    -- nenhum recebivel caia no balde de consulta e o painel mostrava
+    -- TOTAL CONSULTAS R$ 0 ao lado de 78 vendas pagas. O category ja dizia
+    -- 'Consulta', entao as duas colunas se contradiziam.
+    (alvo, 'Consulta clinica',        'Consulta',      'Consulta', 350,  40,  30, true),
+    (alvo, 'Retorno',                 'Consulta',      'Consulta', 180,  20,  20, true),
+    (alvo, 'Avaliacao completa',      'Consulta',      'Consulta', 250,  30,  40, true),
     (alvo, 'Procedimento estetico',   'Procedimento',  'Servicos', 1200, 320, 60, true),
     (alvo, 'Aplicacao de toxina',     'Procedimento',  'Servicos', 1800, 520, 45, true),
     (alvo, 'Preenchimento',           'Procedimento',  'Servicos', 2200, 780, 60, true),
