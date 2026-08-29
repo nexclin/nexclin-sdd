@@ -111,8 +111,32 @@ lei, é sobre pessoas que confiaram um dado de saúde a uma clínica.
 
 - Toda ação administrativa sobre dado de cliente **MUST** gerar auditoria:
   quem, o quê, quando, e o diff `old→new` quando houver alteração.
-- Senha de cliente **MUST NEVER** ser definida por admin ou operador. A única
-  via é o reset por e-mail. Nenhuma action, função ou edge function seta senha.
+- **Senha, emendada em 28/08/2026.** A regra dizia *"senha de cliente MUST NEVER
+  ser definida por admin ou operador"*, sem exceção. Ela partia de um cenário
+  que o produto não tem: o de um admin de clínica trocando a senha de um colega,
+  que continua proibido e é o risco real. **O que ela impedia sem querer era o
+  modelo de implantação da empresa**, em que a NexClin entrega a plataforma
+  configurada e o cliente só chega e usa. O modelo é o diferencial de venda, e a
+  regra estava vetando o produto em nome de um perigo que não era o daquele
+  caminho. Decisão do Arthur, com a razão dele: *"quero entregar a plataforma
+  pro cliente pronta, pra que ele já possa começar usando"*.
+
+  A regra passa a ser:
+
+  - **Somente o superadmin** define senha, e **somente ao provisionar a conta**
+    de uma clínica nova. Todo o resto continua proibido.
+  - Admin ou membro de clínica **MUST NEVER** definir senha de outro usuário,
+    nem da própria clínica. Para esses, a única via continua sendo o reset por
+    e-mail.
+  - Definir senha **MUST** gerar auditoria, com operador, clínica e horário.
+  - A senha **MUST NOT** ser gravada, registrada ou trafegada em texto claro
+    fora do momento da criação. Ela existe para ser entregue e trocada.
+  - O dono **MUST** poder trocá-la a qualquer momento pelo fluxo normal.
+
+  **O que se aceita conscientemente:** por um intervalo, a senha inicial é
+  conhecida por quem faz a implantação. É risco de processo, e não de
+  arquitetura, e se mitiga escolhendo quem implanta, que foi exatamente a
+  ressalva do Arthur ao decidir.
 - Dado pessoal **MUST NOT** trafegar em query string, log, mensagem de erro ou
   título de commit.
 - **Minimização:** um endpoint devolve o mínimo necessário. Endpoint público de

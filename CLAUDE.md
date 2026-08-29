@@ -153,8 +153,10 @@ Valem para todo código e todo texto deste repositório.
 pode existir só no frontend.
 **(d)** Toda ação administrativa sobre dado de cliente gera auditoria: quem, o
 quê, quando, `old→new`.
-**(e)** Senha de cliente **jamais** é definida por admin. Somente reset ou
-convite por e-mail, com o próprio dono digitando.
+**(e)** Senha é definida **só pelo superadmin, e só ao provisionar clínica
+nova**, com auditoria. Admin ou membro de clínica **jamais** define senha de
+outro usuário: para esses, só reset por e-mail, com o próprio dono digitando.
+Emendada em 28/08/2026; o porquê está na Seção II da constituição.
 **(f)** As **15 ModuleKeys** são o contrato único de módulos, e planos,
 permissões e telas usam as mesmas strings:
 `dashboard · leads · pacientes · anamnese · consultas · acompanhamento · tarefas
