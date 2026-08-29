@@ -174,8 +174,31 @@ BEGIN
     (ARRAY['Antunes','Braga','Cardoso','Dias','Esteves','Freitas','Guimaraes','Henriques','Ipolito','Junqueira'])[1 + (g % 10)],
     '(11) 9' || lpad(((g * 6421) % 100000000)::text, 8, '0'),
     'lead' || g || '@exemplo.com.br',
-    (ARRAY['novo','contato','agendado','compareceu','fechado'])[1 + (g % 5)],
-    (ARRAY['novo','agendou','nao_agendou','recaptacao','agendou'])[1 + (g % 5)],
+    -- VOCABULARIO DO PRODUTO. Corrigido em 29/08/2026, e este foi o artefato
+    -- mais caro dos sete, porque nao aparecia como numero errado: aparecia
+    -- como tela vazia.
+    --
+    -- O script escrevia 'novo','contato','agendado','compareceu','fechado'.
+    -- O produto NUNCA escreve nenhum desses. Ele escreve exatamente cinco
+    -- valores, e a lista esta em `Atendimentos.tsx:179-183`:
+    -- novo_contato, em_atendimento, agendou, nao_agendou, recaptacao.
+    --
+    -- Tres consequencias, todas por causa de uma coluna:
+    --   1. `Dashboard.tsx:330` conta `funnel_stage === 'agendou'`. Com
+    --      'agendado' no lugar de 'agendou', a conta da ZERO, e o painel
+    --      mostra "0% agendam" ao lado de 203 agendamentos. Era o achado que
+    --      o handoff de 29/08 registrou como nunca investigado.
+    --   2. `Atendimentos.tsx:327` filtra por `stage.stages.includes(...)`.
+    --      Estagio que nao existe nao entra em coluna nenhuma, entao os 240
+    --      leads sumiam do funil.
+    --   3. O Relatorio de Leads cai no valor cru na coluna Status Final.
+    --
+    -- Um quinto de cada, para que as cinco colunas do funil tenham conteudo e
+    -- a conversao de leads de num numero que nao e nem 0% nem 100%.
+    (ARRAY['novo_contato','em_atendimento','agendou','nao_agendou','recaptacao'])[1 + (g % 5)],
+    -- O status acompanha o estagio, do mesmo jeito que o produto faz. A unica
+    -- assimetria e `novo_contato`, cujo status e 'novo'.
+    (ARRAY['novo','em_atendimento','agendou','nao_agendou','recaptacao'])[1 + (g % 5)],
     (ARRAY['Botox','Preenchimento','Consulta','Limpeza de pele','Pacote'])[1 + (g % 5)],
     origem_ids[1 + (g % array_length(origem_ids, 1))],
     canal_ids[1 + (g % array_length(canal_ids, 1))],
@@ -280,9 +303,28 @@ BEGIN
     (clinic_id, patient_id, appointment_id, description, item, category, macro_category,
      value, gross_value, net_value, due_date, status, paid_at, payment_type, quantity,
      payment_method_id, bank_account_id, installment_number, total_installments, fee_percent, conciliated)
+  -- item, category e macro_category saem de um SERVICO REAL do catalogo, e nao
+  -- de literal. Corrigido em 29/08/2026, e sao dois artefatos numa linha so.
+  --
+  -- O `item` era a palavra 'Atendimento', que nao e nome de servico nenhum. O
+  -- Relatorio de Repasse resolve o custo por `serviceCostMap[item]`, entao as
+  -- colunas Custo Direto e Custo Sala davam ZERO em 100% das linhas. Um
+  -- relatorio cujo proposito e subtrair custo, subtraindo nada, e que parece
+  -- pronto.
+  --
+  -- O `macro_category` era 'Servicos' em TODA linha, e e desta coluna, no
+  -- proprio recebivel, que o dashboard tira TOTAL CONSULTAS
+  -- (`Dashboard.tsx:348`, `isConsultaCat(r.macro_category)`). Com ela fixa em
+  -- 'Servicos', Total Consultas e estruturalmente R$ 0 e Total Vendas leva
+  -- tudo. A correcao de 28/08 mexeu em `services.macro_category`, que alimenta
+  -- outro calculo, e por isso nao mudou este.
+  --
+  -- Escolha por aritmetica sobre o hash do id, e nao por random, pelo mesmo
+  -- contrato de reprodutibilidade do arquivo. A ordem por nome e a mesma de
+  -- `servico_ids`, entao o servico sorteado aqui e o mesmo entre execucoes.
   SELECT alvo, a.patient_id, a.id,
          'Atendimento de ' || to_char(a.date, 'DD/MM'),
-         'Atendimento', 'Consulta', 'Servicos',
+         s.name, s.category, s.macro_category,
          a.sold_value, a.sold_value, round(a.sold_value * 0.965, 2),
          (a.date::date + ((abs(hashtext(a.id::text)) % 75) - 30)),
          CASE WHEN abs(hashtext(a.id::text)) % 10 < 6 THEN 'pago' ELSE 'pendente' END,
@@ -292,6 +334,14 @@ BEGIN
          conta_id, 1, 1, 3.49,
          (abs(hashtext(a.id::text)) % 10 < 6)
   FROM public.appointments a
+  CROSS JOIN LATERAL (
+    SELECT sv.name, sv.category, sv.macro_category
+      FROM public.services sv
+     WHERE sv.clinic_id = alvo
+     ORDER BY sv.name
+     OFFSET (abs(hashtext(a.id::text)) % array_length(servico_ids, 1))
+     LIMIT 1
+  ) s
   WHERE a.clinic_id = alvo AND a.status IN ('compareceu','confirmada');
 
   RAISE NOTICE '  receitas e recebiveis inseridos';
@@ -312,6 +362,17 @@ BEGIN
   SELECT array_agg(id ORDER BY code) INTO plano_ids
     FROM public.chart_of_accounts
    WHERE clinic_id = alvo AND level = 3 AND active;
+
+  -- Trava acrescentada em 29/08/2026. Sem ela, plano de contas vazio deixa
+  -- `plano_ids` NULO, `array_length` devolve NULO, o indice inteiro vira NULO e
+  -- as 70 despesas nascem com `chart_account_id` nulo, EM SILENCIO. Foi
+  -- exatamente assim que o relatorio Saidas por Plano de Contas somou certo e
+  -- jogou tudo em "0 - Outros". Parar aqui e melhor do que descobrir na tela.
+  IF plano_ids IS NULL OR array_length(plano_ids, 1) IS NULL THEN
+    RAISE EXCEPTION
+      'A clinica % nao tem conta analitica (chart_of_accounts nivel 3 ativa). Rode public.semear_clinica antes, senao as despesas nascem sem plano de contas.',
+      nome_clinica;
+  END IF;
 
   INSERT INTO public.expenses (clinic_id, description, value, due_date, competence_date, status, paid_at,
                                category_id, chart_account_id, bank_account_id, person_type, origin_type, is_recurring, supplier, conciliated)
@@ -362,7 +423,20 @@ BEGIN
          (primeiro_dia + ((g * 4) % 70))::date,
          (ARRAY['Recepcao','Comercial','Financeiro'])[1 + (g % 3)],
          p.id,
-         CASE WHEN g % 3 = 0 THEN (primeiro_dia + ((g * 4) % 70))::date ELSE NULL END,
+         -- Corrigido em 29/08/2026. Antes era a MESMA data do vencimento, o que
+         -- fazia `completed_at = due_date` em toda tarefa concluida. O
+         -- Relatorio de Atividades deriva quatro situacoes
+         -- (`situacaoDaAtividade`), e com igualdade sempre verdadeira a
+         -- comparacao `feita <= limite` nunca era falsa: "Realizada fora do
+         -- prazo" era INALCANCAVEL, e a coluna Dias de Atraso ficava sempre
+         -- vazia. Testar um relatorio de prazo numa base sem atraso nenhum
+         -- prova que ele nao quebra, e nao que ele classifica.
+         --
+         -- Agora varia de tres dias antes a tres dias depois do vencimento,
+         -- por aritmetica sobre o indice, entao as quatro situacoes aparecem.
+         CASE WHEN g % 3 = 0
+              THEN ((primeiro_dia + ((g * 4) % 70))::date + ((g % 7) - 3))::date
+              ELSE NULL END,
          primeiro_dia + ((g * 4) % 60) * interval '1 day'
   FROM generate_series(1, 90) g
   JOIN LATERAL (

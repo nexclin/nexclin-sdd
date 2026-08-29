@@ -116,6 +116,12 @@ DECLARE
     'fixed_expenses',
     'tasks',
     'closings',
+    -- Acrescentada em 29/08/2026. O `3-fechamentos` escreve aqui, e a lista
+    -- nunca citou esta tabela: ela sumia so por CASCADE de `patients`, que e
+    -- verdadeiro mas nao esta escrito em lugar nenhum. Explicita, ela aparece
+    -- na contagem do aviso e para de depender de uma cascata implicita. Vem
+    -- depois de `prescriptions` e `closings`, que sao os filhos dela.
+    'funnel_2_entries',
     'ai_insights',
     'anamnesis_responses',
     'appointments',
@@ -199,7 +205,12 @@ END $$;
 
 -- Conferencia. Rode junto, e troque o nome no `WHERE c.name` se trocou acima.
 -- Tudo tem de voltar zero, menos `team_members`, que nao e apagado de proposito.
-WITH c AS (SELECT id FROM public.clinics WHERE name = 'NexClin')
+--
+-- O nome aqui estava 'NexClin' ate 29/08/2026, enquanto o expurgo acima ja
+-- mirava a Clínica Teste Final. Como clinica inexistente devolve id NULO, e
+-- `clinic_id = NULL` nao casa com linha nenhuma, a conferencia respondia zero
+-- em tudo e parecia aprovar um expurgo que ela nao havia olhado.
+WITH c AS (SELECT id FROM public.clinics WHERE name = 'Clínica Teste Final')
 SELECT 'patients' AS tabela, count(*) FROM public.patients     WHERE clinic_id = (SELECT id FROM c)
 UNION ALL SELECT 'appointments',  count(*) FROM public.appointments  WHERE clinic_id = (SELECT id FROM c)
 UNION ALL SELECT 'receivables',   count(*) FROM public.receivables   WHERE clinic_id = (SELECT id FROM c)
@@ -385,8 +396,31 @@ BEGIN
     (ARRAY['Antunes','Braga','Cardoso','Dias','Esteves','Freitas','Guimaraes','Henriques','Ipolito','Junqueira'])[1 + (g % 10)],
     '(11) 9' || lpad(((g * 6421) % 100000000)::text, 8, '0'),
     'lead' || g || '@exemplo.com.br',
-    (ARRAY['novo','contato','agendado','compareceu','fechado'])[1 + (g % 5)],
-    (ARRAY['novo','agendou','nao_agendou','recaptacao','agendou'])[1 + (g % 5)],
+    -- VOCABULARIO DO PRODUTO. Corrigido em 29/08/2026, e este foi o artefato
+    -- mais caro dos sete, porque nao aparecia como numero errado: aparecia
+    -- como tela vazia.
+    --
+    -- O script escrevia 'novo','contato','agendado','compareceu','fechado'.
+    -- O produto NUNCA escreve nenhum desses. Ele escreve exatamente cinco
+    -- valores, e a lista esta em `Atendimentos.tsx:179-183`:
+    -- novo_contato, em_atendimento, agendou, nao_agendou, recaptacao.
+    --
+    -- Tres consequencias, todas por causa de uma coluna:
+    --   1. `Dashboard.tsx:330` conta `funnel_stage === 'agendou'`. Com
+    --      'agendado' no lugar de 'agendou', a conta da ZERO, e o painel
+    --      mostra "0% agendam" ao lado de 203 agendamentos. Era o achado que
+    --      o handoff de 29/08 registrou como nunca investigado.
+    --   2. `Atendimentos.tsx:327` filtra por `stage.stages.includes(...)`.
+    --      Estagio que nao existe nao entra em coluna nenhuma, entao os 240
+    --      leads sumiam do funil.
+    --   3. O Relatorio de Leads cai no valor cru na coluna Status Final.
+    --
+    -- Um quinto de cada, para que as cinco colunas do funil tenham conteudo e
+    -- a conversao de leads de num numero que nao e nem 0% nem 100%.
+    (ARRAY['novo_contato','em_atendimento','agendou','nao_agendou','recaptacao'])[1 + (g % 5)],
+    -- O status acompanha o estagio, do mesmo jeito que o produto faz. A unica
+    -- assimetria e `novo_contato`, cujo status e 'novo'.
+    (ARRAY['novo','em_atendimento','agendou','nao_agendou','recaptacao'])[1 + (g % 5)],
     (ARRAY['Botox','Preenchimento','Consulta','Limpeza de pele','Pacote'])[1 + (g % 5)],
     origem_ids[1 + (g % array_length(origem_ids, 1))],
     canal_ids[1 + (g % array_length(canal_ids, 1))],
@@ -491,9 +525,28 @@ BEGIN
     (clinic_id, patient_id, appointment_id, description, item, category, macro_category,
      value, gross_value, net_value, due_date, status, paid_at, payment_type, quantity,
      payment_method_id, bank_account_id, installment_number, total_installments, fee_percent, conciliated)
+  -- item, category e macro_category saem de um SERVICO REAL do catalogo, e nao
+  -- de literal. Corrigido em 29/08/2026, e sao dois artefatos numa linha so.
+  --
+  -- O `item` era a palavra 'Atendimento', que nao e nome de servico nenhum. O
+  -- Relatorio de Repasse resolve o custo por `serviceCostMap[item]`, entao as
+  -- colunas Custo Direto e Custo Sala davam ZERO em 100% das linhas. Um
+  -- relatorio cujo proposito e subtrair custo, subtraindo nada, e que parece
+  -- pronto.
+  --
+  -- O `macro_category` era 'Servicos' em TODA linha, e e desta coluna, no
+  -- proprio recebivel, que o dashboard tira TOTAL CONSULTAS
+  -- (`Dashboard.tsx:348`, `isConsultaCat(r.macro_category)`). Com ela fixa em
+  -- 'Servicos', Total Consultas e estruturalmente R$ 0 e Total Vendas leva
+  -- tudo. A correcao de 28/08 mexeu em `services.macro_category`, que alimenta
+  -- outro calculo, e por isso nao mudou este.
+  --
+  -- Escolha por aritmetica sobre o hash do id, e nao por random, pelo mesmo
+  -- contrato de reprodutibilidade do arquivo. A ordem por nome e a mesma de
+  -- `servico_ids`, entao o servico sorteado aqui e o mesmo entre execucoes.
   SELECT alvo, a.patient_id, a.id,
          'Atendimento de ' || to_char(a.date, 'DD/MM'),
-         'Atendimento', 'Consulta', 'Servicos',
+         s.name, s.category, s.macro_category,
          a.sold_value, a.sold_value, round(a.sold_value * 0.965, 2),
          (a.date::date + ((abs(hashtext(a.id::text)) % 75) - 30)),
          CASE WHEN abs(hashtext(a.id::text)) % 10 < 6 THEN 'pago' ELSE 'pendente' END,
@@ -503,6 +556,14 @@ BEGIN
          conta_id, 1, 1, 3.49,
          (abs(hashtext(a.id::text)) % 10 < 6)
   FROM public.appointments a
+  CROSS JOIN LATERAL (
+    SELECT sv.name, sv.category, sv.macro_category
+      FROM public.services sv
+     WHERE sv.clinic_id = alvo
+     ORDER BY sv.name
+     OFFSET (abs(hashtext(a.id::text)) % array_length(servico_ids, 1))
+     LIMIT 1
+  ) s
   WHERE a.clinic_id = alvo AND a.status IN ('compareceu','confirmada');
 
   RAISE NOTICE '  receitas e recebiveis inseridos';
@@ -523,6 +584,17 @@ BEGIN
   SELECT array_agg(id ORDER BY code) INTO plano_ids
     FROM public.chart_of_accounts
    WHERE clinic_id = alvo AND level = 3 AND active;
+
+  -- Trava acrescentada em 29/08/2026. Sem ela, plano de contas vazio deixa
+  -- `plano_ids` NULO, `array_length` devolve NULO, o indice inteiro vira NULO e
+  -- as 70 despesas nascem com `chart_account_id` nulo, EM SILENCIO. Foi
+  -- exatamente assim que o relatorio Saidas por Plano de Contas somou certo e
+  -- jogou tudo em "0 - Outros". Parar aqui e melhor do que descobrir na tela.
+  IF plano_ids IS NULL OR array_length(plano_ids, 1) IS NULL THEN
+    RAISE EXCEPTION
+      'A clinica % nao tem conta analitica (chart_of_accounts nivel 3 ativa). Rode public.semear_clinica antes, senao as despesas nascem sem plano de contas.',
+      nome_clinica;
+  END IF;
 
   INSERT INTO public.expenses (clinic_id, description, value, due_date, competence_date, status, paid_at,
                                category_id, chart_account_id, bank_account_id, person_type, origin_type, is_recurring, supplier, conciliated)
@@ -573,7 +645,20 @@ BEGIN
          (primeiro_dia + ((g * 4) % 70))::date,
          (ARRAY['Recepcao','Comercial','Financeiro'])[1 + (g % 3)],
          p.id,
-         CASE WHEN g % 3 = 0 THEN (primeiro_dia + ((g * 4) % 70))::date ELSE NULL END,
+         -- Corrigido em 29/08/2026. Antes era a MESMA data do vencimento, o que
+         -- fazia `completed_at = due_date` em toda tarefa concluida. O
+         -- Relatorio de Atividades deriva quatro situacoes
+         -- (`situacaoDaAtividade`), e com igualdade sempre verdadeira a
+         -- comparacao `feita <= limite` nunca era falsa: "Realizada fora do
+         -- prazo" era INALCANCAVEL, e a coluna Dias de Atraso ficava sempre
+         -- vazia. Testar um relatorio de prazo numa base sem atraso nenhum
+         -- prova que ele nao quebra, e nao que ele classifica.
+         --
+         -- Agora varia de tres dias antes a tres dias depois do vencimento,
+         -- por aritmetica sobre o indice, entao as quatro situacoes aparecem.
+         CASE WHEN g % 3 = 0
+              THEN ((primeiro_dia + ((g * 4) % 70))::date + ((g % 7) - 3))::date
+              ELSE NULL END,
          primeiro_dia + ((g * 4) % 60) * interval '1 day'
   FROM generate_series(1, 90) g
   JOIN LATERAL (
@@ -890,3 +975,159 @@ END $$;
 -- despesa avulsa recusa tudo. Foi o V-24.
 
 SELECT public.semear_clinica('d51ce6c7-582b-469b-a01b-608bd9b38885');
+
+
+-- ================== CONFERENCIA FINAL: LEIA ESTA SAIDA ==================
+--
+-- Acrescentada em 29/08/2026. Razao: o editor de SQL do Lovable Cloud devolve
+-- o resultado do ULTIMO comando. Sem este bloco, uma corrente que comeca por um
+-- expurgo termina sem mostrar nada, e "rodou sem erro" nao e a mesma coisa que
+-- "a base ficou certa".
+--
+-- As tres primeiras linhas sao os TRES ARTEFATOS achados em 28 e 29/08 olhando
+-- a tela. Todas tem de ler OK. Qualquer FALHOU significa que o defeito voltou, e
+-- que um relatorio vai mentir para quem o ler.
+
+WITH c AS (
+  SELECT id FROM public.clinics WHERE name = 'Clínica Teste Final'
+),
+v AS (
+  -- Artefato 1: despesa sem conta analitica. Foi o que jogou 100% das saidas
+  -- em "0 - Outros" no relatorio de plano de contas.
+  SELECT 1 AS ord,
+         'artefato 1  despesa sem plano de contas' AS verificacao,
+         count(*)::text AS valor, '0' AS esperado
+    FROM public.expenses
+   WHERE clinic_id = (SELECT id FROM c) AND chart_account_id IS NULL
+
+  UNION ALL
+  -- Artefato 2: servico de consulta com macro-categoria de venda. Foi o que
+  -- deixou TOTAL CONSULTAS em R$ 0 ao lado de 78 vendas pagas.
+  SELECT 2, 'artefato 2  consulta com macro errada',
+         count(*)::text, '0'
+    FROM public.services
+   WHERE clinic_id = (SELECT id FROM c)
+     AND category = 'Consulta' AND macro_category <> 'Consulta'
+
+  UNION ALL
+  -- Artefato 3: descricao de item que nao casa com nome de servico. Foi o que
+  -- pos "Sem classificacao" na lideranca do Top Macro-Categorias.
+  SELECT 3, 'artefato 3  item sem servico correspondente',
+         count(*)::text, '0'
+    FROM public.appointment_items i
+   WHERE i.clinic_id = (SELECT id FROM c)
+     AND NOT EXISTS (
+       SELECT 1 FROM public.services s
+        WHERE s.clinic_id = i.clinic_id AND s.name = i.description
+     )
+
+  UNION ALL
+  -- Artefato 4: recebivel cujo `item` nao e nome de servico. Foi o que deixou
+  -- Custo Direto e Custo Sala em zero no Relatorio de Repasse.
+  SELECT 4, 'artefato 4  recebivel sem servico correspondente',
+         count(*)::text, '0'
+    FROM public.receivables r
+   WHERE r.clinic_id = (SELECT id FROM c)
+     AND NOT EXISTS (
+       SELECT 1 FROM public.services s
+        WHERE s.clinic_id = r.clinic_id AND s.name = r.item
+     )
+
+  UNION ALL
+  -- Artefato 5: recebivel com uma macro-categoria so. E desta coluna que o
+  -- dashboard tira TOTAL CONSULTAS. Com um valor unico, um dos dois lados fica
+  -- em R$ 0 e o defeito passa por "a clinica nao vende isso".
+  SELECT 5, 'artefato 5  macro-categorias distintas no recebivel',
+         count(DISTINCT macro_category)::text, '> 1'
+    FROM public.receivables WHERE clinic_id = (SELECT id FROM c)
+
+  UNION ALL
+  -- Artefato 6: os DOIS lados do split precisam ter dinheiro. Contar macro
+  -- distintas prova pouco: uma base com 14 macro-categorias e nenhuma delas
+  -- 'consulta' passaria no item 5 e deixaria TOTAL CONSULTAS em R$ 0 do mesmo
+  -- jeito. O dashboard compara com `lower(macro_category) = 'consulta'`
+  -- (`Dashboard.tsx:348`), entao e essa a conta que tem de ser feita aqui.
+  SELECT 6, 'artefato 6  pagos no balde consulta',
+         to_char(coalesce(sum(gross_value), 0), 'FM999G999G990D00'), 'nao zero'
+    FROM public.receivables
+   WHERE clinic_id = (SELECT id FROM c) AND status = 'pago'
+     AND lower(coalesce(macro_category, '')) = 'consulta'
+
+  UNION ALL
+  SELECT 7, 'artefato 6  pagos no balde venda',
+         to_char(coalesce(sum(gross_value), 0), 'FM999G999G990D00'), 'nao zero'
+    FROM public.receivables
+   WHERE clinic_id = (SELECT id FROM c) AND status = 'pago'
+     AND lower(coalesce(macro_category, '')) <> 'consulta'
+
+  UNION ALL
+  -- Artefato 7: estagio de funil fora do vocabulario do produto. Os cinco
+  -- valores validos estao em `Atendimentos.tsx:179-183`. Qualquer outro some
+  -- do funil e zera a conversao do dashboard.
+  SELECT 8, 'artefato 7  lead com estagio invalido',
+         count(*)::text, '0'
+    FROM public.leads
+   WHERE clinic_id = (SELECT id FROM c)
+     AND funnel_stage NOT IN ('novo_contato','em_atendimento','agendou','nao_agendou','recaptacao')
+
+  UNION ALL
+  -- E o balde que o dashboard conta precisa ter gente dentro.
+  SELECT 9, 'artefato 7  leads em agendou',
+         count(*)::text, '> 0'
+    FROM public.leads
+   WHERE clinic_id = (SELECT id FROM c) AND funnel_stage = 'agendou'
+
+  UNION ALL
+  -- Artefato 8: tarefa concluida DEPOIS do vencimento. Se der zero, a situacao
+  -- "Realizada fora do prazo" nao tem como ser exercitada no relatorio.
+  SELECT 10, 'artefato 8  tarefas concluidas com atraso',
+         count(*)::text, '> 0'
+    FROM public.tasks
+   WHERE clinic_id = (SELECT id FROM c)
+     AND status = 'concluida' AND completed_at::date > due_date::date
+
+  UNION ALL
+  -- Volume. Zero em qualquer uma quer dizer que um passo nao rodou.
+  SELECT 10, 'volume      pacientes',    count(*)::text, '> 0' FROM public.patients     WHERE clinic_id = (SELECT id FROM c)
+  UNION ALL
+  SELECT 11, 'volume      consultas',    count(*)::text, '> 0' FROM public.appointments  WHERE clinic_id = (SELECT id FROM c)
+  UNION ALL
+  SELECT 12, 'volume      fechamentos',  count(*)::text, '> 0' FROM public.closings      WHERE clinic_id = (SELECT id FROM c)
+  UNION ALL
+  SELECT 13, 'volume      recebiveis',   count(*)::text, '> 0' FROM public.receivables   WHERE clinic_id = (SELECT id FROM c)
+  UNION ALL
+  SELECT 14, 'volume      despesas',     count(*)::text, '> 0' FROM public.expenses      WHERE clinic_id = (SELECT id FROM c)
+  UNION ALL
+  SELECT 15, 'volume      contas analiticas', count(*)::text, '> 0'
+    FROM public.chart_of_accounts WHERE clinic_id = (SELECT id FROM c) AND level = 3 AND active
+  UNION ALL
+  SELECT 16, 'volume      equipe (NAO pode zerar)', count(*)::text, '> 0'
+    FROM public.team_members WHERE clinic_id = (SELECT id FROM c)
+
+  UNION ALL
+  -- Os numeros do E-01. Sao a referencia contra a qual os oito relatorios sao
+  -- conferidos: o relatorio tem de bater com ISTO, que e o que foi lancado.
+  SELECT 20, 'E-01        entradas brutas (pago)',
+         to_char(coalesce(sum(gross_value), 0), 'FM999G999G990D00'), 'referencia'
+    FROM public.receivables WHERE clinic_id = (SELECT id FROM c) AND status = 'pago'
+  UNION ALL
+  SELECT 21, 'E-01        entradas liquidas (pago)',
+         to_char(coalesce(sum(net_value), 0), 'FM999G999G990D00'), 'referencia'
+    FROM public.receivables WHERE clinic_id = (SELECT id FROM c) AND status = 'pago'
+  UNION ALL
+  SELECT 22, 'E-01        saidas pagas',
+         to_char(coalesce(sum(value), 0), 'FM999G999G990D00'), 'referencia'
+    FROM public.expenses WHERE clinic_id = (SELECT id FROM c) AND status = 'pago'
+)
+SELECT v.verificacao,
+       v.valor,
+       v.esperado,
+       CASE
+         WHEN v.esperado = 'referencia' THEN 'anote'
+         WHEN v.esperado = '0'   AND v.valor = '0'      THEN 'OK'
+         WHEN v.esperado = '> 0' AND v.valor <> '0'     THEN 'OK'
+         WHEN v.esperado = '> 1' AND v.valor NOT IN ('0','1') THEN 'OK'
+         WHEN v.esperado = 'nao zero' AND v.valor <> '0,00' AND v.valor <> '0.00' THEN 'OK'
+         ELSE 'FALHOU'
+       END AS resultado
+  FROM v ORDER BY v.ord;
