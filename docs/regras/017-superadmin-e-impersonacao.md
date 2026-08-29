@@ -4,9 +4,11 @@
 > abaixo são a leitura de defeitos encontrados em produção em 28/08/2026, ao
 > povoar uma clínica de teste e operar o painel como o Arthur opera.
 >
-> **Estado em 29/08/2026:** FR-001, FR-002 e FR-003 corrigidos e **provados na
-> tela**. FR-004 corrigido, aguardando publicação. **FR-005 continua aberto**, e
-> depende de decisão do Arthur, na seção 7.
+> **Estado em 29/08/2026, noite:** FR-001, FR-002 e FR-003 corrigidos e
+> **provados na tela**. FR-004 corrigido e publicado. **FR-005 saiu de aberto
+> para especificado**: as quatro decisões que faltavam foram tomadas pelo Arthur
+> nesta data e estão na seção 7. A implementação é a próxima entrega, e é o
+> único item desta regra com prazo legal.
 >
 > **Lei:** `docs/constituicao.md` · **Contexto:** `CLAUDE.md` ·
 > **Validação de mercado:**
@@ -93,7 +95,53 @@ porcentagem impossível são lidos como fato.
   que a regra (d) da constituição pede, e a impersonação registra a **entrada**.
   Nenhum dos dois registra o que foi visto lá dentro. Um operador abre duzentos
   prontuários e a trilha guarda uma linha dizendo que ele entrou.
-  **Ainda aberto**, e depende da decisão da seção 7.
+  **Especificado em 29/08/2026.** As quatro decisões estão na seção 7, e o que
+  elas produzem são os quatro sub-requisitos abaixo.
+
+- **FR-005a, a tabela.** A trilha **MUST** viver em `patient_access_log`, e ela
+  **MUST** ser somente-anexação: sem policy de `UPDATE` e sem policy de
+  `DELETE`, para ninguém, inclusive superadmin. Pela regra (b) da constituição,
+  o que não é concedido é negado, então a ausência de policy É a proibição.
+
+  A tabela **MUST NOT** ter chave estrangeira para `patients`. Isto é
+  deliberado e contra-intuitivo: com `ON DELETE CASCADE`, apagar um paciente
+  apagaria junto a prova de que alguém o leu, que é exatamente ao contrário do
+  que uma trilha serve. Ela guarda `patient_id` como uuid solto, e guarda
+  `operator_email` desnormalizado pela mesma razão, para sobreviver ao operador
+  ser desativado.
+
+  Ela **MUST** amarrar cada leitura à **sessão de impersonação**, e não só ao
+  operador. `superadmin_impersonation_sessions` já tem `id`, então a pergunta
+  "o que foi visto naquele atendimento de suporte" passa a ter resposta, em vez
+  de só "o que aquela pessoa já viu algum dia".
+
+- **FR-005b, quem escreve.** A escrita **MUST** ser feita por RPC
+  `SECURITY DEFINER`, e **MUST NOT** existir policy de `INSERT` para
+  `authenticated`. Cliente não escreve na trilha direto: se escrevesse, poderia
+  forjar linha.
+
+  O RPC **MUST** resolver a sessão ativa por `auth.uid()`, e **MUST** recusar
+  silenciosamente quando não houver impersonação, porque o escopo decidido é
+  esse. E **MUST** conferir que o paciente pertence à clínica da sessão, senão
+  um operador poderia gravar leitura de paciente de outra clínica e sujar a
+  trilha de quem não foi lido.
+
+- **FR-005c, o gancho.** A tela de prontuário **MUST** chamar o RPC ao abrir.
+  Vale o prontuário, e **não** a lista de pacientes: a lista mostra nome, o
+  prontuário mostra dado clínico, e registrar cada render de lista afogaria a
+  trilha no que não importa.
+
+- **FR-005d, retenção.** A política **MUST** estar escrita, e nada apaga
+  automaticamente antes de 08/09. O risco até o lançamento é registrar de
+  menos, e não guardar demais.
+
+  **A limitação honesta, e ela vai escrita porque será perguntada numa
+  auditoria:** com o gancho na tela, um cliente adulterado consegue ler sem
+  gravar. O desenho que fecha isso é o prontuário deixar de ser `SELECT` direto
+  e passar a vir de um RPC que devolve o dado E grava a linha, e ele é
+  **requisito da stack nova**. Na Lovable fica o gancho, porque aquelas telas
+  são descartadas em outubro. A trilha prova acesso legítimo; ela não defende
+  de operador mal-intencionado com o navegador aberto.
 
 ---
 
@@ -104,7 +152,14 @@ inteiros e exige `is_superadmin` na primeira linha, antes de olhar tabela
 nenhuma. `SECURITY DEFINER` ignora RLS, então sem essa guarda qualquer usuário
 autenticado contaria a base de qualquer clínica.
 
-O FR-005, quando decidido, exige tabela própria de trilha de leitura.
+O FR-005 exige uma migração própria, e ela é **faixa A**: cria
+`patient_access_log` com RLS, e o RPC `registrar_leitura_de_paciente(uuid)`.
+
+O RLS dela tem uma assimetria de propósito. **Superadmin lê tudo**, porque é
+quem audita. **A clínica lê só as linhas dela**, e isso não é generosidade: é
+a resposta à pergunta que o titular do dado tem direito de fazer, que é quem da
+plataforma abriu o prontuário do paciente dela. Ninguém atualiza e ninguém
+apaga.
 
 ---
 
@@ -137,23 +192,54 @@ dia o suporte deixar de entrar na conta, a trilha de leitura muda de forma.
 - **FR-004:** entrar numa clínica, ir para `/superadmin` e ver o banner com o
   botão de encerrar. Aguardando publicação: **código lido, não comportamento
   provado**, pela regra (j).
-- **FR-005:** sem prova, porque não foi feito.
+- **FR-005:** ainda sem prova, porque não foi implementado. Os critérios de
+  aceite, quando for:
+  1. entrar numa clínica por impersonação, abrir um prontuário, e a linha
+     aparecer com operador, clínica, paciente, sessão e horário;
+  2. abrir o **mesmo** prontuário duas vezes e sair **duas** linhas, porque a
+     decisão foi registrar cada abertura;
+  3. abrir prontuário **fora** de impersonação e **nenhuma** linha ser gravada;
+  4. tentar `INSERT`, `UPDATE` e `DELETE` diretos na tabela como usuário
+     autenticado, e os três serem negados;
+  5. um admin de clínica ver as linhas da própria clínica, e **não** ver as de
+     outra.
 
 ---
 
-## 7. A decisão que falta
+## 7. As decisões, tomadas em 29/08/2026
 
-**Uma, e ela destrava o FR-005.** O que exatamente se registra numa leitura de
-prontuário durante impersonação?
+**O que se registra numa leitura de prontuário durante impersonação?**
+**Cada paciente aberto**, uma linha por prontuário visto. As outras duas opções
+que estavam na mesa, registrar a tela sem identificar o paciente e registrar só
+a janela da sessão, atendem auditoria administrativa, que já está atendida por
+`superadmin_audit_log`. Nenhuma das duas responde "quem viu o quê", que é a
+pergunta do requisito.
 
-1. **Cada paciente aberto.** Uma linha por prontuário visto. É o que a exigência
-   de saúde pede ao pé da letra, e é a mais cara: a trilha cresce rápido e
-   precisa de retenção própria.
-2. **Cada tela aberta, sem identificar o paciente.** Registra que o operador
-   abriu a lista de pacientes às 14h02, e não quem ele leu. Mais barato, e não
-   responde "quem viu o quê".
-3. **Só a janela de sessão**, com hora de entrada e de saída, e o que ele podia
-   ter visto. É o que já existe hoje, apenas explicitado.
+**A trilha cobre quem?** **Só impersonação.** É o que esta regra sempre disse,
+e a razão de não ampliar agora é de risco, não de preguiça: o operador da
+plataforma lendo prontuário de clínica que não é dele é exposição de outra
+ordem que a equipe da clínica lendo os próprios pacientes. Ampliar para a
+equipe **fica como requisito da stack nova**, e não como dívida solta.
 
-**A primeira é a que atende o requisito.** As outras duas atendem a auditoria
-administrativa, que já está atendida.
+**Como a leitura chega na trilha?** **A tela chama o RPC ao abrir.** O desenho
+mais forte, em que o prontuário só é lido através do RPC, mexeria em telas que
+serão reescritas em outubro. A limitação está escrita no FR-005d, de propósito,
+porque limitação que só existe na cabeça de quem construiu não sobrevive à
+primeira troca de pessoa.
+
+**Qual retenção?** **A política escrita, sem expurgo automático.** A coluna e o
+job de limpeza nascem quando houver o que limpar. Antes de 08/09 o risco é a
+trilha não registrar, e não a trilha crescer.
+
+---
+
+## 8. O que esta regra NÃO decide
+
+O prazo de retenção em número de anos. A prática do setor para log de acesso a
+dado de saúde é longa, e nenhuma norma brasileira fixa um número para log de
+acesso. Escrever "cinco anos" aqui seria inventar precisão que não existe, e
+número inventado numa regra vira número citado numa auditoria.
+
+**Fica como decisão aberta, e ela não bloqueia a implementação:** a tabela nasce
+sem coluna de expiração, e acrescentar coluna anulável depois é barato. O que
+seria caro é o contrário, apagar cedo demais.
