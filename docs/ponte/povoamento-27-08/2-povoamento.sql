@@ -346,7 +346,26 @@ BEGIN
 
   INSERT INTO public.goals (clinic_id, year, month, revenue_target, closings_target, conversion_target, new_patients_target)
   SELECT alvo, extract(year FROM d)::int, extract(month FROM d)::int, 260000, 120, 45, 60
-  FROM generate_series(date_trunc('month', primeiro_dia), date_trunc('month', ultimo_dia), interval '1 month') d;
+  FROM generate_series(date_trunc('month', primeiro_dia), date_trunc('month', ultimo_dia), interval '1 month') d
+  -- Endurecido em 28/08/2026, depois de estourar em producao com
+  -- `duplicate key value violates unique constraint
+  -- "goals_clinic_id_month_year_key"` na Clinica Teste Final. A meta e a unica
+  -- coisa que uma clinica de teste costuma ter mesmo sem paciente nenhum,
+  -- entao a trava de "ja tem pacientes" nao a pegava.
+  --
+  -- DO UPDATE, e nao DO NOTHING, porque o contrato deste arquivo e produzir
+  -- SEMPRE a mesma base. Com DO NOTHING, uma meta antiga de valor diferente
+  -- sobreviveria, e o dashboard mostraria um alvo diferente a cada clinica.
+  --
+  -- Isto NAO torna o arquivo seguro em clinica nao expurgada: das vinte
+  -- insercoes, dezoito seguem sem tratamento de conflito, e as que caem em
+  -- tabela sem restricao unica DUPLICAM em silencio, que e pior que estourar.
+  -- Rode o `1-expurgo.sql` antes. Sempre.
+  ON CONFLICT (clinic_id, month, year) DO UPDATE SET
+    revenue_target      = EXCLUDED.revenue_target,
+    closings_target     = EXCLUDED.closings_target,
+    conversion_target   = EXCLUDED.conversion_target,
+    new_patients_target = EXCLUDED.new_patients_target;
 
   RAISE NOTICE '  tarefas e metas inseridas';
 

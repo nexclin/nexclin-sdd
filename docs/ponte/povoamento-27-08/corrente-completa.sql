@@ -1,36 +1,214 @@
 -- =====================================================================
--- POVOAMENTO COMPLETO DA CLINICA TESTE FINAL, numa colagem so.
+-- A CORRENTE COMPLETA, para a Clínica Teste Final, numa colagem so.
 -- =====================================================================
 --
--- Os dois blocos que estavam em arquivos separados, na ordem obrigatoria.
--- Montado em 28/08/2026 depois de o 3-fechamentos recusar a clinica com
--- "nao tem consulta com status compareceu", que era a trava dele funcionando:
--- o 2-povoamento ainda nao tinha rodado.
+-- Montada em 28/08/2026 depois de duas falhas seguidas, e cada uma ensinou
+-- uma coisa que esta corrigida aqui.
 --
--- A ORDEM NAO E ARBITRARIA. O bloco 2 cria pacientes, leads e consultas. O
--- bloco 3 pendura fechamento nas consultas que compareceram, e sem elas nao
--- tem onde pendurar.
+-- FALHA 1: o `3-fechamentos` recusou a clinica dizendo que ela nao tinha
+-- consulta com status compareceu. Era a trava dele funcionando, porque o
+-- povoamento ainda nao havia rodado.
 --
--- SE O BLOCO 2 FALHAR, o bloco 3 nao roda: no SQL editor a falha aborta a
--- transacao e as instrucoes seguintes nao executam. E o comportamento que se
--- quer, e nao um efeito colateral.
+-- FALHA 2: o povoamento estourou com
+-- `duplicate key value violates unique constraint "goals_clinic_id_month_year_key"`.
+-- A clinica ja tinha meta de julho de 2026, e a trava do povoamento so olha
+-- paciente, entao nao pegou. A insercao de metas foi endurecida com
+-- ON CONFLICT DO UPDATE, mas isso trata UMA tabela.
 --
--- As travas de cada bloco continuam valendo. Recusam clinica inexistente, nome
--- duplicado, clinica que ja tenha pacientes, e clinica que ja tenha
--- fechamentos. Nenhum dos dois apaga nada, entao rodar duas vezes e recusado
--- em vez de duplicar.
+-- O QUE AS DUAS FALHAS REVELARAM: o povoamento pressupoe clinica EXPURGADA.
+-- Das vinte insercoes dele, dezoito nao tratam conflito, e as que caem em
+-- tabela sem restricao unica DUPLICAM EM SILENCIO, que e pior que estourar.
+-- A Clínica Teste Final nunca foi expurgada, entao ainda tem os catalogos que
+-- `semear_clinica` criou no nascimento dela: canais, origens, tipos de
+-- fechamento, contas bancarias e servicos. Sem o expurgo, tudo isso duplica.
 --
--- ALVO: Clinica Teste Final. Ao final, cerca de 180 pacientes, 420 consultas,
--- 280 comparecimentos e 154 fechamentos.
+-- ============ A ORDEM, E POR QUE ELA E ESTA ============
 --
--- Para provar a sintaxe sem gravar, use o arquivo
--- `povoamento-completo-teste-de-sintaxe.sql`, que e este mesmo conteudo dentro
--- de BEGIN/ROLLBACK. Ele exercita a cadeia inteira, inclusive o bloco 3 achando
--- as consultas que o bloco 2 acabou de criar, e desfaz tudo no fim.
+--   1. EXPURGO       apaga o conteudo da clinica, catalogos inclusive.
+--   2. POVOAMENTO    cria pacientes, leads, consultas e os catalogos de novo.
+--   3. FECHAMENTOS   pendura fechamento nas consultas que compareceram.
+--   4. SEMEAR        devolve o que o expurgo levou e o povoamento nao recria.
+--
+-- O passo 4 nao e enfeite, e a ausencia dele foi o V-24. O expurgo apaga
+-- `chart_of_accounts`, e o povoamento NAO o recria. Foi assim que a conta
+-- mestra ficou com um plano de contas de UM no, e o lancamento de despesa
+-- passou a recusar tudo com "Nenhuma conta analitica disponivel". Sem o
+-- passo 4, a Clínica Teste Final termina com o mesmo defeito.
+--
+-- E o passo 4 vem DEPOIS do 2, e nao antes, para nao duplicar: `semear_clinica`
+-- so preenche o que esta faltando, entao rodando no fim ela ve canais, tipos de
+-- fechamento e contas bancarias ja criados pelo povoamento e os pula, e cria so
+-- o que ninguem criou, que e o plano de contas e as regras de negocio.
+--
+-- ============ SEGURANCA ============
+--
+-- O passo 1 APAGA. Ele mira por NOME, conferivel a olho, com INTO STRICT: nome
+-- que nao existe, ou que casa com duas clinicas, para tudo antes de apagar. Ele
+-- nao toca na clinica em si, nos perfis, na equipe, na assinatura nem nos
+-- papeis. A conta continua existindo e continua logando.
+--
+-- ALVO: Clínica Teste Final, `d51ce6c7-582b-469b-a01b-608bd9b38885`.
+-- Confira este nome antes de rodar.
+--
+-- Para provar sem gravar, use `corrente-completa-teste-de-sintaxe.sql`, que e
+-- este conteudo dentro de BEGIN e ROLLBACK. Ele exercita a cadeia inteira,
+-- inclusive o passo 3 achando as consultas que o passo 2 acabou de criar, e
+-- desfaz tudo no fim.
 -- =====================================================================
 
 
--- ================== BLOCO 2 de 3: POVOAMENTO ==================
+-- ================== PASSO 1 de 4: EXPURGO (APAGA) ==================
+
+-- =====================================================================
+-- EXPURGO. Apaga TODO o dado de operacao de UMA clinica.
+-- =====================================================================
+--
+-- Este arquivo existe antes do povoamento de proposito, e a razao esta em
+-- ../../historico/2026-08-27-triagem-erick.md, item E-01: o banco da Lovable
+-- migra intacto em outubro, entao dado de simulacao sem expurgo escrito nao
+-- e descartado na migracao, e importado.
+--
+-- O QUE ELE APAGA: paciente, lead, consulta, orcamento, receita, recebivel,
+-- despesa, tarefa, meta, insumo, sala, imobilizado e os catalogos, tudo
+-- filtrado por clinic_id.
+--
+-- O QUE ELE NAO TOCA, e isto e o que o torna seguro de rodar: a propria
+-- clinica, os perfis, os membros de equipe, a assinatura e os papeis. A conta
+-- continua existindo e continua logando. So o conteudo some.
+--
+-- COMO USAR: troque o NOME da clinica na linha do `nome_alvo`, rode, e leia o
+-- aviso com a contagem por tabela.
+--
+-- Por que nome e nao UUID: a versao anterior pedia um UUID colado a mao, e
+-- UUID copiado errado num script que apaga dado apaga a clinica errada. O
+-- nome e conferivel a olho. A busca e exata e usa INTO STRICT, entao nome que
+-- nao existe ou que casa com duas clinicas para tudo antes de apagar.
+--
+-- Para ver os nomes:
+--   select name, created_at from public.clinics order by created_at;
+-- =====================================================================
+
+DO $$
+DECLARE
+  -- >>>>>>>>>>>>>>>> TROQUE AQUI, E SO AQUI <<<<<<<<<<<<<<<<
+  nome_alvo text := 'Clínica Teste Final';
+  -- >>>>>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+  alvo uuid;
+  nome_da_clinica text;
+  t text;
+  n bigint;
+  total bigint := 0;
+
+  -- Ordem obrigatoria: filho antes de pai. Trocar a ordem produz erro de
+  -- chave estrangeira, e o erro diz qual tabela, entao e recuperavel; mas a
+  -- ordem certa evita a ida e volta.
+  tabelas text[] := ARRAY[
+    'lead_history',
+    'appointment_items',
+    'appointment_resources',
+    'budget_items',
+    'budgets',
+    'prescriptions',
+    'receivables',
+    'revenues',
+    'expenses',
+    'fixed_expenses',
+    'tasks',
+    'closings',
+    'ai_insights',
+    'anamnesis_responses',
+    'appointments',
+    'leads',
+    'patients',
+    'goals',
+    'service_supplies',
+    'supplies',
+    'suppliers',
+    'assets',
+    'pricing_params',
+    'resources',
+    'budget_notices',
+    'services',
+    'consultation_types',
+    'closing_types',
+    'origins',
+    'channels',
+    'objections',
+    'payment_methods',
+    'acquirers',
+    'expense_categories',
+    'chart_of_accounts',
+    'bank_accounts',
+    'business_rules',
+    'anamnesis_config'
+  ];
+  -- Estas tabelas fazem parte do ESQUELETO que `handle_new_user` cria junto com
+  -- a clinica, e nao de dado de operacao. Elas continuam sendo apagadas acima,
+  -- porque simulacao suja o catalogo tambem, mas o esqueleto e RECRIADO no fim,
+  -- por `semear_clinica`.
+  --
+  -- Isto foi aprendido errando em 27/08. A primeira versao apagava e nao
+  -- recriava, e a clinica ficava num estado em que nenhuma clinica real nasce:
+  -- sem `business_rules`, sem plano de contas, sem forma de pagamento. O
+  -- sintoma foi o onboarding travar no passo 2 para sempre.
+BEGIN
+  -- INTO STRICT: zero linhas e mais de uma linha viram excecao. E o que
+  -- garante que um nome ambiguo pare aqui, e nao apague duas clinicas.
+  BEGIN
+    SELECT id, name INTO STRICT alvo, nome_da_clinica
+      FROM public.clinics WHERE name = nome_alvo;
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      RAISE EXCEPTION 'Nao existe clinica chamada "%". Nada foi apagado.', nome_alvo;
+    WHEN TOO_MANY_ROWS THEN
+      RAISE EXCEPTION 'Existe mais de uma clinica chamada "%". Nada foi apagado.', nome_alvo;
+  END;
+
+  RAISE NOTICE 'Expurgando a clinica: % (%)', nome_da_clinica, alvo;
+
+  FOREACH t IN ARRAY tabelas LOOP
+    -- A tabela pode nao existir: as seis migracoes de 26/08 entraram, mas o
+    -- script precisa continuar valendo em um banco que esteja atras disso.
+    IF to_regclass('public.' || t) IS NULL THEN
+      RAISE NOTICE '  % : tabela nao existe, pulando', t;
+      CONTINUE;
+    END IF;
+
+    EXECUTE format('DELETE FROM public.%I WHERE clinic_id = $1', t) USING alvo;
+    GET DIAGNOSTICS n = ROW_COUNT;
+    total := total + n;
+    IF n > 0 THEN
+      RAISE NOTICE '  % : % linhas', t, n;
+    END IF;
+  END LOOP;
+
+  RAISE NOTICE 'Total apagado: % linhas. Clinica, perfis, equipe e assinatura intactos.', total;
+
+  -- Recompoe o esqueleto. Sem isto a clinica fica pior que nova, e o onboarding
+  -- nao tem como ser concluido. Ver a migracao 20260827020000.
+  IF to_regclass('public.clinics') IS NOT NULL
+     AND EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+                  WHERE n.nspname = 'public' AND p.proname = 'semear_clinica') THEN
+    PERFORM public.semear_clinica(alvo);
+    RAISE NOTICE 'Esqueleto recriado: regras, plano de contas, catalogos e conta caixa.';
+  ELSE
+    RAISE WARNING 'A funcao semear_clinica NAO existe. Aplique a migracao 20260827020000 e rode-a para esta clinica, senao o onboarding trava no passo 2.';
+  END IF;
+END $$;
+
+-- Conferencia. Rode junto, e troque o nome no `WHERE c.name` se trocou acima.
+-- Tudo tem de voltar zero, menos `team_members`, que nao e apagado de proposito.
+WITH c AS (SELECT id FROM public.clinics WHERE name = 'NexClin')
+SELECT 'patients' AS tabela, count(*) FROM public.patients     WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'appointments',  count(*) FROM public.appointments  WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'receivables',   count(*) FROM public.receivables   WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'expenses',      count(*) FROM public.expenses      WHERE clinic_id = (SELECT id FROM c)
+UNION ALL SELECT 'team_members (NAO deve zerar)', count(*) FROM public.team_members WHERE clinic_id = (SELECT id FROM c);
+
+
+-- ================== PASSO 2 de 4: POVOAMENTO ==================
+
 -- =====================================================================
 -- POVOAMENTO. Dois meses de operacao simulada, em UMA clinica.
 -- =====================================================================
@@ -379,7 +557,26 @@ BEGIN
 
   INSERT INTO public.goals (clinic_id, year, month, revenue_target, closings_target, conversion_target, new_patients_target)
   SELECT alvo, extract(year FROM d)::int, extract(month FROM d)::int, 260000, 120, 45, 60
-  FROM generate_series(date_trunc('month', primeiro_dia), date_trunc('month', ultimo_dia), interval '1 month') d;
+  FROM generate_series(date_trunc('month', primeiro_dia), date_trunc('month', ultimo_dia), interval '1 month') d
+  -- Endurecido em 28/08/2026, depois de estourar em producao com
+  -- `duplicate key value violates unique constraint
+  -- "goals_clinic_id_month_year_key"` na Clinica Teste Final. A meta e a unica
+  -- coisa que uma clinica de teste costuma ter mesmo sem paciente nenhum,
+  -- entao a trava de "ja tem pacientes" nao a pegava.
+  --
+  -- DO UPDATE, e nao DO NOTHING, porque o contrato deste arquivo e produzir
+  -- SEMPRE a mesma base. Com DO NOTHING, uma meta antiga de valor diferente
+  -- sobreviveria, e o dashboard mostraria um alvo diferente a cada clinica.
+  --
+  -- Isto NAO torna o arquivo seguro em clinica nao expurgada: das vinte
+  -- insercoes, dezoito seguem sem tratamento de conflito, e as que caem em
+  -- tabela sem restricao unica DUPLICAM em silencio, que e pior que estourar.
+  -- Rode o `1-expurgo.sql` antes. Sempre.
+  ON CONFLICT (clinic_id, month, year) DO UPDATE SET
+    revenue_target      = EXCLUDED.revenue_target,
+    closings_target     = EXCLUDED.closings_target,
+    conversion_target   = EXCLUDED.conversion_target,
+    new_patients_target = EXCLUDED.new_patients_target;
 
   RAISE NOTICE '  tarefas e metas inseridas';
 
@@ -484,7 +681,7 @@ BEGIN
 END $$;
 
 
--- ================== BLOCO 3 de 3: FECHAMENTOS ==================
+-- ================== PASSO 3 de 4: FECHAMENTOS ==================
 
 -- =====================================================================
 -- FECHAMENTOS. O que faltava para o financeiro do dashboard sair do zero.
@@ -644,3 +841,14 @@ BEGIN
   RAISE NOTICE 'Clinica %: % consultas percorridas, % fechamentos, % itens.',
     nome_clinica, i, n_fechados, n_itens;
 END $$;
+
+
+-- ================== PASSO 4 de 4: SEMEAR O ESQUELETO ==================
+--
+-- Devolve o que o expurgo levou e o povoamento nao recria. Na pratica, o plano
+-- de contas e as regras de negocio. Idempotente: o que ja existe, ela pula.
+--
+-- Sem esta linha a clinica termina sem conta analitica, e o lancamento de
+-- despesa avulsa recusa tudo. Foi o V-24.
+
+SELECT public.semear_clinica('d51ce6c7-582b-469b-a01b-608bd9b38885');
