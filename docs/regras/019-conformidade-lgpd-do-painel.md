@@ -109,7 +109,7 @@ foi feita, e o resultado está no FR-001.
   passa a dizer que alguém leu um paciente que não existe mais, que é a resposta
   correta, e não uma contradição.
 
-### O dado não pode ficar para sempre
+### O dado não pode SUMIR antes da hora
 
 - **FR-003**: **MUST** existir política de retenção escrita **por tipo de
   documento**, e ela **MUST** tratar o prazo como MÍNIMO antes de tratá-lo como
