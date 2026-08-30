@@ -72,13 +72,31 @@ foi feita, e o resultado está no FR-001.
 
 ### O titular tem direitos, e eles precisam de caminho
 
-- **FR-002**: **MUST** existir caminho auditado para atender pedido do titular:
-  localizar todo dado de um paciente, exportá-lo, e eliminá-lo.
+- **FR-002**: **MUST** existir caminho auditado para **recuperar e exportar**
+  todo o histórico de um paciente, inclusive de anos atrás. A eliminação vem
+  depois, e não antes.
 
-  *Porquê:* a LGPD dá ao titular acesso, portabilidade e eliminação. Hoje um
-  pedido desses vira consulta SQL escrita à mão por quem tiver acesso ao banco.
-  **Isso não é fluxo, é improviso, e improviso não se audita**: não fica
-  registro de quem atendeu, quando, nem o que foi entregue.
+  **A ORDEM DOS DOIS FOI INVERTIDA EM 29/08/2026**, depois da resposta do
+  Vinícius, e a inversão é a informação:
+
+  > *"Tem paciente que já entrou na justiça e precisava de um laudo ou
+  > prontuário de anos atrás. Aí tivemos que correr atrás de conseguir junto ao
+  > sistema. Nunca pediram pra apagar nada."*
+
+  A versão anterior desta regra tratava acesso, portabilidade e eliminação como
+  três faces do mesmo requisito, seguindo o texto da LGPD. Na operação real de
+  clínica, **o pedido que acontece é o de recuperação, e o gatilho é processo
+  judicial.** O de eliminação nunca aconteceu.
+
+  Isso não torna a eliminação dispensável: ela continua sendo direito do titular
+  e vai ser exigida um dia. Torna-a **menos urgente que a recuperação**, que já
+  aconteceu, tem prazo de tribunal, e hoje depende de alguém "correr atrás junto
+  ao sistema".
+
+  *Porquê ainda vale:* um pedido desses hoje vira consulta SQL escrita à mão por
+  quem tiver acesso ao banco. **Isso não é fluxo, é improviso, e improviso não
+  se audita**: não fica registro de quem atendeu, quando, nem o que foi
+  entregue. Num processo judicial, é justamente isso que se pergunta.
 
   **A tensão que este requisito esconde, e que precisa ser resolvida junto:**
   o direito de eliminação conflita com a trilha de auditoria, que existe
@@ -93,11 +111,36 @@ foi feita, e o resultado está no FR-001.
 
 ### O dado não pode ficar para sempre
 
-- **FR-003**: **MUST** existir política de retenção escrita por tipo de dado, e
-  **MUST** existir execução do descarte.
+- **FR-003**: **MUST** existir política de retenção escrita **por tipo de
+  documento**, e ela **MUST** tratar o prazo como MÍNIMO antes de tratá-lo como
+  máximo.
 
-  *Porquê:* nenhuma tela define por quanto tempo o dado fica, e nada descarta. O
-  banco cresce para sempre, e a LGPD pede o contrário.
+  **ESTE REQUISITO ESTAVA ESCRITO AO CONTRÁRIO.** A versão anterior dizia que o
+  banco cresce para sempre e a LGPD pede o oposto, o que é verdade e é a
+  preocupação errada para este produto. O Vinícius, em 29/08:
+
+  > *"Tem prazo sim. Na prática, ninguém guarda e troca de sistema e às vezes
+  > perde tudo. Mas o sistema é obrigado a ter isso. Mas os prazos variam sim,
+  > prontuário que é o documento mais importante do paciente."*
+
+  Três coisas saem daí, e as três mudam o desenho:
+
+  1. **O prazo é MÍNIMO, e a falha real é perder antes.** Guardar demais é
+     desperdício de disco. Perder um prontuário que a lei obrigava a manter é
+     defesa judicial impossível. Os dois riscos não têm o mesmo peso.
+  2. **O prazo varia por tipo de documento**, e prontuário é o mais longo. Uma
+     política única para "dado de paciente" seria errada nos dois sentidos.
+  3. **A perda acontece na TROCA DE SISTEMA.** Não é o banco que apaga: é a
+     migração que deixa para trás.
+
+  **O item 3 aponta para dentro de casa.** O NexClin troca de arquitetura em
+  outubro, e migra o banco da Lovable para a stack nova. É exatamente o momento
+  em que, segundo quem opera clínica, as clínicas perdem tudo. **A migração de
+  outubro é o primeiro teste desta regra**, e não um evento à parte dela.
+
+  *O que NÃO se decide aqui:* o número de anos. Continua em aberto, e agora por
+  um motivo melhor do que antes: sabe-se que ele **varia por documento**, então
+  um número só nunca teria servido.
 
   O FR-005d da regra 017 já decidiu isto para a trilha de leitura: **política
   escrita, sem expurgo automático antes de 08/09**, porque até o lançamento o

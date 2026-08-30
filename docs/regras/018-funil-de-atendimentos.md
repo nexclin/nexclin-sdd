@@ -21,8 +21,10 @@ arrastar entre eles. Ele responde **onde** o lead está. Não responde **há qua
 tempo**, não deixa remover cartão sem fricção, e com volume real empurra os
 cartões para baixo da dobra.
 
-As três primeiras são de gestão. A quarta é de densidade, e tem uma ressalva que
-importa mais que ela mesma.
+**Este texto é de antes de perguntar ao Vinícius, e ficou parcialmente errado.**
+O que ele respondeu em 29/08 mudou dois requisitos de lado, e as mudanças estão
+marcadas onde acontecem. A parte que sobreviveu é a de densidade, e ela tem uma
+ressalva que importa mais que ela mesma.
 
 **A ressalva:** a lista que o Arthur viu gigante tinha **240 leads simulados,
 48 por coluna**. Uma clínica fundadora começa em zero e leva semanas para ter
@@ -31,7 +33,7 @@ dezenas. Em 08/09 a coluna terá dois ou três cartões. Dimensionar a tela para
 tela desenhada para muito fica vazia e estranha com pouco.
 
 O que **não** depende de volume é o desperdício de altura no topo, e é só isso
-que a FR-004 trata.
+que o FR-006 trata.
 
 ---
 
@@ -39,19 +41,42 @@ que a FR-004 trata.
 
 ### Responder há quanto tempo, e não só onde
 
-- **FR-001**: O cartão do funil **MUST** mostrar há quanto tempo o lead está no
-  estágio atual, e o funil **MUST** permitir ordenar ou destacar por esse tempo.
+- **FR-001**: O funil **MUST** trabalhar por CADÊNCIA, e não por tempo decorrido
+  solto. Ele **MUST** dizer qual contato está vencido, e a cadência **MUST** ser
+  editável por clínica.
 
-  *Porquê:* "onde o lead está" é cadastro. "Há dezoito dias em Novo Contato" é
-  gestão, e gestão é o que o NexClin vende. Um lead parado é receita parada, e
-  hoje ninguém vê isso sem abrir cartão por cartão.
+  *Porquê, e isto veio do Vinícius em 29/08, corrigindo o que esta regra dizia
+  antes:* a clínica dele não olha "há quantos dias esse lead está parado". Ela
+  roda uma régua comercial de **três contatos, nos dias 1, 3 e 7**. Não
+  respondeu aos três, encerra.
 
-  **O dado já existe, e isto é o achado que barateia o requisito.**
-  `Atendimentos.tsx:250` grava `funnel_move` em `lead_history` a cada
-  movimento, com `created_at`. O tempo no estágio é a diferença entre agora e o
-  último `funnel_move` do lead. **Não exige coluna nova.**
+  A diferença não é de vocabulário. "Há dezoito dias em Novo Contato" é um
+  número que a pessoa ainda precisa interpretar. "O segundo contato venceu
+  ontem" é uma instrução. A primeira versão desta regra pedia a primeira coisa,
+  e ela seria menos útil.
 
-- **FR-002**: O histórico de movimentação **MUST** guardar o ESTÁGIO, e não a
+  **E a régua varia de clínica para clínica**, palavras dele. Então o número de
+  contatos e os intervalos são **configuração**, e não constante no código. Isso
+  tem casa: `business_rules` e a área de configurações da regra 005.
+
+  **O relógio já existe.** `Atendimentos.tsx:250` grava `funnel_move` em
+  `lead_history` a cada movimento, com `created_at`. Quando o lead entrou no
+  estágio é a data do último `funnel_move`, e a cadência conta a partir dela.
+  **Não exige coluna nova.**
+
+- **FR-002**: O funil **MUST** distinguir lead encerrado por **desqualificação**
+  de lead encerrado por **não resposta**.
+
+  *Porquê:* são coisas diferentes e hoje caem no mesmo balde. Quando alguém
+  procura uma especialidade que a clínica não atende, a atendente encerra na
+  hora, e esse lead **nunca deveria entrar na cadência**. Já o que não respondeu
+  aos três contatos encerra por esgotamento.
+
+  Misturar os dois estraga as duas leituras: a taxa de conversão fica
+  artificialmente baixa por causa de gente que nunca foi público, e o volume de
+  "perdidos" deixa de dizer se o problema é o atendimento ou a origem do lead.
+
+- **FR-003**: O histórico de movimentação **MUST** guardar o ESTÁGIO, e não a
   frase.
 
   *Porquê:* hoje `details` recebe `'Movido para ' || label`, texto livre. Para
@@ -60,17 +85,33 @@ que a FR-004 trata.
   silêncio. É a mesma classe do artefato 3 do povoamento, em que descrição livre
   não casava com nome de serviço.
 
-### Remover sem fricção, e sem perder o histórico
+### Não remover, e é aqui que a regra mudou de lado
 
-- **FR-003**: O cartão **MUST** oferecer exclusão direta, no lado oposto ao
-  nome, e **MUST NOT** exigir diálogo de confirmação.
+> **Esta seção foi INVERTIDA em 29/08/2026**, depois da resposta do Vinícius. A
+> versão anterior pedia exclusão fácil no cartão, com desfazer de oito segundos,
+> a pedido do Arthur. **Fica registrado que a versão anterior existiu**, porque
+> a inversão é a informação, e não o texto final.
 
-  *Porquê:* pedido do Arthur em 29/08, e o raciocínio dele está certo:
-  confirmação a cada exclusão treina a pessoa a clicar em "sim" sem ler. A
-  confirmação que sempre aparece deixa de ser barreira e vira reflexo.
+- **FR-004**: O funil **MUST NOT** oferecer exclusão de lead no cartão. O que
+  ele **MUST** oferecer é **filtro e arquivamento**.
 
-- **FR-004**: A exclusão **MUST** ser desfazível por uma janela de alguns
-  segundos, e a exclusão de lead **MUST NOT** apagar o histórico dele.
+  *Porquê:* perguntado se apagam lead, o Vinícius respondeu que **não apagam
+  nada**. Tudo fica na base e serve para análise, e o volume de leads chegando e
+  a evolução da qualidade deles são o que a clínica usa **para cobrar do
+  marketing**.
+
+  Isso torna a exclusão fácil não apenas desnecessária: torna-a **danosa**. Um
+  clique cômodo apagaria a série histórica com que a clínica negocia com o
+  fornecedor dela. O problema que o Arthur descreveu, lista longa demais para
+  enxergar, é real, e a resposta certa para ele é **filtrar**, e não remover.
+
+  **A exclusão de lead que existe hoje continua sendo um defeito**, e piora com
+  o que se sabe agora: `Atendimentos.tsx:268` apaga o `lead_history` antes de
+  apagar o lead. Se ninguém deveria apagar, muito menos deveria apagar em
+  silêncio a prova do que aconteceu.
+
+- **FR-005**: A exclusão de lead, onde ela existir, **MUST NOT** apagar o
+  histórico dele.
 
   *Porquê, e são dois porquês diferentes.*
 
@@ -95,7 +136,7 @@ que a FR-004 trata.
 
 ### Caber na tela
 
-- **FR-005**: O topo da tela de funil **MUST** caber junto com a primeira linha
+- **FR-006**: O topo da tela de funil **MUST** caber junto com a primeira linha
   de cartões, sem rolagem.
 
   *Porquê:* hoje migalha, título, subtítulo e filtros consomem a altura toda, e
@@ -112,16 +153,21 @@ que a FR-004 trata.
 
 **Quase nada, e é uma boa notícia.**
 
-O FR-001 se resolve lendo `lead_history`, que já existe e já é povoado.
+O **FR-001** lê `lead_history`, que já existe e já é povoado. O que ele
+acrescenta é a CADÊNCIA como configuração: quantos contatos e em que intervalos,
+por clínica. Isso mora onde as outras regras editáveis já moram, em
+`business_rules`.
 
-O FR-002 muda o que se ESCREVE em `lead_history.details`, ou acrescenta coluna
-`to_stage`. Acrescentar coluna é melhor: `details` continua sendo a frase para
-humano, e o estágio vira dado. Coluna anulável, então o histórico antigo
-continua válido e o cálculo trata nulo como desconhecido.
+O **FR-002** precisa distinguir os dois encerramentos. Hoje `nao_agendou` é um
+estágio só. Ou nasce um estágio novo, ou nasce um motivo de encerramento como
+coluna. **A segunda é melhor:** motivo é dado, e estágio é posição no funil;
+misturar os dois faria o Kanban crescer uma coluna a cada motivo novo.
 
-O FR-004 remove um `DELETE` do código, e não acrescenta nada ao banco. Se a
-exclusão virar reversível de verdade um dia, aí sim entra `deleted_at`, e isso
-é decisão da seção 7.
+O **FR-003** acrescenta `to_stage` em `lead_history`. Coluna anulável, então o
+histórico antigo continua válido e o cálculo trata nulo como desconhecido.
+
+O **FR-004** e o **FR-005** removem um `DELETE` do código e não acrescentam nada
+ao banco.
 
 ---
 
@@ -148,35 +194,51 @@ esses leads, e mentira parcial é pior que ausência, porque não se percebe.
 
 ## 6. Como se prova
 
-- **FR-001:** mover um lead, esperar, e o cartão dizer o tempo certo. Com um
-  lead movido há dias na base povoada, o número tem de bater com o
-  `created_at` do último `funnel_move`.
-- **FR-002:** ler `lead_history` e achar o estágio como dado, sem precisar
+- **FR-001:** com a régua de 1, 3 e 7 dias configurada, um lead que entrou há
+  quatro dias tem de aparecer com o **segundo contato vencido**, e não com "há
+  quatro dias". Trocar a régua para 2, 5 e 10 na configuração tem de mudar o que
+  a tela diz, sem tocar em código.
+- **FR-002:** encerrar um lead por especialidade não atendida e outro por não
+  ter respondido, e os dois aparecerem separados na leitura, não somados.
+- **FR-003:** ler `lead_history` e achar o estágio como dado, sem precisar
   interpretar a frase.
-- **FR-003:** excluir pelo ícone do cartão, sem diálogo.
-- **FR-004:** excluir, clicar em desfazer dentro da janela, e o lead continuar
-  existindo **com o mesmo `id`**. Depois excluir e deixar a janela expirar, e o
-  `lead_history` dele ter sobrevivido ou ter sido preservado onde a regra
-  decidir.
-- **FR-005:** abrir o funil numa tela de notebook e ver a primeira linha de
+- **FR-004:** não existir caminho de exclusão no cartão, e existir filtro que
+  esconda o que não interessa sem apagar.
+- **FR-005:** apagar um lead por onde ainda der, e o `lead_history` dele
+  continuar existindo.
+- **FR-006:** abrir o funil numa tela de notebook e ver a primeira linha de
   cartões sem rolar.
 
 ---
 
 ## 7. O que falta decidir
 
-**O histórico de um lead excluído vive onde?** Três saídas, e nenhuma é óbvia:
+**O motivo de encerramento é lista fixa ou texto livre?** Lista fixa se analisa e
+texto livre não. Mas lista curta demais faz a atendente escolher "outro" sempre,
+e aí a lista existe e não informa. Precisa vir de quem atende, e não daqui.
 
-1. `lead_history` deixa de cascatear, e as linhas ficam órfãs, como a
-   `patient_access_log` do FR-005 faz de propósito.
-2. O lead passa a ter exclusão lógica, com `deleted_at`, e nada é apagado.
-3. O histórico é copiado para uma trilha de exclusões antes de sumir.
+**A cadência é por clínica ou por origem do lead?** O Vinícius disse que a régua
+varia de clínica para clínica. Falta saber se dentro da mesma clínica ela varia
+por origem: lead de indicação e lead de tráfego pago talvez não mereçam a mesma
+insistência.
 
-A **2** é a mais completa e a que mais mexe: toda consulta de lead passa a
-precisar do filtro, e esquecer o filtro em um lugar traz de volta o que foi
-excluído. A **1** é a mais barata e é coerente com o que já foi decidido para a
-trilha de leitura.
+**O que "arquivar" faz com o lead.** Some do Kanban e continua nos relatórios, ou
+some dos dois? O FR-004 diz que não se apaga, e não diz onde o arquivado
+aparece.
 
-**Quanto dura a janela de desfazer?** O Arthur falou em oito a dez segundos.
-Falta decidir se ela sobrevive à navegação: sair da tela dentro da janela
-executa, ou cancela?
+---
+
+## 8. O que esta regra deixou de pedir, e por quê
+
+Registrado porque a mudança de direção vale mais que o texto final, e porque
+alguém vai perguntar por que a lixeira não foi feita.
+
+**Exclusão fácil no cartão, com desfazer de oito segundos.** Pedida pelo Arthur
+em 29/08 e escrita nesta regra no mesmo dia. Caiu quando o Vinícius respondeu
+que a clínica **não apaga lead nenhum**, porque a base inteira é usada para
+cobrar do marketing.
+
+O problema que originou o pedido continua real: com volume, a coluna fica
+ilegível. **A resposta mudou de "remover" para "filtrar".** Vale a pena separar
+as duas coisas sempre que aparecer um pedido de exclusão: quase sempre o que
+incomoda é a presença na tela, e não a existência do registro.
