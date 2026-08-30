@@ -20,10 +20,10 @@
 > e o progresso do onboarding estão em pé em `app/app/configuracoes/`, sobre
 > `lib/config/`, com 157 testes. **Continuam abertos o FR-005 em parte, a
 > segunda metade do FR-010 e o consumo do FR-016**, detalhados na seção 7. **O
-> FR-006 saiu do impasse em 28/08**, com a decisão do Arthur, e tem migração
-> escrita: `20260828030000`. Ela **não foi aplicada a banco nenhum**, então vale
-> a regra (j), *código lido, não comportamento provado*. Falta também
-> o aceite na tela, que é do Arthur. Alvo: a stack Next.js deste repositório.
+> FR-006 saiu do impasse em 28/08**, com a decisão do Arthur, e a migração
+> `20260828030000` foi **aplicada e provada em 30/08/2026**, no banco da
+> plataforma. Deixa de valer a regra (j) para a parte de banco. Falta o aceite
+> na tela, que é do Arthur. Alvo: a stack Next.js deste repositório.
 >
 > **Duas correções de cabeçalho em dois dias, e as duas são a regra (l) em
 > ação.** Em 27/08 ele dizia "escrita, não executada", herdado do `Status: Draft`
@@ -282,9 +282,49 @@ existe. Restritiva entra em E lógico com as demais, então subtrai permissão s
 que eu precise saber o que a outra concede, e sem risco de afrouxar o isolamento
 por `clinic_id` ao reescrever.
 
-**O que ainda falta:** aplicar a migração e provar na tela que a clínica
-consegue desativar um tipo de fechamento e não consegue renomeá-lo. Enquanto
-isso não acontecer, o FR-006 é código lido.
+**APLICADA E PROVADA NO BANCO em 30/08/2026.** O ciclo foi o mesmo do FR-005:
+a verificação foi escrita antes, rodada antes, e leu vermelho.
+
+**Antes:** função 0, gatilhos 0, policies restritivas 0.
+**Depois:** função 1, gatilhos 3, policies restritivas 3.
+
+E o comportamento, que é o que prova de verdade. O teste assume papel e
+identidade de um usuário comum da clínica, dentro de `BEGIN`/`ROLLBACK`, e
+tenta o que a regra proíbe:
+
+| | tentativa | resultado |
+|---|---|---|
+| B1 | editar o NOME de linha de sistema | **negado, SQLSTATE 23514** |
+| B2 | alternar `active` de linha de sistema | **permitido** |
+| B3 | apagar linha de sistema | **negado, zero linha** |
+| B4 | promover a própria linha a `is_system` | **não provado** |
+
+**O B1 é a prova mais forte, e o código do erro é a razão.** `23514` é
+`check_violation`, que é exatamente o `ERRCODE` que o gatilho levanta. Se a
+negação viesse do RLS, o resultado seria zero linha afetada, e não exceção.
+Quem negou foi a trava do FR-006, e não outra coisa que estava no caminho.
+
+**O B2 é a prova de que a escolha entre as três saídas estava certa.** Negar
+todo `UPDATE` teria sido mais simples de garantir e teria quebrado o FR-005: a
+clínica precisa poder DESATIVAR o que não oferece. Ela ainda pode.
+
+**O B3 nega por ausência de escopo, e não por exceção.** É como policy
+`RESTRICTIVE` de `DELETE` funciona: a linha sai do conjunto visível para
+apagar. Zero linha afetada é a negação, e não um teste inconclusivo.
+
+**O B4 não foi provado, e a razão é dado de teste, não código.** Na Clínica
+Teste Final **todas** as linhas de `chart_of_accounts` são `is_system`, então
+não havia linha comum para tentar promover. A tentativa em `closing_types`, que
+tem linhas comuns, não chegou a rodar: o editor de SQL da plataforma parou de
+aceitar substituição de conteúdo no meio da sessão.
+
+**Como provar o B4 quando houver janela:** rodar o mesmo bloco de
+`docs/ponte/fr-006-aceite-comportamento.sql` trocando `chart_of_accounts` por
+`closing_types`. O esperado é `negado`, pelo ramo `ELSIF NEW.is_system` do
+gatilho.
+
+**O que ainda falta:** o B4 acima, e o aceite na tela, que é do Arthur: a
+clínica consegue desativar um tipo de fechamento e não consegue renomeá-lo.
 
 ### As três saídas que estavam sobre a mesa
 
