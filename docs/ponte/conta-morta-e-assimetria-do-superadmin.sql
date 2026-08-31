@@ -191,17 +191,27 @@ DECLARE
   v_out    text := '';
   v_dif    int := 0;
 BEGIN
-  SELECT c.id, c.name INTO v_clinic, v_nome
+  -- A clinica e escolhida JUNTO com o dono, e nao antes dele.
+  --
+  -- A primeira versao escolhia a clinica com menos assinaturas e so depois
+  -- procurava um dono comum. Na primeira execucao, em 31/08, caiu na clinica
+  -- propria da conta mestra, cujos unicos perfis sao operadores da plataforma,
+  -- e o bloco respondeu `dono=nulo` sem medir nada. O `JOIN LATERAL` garante
+  -- que so entra clinica que TEM dono comum.
+  SELECT c.id, c.name, d.user_id INTO v_clinic, v_nome, v_dono
     FROM public.clinics c
+    JOIN LATERAL (
+      SELECT pr.user_id
+        FROM public.profiles pr
+       WHERE pr.clinic_id = c.id
+         AND NOT EXISTS (SELECT 1 FROM public.superadmin_operators o
+                          WHERE o.user_id = pr.user_id)
+       ORDER BY pr.created_at
+       LIMIT 1
+    ) d ON true
    ORDER BY (SELECT count(*) FROM public.account_subscriptions s WHERE s.clinic_id = c.id) ASC,
             c.name
    LIMIT 1;
-
-  SELECT pr.user_id INTO v_dono
-    FROM public.profiles pr
-   WHERE pr.clinic_id = v_clinic
-     AND NOT EXISTS (SELECT 1 FROM public.superadmin_operators o WHERE o.user_id = pr.user_id)
-   ORDER BY pr.created_at LIMIT 1;
 
   SELECT o.user_id INTO v_oper
     FROM public.superadmin_operators o
@@ -211,7 +221,18 @@ BEGIN
   IF v_dono IS NULL OR v_oper IS NULL THEN
     PERFORM set_config('assim.r',
       'CONTEXTO FALTANDO: dono=' || coalesce(v_dono::text,'nulo') ||
-      ' operador=' || coalesce(v_oper::text,'nulo') || '. Nao medido.', false);
+      ' operador=' || coalesce(v_oper::text,'nulo') || E'.\n' ||
+      CASE WHEN v_dono IS NULL THEN
+        'NENHUMA clinica do banco tem pessoa que nao seja operador da ' ||
+        'plataforma.' || E'\n' ||
+        'Isso e resultado, e nao falha: significa que so existem contas de ' ||
+        'teste' || E'\n' ||
+        'operadas por voces, e que a assimetria so podera ser medida quando ' ||
+        'houver' || E'\n' ||
+        'uma clinica com dono de verdade.'
+      ELSE
+        'Nao ha operador ativo em superadmin_operators.'
+      END, false);
     RETURN;
   END IF;
 
