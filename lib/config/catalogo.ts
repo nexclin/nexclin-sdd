@@ -183,6 +183,12 @@ export const CATALOGOS: readonly DefinicaoDeCatalogo[] = [
     rotuloSingular: "Conta bancária",
     descricao:
       "Onde o dinheiro entra e sai. É a conta que o fluxo de caixa concilia.",
+    // `bank_accounts` tem `is_system` desde `20260510231935`, e esta definição
+    // não o marcava: a conta "Caixa (dinheiro)", semeada em toda clínica nova,
+    // aparecia sem selo e parecia editável como qualquer outra. Achado pela
+    // revisão de código de 28/08, e corrigido junto com o FR-006, porque a
+    // trava no banco sem o selo na tela produz erro sem explicação.
+    temIsSystem: true,
     campos: [
       {
         coluna: "bank_name",

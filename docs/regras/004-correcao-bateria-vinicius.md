@@ -3,9 +3,13 @@
 > **Regra viva.** Nasceu antes da execução, guiou a execução, e é corrigida no
 > mesmo commit em que a execução a contradiz.
 >
-> **Estado em 27/08/2026:** trava com **20 de 23 fechados**, nove commits na
-> `main` da plataforma, todos publicados. **Três abertos**, e dois deles dependem
-> só de atos do Arthur. Alvo: a plataforma Lovable, via ponte inversa.
+> **Estado em 28/08/2026:** **trava zerada, 23 de 23 fechados.** O V-24 caiu no
+> fim do dia, com a migração aplicada em produção e o resultado provado na tela.
+> Alvo: a plataforma Lovable, via ponte inversa.
+>
+> **A trava caiu de 3 para 1 em 28/08**, com o app finalmente acessível: o V-21
+> foi reconferido na tela com base povoada e fechou, e o V-04 saiu por não
+> existir. O detalhe de cada um está na seção 7.
 >
 > **Lei:** `docs/constituicao.md` · **Critério:** `CLAUDE.md` §2.5 ·
 > **Fonte dos itens:** `../historico/2026-08-20-triagem-baterias-vinicius.md` (V-01 a
@@ -146,38 +150,110 @@ apontamento marcado no Notion.
 
 ## 7. A decisão que falta
 
-**Três itens abertos, e dois deles esperam o Arthur.**
+**Nenhuma.** A trava fechou em 28/08/2026.
 
-1. **V-24, plano de contas não carrega.** É o único item da trava que impede uma
-   rotina inteira: sem plano de contas, o lançamento de despesa avulsa não salva.
-   O diagnóstico por leitura já está feito, `chart-account-select.tsx:49` filtra
-   `analyticalOnly` por `level === 3`, e sem conta de nível 3 ativa o combobox vem
-   vazio. **Bloqueado numa consulta de 30 segundos**, pedida em 20/08 e repetida
-   em 23/08:
+### V-24, fechado: da causa provada ao conserto aplicado
 
-   ```sql
-   select level, count(*), bool_or(active) as tem_ativo
-   from chart_of_accounts
-   where clinic_id = '<id da clínica>'
-   group by level order by level;
-   ```
+A bifurcação que esta regra deixou em aberto (*"sem linha `level = 3` é SQL; com
+linhas de nível 3 é front"*) **foi resolvida na tela, sem precisar da consulta**.
 
-   Sem linha `level = 3`, a correção é SQL: o seed do plano de contas não rodou
-   para essa clínica. Com linhas de nível 3, é bug de query no diálogo, e o
-   executor corrige.
+O que se vê em Configurações, Financeiro, Plano de Contas: a árvore tem **um
+único nó**, `1 nexclin`, de nível 1, **sem nenhum filho**. E o diálogo de despesa
+avulsa diz, com todas as letras: *"Nenhuma conta analítica disponível. O
+lançamento exige uma conta de último nível."*
 
-2. **V-21, bloco de indicadores do dashboard, 5 de 6.** Faltam duas facetas, e as
-   duas dependem de olhar a tela com dado real: o ticket por orçamento (que
-   parecia errado porque a consulta valia zero) e o gráfico de fluxo de caixa
-   (não reproduzido, já lê de `receivables`). A regra é não corrigir antes de
-   reproduzir. Chutar aqui produz correção que conserta o que não estava
-   quebrado.
+**É o ramo SQL.** O seed do plano de contas não rodou para esta clínica, e o
+front está certo: ele recusa porque não há o que oferecer.
 
-3. **V-04, convite de equipe.** A function foi reescrita e está em produção desde
-   20/08, mas **a causa original nunca foi diagnosticada**: o caminho que falhava
-   foi substituído por inteiro, então não há como afirmar que a falha não volta
-   por outro motivo. É o item mais barato da trava, oito passos e zero crédito, e
-   é o único que prova o T017.
+### O achado que impede o conserto óbvio
+
+`semear_clinica(uuid)`, criada em `20260827020000` justamente para reparar
+clínica existente, **não conserta esta**. O guarda dela é:
+
+```sql
+IF NOT EXISTS (SELECT 1 FROM public.chart_of_accounts WHERE clinic_id = _clinic_id) THEN
+  PERFORM public.seed_chart_of_accounts(_clinic_id);
+```
+
+Existe **uma** linha, então a condição é falsa e o seed é pulado. *"Tem pelo
+menos uma linha"* não é a mesma pergunta que *"o esqueleto está completo"*, e a
+clínica com um grupo solto passa pelo guarda e nunca é semeada.
+
+**Isso é defeito da função de reparo, não desta clínica**, e é faixa A: a mesma
+armadilha vai pegar qualquer conta que tenha sido expurgada pela metade.
+
+**A correção durável:** o guarda passa a perguntar por conta **analítica**, que é
+o que o lançamento exige, em vez de por linha qualquer. Algo como `NOT EXISTS
+(... WHERE clinic_id = _clinic_id AND level = 3 AND active)`. Requer migração, e
+por isso está aqui e não foi feita.
+
+**A decisão do Arthur, 28/08:** corrigir o guarda, porque conserta a próxima
+clínica também. Virou a migração `20260828010000`, aplicada em produção no mesmo
+dia.
+
+### O que a leitura do banco revelou antes da escrita
+
+São **18 clínicas**, e o estrago era muito menor do que parecia:
+
+| Estado | Quantas |
+|---|---|
+| Saudáveis, 104 contas e 79 analíticas | **16**, inclusive a Clínica VB |
+| Vazia de propósito, zero contas | 1 |
+| Quebrada pela metade, 1 conta e 0 analíticas | **1**, a conta mestra NexClin |
+
+**A Clínica VB estava íntegra**, então nenhum cliente foi afetado. E a "Clínica
+Vazia" não dependia deste conserto: com zero linhas, o guarda antigo já a
+semearia. O bug do guarda atingia exatamente uma clínica. **O defeito de
+idempotência, esse sim, era latente para todas as 18.**
+
+### Como foi provado
+
+1. **Sintaxe**, com a migração inteira dentro de `BEGIN … ROLLBACK`: rodou de
+   verdade e foi desfeita. "Query succeeded."
+2. **Aplicação real** das duas funções. "Query succeeded."
+3. **`semear_clinica`** na conta mestra, e a contagem passou de `1 / 0` para
+   **`104 / 79`**, o mesmo número das outras 16.
+4. **Na tela**, que é o que a regra (j) exige: o diálogo de despesa avulsa, que
+   dizia *"Nenhuma conta analítica disponível"*, agora lista 1.1.1 Simples
+   Nacional, 1.1.2 ICMS, 1.1.3 ISS, 1.1.4 PIS, 1.1.5 COFINS, 1.1.6 IRPJ,
+   1.1.7 IRs Diversos, 1.1.8 CSLL, 1.2.1 REFIS.
+
+**O nó `1 nexclin` continua lá, com o nome dele**, e agora é o pai da subárvore
+semeada. Foi decisão de projeto: sobrescrever dado que a clínica pode ter
+digitado não é trabalho de migração, e a tela renomeia em dois cliques.
+
+### V-21, fechado em 28/08 na tela
+
+As duas facetas que faltavam foram reconferidas com a base povoada, e **nenhuma
+das duas é bug**:
+
+- **Gráfico do fluxo de caixa:** aparece, com saldo acumulado por semana e
+  `SALDO FINAL R$ -63.380,00`. Não reproduzido, e agora com dado real na base.
+- **Ticket médio zerado:** o cálculo está certo. O quadro mede **por
+  fechamento**, e a base povoada **não tem nenhum fechamento**: `FECHAMENTOS 0`,
+  `TAXA DE CONVERSÃO 0.0%`, `R$ 0 de R$ 0 orçados`. O que tem dado é venda e
+  recebimento, e ali o ticket aparece certo: `R$ 133.700 / 78 vendas = R$ 1.714`.
+
+**O que isso revela, e vale mais que a faceta:** o povoamento criou vendas,
+recebimentos e despesas, e **não criou fechamentos**. Toda a família de números
+que depende de `closings` fica sem como ser testada, que é justamente o que o
+E-01 do Erick queria destravar. Registrado para a próxima rodada de povoamento.
+
+**Achado menor, faixa C:** *Top Macro-Categorias* e *Top Profissionais* mostram
+"Nenhum fechamento e nenhum recebimento no período" enquanto o quadro ao lado diz
+`Recebimentos efetivados R$ 129.020,50`. A mensagem de vazio contradiz o card
+vizinho. Não corrigir agora, vira requisito da stack nova.
+
+### V-04, fora da trava desde 28/08
+
+Retirado por decisão do Arthur, com a razão dele: *"quem cria as contas é o
+Superadmin, por isso não tem a opção de se cadastrar no sistema. 1 conta mestra
+gerencia tudo isso."* O cenário reportado não existe no produto.
+
+**Fica em aberto a pergunta que colide com a regra (e) da constituição:** quando
+a conta mestra cria o acesso de alguém, quem digita a senha é a pessoa, por link,
+ou a mestra define e repassa? É a decisão pendente mais antiga do projeto, e ela
+não morre com o V-04.
 
 **Fora de escopo por decisão, e não é adiamento:** V-05, V-07, V-08, V-09, V-30 e
 V-31 viram **requisito das regras de módulo da stack nova** pela D-7, não item de

@@ -55,6 +55,12 @@ DECLARE
     'fixed_expenses',
     'tasks',
     'closings',
+    -- Acrescentada em 29/08/2026. O `3-fechamentos` escreve aqui, e a lista
+    -- nunca citou esta tabela: ela sumia so por CASCADE de `patients`, que e
+    -- verdadeiro mas nao esta escrito em lugar nenhum. Explicita, ela aparece
+    -- na contagem do aviso e para de depender de uma cascata implicita. Vem
+    -- depois de `prescriptions` e `closings`, que sao os filhos dela.
+    'funnel_2_entries',
     'ai_insights',
     'anamnesis_responses',
     'appointments',

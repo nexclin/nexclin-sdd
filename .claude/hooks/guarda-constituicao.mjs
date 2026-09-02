@@ -106,8 +106,28 @@ function semComentariosTs(src) {
   return src.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/[^\n]*/gm, ' ');
 }
 
-/** Princípio II — ninguém, nem o suporte, define senha de cliente. */
-function checarSenha(bruto) {
+/**
+ * Os únicos arquivos onde definir senha é permitido, pela emenda de 28/08/2026
+ * à Seção II da constituição.
+ *
+ * A emenda liberou UM caminho, o do superadmin provisionando clínica nova, e
+ * manteve todo o resto proibido. A lista é curta de propósito: foi um caminho
+ * lateral que produziu a violação original, o `invite-team-user` criando o
+ * usuário já com senha, e uma liberação ampla reabriria exatamente aquela
+ * porta. Arquivo novo aqui exige nova emenda.
+ */
+const ONDE_SENHA_E_PERMITIDA = [
+  /supabase[\\/]functions[\\/]superadmin-manage-user[\\/]/i,
+  /supabase[\\/]functions[\\/]superadmin-provisionar-clinica[\\/]/i,
+];
+
+/**
+ * Princípio II, com a emenda de 28/08/2026: só o superadmin define senha, e só
+ * ao provisionar clínica nova. Admin de clínica sobre outro usuário continua
+ * proibido, e é esse o risco que a regra sempre quis impedir.
+ */
+function checarSenha(bruto, caminho = '') {
+  if (ONDE_SENHA_E_PERMITIDA.some((p) => p.test(caminho))) return [];
   const conteudo = semComentariosTs(bruto);
   const achados = [];
   const suspeitos = [
@@ -123,11 +143,16 @@ function checarSenha(bruto) {
   for (const padrao of suspeitos) {
     if (padrao.test(conteudo)) {
       achados.push(
-        `Caminho que DEFINE senha detectado (\`${padrao.source.slice(0, 40)}…\`). ` +
-        `Princípio II: senha de cliente nunca é definida por admin — só reset por ` +
-        `e-mail via resetPasswordForEmail. Esta action foi removida no porte ` +
-        `(supabase/functions/superadmin-manage-user/index.ts) depois de aparecer no ` +
-        `audit log do MVP. Não reintroduza.`,
+        `Caminho que DEFINE senha detectado (\`${padrao.source.slice(0, 40)}…\`), ` +
+        `e este arquivo não é um dos onde a emenda de 28/08/2026 permite. ` +
+        `Princípio II, emendado: só o SUPERADMIN define senha, e só ao ` +
+        `provisionar clínica nova, com auditoria. Admin ou membro de clínica ` +
+        `nunca define senha de outro usuário, e para esses a via continua sendo ` +
+        `resetPasswordForEmail. Se este caminho é mesmo de provisionamento pelo ` +
+        `superadmin, o arquivo precisa entrar em ONDE_SENHA_E_PERMITIDA, e isso ` +
+        `é decisão consciente, não conveniência: foi um caminho lateral, o ` +
+        `invite-team-user criando usuário já com senha, que produziu a violação ` +
+        `original.`,
       );
       break;
     }
@@ -169,7 +194,7 @@ try {
 
 const achados = [];
 if (RAIZ_MIGRACOES.test(caminho)) achados.push(...checarMigracao(conteudo));
-if (RAIZ_MIGRACOES.test(caminho) || RAIZ_FUNCOES.test(caminho)) achados.push(...checarSenha(conteudo));
+if (RAIZ_MIGRACOES.test(caminho) || RAIZ_FUNCOES.test(caminho)) achados.push(...checarSenha(conteudo, caminho));
 achados.push(...checarSegredo(conteudo));
 
 if (achados.length === 0) process.exit(0);

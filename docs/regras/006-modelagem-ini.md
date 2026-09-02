@@ -124,6 +124,42 @@ existe a tela usa o padrão e **diz que está usando padrão**.
   por seção e transforma "tela de configuração" em "sei por que estou preenchendo
   isto". Foi o item de maior retorno por menor custo da pesquisa.
 
+- **FR-011. Com a barra lateral recolhida, o grupo Financeiro **MUST** ser um
+  único ícone com seta, e a lista **MUST** sair na horizontal ao passar o
+  mouse.** O flyout **MUST** espelhar exatamente os itens do grupo, sem
+  acrescentar nem remover nenhum, e **MUST** mostrar o nome inteiro (`title`),
+  não o encurtado (`label`). Também **MUST** abrir por foco de teclado e por
+  clique, porque em tela sensível ao toque não existe passar o mouse.
+
+  *Porquê:* a modelagem do INI levou o grupo de três para nove itens, e com a
+  barra em 80px os nove viravam nove ícones iguais empilhados, sem nada que os
+  lesse como conjunto. Relato do Arthur em 28/08/2026: *"quando a barra lateral
+  está recolhida, os ícones ficam em forma de [lista] e fica um pouco poluído.
+  Pro cliente não ter que ficar abrindo toda hora a barra pra se locomover."*
+
+  **Decisões dele, no mesmo dia, que esta regra fixa:** abre no passar do mouse;
+  espelha o grupo existente, sem redesenhar a estrutura (*"é pra redesenhar o
+  que já existe, não quero mudar a estrutura de nada"*).
+
+  **Registrado porque contraria a classificação:** isto é faixa C pela §2.5, e
+  eu recomendei escrever a regra sem construir, já que o componente será
+  reescrito na stack nova. **O Arthur decidiu construir agora**, reafirmando
+  duas vezes, pelo ganho de experiência antes de 08/09. A decisão é dele e está
+  implementada na plataforma no commit `56dc5d5`. A regra continua valendo como
+  requisito da stack nova, que é o que de fato atravessa outubro.
+
+  **A armadilha técnica, para quem reimplementar:** `.nx-sidebar-nav` tem
+  `overflow-y: auto`, e caixa posicionada de forma absoluta dentro de container
+  que rola **é recortada na horizontal**. O flyout precisa de `position: fixed`
+  com as coordenadas lidas do `getBoundingClientRect()` do gatilho. Isso só
+  funciona porque nenhum ancestral cria bloco de contenção: a barra é `sticky`,
+  que não cria, e não há `transform` no caminho. Um `transform` adicionado ali
+  no futuro quebra o flyout **em silêncio**.
+
+  **A segunda armadilha:** entre o ícone e a caixa há um vão de 8px onde o mouse
+  não está em nenhum dos dois. Fechar no `mouseleave` sem folga faz o flyout
+  piscar e ficar inusável. A implementação usa 140ms de atraso.
+
 ## 3. O que muda no banco
 
 Seis migrações, e as decisões de schema que valem para todas elas.

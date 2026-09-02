@@ -38,14 +38,10 @@ import { nivelPeloPai, paisPossiveis, type ContaCrua } from "./arvore";
 import { normalizaParaSecoes, paraJsonb, problemasDoModelo } from "./anamnese";
 import { interpretaNumero, normalizaEntradaDeCatalogo } from "./entrada";
 import {
-  CAMPOS_DE_AGENDAMENTO,
-  CAMPOS_DE_PACIENTE,
-  PISO_AGENDAMENTO,
-  PISO_PACIENTE,
-  diasParaHoras,
-  normalizaCamposObrigatorios,
-  normalizaDias,
-} from "./regras";
+  normalizaCamposDeAgendamento,
+  normalizaCamposDePaciente,
+} from "./campos-obrigatorios";
+import { diasParaHoras, normalizaDias } from "./regras";
 
 export interface ResultadoDeAcao {
   ok: boolean;
@@ -254,19 +250,15 @@ export async function salvarRegras(form: FormData): Promise<ResultadoDeAcao> {
     anamnesis_send_days: dias("anamnesis_send_days", 1),
     confirmation_hours: diasParaHoras(dias("confirmation_days", 1)),
     work_saturday: t.work_saturday === "on" || t.work_saturday === "true",
-    // O terceiro argumento é o PISO: campos que a clínica não consegue
-    // desmarcar. Paciente sem nome e consulta sem paciente não são
-    // configuração, são registro quebrado, e a normalização os devolve
-    // mesmo quando o formulário não os manda.
-    patient_required_fields: normalizaCamposObrigatorios(
+    // O PISO vai junto por dentro destas funções: campos que a clínica não
+    // consegue desmarcar. Paciente sem nome e consulta sem paciente não são
+    // configuração, são registro quebrado, e a normalização os devolve mesmo
+    // quando o formulário não os manda.
+    patient_required_fields: normalizaCamposDePaciente(
       form.getAll("patient_required_fields").filter((v) => typeof v === "string"),
-      CAMPOS_DE_PACIENTE,
-      PISO_PACIENTE,
     ),
-    appointment_required_fields: normalizaCamposObrigatorios(
+    appointment_required_fields: normalizaCamposDeAgendamento(
       form.getAll("appointment_required_fields").filter((v) => typeof v === "string"),
-      CAMPOS_DE_AGENDAMENTO,
-      PISO_AGENDAMENTO,
     ),
   };
 

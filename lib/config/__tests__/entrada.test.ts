@@ -9,7 +9,7 @@
 import { describe, expect, it } from "vitest";
 
 import { catalogoPorSlug } from "../catalogo";
-import { interpretaNumero, normalizaEntradaDeCatalogo } from "../entrada";
+import { interpretaNumero, normalizaEntradaDeCatalogo , normalizaCnpj } from "../entrada";
 
 describe("interpretaNumero: o formato brasileiro, e a armadilha do ponto", () => {
   // A armadilha que motivou a função: `Number("1.234")` devolve 1.234, mil
@@ -161,5 +161,45 @@ describe("normalizaEntradaDeCatalogo: a fronteira e as regras", () => {
       "name",
       "price",
     ]);
+  });
+});
+
+/**
+ * Regra: CNPJ e gravado em DIGITO, e a mascara e da tela.
+ *
+ * Nasce de um defeito real, achado em 29/08/2026 ao conferir a primeira conta
+ * provisionada em producao. A clinica nova gravou `43.243.243/2423-42` e a
+ * Barros Clinic tinha `57314658000154`, na MESMA coluna. Dois formatos
+ * convivendo quebram busca, comparacao e qualquer integracao fiscal.
+ *
+ * Pela regua fina da Sec. 2.5 isso e dado PERSISTIDO, faixa A: o erro nao e
+ * descartado em outubro, e importado.
+ */
+describe("normalizaCnpj: o banco guarda digito, a tela guarda mascara", () => {
+  it("tira a mascara de um CNPJ formatado", () => {
+    expect(normalizaCnpj("43.243.243/2423-42")).toBe("43243243242342");
+  });
+
+  it("deixa intacto o que ja esta so com digito", () => {
+    expect(normalizaCnpj("57314658000154")).toBe("57314658000154");
+  });
+
+  it("devolve string vazia para ausencia, e nao null nem undefined", () => {
+    // A coluna e `text` com default vazio. Devolver null aqui obrigaria todo
+    // chamador a tratar, e cada um trataria de um jeito.
+    expect(normalizaCnpj("")).toBe("");
+    expect(normalizaCnpj(null)).toBe("");
+    expect(normalizaCnpj(undefined)).toBe("");
+    expect(normalizaCnpj("   ")).toBe("");
+  });
+
+  it("descarta letra e simbolo que o usuario tenha colado junto", () => {
+    expect(normalizaCnpj("CNPJ 43.243.243/2423-42 ")).toBe("43243243242342");
+  });
+
+  it("corta em catorze digitos, que e o tamanho do CNPJ", () => {
+    // Sem o corte, um numero colado errado entra inteiro e a coluna passa a
+    // ter valor que nao e CNPJ nenhum.
+    expect(normalizaCnpj("432432432423429999")).toBe("43243243242342");
   });
 });
