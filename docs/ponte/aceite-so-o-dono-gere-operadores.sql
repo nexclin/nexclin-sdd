@@ -36,7 +36,7 @@ SELECT set_config('op.r', '', true);
 DO $antes$
 DECLARE
   v_comum uuid;
-  v_novo  uuid := gen_random_uuid();
+  v_novo  uuid;
   v_out   text := '';
 BEGIN
   -- Um usuario qualquer que NAO seja operador hoje.
@@ -46,9 +46,20 @@ BEGIN
                       WHERE o.user_id = p.user_id)
    LIMIT 1;
 
-  IF v_comum IS NULL THEN
-    PERFORM set_config('op.r', 'CONTEXTO FALTANDO: nao ha usuario fora da '
-      || 'tabela de operadores para usar no teste.', true);
+  -- Um SEGUNDO usuario real, para o alvo do INSERT. A primeira versao usava
+  -- `gen_random_uuid()`, e como `user_id` referencia `auth.users`, os dois
+  -- INSERTs morriam com 23503, `foreign_key_violation`, ANTES de a guarda
+  -- opinar. O teste dizia "negado" sem nada ter sido negado pela policy.
+  SELECT p.user_id INTO v_novo
+    FROM public.profiles p
+   WHERE p.user_id <> v_comum
+     AND NOT EXISTS (SELECT 1 FROM public.superadmin_operators o
+                      WHERE o.user_id = p.user_id)
+   LIMIT 1;
+
+  IF v_comum IS NULL OR v_novo IS NULL THEN
+    PERFORM set_config('op.r', 'CONTEXTO FALTANDO: sao precisos DOIS usuarios '
+      || 'fora da tabela de operadores.', true);
     RETURN;
   END IF;
 
@@ -114,7 +125,7 @@ DO $depois$
 DECLARE
   v_comum uuid;
   v_dono  uuid;
-  v_novo  uuid := gen_random_uuid();
+  v_novo  uuid;
   v_out   text := '';
 BEGIN
   SELECT o.user_id INTO v_dono
@@ -128,10 +139,18 @@ BEGIN
                       WHERE o.user_id = p.user_id)
    LIMIT 1;
 
-  IF v_dono IS NULL OR v_comum IS NULL THEN
+  SELECT p.user_id INTO v_novo
+    FROM public.profiles p
+   WHERE p.user_id <> v_comum
+     AND NOT EXISTS (SELECT 1 FROM public.superadmin_operators o
+                      WHERE o.user_id = p.user_id)
+   LIMIT 1;
+
+  IF v_dono IS NULL OR v_comum IS NULL OR v_novo IS NULL THEN
     PERFORM set_config('op.r2',
       'CONTEXTO FALTANDO: dono=' || coalesce(v_dono::text,'nulo') ||
-      ' comum=' || coalesce(v_comum::text,'nulo'), true);
+      ' comum=' || coalesce(v_comum::text,'nulo') ||
+      ' alvo=' || coalesce(v_novo::text,'nulo'), true);
     RETURN;
   END IF;
 
