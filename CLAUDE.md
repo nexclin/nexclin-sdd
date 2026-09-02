@@ -215,3 +215,24 @@ skill; trabalho paralelo vira agente. A constituição vence qualquer uma delas.
 **A cadeia canônica de trabalho:** `grill-with-docs` para interrogar a ideia,
 `nx-regra` para escrever a regra em `docs/regras/`, `to-tickets` para abrir as
 issues, `implement` para executar por fases.
+
+---
+
+## Agent skills
+
+Onde as skills de engenharia buscam configuração deste repositório. Não apague
+os títulos em inglês: é por eles que o `setup-matt-pocock-skills` se reencontra
+numa re-execução, em vez de criar bloco duplicado.
+
+### Issue tracker
+
+As issues vivem no GitHub, em `nexclin/nexclin-sdd`, que é este mesmo
+repositório, então o `gh` infere sozinho. Ver
+[`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md).
+
+### Domain docs
+
+Contexto único: `CONTEXT.md` e `docs/adr/` na raiz. E antes de explorar
+qualquer área, a **regra viva** dela em `docs/regras/`, porque aqui o requisito
+mora na regra e não no código. Ver
+[`docs/agents/domain.md`](docs/agents/domain.md).
