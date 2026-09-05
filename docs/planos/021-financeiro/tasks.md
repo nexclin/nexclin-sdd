@@ -39,9 +39,9 @@ FR-011 antes de decidir sobre ele.
 **Aceite:** o resultado bate com a tabela "o que já existe" da seção 3 da regra.
 Se divergir, **a divergência é o achado** e a regra se corrige antes de T006.
 
-- [ ] T001 (#55) [F0] Escrever o bloco de censo de schema em `docs/ponte/021-censo-financeiro.sql`, listando por `information_schema.columns` as colunas de `receivables`, `expenses` e `bank_accounts`, e por `pg_policies` as policies de `receivables`, `expenses`, `revenues` e `fixed_expenses`
-- [ ] T002 (#56) [P] [F0] Escrever no mesmo arquivo a **prova 3**, contando `receivables` e `revenues` da Clínica Teste Final (`d51ce6c7-582b-469b-a01b-608bd9b38885`) e cruzando com os 280 recebíveis da base de referência
-- [ ] T003 (#57) [P] [F0] Escrever no mesmo arquivo a **prova 2**, o bloco `BEGIN`/`ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims`, medindo o que um usuário com `contas_receber` negado consegue ler de `receivables`. **Com controle positivo**: o mesmo bloco para um usuário com o módulo liberado
+- [x] T001 (#55, fechada 05/09) [F0] Escrever o bloco de censo de schema em `docs/ponte/021-censo-financeiro.sql`, listando por `information_schema.columns` as colunas de `receivables`, `expenses` e `bank_accounts`, e por `pg_policies` as policies de `receivables`, `expenses`, `revenues` e `fixed_expenses`
+- [x] T002 (#56, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a **prova 3**, contando `receivables` e `revenues` da Clínica Teste Final (`d51ce6c7-582b-469b-a01b-608bd9b38885`) e cruzando com os 280 recebíveis da base de referência
+- [x] T003 (#57, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a **prova 2**, o bloco `BEGIN`/`ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims`, medindo o que um usuário com `contas_receber` negado consegue ler de `receivables`. **Com controle positivo**: o mesmo bloco para um usuário com o módulo liberado
 - [ ] T004 (#58) [F0] Rodar os três blocos no editor de SQL da plataforma, um por vez. **Clicar por referência e não por coordenada**: o botão Run muda de altura conforme o painel do chat rola
 - [ ] T005 (#59) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-financeiro.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 

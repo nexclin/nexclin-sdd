@@ -38,9 +38,9 @@ regra viva.
 **Objetivo:** derrubar ou confirmar a premissa 1 da regra, e medir o buraco do
 FR-008 antes de decidir sobre ele.
 
-- [ ] T100 (#75) [F0] Escrever o censo de `tasks` em `docs/ponte/022-censo-tarefas.sql`, listando por `information_schema.columns` as colunas de `tasks` e por `pg_policies` as policies dela
-- [ ] T101 (#76) [P] [F0] Escrever no mesmo arquivo a contagem de valores distintos em `tasks.responsible`, com quantos deles casam com algum nome de usuário da clínica. **É este número que dimensiona o risco da Fase 1**
-- [ ] T102 (#77) [P] [F0] Escrever no mesmo arquivo a prova 2, o bloco `BEGIN`/`ROLLBACK` medindo o que um usuário com `tarefas` negado lê de `tasks`, **com controle positivo**
+- [x] T100 (#75, fechada 05/09) [F0] Escrever o censo de `tasks` em `docs/ponte/022-censo-tarefas.sql`, listando por `information_schema.columns` as colunas de `tasks` e por `pg_policies` as policies dela
+- [x] T101 (#76, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a contagem de valores distintos em `tasks.responsible`, com quantos deles casam com algum nome de usuário da clínica. **É este número que dimensiona o risco da Fase 1**
+- [x] T102 (#77, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a prova 2, o bloco `BEGIN`/`ROLLBACK` medindo o que um usuário com `tarefas` negado lê de `tasks`, **com controle positivo**
 - [ ] T103 (#78) [F0] Rodar os blocos no editor de SQL, um por vez, clicando por referência e não por coordenada
 - [ ] T104 (#79) [F0] Registrar o resultado em `docs/historico/`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 
