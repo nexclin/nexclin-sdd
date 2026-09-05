@@ -22,10 +22,39 @@
 
 ## Do Spec Kit
 
-`speckit-*`, onze skills. Vieram com a instalação do GitHub Spec Kit e foram o
-fluxo canônico do método SDD deste projeto até 27/08/2026, quando **saíram
-junto com a pasta `.specify/`**. O motivo está em
-`docs/adr/0004-o-spec-kit-sai.md`.
+**Saíram em 27/08 e quatro voltaram em 04/09.**
+
+As onze `speckit-*` vieram com a instalação do GitHub Spec Kit e foram o fluxo
+canônico do método SDD deste projeto até 27/08/2026, quando saíram junto com a
+pasta `.specify/`. O motivo está em `docs/adr/0004-o-spec-kit-sai.md`.
+
+Em 04/09/2026 o Spec Kit voltou pela metade, pela
+`docs/adr/0006-o-spec-kit-volta-pela-metade.md`. **Quatro skills entraram**, e as
+seis restantes ficaram de fora porque este projeto já tem substituto para cada
+uma.
+
+- **Origem:** `github.com/github/spec-kit`, via `pip install specify-cli`
+- **Versão:** `specify-cli 1.0.4`, instalado com `--integration claude --script sh`
+- **Data da instalação:** 04/09/2026
+- **Licença:** MIT
+- **Total:** 164 KB em `.specify/`, e 1.010 bytes de descrição de skill por turno
+
+| Skill | Por que esta |
+|---|---|
+| `speckit-plan` | o degrau que faltava entre a regra e as issues, e ele pesa quando a frente é grande |
+| `speckit-tasks` | lista de tarefas ordenada por dependência, a partir do plano |
+| `speckit-analyze` | confere consistência entre regra, plano e tarefas. **Não tem equivalente aqui**, e ataca a classe de erro que já custou meio dia num arquivo órfão |
+| `speckit-checklist` | checklist de qualidade sobre o plano, quando valer |
+
+**As seis que ficaram de fora, e o que as substitui:** `speckit-specify` por
+`nx-regra`, `speckit-clarify` por `grill-with-docs`, `speckit-constitution` por
+`docs/constituicao.md`, `speckit-taskstoissues` por `to-tickets`,
+`speckit-implement` por `implement`, e `speckit-converge` por nada, porque não
+foi pedido.
+
+**Estas quatro são cópia, não instalação viva.** Vale o mesmo custo assumido das
+outras cópias: não recebem atualização sozinhas. A versão está registrada acima
+para que a comparação com o upstream seja possível.
 
 ## De terceiros, incorporadas
 
