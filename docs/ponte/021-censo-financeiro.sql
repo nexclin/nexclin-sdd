@@ -165,92 +165,120 @@ where clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885';
 -- =============================================================================
 -- BLOCO 4 · PROVA 2 · o buraco de permissao, com controle positivo  ·  T003 (#57)
 -- =============================================================================
--- ATENCAO, TRES ARMADILHAS JA PAGAS COM TEMPO:
+-- COLE E RODE. NAO PRECISA EDITAR NADA. O bloco escolhe os dois usuarios
+--   sozinho e diz, na propria saida, se conseguiu escolher.
 --
---  1. TABELA TEMPORARIA NAO SERVE aqui. Ela nasce do superusuario, e a parte
---     que interessa roda como `authenticated`: o teste morre com 42501 ANTES de
---     exercitar o que ha para exercitar. Por isso o resultado vai em
---     set_config, com prefixo proprio, que nao exige permissao de ninguem.
+-- QUATRO ARMADILHAS JA PAGAS COM TEMPO, e as quatro estao tratadas aqui:
 --
---  2. ASSERCAO NEGATIVA PASSA POR VACUIDADE. "O usuario negado nao consegue"
---     fica verdadeiro se o teste estiver errado. Por isso existe o CONTROLE
---     POSITIVO no fim: um usuario com o modulo liberado TEM de voltar linha.
---     Sem as duas metades, este bloco nao prova nada.
+--  1. MARCADOR PARA SUBSTITUIR A MAO. A primeira versao deste bloco pedia para
+--     colar dois user_id dentro do JSON. Quem colou e rodou levou
+--     "22P02: invalid input syntax for type uuid". Bloco de conferencia que
+--     exige edicao manual erra na primeira execucao. Agora ele se resolve.
 --
---  3. Tudo dentro de BEGIN/ROLLBACK. Nada e escrito.
+--  2. TABELA TEMPORARIA NAO SERVE. Ela nasce do superusuario, e a parte que
+--     interessa roda como `authenticated`: o teste morre com 42501 ANTES de
+--     exercitar o que ha para exercitar. Por isso tudo vai em set_config.
 --
--- ANTES DE RODAR, preencha os dois user_id abaixo:
---   NEGADO   = usuario da clinica COM o modulo contas_receber negado
---   LIBERADO = usuario da mesma clinica COM o modulo liberado
+--  3. ASSERCAO NEGATIVA PASSA POR VACUIDADE. Ha CONTROLE POSITIVO, e o veredito
+--     acusa TESTE INVALIDO quando ele volta zero, em vez de deixar passar.
 --
--- Para achar candidatos, rode antes o BLOCO 4a.
+--  4. A ESCOLHA DOS USUARIOS PODE FALHAR, e isso e achado, nao erro. Se a
+--     clinica nao tiver ninguem com o modulo negado, o veredito diz isso com
+--     todas as letras em vez de fingir que testou.
+
+BEGIN;
+
+-- ---- passo 1: como superusuario, escolher os dois usuarios ----
+-- Negado: membro ativo, que NAO e admin da clinica, e sem contas_receber.
+--   Admin da clinica recebe `full` pela cascata, entao ele nunca serve de negado.
+select set_config('nx021.uid_negado', coalesce((
+  select p.user_id::text
+  from profiles p
+  join team_members tm on tm.user_id = p.user_id
+  where p.clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885'
+    and tm.active
+    and not exists (select 1 from user_roles ur
+                    where ur.user_id = p.user_id and ur.role = 'admin')
+    and not exists (select 1 from superadmin_operators so
+                    where so.user_id = p.user_id and so.active)
+    and coalesce(tm.permissions ->> 'contas_receber', 'none') in ('none', '')
+  order by p.full_name
+  limit 1
+), ''), true);
+
+-- Liberado: qualquer membro ativo que tenha o modulo, ou o admin da clinica.
+select set_config('nx021.uid_liberado', coalesce((
+  select p.user_id::text
+  from profiles p
+  join team_members tm on tm.user_id = p.user_id
+  where p.clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885'
+    and tm.active
+    and (exists (select 1 from user_roles ur
+                 where ur.user_id = p.user_id and ur.role = 'admin')
+         or coalesce(tm.permissions ->> 'contas_receber', 'none') <> 'none')
+  order by p.full_name
+  limit 1
+), ''), true);
+
+-- ---- passo 2: medir como o usuario NEGADO ----
+SET LOCAL ROLE authenticated;
+
+select set_config('request.jwt.claims', json_build_object(
+  'sub',  nullif(current_setting('nx021.uid_negado', true), ''),
+  'role', 'authenticated')::text, true);
+
+select set_config('nx021.negado_ve_linhas',
+  (select count(*)::text from receivables), true);
+select set_config('nx021.negado_permissao',
+  coalesce(my_permission('contas_receber'), 'nulo'), true);
+
+-- ---- passo 3: o CONTROLE POSITIVO, usuario LIBERADO ----
+select set_config('request.jwt.claims', json_build_object(
+  'sub',  nullif(current_setting('nx021.uid_liberado', true), ''),
+  'role', 'authenticated')::text, true);
+
+select set_config('nx021.liberado_ve_linhas',
+  (select count(*)::text from receivables), true);
+select set_config('nx021.liberado_permissao',
+  coalesce(my_permission('contas_receber'), 'nulo'), true);
+
+-- ---- passo 4: o veredito ----
+RESET ROLE;
+select
+  nullif(current_setting('nx021.uid_negado',   true), '') as usuario_negado_escolhido,
+  nullif(current_setting('nx021.uid_liberado', true), '') as usuario_liberado_escolhido,
+  current_setting('nx021.negado_permissao',    true)      as permissao_do_negado,
+  current_setting('nx021.negado_ve_linhas',    true)      as linhas_que_o_negado_ve,
+  current_setting('nx021.liberado_permissao',  true)      as permissao_do_liberado,
+  current_setting('nx021.liberado_ve_linhas',  true)      as linhas_que_o_liberado_ve,
+  case
+    when nullif(current_setting('nx021.uid_negado', true), '') is null
+      then 'NAO TESTADO, E ISSO E ACHADO: nao existe membro ativo com contas_receber negado nesta clinica. Convide um usuario de teste com o modulo negado, que e a issue #50, e rode de novo'
+    when nullif(current_setting('nx021.uid_liberado', true), '') is null
+      then 'TESTE INVALIDO: nao achei usuario com o modulo liberado. Sem controle positivo o resultado nao vale'
+    when current_setting('nx021.liberado_ve_linhas', true)::int = 0
+      then 'TESTE INVALIDO: o controle positivo voltou zero linha. Ou a clinica esta vazia, ou a selecao pegou o usuario errado. Nao conclua nada daqui'
+    when current_setting('nx021.negado_ve_linhas', true)::int > 0
+      then 'DEFEITO CONFIRMADO: usuario com o modulo negado le o financeiro. E o FR-011, e e a alinea (c) ao contrario'
+    else 'SEM DEFEITO: a policy ja consulta a cascata. Corrija a secao 3 da regra 021 no mesmo commit'
+  end as veredito;
+
+ROLLBACK;
+
 
 -- -----------------------------------------------------------------------------
--- BLOCO 4a · Achar os dois usuarios de teste
+-- BLOCO 4b · Quem existe na clinica, se precisar olhar com os proprios olhos
 -- -----------------------------------------------------------------------------
 select
   p.user_id,
   p.full_name,
-  p.clinic_id,
   tm.permission_level,
-  tm.permissions -> 'contas_receber' as permissao_contas_receber,
+  tm.permissions ->> 'contas_receber' as contas_receber,
   tm.active
 from profiles p
 left join team_members tm on tm.user_id = p.user_id
 where p.clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885'
 order by tm.permission_level nulls last, p.full_name;
-
-
--- -----------------------------------------------------------------------------
--- BLOCO 4b · O teste, com as duas metades
--- -----------------------------------------------------------------------------
-BEGIN;
-
--- ---- metade 1: o usuario com o modulo NEGADO ----
-SET LOCAL ROLE authenticated;
-SET LOCAL "request.jwt.claims" = '{"sub":"COLE_AQUI_O_USER_ID_NEGADO","role":"authenticated"}';
-
-select set_config(
-  'nx021.negado_ve_linhas',
-  (select count(*)::text from receivables),
-  true
-);
-select set_config(
-  'nx021.negado_permissao',
-  coalesce(my_permission('contas_receber'), 'nulo'),
-  true
-);
-
--- ---- metade 2: o CONTROLE POSITIVO, usuario com o modulo LIBERADO ----
-SET LOCAL "request.jwt.claims" = '{"sub":"COLE_AQUI_O_USER_ID_LIBERADO","role":"authenticated"}';
-
-select set_config(
-  'nx021.liberado_ve_linhas',
-  (select count(*)::text from receivables),
-  true
-);
-select set_config(
-  'nx021.liberado_permissao',
-  coalesce(my_permission('contas_receber'), 'nulo'),
-  true
-);
-
--- ---- o veredito ----
-RESET ROLE;
-select
-  current_setting('nx021.negado_permissao',   true) as permissao_do_negado,
-  current_setting('nx021.negado_ve_linhas',   true) as linhas_que_o_negado_ve,
-  current_setting('nx021.liberado_permissao', true) as permissao_do_liberado,
-  current_setting('nx021.liberado_ve_linhas', true) as linhas_que_o_liberado_ve,
-  case
-    when current_setting('nx021.liberado_ve_linhas', true)::int = 0
-      then 'TESTE INVALIDO: o controle positivo voltou zero. Confira o user_id LIBERADO antes de concluir qualquer coisa'
-    when current_setting('nx021.negado_ve_linhas', true)::int > 0
-      then 'DEFEITO CONFIRMADO: usuario com o modulo negado le o financeiro. E o FR-011'
-    else 'SEM DEFEITO: a policy ja consulta a cascata. Corrija a secao 3 da regra'
-  end as veredito;
-
-ROLLBACK;
 
 
 -- =============================================================================

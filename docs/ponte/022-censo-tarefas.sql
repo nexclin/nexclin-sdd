@@ -154,36 +154,53 @@ order by 2 desc;
 -- =============================================================================
 -- BLOCO 3 · PROVA 2 · o buraco de permissao em tasks  ·  T102 (#77)
 -- =============================================================================
+-- COLE E RODE. NAO PRECISA EDITAR NADA.
+--
 -- AQUI E PIOR QUE NO FINANCEIRO por um motivo especifico: tasks carrega
---   patient_id. E a alinea (c) ao contrario, sobre dado ligado a paciente.
+--   patient_id. Se o modulo negado ler tarefa COM paciente, e dado de saude
+--   exposto por ausencia de policy, e nao so modulo mal escondido.
 --
--- As mesmas tres armadilhas do censo financeiro valem: nada de tabela
---   temporaria, controle positivo obrigatorio, e tudo em BEGIN/ROLLBACK.
---
--- Preencha os dois user_id. Para achar candidatos, rode o BLOCO 3a.
+-- As mesmas quatro armadilhas do censo financeiro estao tratadas aqui: sem
+--   marcador para substituir a mao, sem tabela temporaria, com controle
+--   positivo, e com a falha de selecao virando achado em vez de erro.
 
--- -----------------------------------------------------------------------------
--- BLOCO 3a · Achar os dois usuarios de teste
--- -----------------------------------------------------------------------------
-select
-  p.user_id,
-  p.full_name,
-  tm.permission_level,
-  tm.permissions -> 'tarefas' as permissao_tarefas,
-  tm.active
-from profiles p
-left join team_members tm on tm.user_id = p.user_id
-where p.clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885'
-order by tm.permission_level nulls last, p.full_name;
-
-
--- -----------------------------------------------------------------------------
--- BLOCO 3b · O teste, com as duas metades
--- -----------------------------------------------------------------------------
 BEGIN;
 
+-- ---- passo 1: escolher os dois usuarios, como superusuario ----
+select set_config('nx022.uid_negado', coalesce((
+  select p.user_id::text
+  from profiles p
+  join team_members tm on tm.user_id = p.user_id
+  where p.clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885'
+    and tm.active
+    and not exists (select 1 from user_roles ur
+                    where ur.user_id = p.user_id and ur.role = 'admin')
+    and not exists (select 1 from superadmin_operators so
+                    where so.user_id = p.user_id and so.active)
+    and coalesce(tm.permissions ->> 'tarefas', 'none') in ('none', '')
+  order by p.full_name
+  limit 1
+), ''), true);
+
+select set_config('nx022.uid_liberado', coalesce((
+  select p.user_id::text
+  from profiles p
+  join team_members tm on tm.user_id = p.user_id
+  where p.clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885'
+    and tm.active
+    and (exists (select 1 from user_roles ur
+                 where ur.user_id = p.user_id and ur.role = 'admin')
+         or coalesce(tm.permissions ->> 'tarefas', 'none') <> 'none')
+  order by p.full_name
+  limit 1
+), ''), true);
+
+-- ---- passo 2: medir como o NEGADO ----
 SET LOCAL ROLE authenticated;
-SET LOCAL "request.jwt.claims" = '{"sub":"COLE_AQUI_O_USER_ID_NEGADO","role":"authenticated"}';
+
+select set_config('request.jwt.claims', json_build_object(
+  'sub',  nullif(current_setting('nx022.uid_negado', true), ''),
+  'role', 'authenticated')::text, true);
 
 select set_config('nx022.negado_ve_tarefas',
   (select count(*)::text from tasks), true);
@@ -192,31 +209,56 @@ select set_config('nx022.negado_ve_com_paciente',
 select set_config('nx022.negado_permissao',
   coalesce(my_permission('tarefas'), 'nulo'), true);
 
-SET LOCAL "request.jwt.claims" = '{"sub":"COLE_AQUI_O_USER_ID_LIBERADO","role":"authenticated"}';
+-- ---- passo 3: CONTROLE POSITIVO ----
+select set_config('request.jwt.claims', json_build_object(
+  'sub',  nullif(current_setting('nx022.uid_liberado', true), ''),
+  'role', 'authenticated')::text, true);
 
 select set_config('nx022.liberado_ve_tarefas',
   (select count(*)::text from tasks), true);
 select set_config('nx022.liberado_permissao',
   coalesce(my_permission('tarefas'), 'nulo'), true);
 
+-- ---- passo 4: veredito ----
 RESET ROLE;
 select
-  current_setting('nx022.negado_permissao',       true) as permissao_do_negado,
-  current_setting('nx022.negado_ve_tarefas',      true) as tarefas_que_o_negado_ve,
-  current_setting('nx022.negado_ve_com_paciente', true) as dessas_quantas_tem_paciente,
-  current_setting('nx022.liberado_permissao',     true) as permissao_do_liberado,
-  current_setting('nx022.liberado_ve_tarefas',    true) as tarefas_que_o_liberado_ve,
+  nullif(current_setting('nx022.uid_negado',   true), '') as usuario_negado_escolhido,
+  nullif(current_setting('nx022.uid_liberado', true), '') as usuario_liberado_escolhido,
+  current_setting('nx022.negado_permissao',       true)   as permissao_do_negado,
+  current_setting('nx022.negado_ve_tarefas',      true)   as tarefas_que_o_negado_ve,
+  current_setting('nx022.negado_ve_com_paciente', true)   as dessas_quantas_tem_paciente,
+  current_setting('nx022.liberado_permissao',     true)   as permissao_do_liberado,
+  current_setting('nx022.liberado_ve_tarefas',    true)   as tarefas_que_o_liberado_ve,
   case
+    when nullif(current_setting('nx022.uid_negado', true), '') is null
+      then 'NAO TESTADO, E ISSO E ACHADO: nao existe membro ativo com o modulo tarefas negado nesta clinica. E a mesma falta que trava a issue #50'
+    when nullif(current_setting('nx022.uid_liberado', true), '') is null
+      then 'TESTE INVALIDO: nao achei usuario com o modulo liberado. Sem controle positivo o resultado nao vale'
     when current_setting('nx022.liberado_ve_tarefas', true)::int = 0
-      then 'TESTE INVALIDO: controle positivo voltou zero. Confira o user_id LIBERADO'
+      then 'TESTE INVALIDO: o controle positivo voltou zero tarefa. Nao conclua nada daqui'
     when current_setting('nx022.negado_ve_com_paciente', true)::int > 0
-      then 'DEFEITO CONFIRMADO, E COM PACIENTE JUNTO: modulo negado le tarefa ligada a paciente. E o FR-008'
+      then 'DEFEITO CONFIRMADO, E COM PACIENTE JUNTO: modulo negado le tarefa ligada a paciente. E o FR-008, e e dado de saude'
     when current_setting('nx022.negado_ve_tarefas', true)::int > 0
       then 'DEFEITO CONFIRMADO: modulo negado le tarefas. E o FR-008'
-    else 'SEM DEFEITO: a policy ja consulta a cascata. Corrija a secao 3 da regra'
+    else 'SEM DEFEITO: a policy ja consulta a cascata. Corrija a secao 3 da regra 022 no mesmo commit'
   end as veredito;
 
 ROLLBACK;
+
+
+-- -----------------------------------------------------------------------------
+-- BLOCO 3b · Quem existe na clinica, se precisar olhar
+-- -----------------------------------------------------------------------------
+select
+  p.user_id,
+  p.full_name,
+  tm.permission_level,
+  tm.permissions ->> 'tarefas' as tarefas,
+  tm.active
+from profiles p
+left join team_members tm on tm.user_id = p.user_id
+where p.clinic_id = 'd51ce6c7-582b-469b-a01b-608bd9b38885'
+order by tm.permission_level nulls last, p.full_name;
 
 
 -- =============================================================================
