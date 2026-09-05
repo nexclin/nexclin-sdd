@@ -24,11 +24,12 @@ agosto. Regra nova continua a partir de 017.
 | [017](017-superadmin-e-impersonacao.md) | Superadmin e impersonação | FR-005 **fechado e provado**, demais em execução |
 | [018](018-funil-de-atendimentos.md) | Funil de atendimentos | especificada · requisito da stack nova |
 | [019](019-conformidade-lgpd-do-painel.md) | Conformidade LGPD do painel | 1 de 3 lacunas auditada, **nenhuma implementada** |
-| [020](020-avisos-internos-e-o-dia-do-medico.md) | Avisos internos e o dia do médico | especificada, nada implementado · **espera emenda** |
+| [020](020-avisos-internos-e-o-dia-do-medico.md) | Avisos internos e o dia do médico | especificada, nada implementado · **só o sininho espera emenda** |
+| [021](021-financeiro-que-nao-erra-o-caixa.md) | Financeiro que não erra o caixa | especificada, nada implementado · **3 decisões abertas** |
 
 Os números 007 a 012, 014 e 015 seguem reservados à fila em
 [`fila-de-regras.md`](fila-de-regras.md), que ordena as próximas regras da
-Onda 1. Regra fora da fila continua a partir de **017**.
+Onda 1. Regra fora da fila continua a partir de **022**.
 
 ## O formato, em sete seções
 
