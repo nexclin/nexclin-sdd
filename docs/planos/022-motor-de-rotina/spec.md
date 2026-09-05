@@ -1,0 +1,1 @@
+../../regras/022-motor-de-rotina-da-clinica.md

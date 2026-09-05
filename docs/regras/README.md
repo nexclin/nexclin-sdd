@@ -26,10 +26,11 @@ agosto. Regra nova continua a partir de 017.
 | [019](019-conformidade-lgpd-do-painel.md) | Conformidade LGPD do painel | 1 de 3 lacunas auditada, **nenhuma implementada** |
 | [020](020-avisos-internos-e-o-dia-do-medico.md) | Avisos internos e o dia do médico | especificada, nada implementado · **só o sininho espera emenda** |
 | [021](021-financeiro-que-nao-erra-o-caixa.md) | Financeiro que não erra o caixa | especificada, nada implementado · **3 decisões abertas** |
+| [022](022-motor-de-rotina-da-clinica.md) | Motor de rotina da clínica | especificada, nada implementado · **4 decisões abertas** |
 
 Os números 007 a 012, 014 e 015 seguem reservados à fila em
 [`fila-de-regras.md`](fila-de-regras.md), que ordena as próximas regras da
-Onda 1. Regra fora da fila continua a partir de **022**.
+Onda 1. Regra fora da fila continua a partir de **023**.
 
 ## O formato, em sete seções
 
