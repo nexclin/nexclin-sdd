@@ -31,11 +31,11 @@ regra viva.
 **Objetivo:** derrubar ou confirmar a premissa 1 da regra, e medir o buraco do
 FR-008 antes de decidir sobre ele.
 
-- [ ] T100 [F0] Escrever o censo de `tasks` em `docs/ponte/022-censo-tarefas.sql`, listando por `information_schema.columns` as colunas de `tasks` e por `pg_policies` as policies dela
-- [ ] T101 [P] [F0] Escrever no mesmo arquivo a contagem de valores distintos em `tasks.responsible`, com quantos deles casam com algum nome de usuário da clínica. **É este número que dimensiona o risco da Fase 1**
-- [ ] T102 [P] [F0] Escrever no mesmo arquivo a prova 2, o bloco `BEGIN`/`ROLLBACK` medindo o que um usuário com `tarefas` negado lê de `tasks`, **com controle positivo**
-- [ ] T103 [F0] Rodar os blocos no editor de SQL, um por vez, clicando por referência e não por coordenada
-- [ ] T104 [F0] Registrar o resultado em `docs/historico/`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
+- [ ] T100 (#75) [F0] Escrever o censo de `tasks` em `docs/ponte/022-censo-tarefas.sql`, listando por `information_schema.columns` as colunas de `tasks` e por `pg_policies` as policies dela
+- [ ] T101 (#76) [P] [F0] Escrever no mesmo arquivo a contagem de valores distintos em `tasks.responsible`, com quantos deles casam com algum nome de usuário da clínica. **É este número que dimensiona o risco da Fase 1**
+- [ ] T102 (#77) [P] [F0] Escrever no mesmo arquivo a prova 2, o bloco `BEGIN`/`ROLLBACK` medindo o que um usuário com `tarefas` negado lê de `tasks`, **com controle positivo**
+- [ ] T103 (#78) [F0] Rodar os blocos no editor de SQL, um por vez, clicando por referência e não por coordenada
+- [ ] T104 (#79) [F0] Registrar o resultado em `docs/historico/`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 
 **Ponto de conferência:** premissa 1 confirmada ou derrubada, e os dois números
 na mão.
@@ -50,19 +50,19 @@ para onde o papel resolver.
 **Aceite independente:** o responsável de uma tarefa é usuário, e nenhum nome que
 existia antes se perdeu.
 
-- [ ] T105 [F1] Escrever a migração `supabase/migrations/2026090NNNNNNN_responsavel_da_tarefa_e_usuario.sql`, acrescentando a `tasks` a referência a usuário ou a membro da equipe
-- [ ] T106 [F1] Na mesma migração, criar a coluna de **legado** que preserva o texto original de `responsible`. **Nome que não casar com usuário nenhum MUST ficar guardado ali, e MUST NOT ser descartado**: perder atribuição de tarefa de cliente real é dano que não se desfaz
-- [ ] T107 [F1] Escrever a conversão que casa o texto existente com usuário, usando o número medido em T101, e deixar sem casar o que não casar em vez de adivinhar
-- [ ] T108 [F1] Escrever o bloco guiado em `docs/ponte/aplicacao-022-fase1/`, um bloco por vez, cada um com a consulta de conferência ao lado e a reversão palavra por palavra abaixo
-- [ ] T109 [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`
-- [ ] T110 [F1] Aplicar os blocos no editor de SQL e conferir cada um
-- [ ] T111 [P] [F1] Rodar `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova
-- [ ] T112 [F1] Trocar o front para gravar e ler o responsável como usuário, em `../nexclin-lovable/src/`. **Migração antes do front, sempre**
-- [ ] T113 [F1] Procurar as telas irmãs que mostram responsável antes de fechar. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às outras**
-- [ ] T114 [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` não confere tipos
-- [ ] T115 [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md` e rodar `scripts/ponte.sh conferir`
-- [ ] T116 [F1] Procurar marcador de texto da tela nova dentro do bundle publicado, porque o Publish da Lovable publica o preview e não o commit
-- [ ] T117 [F1] Aceite na tela: atribuir tarefa a um usuário, conferir no banco, e conferir que nenhum nome antigo sumiu
+- [ ] T105 (#80) [F1] Escrever a migração `supabase/migrations/2026090NNNNNNN_responsavel_da_tarefa_e_usuario.sql`, acrescentando a `tasks` a referência a usuário ou a membro da equipe
+- [ ] T106 (#81) [F1] Na mesma migração, criar a coluna de **legado** que preserva o texto original de `responsible`. **Nome que não casar com usuário nenhum MUST ficar guardado ali, e MUST NOT ser descartado**: perder atribuição de tarefa de cliente real é dano que não se desfaz
+- [ ] T107 (#82) [F1] Escrever a conversão que casa o texto existente com usuário, usando o número medido em T101, e deixar sem casar o que não casar em vez de adivinhar
+- [ ] T108 (#83) [F1] Escrever o bloco guiado em `docs/ponte/aplicacao-022-fase1/`, um bloco por vez, cada um com a consulta de conferência ao lado e a reversão palavra por palavra abaixo
+- [ ] T109 (#84) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`
+- [ ] T110 (#85) [F1] Aplicar os blocos no editor de SQL e conferir cada um
+- [ ] T111 (#86) [P] [F1] Rodar `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova
+- [ ] T112 (#87) [F1] Trocar o front para gravar e ler o responsável como usuário, em `../nexclin-lovable/src/`. **Migração antes do front, sempre**
+- [ ] T113 (#88) [F1] Procurar as telas irmãs que mostram responsável antes de fechar. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às outras**
+- [ ] T114 (#89) [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` não confere tipos
+- [ ] T115 (#90) [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md` e rodar `scripts/ponte.sh conferir`
+- [ ] T116 (#91) [F1] Procurar marcador de texto da tela nova dentro do bundle publicado, porque o Publish da Lovable publica o preview e não o commit
+- [ ] T117 (#92) [F1] Aceite na tela: atribuir tarefa a um usuário, conferir no banco, e conferir que nenhum nome antigo sumiu
 
 **Ponto de conferência:** o responsável passa a ser referência, e o texto antigo
 continua recuperável.
@@ -75,14 +75,14 @@ continua recuperável.
 
 **Aceite independente:** prova 7 na tela.
 
-- [ ] T118 [F2] Exibir a **contagem de dias** de atraso no card, e não só cor. **Converter `due_date` e `completed_at` com `::date` nos dois lados**: Postgres não define `timestamptz + integer`, e isso já custou tempo
-- [ ] T119 [P] [F2] Exibir a foto do responsável no card, usando `20260827010000_foto_de_perfil.sql`, que já existe. Depende de T112
-- [ ] T120 [P] [F2] Tratar o caso sem foto, que existe e é comum: iniciais ou avatar neutro, e nunca espaço vazio
-- [ ] T121 [F2] Aplicar os dois às telas irmãs de tarefa, e não só à lista principal
-- [ ] T122 [F2] Gate de tipos, publicar, e conferir o marcador no bundle
-- [ ] T123 [F2] **Prova 7** na tela: tarefa vencida há três dias mostra o número 3
-- [ ] T124 [F2] Validação pela ótica de quem usa, e não pela do backend. **É o que fecha os 200%** desta entrega
-- [ ] T125 [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
+- [ ] T118 (#93) [F2] Exibir a **contagem de dias** de atraso no card, e não só cor. **Converter `due_date` e `completed_at` com `::date` nos dois lados**: Postgres não define `timestamptz + integer`, e isso já custou tempo
+- [ ] T119 (#94) [P] [F2] Exibir a foto do responsável no card, usando `20260827010000_foto_de_perfil.sql`, que já existe. Depende de T112
+- [ ] T120 (#95) [P] [F2] Tratar o caso sem foto, que existe e é comum: iniciais ou avatar neutro, e nunca espaço vazio
+- [ ] T121 (#96) [F2] Aplicar os dois às telas irmãs de tarefa, e não só à lista principal
+- [ ] T122 (#97) [F2] Gate de tipos, publicar, e conferir o marcador no bundle
+- [ ] T123 (#98) [F2] **Prova 7** na tela: tarefa vencida há três dias mostra o número 3
+- [ ] T124 (#99) [F2] Validação pela ótica de quem usa, e não pela do backend. **É o que fecha os 200%** desta entrega
+- [ ] T125 (#100) [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **FIM DA ENTREGA 1.** É o que vai ao cliente em 08/09.
 

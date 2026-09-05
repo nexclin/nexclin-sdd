@@ -32,11 +32,11 @@ FR-011 antes de decidir sobre ele.
 **Aceite:** o resultado bate com a tabela "o que já existe" da seção 3 da regra.
 Se divergir, **a divergência é o achado** e a regra se corrige antes de T006.
 
-- [ ] T001 [F0] Escrever o bloco de censo de schema em `docs/ponte/021-censo-financeiro.sql`, listando por `information_schema.columns` as colunas de `receivables`, `expenses` e `bank_accounts`, e por `pg_policies` as policies de `receivables`, `expenses`, `revenues` e `fixed_expenses`
-- [ ] T002 [P] [F0] Escrever no mesmo arquivo a **prova 3**, contando `receivables` e `revenues` da Clínica Teste Final (`d51ce6c7-582b-469b-a01b-608bd9b38885`) e cruzando com os 280 recebíveis da base de referência
-- [ ] T003 [P] [F0] Escrever no mesmo arquivo a **prova 2**, o bloco `BEGIN`/`ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims`, medindo o que um usuário com `contas_receber` negado consegue ler de `receivables`. **Com controle positivo**: o mesmo bloco para um usuário com o módulo liberado
-- [ ] T004 [F0] Rodar os três blocos no editor de SQL da plataforma, um por vez. **Clicar por referência e não por coordenada**: o botão Run muda de altura conforme o painel do chat rola
-- [ ] T005 [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-financeiro.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
+- [ ] T001 (#55) [F0] Escrever o bloco de censo de schema em `docs/ponte/021-censo-financeiro.sql`, listando por `information_schema.columns` as colunas de `receivables`, `expenses` e `bank_accounts`, e por `pg_policies` as policies de `receivables`, `expenses`, `revenues` e `fixed_expenses`
+- [ ] T002 (#56) [P] [F0] Escrever no mesmo arquivo a **prova 3**, contando `receivables` e `revenues` da Clínica Teste Final (`d51ce6c7-582b-469b-a01b-608bd9b38885`) e cruzando com os 280 recebíveis da base de referência
+- [ ] T003 (#57) [P] [F0] Escrever no mesmo arquivo a **prova 2**, o bloco `BEGIN`/`ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims`, medindo o que um usuário com `contas_receber` negado consegue ler de `receivables`. **Com controle positivo**: o mesmo bloco para um usuário com o módulo liberado
+- [ ] T004 (#58) [F0] Rodar os três blocos no editor de SQL da plataforma, um por vez. **Clicar por referência e não por coordenada**: o botão Run muda de altura conforme o painel do chat rola
+- [ ] T005 (#59) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-financeiro.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 
 **Ponto de conferência:** premissa 1 confirmada ou derrubada, e o tamanho do
 buraco do FR-011 medido em número.
@@ -49,7 +49,7 @@ buraco do FR-011 medido em número.
 volta à mesa antes de 08/09 e nascem tarefas novas aqui. Se não vierem, a
 recomendação registrada vale e `revenues` não é tocada.
 
-- [ ] T006 [F0] **FR-016**: levar o resultado de T002 ao Arthur com as três saídas da seção 7 da regra, e registrar a decisão em `docs/historico/`
+- [ ] T006 (#60) [F0] **FR-016**: levar o resultado de T002 ao Arthur com as três saídas da seção 7 da regra, e registrar a decisão em `docs/historico/`
 
 **Enquanto este portão não abrir, nenhuma tarefa escreve em `revenues`.**
 
@@ -65,29 +65,29 @@ impede erro de virar importação em outubro.
 
 ### Banco, e ele vem primeiro
 
-- [ ] T007 [F1] Escrever a migração `supabase/migrations/2026090NNNNNNN_baixa_em_duas_etapas_e_saldo_inicial.sql`: valor recebido e autor da baixa em `receivables` e `expenses`, hora da baixa em `timestamptz`, e saldo inicial mais a data dele em `bank_accounts`
-- [ ] T008 [F1] Escrever o bloco guiado de aplicação em `docs/ponte/aplicacao-021-fase1/`, um bloco por vez, **cada um com a sua consulta de conferência ao lado e a reversão palavra por palavra abaixo**
-- [ ] T009 [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`. **Cuidado com a tela:** logo abaixo do `Export data` ficam `Pause` e `Remove`, os dois em vermelho, num espaço de cerca de 200 pixels
-- [ ] T010 [F1] Aplicar os blocos no editor de SQL e conferir cada um
-- [ ] T011 [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
+- [ ] T007 (#61) [F1] Escrever a migração `supabase/migrations/2026090NNNNNNN_baixa_em_duas_etapas_e_saldo_inicial.sql`: valor recebido e autor da baixa em `receivables` e `expenses`, hora da baixa em `timestamptz`, e saldo inicial mais a data dele em `bank_accounts`
+- [ ] T008 (#62) [F1] Escrever o bloco guiado de aplicação em `docs/ponte/aplicacao-021-fase1/`, um bloco por vez, **cada um com a sua consulta de conferência ao lado e a reversão palavra por palavra abaixo**
+- [ ] T009 (#63) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`. **Cuidado com a tela:** logo abaixo do `Export data` ficam `Pause` e `Remove`, os dois em vermelho, num espaço de cerca de 200 pixels
+- [ ] T010 (#64) [F1] Aplicar os blocos no editor de SQL e conferir cada um
+- [ ] T011 (#65) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
 
 ### Front, e só depois do banco
 
 > **Ordem obrigatória.** Front novo com a coluna inexistente quebra a tela de
 > dinheiro. E o Publish da Lovable publica o **preview**, não o commit.
 
-- [ ] T012 [F1] Trocar a baixa de contas a receber por duas etapas em `../nexclin-lovable/src/`, registrando pagamento com apontamentos e depois confirmando, e parar de escrever `status` direto
-- [ ] T013 [F1] Fazer a mesma troca em contas a **pagar**. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às irmãs**
-- [ ] T014 [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` **não** confere tipos, porque Vite usa esbuild, e foi isso que derrubou o app por 1h35 em 20/08
-- [ ] T015 [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md`, e rodar `scripts/ponte.sh conferir`
-- [ ] T016 [F1] Procurar um marcador de texto das telas novas dentro do bundle publicado, porque o `conferir` sozinho não prova que o código subiu
+- [ ] T012 (#66) [F1] Trocar a baixa de contas a receber por duas etapas em `../nexclin-lovable/src/`, registrando pagamento com apontamentos e depois confirmando, e parar de escrever `status` direto
+- [ ] T013 (#67) [F1] Fazer a mesma troca em contas a **pagar**. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às irmãs**
+- [ ] T014 (#68) [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` **não** confere tipos, porque Vite usa esbuild, e foi isso que derrubou o app por 1h35 em 20/08
+- [ ] T015 (#69) [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md`, e rodar `scripts/ponte.sh conferir`
+- [ ] T016 (#70) [F1] Procurar um marcador de texto das telas novas dentro do bundle publicado, porque o `conferir` sozinho não prova que o código subiu
 
 ### Aceite, e é onde a fase fecha
 
-- [ ] T017 [F1] **Prova 4** na tela: dar baixa e conferir no banco o valor recebido, a hora com fuso e o autor
-- [ ] T018 [F1] **Prova 5** na tela: baixar um recebível de R$ 100 recebendo R$ 97. O previsto continua 100, o recebido é 97, e o fluxo de caixa usa 97
-- [ ] T019 [F1] **Prova 6** na tela: com saldo inicial gravado, o saldo de hoje bate com a soma feita à mão
-- [ ] T020 [F1] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto. Sem arredondar
+- [ ] T017 (#71) [F1] **Prova 4** na tela: dar baixa e conferir no banco o valor recebido, a hora com fuso e o autor
+- [ ] T018 (#72) [F1] **Prova 5** na tela: baixar um recebível de R$ 100 recebendo R$ 97. O previsto continua 100, o recebido é 97, e o fluxo de caixa usa 97
+- [ ] T019 (#73) [F1] **Prova 6** na tela: com saldo inicial gravado, o saldo de hoje bate com a soma feita à mão
+- [ ] T020 (#74) [F1] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto. Sem arredondar
 
 **Ponto de conferência:** o dinheiro que entra passa a ser gravado como entrou,
 e não como estava previsto.
