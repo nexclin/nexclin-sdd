@@ -11,6 +11,45 @@
 > `backups/`, `dumps/`…). `supabase/migrations/*.sql` continua versionado por
 > desenho — é DDL, é a fonte de verdade do schema, e não contém dado.
 
+## Qual banco, e por que a pergunta importa
+
+> **Acrescentado em 05/09/2026**, depois do Arthur perguntar "backup de onde?".
+> A pergunta expôs uma ambiguidade que estava em sete documentos.
+
+**Existem dois bancos, e eles não têm o mesmo dono.**
+
+| Banco | Onde vive | O que tem dentro | Como se salva hoje |
+|---|---|---|---|
+| **O da plataforma ao vivo** | **Lovable Cloud**, gerenciado pela Lovable | o dado das clínicas a partir de 08/09 | **só o export manual** descrito acima. Não há recuperação no tempo neste tier |
+| O da stack nova | Supabase próprio, deste repositório | schema, e nenhum dado de cliente ainda | ainda não importa, e passa a importar em outubro |
+
+**O banco que corre risco em 08/09 é o primeiro**, e ele **não aparece no painel
+do Supabase**: é infraestrutura da Lovable.
+
+**A consequência, e ela precisa estar escrita:** sete documentos deste
+repositório dizem "ligar o Supabase Pro antes de 08/09" e **nenhum diz de qual
+projeto**. Se for o Supabase deste repositório, ligar o Pro **não protege nada
+do que entra no dia 8**, porque o dado do cliente não está lá. A pré-condição de
+lançamento estava nomeada pelo plano de um serviço que pode não ser o que guarda
+o dado em risco.
+
+## Uma divergência a reverificar antes de confiar no export
+
+O bloco acima registra, com o export feito na frente do Arthur em 25/08, que
+**não existe limite de um export a cada 24 horas**. Material de terceiros
+consultado em 05/09 descreve o contrário para a Lovable: **um export por dia e
+teto de 5 GB**.
+
+**Não sei qual vale hoje**, e as duas afirmações são de datas diferentes. A
+observação de 25/08 é de primeira mão e sobre esta conta; a de 05/09 é de
+terceiro e pode descrever outro plano ou uma mudança posterior.
+
+**Por que isso não é detalhe:** as tarefas T009 e T109 mandam repetir o export
+antes de cada aplicação em produção. Se o limite de um por dia existir, **duas
+migrações no mesmo dia passam a compartilhar um único ponto de retorno**, e o
+gate deixa de valer o que se pensa que vale. Confira na própria tela antes da
+primeira aplicação, e corrija esta seção com o que vir.
+
 ## Onde os exports vivem
 
 | Camada | Caminho | Por quê |

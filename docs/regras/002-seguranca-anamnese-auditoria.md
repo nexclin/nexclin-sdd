@@ -153,8 +153,19 @@ tela. Contra produção, isso é inaceitável.
   do front.
 - **A regra 005 depende desta**, no FR-013 dela: a auditoria de ação dentro da
   clínica precisa de `data_audit_log`.
-- **Pré-condição de lançamento, e não é código:** Supabase Pro ligado **antes** de
-  08/09, não no dia. É o que dá backup diário para operar com dado de saúde real.
+- **Pré-condição de lançamento, e não é código: um backup restaurado com
+  sucesso, com a data disso registrada.** Corrigido em 05/09/2026, e a correção
+  importa.
+
+  Esta linha dizia "Supabase Pro ligado antes de 08/09". Estava errada por dois
+  motivos. **Primeiro, ela não dizia de qual banco**, e o dado das clínicas a
+  partir de 08/09 vive no **Lovable Cloud**, que não aparece no painel do
+  Supabase: ligar o Pro do Supabase deste repositório não protegeria nada do que
+  entra no dia 8. **Segundo, plano ativo não é backup.** O que separa ter rede de
+  achar que se tem é a restauração testada, e o critério agora é esse.
+
+  O detalhamento dos dois bancos está em
+  [`../ponte/registro-exports-banco.md`](../ponte/registro-exports-banco.md).
 
 ## 6. Como se prova que funciona
 
