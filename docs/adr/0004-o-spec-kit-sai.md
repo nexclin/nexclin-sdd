@@ -1,5 +1,13 @@
 # 0004 · O Spec Kit sai do projeto
 
+> **Substituída em parte pela [`0006`](./0006-o-spec-kit-volta-pela-metade.md),
+> de 04/09/2026.** O Spec Kit voltou com quatro das dez skills, e a medição de
+> 04/09 desmentiu um dos dois motivos abaixo: o pacote passou de 16 MB para
+> 380 KB. **O que esta decisão diz sobre onde a regra mora continua de pé**: a
+> regra viva fica em `docs/regras/`, um arquivo por regra, nas sete seções. O
+> plano e as tarefas passaram a viver em `docs/planos/`. Nada aqui foi
+> reescrito.
+
 **Situação:** Aceita · **Data:** 27/08/2026
 **Decide:** Arthur Hideo. **A recomendação do executor era manter**, e a
 divergência fica visível de propósito. Reversível: ver §Como reverter.

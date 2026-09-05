@@ -3,6 +3,12 @@
 Glossário, e nada além. Só termo que **já causou confusão real** aqui. Termo que
 nunca foi mal-entendido custa token e não evita nada. Teto: 60 linhas.
 
+> **Estourado em 05/09/2026: 67 linhas.** "Área inútil" e "motor de rotina"
+> entraram e nada saiu, porque apagar termo alheio não é decisão de quem
+> acrescenta. **Alguém precisa cortar dois termos ou subir o teto**, e a decisão
+> é do Arthur. Candidatos a corte, por já não causarem confusão: nenhum foi
+> avaliado ainda.
+
 **Regra viva.** Documento que nasce antes da execução, guia a execução, e é
 corrigido no mesmo commit em que a execução o contradiz. Vive em `docs/regras/`.
 *Errado:* escrever a regra depois e chamar de documentação. Isso é histórico.
@@ -51,6 +57,15 @@ dizer que o imposto está fixado em zero, porque hoje ele está.
 **Esqueleto da clínica.** O app em `app/app/` com layout, menu e rotas de pé, e
 sem módulo de negócio dentro. Foi o que a regra 001 entregou.
 *Errado:* chamar de MVP. Ele navega e não opera nada.
+
+**Área inútil.** A altura acima da primeira linha de conteúdo que o operador não
+usa. Teto em `docs/referencia/marca-tokens.md`: 180px, 280px com mini dash.
+*Errado:* tratar como "deixar mais bonito". É orçamento de pixel, e se mede.
+
+**Motor de rotina.** O módulo `tarefas` lido como a rotina que a clínica cumpre,
+não como quadro de cards. A tarefa nasce de evento ou de checklist, e o que se
+mede é cumprimento no prazo.
+*Errado:* chamar de gerenciador de tarefas. Card à mão é o caso menor.
 
 **Apontamento.** Um item relatado por sócio testando a plataforma, no formato da
 base do Notion. Vira bug ou requisito depois da triagem, nunca antes.

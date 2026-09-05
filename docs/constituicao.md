@@ -1,6 +1,64 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.0.2 → 2.0.3
+Data: 2026-09-05
+
+PATCH: emenda de endereço. Os nove princípios ficam intactos.
+
+O `grilling` NÃO EXISTE em clone limpo: ele está em `.claude/skills-fora/`, que
+o `.gitignore` exclui na linha 62. A cadeia canônica citava `grill-with-docs`
+como primeiro degrau, e `grill-with-docs` não faz nada sozinho, só delega ao
+`grilling`. Achado em 05/09 ao tentar rodar o comando numa sessão remota.
+
+Linhas alteradas:
+  - Fluxo de Desenvolvimento: `grill-with-docs` sai do primeiro degrau e entra
+        `speckit-clarify`, que faz o mesmo papel e vem do pacote instalado.
+  - Fluxo de Desenvolvimento: `to-tickets` vira `speckit-taskstoissues` na
+        cadeia, porque ele lê o `tasks.md` e preserva a ordem de dependência.
+        `to-tickets` continua existindo para pedido solto, sem plano.
+  - Fluxo de Desenvolvimento: linha nova registrando por que `grill-with-docs`
+        saiu, para ninguém o recolocar sem antes versionar o `grilling`.
+
+Princípios modificados: nenhum
+Princípios adicionados: nenhum
+Templates a revisar: nenhum
+TODOs adiados: versionar o `grilling` continua possível, e reabre a decisão
+
+--- histórico ---
+
+SYNC IMPACT REPORT
+==================
+Version change: 2.0.1 → 2.0.2
+Data: 2026-09-04
+
+PATCH: emenda de endereço, de novo, e no sentido inverso da anterior. Os nove
+princípios ficam intactos, palavra por palavra. O Spec Kit voltou pela metade
+em 04/09/2026, com quatro das dez skills, e a ordem canônica passou a citar o
+degrau que nasceu: plano e lista de tarefas em `docs/planos/`.
+
+Onde a regra viva mora NÃO mudou. Ela continua em `docs/regras/`, um arquivo
+por regra, nas sete seções, que é o que a ADR 0004 decidiu e a ADR 0006 não
+reverteu.
+
+Linhas alteradas:
+  - Fluxo de Desenvolvimento: a ordem canônica ganha `speckit-plan` e
+        `speckit-tasks` entre `nx-regra` e `to-tickets`, e cita as duas ADR.
+  - Fluxo de Desenvolvimento: linha nova dizendo que a regra viva é a fonte e
+        que o `spec.md` de `docs/planos/` é link simbólico, nunca cópia. Cópia
+        criaria duas versões da mesma regra, o que a alínea (l) do `CLAUDE.md`
+        existe para impedir.
+
+Princípios modificados: nenhum
+Princípios adicionados: nenhum
+Templates a revisar: `.specify/memory/constitution.md`, que é ponteiro para
+  este arquivo e não duplica o texto
+TODOs adiados: nenhum
+
+--- histórico ---
+
+SYNC IMPACT REPORT
+==================
 Version change: 2.0.0 → 2.0.1
 Data: 2026-08-27
 
@@ -313,10 +371,22 @@ chama essa implementação.
 
 ## Fluxo de Desenvolvimento
 
-- Ordem canônica: `grill-with-docs` (interrogar a ideia) → `nx-regra` (escrever
-  a regra viva em `docs/regras/`) → `to-tickets` (abrir as issues) →
-  `implement` (executar por fases). O Spec Kit saiu do projeto em 27/08/2026;
-  o motivo está em `docs/adr/0004-o-spec-kit-sai.md`.
+- Ordem canônica: `speckit-clarify` (interrogar a ideia) → `nx-regra` (escrever
+  a regra viva em `docs/regras/`) → `speckit-plan` e `speckit-tasks` (plano e
+  tarefas em `docs/planos/NNN-nome/`) → `speckit-taskstoissues` (abrir as issues
+  na ordem de dependência) → `implement` (executar por fases).
+- **`grill-with-docs` saiu da cadeia em 05/09/2026**, e o motivo é mecânico: ele
+  delega a uma skill `grilling` que vive em `.claude/skills-fora/`, excluída pelo
+  `.gitignore`. O primeiro degrau não sobrevivia a um checkout limpo, e lei que
+  aponta para skill inexistente corrói as outras linhas, exatamente como a
+  emenda de 27/08 registrou sobre pasta inexistente. O Spec Kit saiu do projeto em 27/08/2026 e
+  **voltou pela metade em 04/09/2026**, com quatro das dez skills e sem mexer em
+  onde a regra mora; os motivos das duas decisões estão em
+  `docs/adr/0004-o-spec-kit-sai.md` e `docs/adr/0006-o-spec-kit-volta-pela-metade.md`.
+- A regra viva é a fonte. `docs/planos/` guarda plano e lista de tarefas, e o
+  `spec.md` que o Spec Kit exige é **link simbólico** para a regra, nunca cópia:
+  duas versões da mesma regra violam a alínea que manda corrigir a regra no
+  mesmo commit da mudança de comportamento.
 - Cada regra produz execução por fases, com aceite manual antes de avançar.
 - Toda alteração de banco entra por migração; seeds são idempotentes.
 - Correção na plataforma ao vivo segue `docs/ponte/ponte-inversa.md`: gate de
@@ -338,4 +408,4 @@ chama essa implementação.
   mundo, **a constituição MUST ser corrigida** — foi assim que a cláusula de
   somente leitura sobreviveu seis dias além da sua validade.
 
-**Version**: 2.0.1 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-08-27
+**Version**: 2.0.3 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-09-05

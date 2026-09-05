@@ -1,0 +1,1 @@
+../../regras/021-financeiro-que-nao-erra-o-caixa.md

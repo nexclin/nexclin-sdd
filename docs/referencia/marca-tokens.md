@@ -57,6 +57,45 @@ no app publicado: `OPERAÇÃO / DASHBOARD`, `01 / FINANCEIRO`.
 A distinção é intencional: o operador precisa saber num relance em qual dos
 dois mundos está. Não unifique os temas "por consistência".
 
+## Orçamento de tela
+
+> Acrescentado em 05/09/2026. Origem: a reunião de 03/09, em 00:14:08, mais o
+> pedido do Arthur em 05/09. O termo **área inútil** está no `CONTEXT.md`.
+>
+> **Isto é token, e não regra viva, de propósito.** Aproveitamento de tela é
+> front puro, e pela §2.5 front puro não gera regra: vira requisito da stack
+> nova. Um teto de pixels, ao contrário de "menos poluído", é verificável, e é
+> por isso que ele cabe aqui.
+
+```css
+:root {
+  --nx-topo-max:      180px;  /* topo até a primeira linha de conteúdo */
+  --nx-topo-max-dash: 280px;  /* idem, quando a tela tem mini dash */
+}
+```
+
+**A conta que define o teto:** tudo acima da primeira linha de conteúdo é área
+que o operador não usa. Cabeçalho, título, respiro e a barra de ação somados
+**MUST NOT** passar de `--nx-topo-max`. Tela com mini dash, ou seja com números
+resumidos no topo, ganha até `--nx-topo-max-dash`, e não mais.
+
+**Três padrões que estouram o teto, e os três já foram vistos no produto:**
+
+1. **Botão sozinho numa linha inteira**, com o resto da largura vazia. Botão
+   solto **MUST** dividir a linha com o título ou com o filtro. Uma linha de
+   40 a 50px para um controle só é o caso mais barato de corrigir e o mais
+   frequente.
+2. **Seletor de período numa faixa própria**, quando ele cabe na linha do
+   título.
+3. **Submenu com ícone em cada item.** No menu lateral em cascata, o subitem
+   **SHOULD** vir sem ícone: o ícone do pai já orienta, e o do filho só adiciona
+   ruído. Observado no sistema de referência da reunião.
+
+**Como se confere, e não é no olho:** medir do topo do conteúdo até a primeira
+linha útil, no navegador, com a janela em 1280px de largura. Tela que passar do
+teto entra na lista com o nome da tela, porque conserto sem nome de tela já foi
+aplicado a uma e não às irmãs cinco vezes nesta base.
+
 ## Uso incorreto
 
 Cruz, coração, estetoscópio. Preto puro. Segundo acento cromático. Tipografia
