@@ -18,6 +18,13 @@ regra viva.
 > nenhum plano, nenhuma tarefa e nenhuma mensagem de commit. O agrupamento aqui é
 > por **fase do plano**, que é o que tem aceite próprio pela alínea (h).
 
+> **Issues abertas em 05/09**, pelo `speckit-taskstoissues`. O número entre
+> parênteses depois do ID é a issue no GitHub. **Só as tarefas com prazo em
+> 08/09 viraram issue**: o `docs/regras/README.md` diz que tarefa vira issue
+> quando entra em execução, porque issue que ninguém toca em duas semanas
+> envelhece igual às 28 que foram fechadas em 27/08. O resto continua aqui como
+> texto, e vira issue quando o portão correspondente abrir.
+
 > **Os três portões são parada dura.** Tarefa depois de um portão **não começa**
 > antes de a decisão sair. Atravessar portão é o que este plano existe para
 > impedir.
