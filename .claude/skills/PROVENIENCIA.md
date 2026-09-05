@@ -29,28 +29,47 @@ canônico do método SDD deste projeto até 27/08/2026, quando saíram junto com
 pasta `.specify/`. O motivo está em `docs/adr/0004-o-spec-kit-sai.md`.
 
 Em 04/09/2026 o Spec Kit voltou pela metade, pela
-`docs/adr/0006-o-spec-kit-volta-pela-metade.md`. **Quatro skills entraram**, e as
-seis restantes ficaram de fora porque este projeto já tem substituto para cada
-uma.
+`docs/adr/0006-o-spec-kit-volta-pela-metade.md`. **Seis skills entraram**, quatro
+delas em 04/09 e duas em 05/09, e as quatro restantes ficaram de fora porque este
+projeto já tem substituto para cada uma.
 
 - **Origem:** `github.com/github/spec-kit`, via `pip install specify-cli`
 - **Versão:** `specify-cli 1.0.4`, instalado com `--integration claude --script sh`
 - **Data da instalação:** 04/09/2026
 - **Licença:** MIT
-- **Total:** 164 KB em `.specify/`, e 1.010 bytes de descrição de skill por turno
+- **Total:** 164 KB em `.specify/`, e 1.594 bytes de descrição de skill por turno
 
-| Skill | Por que esta |
-|---|---|
-| `speckit-plan` | o degrau que faltava entre a regra e as issues, e ele pesa quando a frente é grande |
-| `speckit-tasks` | lista de tarefas ordenada por dependência, a partir do plano |
-| `speckit-analyze` | confere consistência entre regra, plano e tarefas. **Não tem equivalente aqui**, e ataca a classe de erro que já custou meio dia num arquivo órfão |
-| `speckit-checklist` | checklist de qualidade sobre o plano, quando valer |
+| Skill | Entrou em | Por que esta |
+|---|---|---|
+| `speckit-plan` | 04/09 | o degrau que faltava entre a regra e as issues, e ele pesa quando a frente é grande |
+| `speckit-tasks` | 04/09 | lista de tarefas ordenada por dependência, a partir do plano |
+| `speckit-analyze` | 04/09 | confere consistência entre regra, plano e tarefas. **Não tem equivalente aqui**, e ataca a classe de erro que já custou meio dia num arquivo órfão |
+| `speckit-checklist` | 04/09 | checklist de qualidade sobre o plano, quando valer |
+| `speckit-taskstoissues` | 05/09 | abre issue a partir do `tasks.md` **preservando a ordem de dependência**. O `to-tickets` abre a partir de documento, sem essa ordem |
+| `speckit-clarify` | 05/09 | de-risca a ideia antes do plano. **Entrou no lugar do `grilling`**, ver abaixo |
 
-**As seis que ficaram de fora, e o que as substitui:** `speckit-specify` por
-`nx-regra`, `speckit-clarify` por `grill-with-docs`, `speckit-constitution` por
-`docs/constituicao.md`, `speckit-taskstoissues` por `to-tickets`,
+**As quatro que ficaram de fora, e o que as substitui:** `speckit-specify` por
+`nx-regra`, `speckit-constitution` por `docs/constituicao.md`,
 `speckit-implement` por `implement`, e `speckit-converge` por nada, porque não
 foi pedido.
+
+### O achado de 05/09 sobre as 22 skills movidas
+
+**Mover skill para `.claude/skills-fora/` a apaga para todo mundo menos para a
+máquina do Arthur.** A pasta está no `.gitignore`, linha 62, então num clone
+limpo, inclusive numa sessão em nuvem, ela não existe.
+
+Isso quebrou `grill-with-docs`, que era o **primeiro degrau da cadeia canônica**
+e estava citado na constituição pelo nome. Ele não faz nada sozinho: só delega a
+`grilling` e a `domain-modeling`. O `domain-modeling` ficou; o `grilling` foi
+movido. O comando falha em qualquer checkout que não seja o do Arthur, e falhou
+em 05/09 quando foi chamado.
+
+**O conserto foi trocar o degrau, não recuperar a skill:** `speckit-clarify`
+passou a ser a porta de entrada, pela mesma emenda que subiu a constituição para
+2.0.3. **Versionar o `grilling` continua sendo uma opção**, e reabriria a
+decisão. Quem for mexer nas skills movidas leia isto antes: qualquer uma delas
+citada em documento versionado tem o mesmo defeito latente.
 
 **Estas quatro são cópia, não instalação viva.** Vale o mesmo custo assumido das
 outras cópias: não recebem atualização sozinhas. A versão está registrada acima

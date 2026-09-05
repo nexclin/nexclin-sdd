@@ -44,21 +44,34 @@ export SPECIFY_FEATURE_DIRECTORY=docs/planos/021-financeiro
 A primeira skill que rodar grava o valor em `.specify/feature.json`, e as
 seguintes o encontram sozinhas.
 
-## Só quatro skills estão instaladas
+## Seis skills estão instaladas, e quatro ficaram de fora
 
-`speckit-plan`, `speckit-tasks`, `speckit-analyze` e `speckit-checklist`.
+| Skill do Spec Kit | Por que ela está aqui |
+|---|---|
+| `speckit-clarify` | de-risca a ideia antes do plano. **Entrou em 05/09 no lugar do `grilling`**, que não existe em clone limpo |
+| `speckit-plan` | o degrau entre a regra e as issues |
+| `speckit-tasks` | lista ordenada por dependência |
+| `speckit-analyze` | consistência cruzada entre regra, plano e tarefas |
+| `speckit-checklist` | checklist de qualidade sobre o plano |
+| `speckit-taskstoissues` | abre issue a partir do `tasks.md`, **preservando a ordem de dependência** |
 
-As outras seis ficaram de fora porque este projeto já tem substituto e ter as
+As quatro que ficaram de fora, porque este projeto já tem substituto e ter as
 duas causaria escolha por acaso:
 
 | Skill do Spec Kit | O que este projeto usa no lugar |
 |---|---|
 | `speckit-specify` | `nx-regra`, que escreve nas sete seções em `docs/regras/` |
-| `speckit-clarify` | `grill-with-docs`, que interroga a ideia antes |
 | `speckit-constitution` | `docs/constituicao.md`, emendada à mão com versão |
-| `speckit-taskstoissues` | `to-tickets` |
 | `speckit-implement` | `implement`, que já para por fase |
 | `speckit-converge` | não tem equivalente, e não foi pedido |
+
+> **`to-tickets` e `speckit-taskstoissues` convivem, e a divisão é clara.** O
+> `to-tickets` quebra um **documento** em issues. O `speckit-taskstoissues` lê o
+> **`tasks.md`** e preserva a ordem de dependência. Frente com plano usa o
+> segundo; pedido solto usa o primeiro.
+>
+> **`grill-with-docs` não é substituto de nada, e está quebrado.** Ele delega ao
+> `grilling`, que vive em `.claude/skills-fora/`, excluída pelo `.gitignore`.
 
 ## Pasta que fecha
 

@@ -4,6 +4,24 @@ description: Ask which skill or flow fits your situation. A router over the skil
 disable-model-invocation: true
 ---
 
+> **AVISO DO NEXCLIN, 05/09/2026. Cinco comandos citados abaixo não existem
+> neste repositório**, e chamá-los falha. Este arquivo é obra de terceiro sob
+> MIT e não foi reescrito, então o aviso fica aqui em cima:
+>
+> | Citado abaixo | Situação aqui |
+> |---|---|
+> | `/grilling` | **ausente.** Está em `.claude/skills-fora/`, fora do git |
+> | `/grill-with-docs` | **quebrado**, porque só delega ao `/grilling` |
+> | `/grill-me` | ausente |
+> | `/triage` | ausente |
+> | `/improve-codebase-architecture` | ausente |
+> | `/to-spec` | ausente, **bifurcado em `nx-regra`** pela ADR 0005 |
+>
+> A porta de entrada aqui é **`speckit-clarify`**, e a cadeia canônica está na
+> constituição, seção Fluxo de Desenvolvimento. Ver
+> `docs/adr/0006-o-spec-kit-volta-pela-metade.md`.
+
+
 # Ask Matt
 
 You don't remember every skill, so ask.

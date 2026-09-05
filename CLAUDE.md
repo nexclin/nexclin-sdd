@@ -205,18 +205,24 @@ Cada peça rastreia a uma falha real (princípio da catraca). Leia
   projeto:** travessão proibido, barra como conector proibida, superlativo exige
   conta atrás. Vale para a resposta na tela também.
 - **skills** são procedimentos longos. As nossas: `nx-regra`, `nx-modulo`,
-  `nx-ponte`, `nx-paralelo`, `nx-apontamento`. De terceiros, quatro do Spec Kit:
-  `speckit-plan`, `speckit-tasks`, `speckit-analyze`, `speckit-checklist`.
+  `nx-ponte`, `nx-paralelo`, `nx-apontamento`. De terceiros, seis do Spec Kit:
+  `speckit-clarify`, `speckit-plan`, `speckit-tasks`, `speckit-taskstoissues`,
+  `speckit-analyze` e `speckit-checklist`.
 - **agents**: auditor-multitenant, triador-apontamentos, consultor-vertical,
   relator-semanal.
 
 "Toda vez que X" vira hook; restrição de área vira rule; procedimento longo vira
 skill; trabalho paralelo vira agente. A constituição vence qualquer uma delas.
 
-**A cadeia canônica de trabalho:** `grill-with-docs` para interrogar a ideia,
+**A cadeia canônica de trabalho:** `speckit-clarify` para interrogar a ideia,
 `nx-regra` para escrever a regra em `docs/regras/`, `speckit-plan` e
-`speckit-tasks` para o plano e as tarefas em `docs/planos/`, `to-tickets` para
-abrir as issues, `implement` para executar por fases.
+`speckit-tasks` para o plano e as tarefas em `docs/planos/`,
+`speckit-taskstoissues` para abrir as issues na ordem de dependência, e
+`implement` para executar por fases.
+
+**Não use `grill-with-docs`.** Ele delega a uma skill `grilling` que está em
+`.claude/skills-fora/`, fora do git: existe só na máquina do Arthur e falha em
+qualquer clone. Saiu da cadeia em 05/09/2026.
 
 **O Spec Kit voltou pela metade em 04/09**, com quatro skills e a regra
 continuando em `docs/regras/`. O porquê está na
