@@ -257,20 +257,24 @@ lido, não comportamento provado"** e continua aberto.
 
 ## 7. A decisão que falta, e precisa do Arthur
 
-**1. Tarefas está na régua dos 200% para 08/09, e o motor de rotina não cabe em
-três dias.** As duas coisas foram decididas com um dia de diferença e se batem.
+**1. RESPONDIDA em 05/09: a regra vai em duas entregas.** Tarefas está na régua
+dos 200% para 08/09 e o motor de rotina não cabe em três dias. As duas coisas
+foram decididas com um dia de diferença e se batiam. O Arthur fechou pela
+partição.
 
-A saída que eu recomendo, e é recomendação: **partir a regra em duas entregas.**
-
-| O que entra em 08/09 | O que fica para a stack nova |
+| Entrega 1, até 08/09, na Lovable | Entrega 2, stack nova |
 |---|---|
 | FR-005, responsável vira usuário | FR-001 a FR-004, o motor |
 | FR-010, dias de atraso | FR-006, FR-007, FR-009 |
 | FR-011, foto no card | FR-008, a permissão |
 | | FR-012, a tela que abre na rotina |
 
-A metade de 08/09 é o que a reunião pediu em voz alta e cabe. O motor é o que
-diferencia, e diferenciação com três dias vira demonstração ruim.
+A Entrega 1 é o que a reunião pediu em voz alta e cabe em três dias. O motor é o
+que diferencia, e diferenciação feita em três dias vira demonstração ruim.
+
+**O FR-005 é a dobradiça, e por isso ele está na Entrega 1.** Sem responsável
+como referência a usuário não há foto a buscar (FR-011), e não há para onde o
+papel resolver (FR-004). Ele é a única coluna que as duas entregas precisam.
 
 **2. Papel: entidade nova, ou o `app_role` que já existe?** O banco tem o enum
 `app_role` com `admin`, `medico`, `secretaria` e `user`. Reusar custa quase nada
