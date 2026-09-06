@@ -27,12 +27,55 @@ Cada item vira uma linha, com o estado real. Commits são de `nexclin/nexclin`.
 | 14 | "o tamanho dos quadrados de informações, isso não está muito legal" | consultas | `a96861a` |
 | 15 | "régua de cobrança tem um quadrado gigantesco, o layout está bem ruim" | cobrança | `d68d949` |
 
+## Segunda rodada, depois de ele publicar e olhar
+
+| # | O que ele viu | Commit |
+|---|---|---|
+| 16 | "você ainda não colocou o quadro piscando em alerta" | `b708283` |
+| 17 | "em vez do tanto de horas restantes você somente informou hoje" | `b708283` |
+| 18 | "do tipo eu não vejo como prioridade exibir dessa maneira" | `b708283` |
+| 19 | "o modelo seria o funil, deixa os leads igual a ele" | `b708283` |
+| 20 | "a linha pode ser mais fina, aparecendo mais por tela" (consultas) | `b708283` |
+| 21 | "no profissional deve aparecer a foto também" | `b708283` |
+| 22 | "somente dois aparecendo na tela inicial" (cobrança) | `b708283` |
+| 23 | "podia ser um pouco maior a aba do faturamento" | `b708283` |
+| 24 | "se o dado tiver realmente correspondente, queria que você verificasse" | `537016b` |
+
+### O que a verificação do saldo atual encontrou
+
+Ele pediu a conferência antes de validar, e ela achou **dois erros na versão
+que eu mesmo tinha entregue** em `f68afb7`.
+
+**O pendente vencido entrava como se tivesse entrado.** A conta reaproveitava
+`dailyData`, e `dailyData` usa `dataDeCaixa`, que joga o pendente vencido no
+dia de hoje. Essa é a regra certa para **projetar** e a regra errada para dizer
+quanto há na conta **agora**. Numa clínica com inadimplência o número saía
+alto, que é o pior erro possível para quem decide se paga o fornecedor.
+
+**O saldo atual mudava com o mês escolhido.** Ele partia do saldo inicial do
+período, então olhar julho e olhar setembro davam saldos atuais diferentes.
+
+A conta nova é independente do período e só soma fato consumado: abertura de
+toda conta ativa já aberta, mais recebível pago até hoje, menos despesa paga
+até hoje.
+
+**Um terceiro erro foi evitado antes de subir:** a consulta pedia `net_value` e
+`gross_value` de `expenses`, e essas colunas não existem lá. Coluna inexistente
+devolve 400 no PostgREST, não zero, e a tela quebraria.
+
+### E um achado que fica aberto, porque muda número que ele já olha
+
+`initialBalance`, que alimenta **Saldo do Período**, soma só a abertura das
+contas e **ignora todo movimento anterior ao período**. O saldo do período só
+está certo quando a abertura da conta coincide com o início do período. Em
+qualquer outro mês ele está deslocado pelo acumulado que ficou de fora.
+Corrigir exige uma consulta ao histórico anterior ao período, e a decisão é
+dele porque muda um número que ele já usa.
+
 ## Aberto, e por quê
 
-**A. A aba Leads igual ao funil.** Ele disse *"o funil é pra estar exatamente
-igual os leads"* logo depois de dizer que a busca do funil ficou ótima e que a
-de leads ficou pior. As duas leituras são opostas, e escolher errado desfaz
-trabalho que ele aprovou. **Precisa de uma frase dele**, não de um palpite.
+**A. RESOLVIDO em 06/09.** Ele decidiu: *"o modelo seria o funil, deixa os
+leads igual a ele"*. Feito em `b708283`.
 
 **B. Tipo de tarefa continua na lista.** Ele levantou a hipótese: *"se ainda é
 necessário ter o tipo, porque quando você adequa um responsável você já sabe
