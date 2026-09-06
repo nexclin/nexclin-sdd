@@ -10,6 +10,22 @@ gastam token nenhum do Claude. Vinte e duas gastam, e três delas são caras.
 **Como marcar:** ponha `AGORA`, `08/09` ou `DEPOIS` na coluna vazia. Item sem
 marca fica como está.
 
+## Como #61 e #62 foram verificadas, já que você perguntou
+
+Você rodou a conferência e me mandou o resultado. **Ele prova as duas**, e a
+razão é mecânica, não interpretação:
+
+A consulta que devolveu `intactas` e `linhas` **cita as três colunas novas pelo
+nome**. Se qualquer uma não existisse, o Postgres devolveria erro de coluna
+inexistente, e não linhas. Ela devolveu **604 e 604** em `receivables` e **157 e
+157** em `expenses`.
+
+Logo: as seis colunas existem, e **nenhuma das 761 linhas foi tocada**. A
+consulta de reversão confirmou pelo outro lado, com `baixas_gravadas = 0`.
+
+Pode marcar as duas como OK. O que **não** está provado por isso é o
+comportamento das telas de baixa, que é a issue #71 e ainda depende do Publish.
+
 ## Legenda de custo
 
 | Marca | O que significa |
@@ -28,8 +44,8 @@ token. Não existe medição precisa disponível.
 
 | Issue | O que é | Custo | Marcar |
 |---|---|---|---|
-| #61 | migração da baixa em duas etapas, escrita e aplicada por você em 06/09 | zero | |
-| #62 | bloco guiado da fase 1 da 021, com conferência e reversão | zero | |
+| #61 | migração da baixa em duas etapas | zero | **OK, verificada em 06/09** |
+| #62 | bloco guiado da fase 1 da 021, com conferência e reversão | zero | **OK, verificada em 06/09** |
 | #88 | procurar as telas irmãs que mostram responsável. São três, e as três têm foto | zero | |
 | #93 | contagem de dias de atraso no card, e não só cor | zero | |
 | #94 | foto do responsável no card | zero | |
@@ -44,9 +60,9 @@ token. Não existe medição precisa disponível.
 
 | Issue | O que é | Por que importa | Marcar |
 |---|---|---|---|
-| #47 | garantir uma restauração **testada** do banco antes de 08/09 | export que ninguém testou não é backup. Sem isso, erro nos próximos três dias é irreversível | |
-| #48 | definir a senha real do superadmin por recovery | a alínea (e) proíbe senha definida por terceiro | |
-| #50 | destravar os cinco e2e da cascata de permissão | **falta um segundo usuário na clínica.** Destrava cinco provas e a foto do responsável de uma vez | |
+| #47 | garantir uma restauração **testada** do banco antes de 08/09 | export que ninguém testou não é backup | **OK, o Arthur assumiu em 06/09** |
+| #48 | definir a senha real do superadmin por recovery | a alínea (e) proíbe senha definida por terceiro | **OK, feita** |
+| #50 | destravar os cinco e2e da cascata de permissão | **falta um segundo usuário na clínica.** Destrava cinco provas e a foto do responsável de uma vez. **Passo a passo em [`docs/ponte/50-segundo-usuario-passo-a-passo.md`](../ponte/50-segundo-usuario-passo-a-passo.md)** | |
 
 ### B2. Rodar SQL no editor
 
