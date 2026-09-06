@@ -72,8 +72,8 @@ impede erro de virar importação em outubro.
 
 ### Banco, e ele vem primeiro
 
-- [ ] T007 (#61) [F1] Escrever a migração `supabase/migrations/2026090NNNNNNN_baixa_em_duas_etapas_e_saldo_inicial.sql`: valor recebido e autor da baixa em `receivables` e `expenses`, hora da baixa em `timestamptz`, e saldo inicial mais a data dele em `bank_accounts`
-- [ ] T008 (#62) [F1] Escrever o bloco guiado de aplicação em `docs/ponte/aplicacao-021-fase1/`, um bloco por vez, **cada um com a sua consulta de conferência ao lado e a reversão palavra por palavra abaixo**
+- [x] T007 (#61) [F1] Escrever a migração da baixa em duas etapas: valor recebido, autor e hora em `timestamptz`, em `receivables` e `expenses`. **O saldo inicial saiu do escopo**: `bank_accounts.opening_balance` e `opening_date` já existem desde `20260427222514`, e o FR-004 foi corrigido de faixa A para faixa B na regra. Escrita em `docs/ponte/aplicacao-021-fase1/b1-baixa-em-duas-etapas.sql`
+- [x] T008 (#62) [F1] Bloco guiado em `docs/ponte/aplicacao-021-fase1/`, com conferência e reversão separadas por arquivo
 - [ ] T009 (#63) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`. **Cuidado com a tela:** logo abaixo do `Export data` ficam `Pause` e `Remove`, os dois em vermelho, num espaço de cerca de 200 pixels
 - [ ] T010 (#64) [F1] Aplicar os blocos no editor de SQL e conferir cada um
 - [ ] T011 (#65) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado

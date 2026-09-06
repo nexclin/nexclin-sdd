@@ -61,15 +61,21 @@ gravado?*. A coluna **alvo** diz onde o requisito precisa existir.
   existe `paid_at`, que é `DATE`, e nenhuma coluna de autor. Ficou mais urgente
   com a decisão de 04/09 de login de superadmin compartilhado pelos três sócios.
 
-- **FR-004** · faixa **A** · alvo **Lovable + stack nova**
+- **FR-004** · faixa **B** · alvo **Lovable + stack nova** · **JÁ ATENDIDO NO
+  BANCO, corrigido em 06/09/2026**
   A conta bancária **MUST** ter **saldo inicial** e a data a que ele se refere.
-  *Porquê:* **este requisito corrige uma classificação errada.** Na apuração de
-  04/09 o "saldo de hoje em destaque" foi posto na faixa B, como cálculo de
-  tela. A leitura de `bank_accounts` em 05/09 mostrou que a tabela **não tem
-  nenhuma coluna de saldo**, nem inicial nem corrente. Sem um ponto de partida
-  gravado, saldo de hoje não é exibição que falta: é **conta que não fecha**. Foi
-  por isso que a tela passou a mostrar "saldo do período", que é o que dá para
-  calcular sem saldo inicial.
+  *Estado real:* `bank_accounts.opening_balance` e `opening_date` **existem
+  desde a migração `20260427222514`, de 27/04/2026**, e o front já as lê em
+  `FluxoCaixa.tsx`, `Dashboard.tsx` e `ConfigBankAccountsDialog.tsx`.
+  *A correção, e por que ela vale ser lida:* em 05/09 este requisito foi escrito
+  dizendo que a tabela **não tinha nenhuma coluna de saldo**, e por causa disso
+  o "saldo de hoje em destaque" foi promovido de faixa B para faixa A. **A
+  afirmação era falsa**, e veio de uma leitura incompleta das migrações: a busca
+  parou no `CREATE TABLE` e não alcançou o `ALTER TABLE` de abril. O que falta do
+  FR-004 é de tela, e a tela foi feita em 06/09 (`nexclin/nexclin@537016b`).
+  *O que a busca incompleta custou:* uma migração de schema entrou no plano da
+  fase 1 sem precisar existir, e teria sido aplicada no banco ao vivo a três
+  dias do lançamento.
 
 - **FR-005** · faixa **A** · alvo **stack nova**
   Transferência entre contas da clínica **MUST** ser gravada como movimento
@@ -196,7 +202,7 @@ gravado?*. A coluna **alvo** diz onde o requisito precisa existir.
 | `receivables` | coluna de **valor recebido**, distinta de `value` | FR-002 |
 | `receivables` | **autor da baixa** e **hora da baixa** em `timestamptz` | FR-003 |
 | `expenses` | as mesmas duas de cima | FR-002, FR-003 |
-| `bank_accounts` | **saldo inicial** e a data a que ele se refere | FR-004 |
+| ~~`bank_accounts`~~ | ~~**saldo inicial** e a data a que ele se refere~~ **já existe desde 27/04, ver FR-004** | FR-004 |
 | tabela nova de **transferência entre contas** | origem, destino, valor, data, autor | FR-005 |
 | tabela nova de **linha de extrato** | conta, identificador da transação no banco, data, valor, descrição, com **índice único** por conta mais identificador | FR-006, FR-008 |
 | tabela nova de **vínculo de conciliação** | linha de extrato e o recebível ou a despesa que ela quita | FR-007 |
