@@ -76,9 +76,17 @@ operacional por módulo, `permission_level` + `permissions` jsonb, repasse médi
 - `is_superadmin(uuid)` — identidade superadmin
 - `get_my_team_member()` / `my_team_member_name()` — vínculo operacional
 - `get_my_subscription_state()` — status da assinatura da clínica
-- **`my_permission(text)`** — a cascata central (redefinida 4×; versão final em
-  `20260725033102`): superadmin → status assinatura → teto do plano
+- **`my_permission(text)`** — a cascata central (redefinida 5×; **versão final em
+  `20260725034148`**, e não em `20260725033102`, corrigido em 05/09/2026):
+  superadmin → status assinatura → teto do plano
   (`enabled_modules`) → permissão individual → **default deny**
+
+  > **Ler a versão certa importa, e a diferença é de segurança.** A penúltima,
+  > `20260725033102`, termina em `COALESCE(v_individual, 'full')`, ou seja
+  > default **allow**. Ela foi substituída dez minutos depois por
+  > `20260725034148`, que termina em `COALESCE(v_individual, 'none')`. Quem ler
+  > a penúltima achando que é a final conclui que o banco é default-allow, e
+  > isso é falso.
 - `get_clinic_team_full()` — leitura consolidada da equipe
 
 **Impersonação (superadmin)**

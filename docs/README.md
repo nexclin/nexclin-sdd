@@ -1,7 +1,8 @@
 # Índice da documentação do NexClin
 
 > Ponto de entrada da árvore `docs/`. Reorganizada em 27/08/2026: eram dez
-> pastas por assunto, hoje são **sete, uma pergunta cada**.
+> pastas por assunto, hoje são **oito, uma pergunta cada**. A oitava,
+> `planos/`, nasceu em 04/09/2026.
 > Se você é uma sessão nova do Claude Code, leia na ordem da seção 1.
 
 ---
@@ -18,7 +19,7 @@
 
 ---
 
-## 2. As sete pastas, e a pergunta que cada uma responde
+## 2. As oito pastas, e a pergunta que cada uma responde
 
 ### `regras/` · o que o sistema deve fazer
 Uma **regra viva** por arquivo, numerada, no formato de sete seções. Regra viva
@@ -30,6 +31,14 @@ Tudo que é registro de um momento: handoffs de fim de dia, triagem de baterias,
 revisões de segurança, relatórios para os sócios, análises pontuais, verificações.
 **Todo nome começa com `AAAA-MM-DD`**, e é isso que faz a pasta se ordenar
 sozinha. O arquivo mais recente é o estado mais recente.
+
+### `planos/` · como uma frente em execução vai ser executada
+Uma pasta por frente **ativa**, com o plano e a lista de tarefas gerados pelo
+Spec Kit, que voltou pela metade em 04/09/2026
+([ADR 0006](adr/0006-o-spec-kit-volta-pela-metade.md)). O `spec.md` de cada
+pasta é **link simbólico** para a regra em `regras/`, e não uma cópia. A regra
+continua sendo a fonte, e a resposta para *"onde está a regra?"* continua sendo
+`regras/`.
 
 ### `adr/` · por que é assim, e o que foi descartado
 Decisão cara de reverter, uma por arquivo, numerada. Contexto, decisão,
@@ -67,6 +76,7 @@ volta. A regra:
 | Achado de segurança | `historico/AAAA-MM-DD-assunto.md` |
 | Apontamento de bateria de teste | `historico/AAAA-MM-DD-triagem-*.md` |
 | Estado ao fim do dia | `historico/AAAA-MM-DD-handoff-*.md` |
+| Plano e lista de tarefas de uma frente ativa | `planos/NNN-nome/`, pelas skills `speckit-plan` e `speckit-tasks` |
 | Levantamento do que existe | `referencia/` |
 | Procedimento que toca a plataforma ao vivo | `ponte/` |
 | Procedimento longo que se repete | skill em `.claude/skills/` |
