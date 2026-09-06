@@ -20,7 +20,17 @@
 
 import { readFileSync } from 'node:fs';
 
-const RAIZ_MIGRACOES = /supabase[/\\]migrations[/\\].+\.sql$/i;
+/**
+ * SQL que vai para o banco.
+ *
+ * `docs/ponte/` entrou em 06/09/2026, e a falha que o motivou aconteceu no
+ * mesmo dia: escrevi a fase 1 da regra 021 em
+ * `docs/ponte/aplicacao-021-fase1/`, que é SQL destinado ao editor do banco AO
+ * VIVO, e o guarda não olhou uma linha dela, porque só vigiava
+ * `supabase/migrations/`. O caminho por onde o SQL chega ao banco mudou com a
+ * ponte inversa; a vigilância não tinha acompanhado.
+ */
+const RAIZ_MIGRACOES = /(?:supabase[/\\]migrations[/\\]|docs[/\\]ponte[/\\]).+\.sql$/i;
 const RAIZ_FUNCOES = /supabase[/\\]functions[/\\]/i;
 const CODIGO = /\.(ts|tsx|js|mjs|sql)$/i;
 
