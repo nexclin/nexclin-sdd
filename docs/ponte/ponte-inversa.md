@@ -253,5 +253,20 @@ enviar faz parte da correção, não é passo opcional.
    correção que também muda a function deixa produção pela metade — ver a seção
    "Correção de edge function" acima.
 3. **Não dar pull antes.** Push rejeitado por causa dos commits do bot.
+3b. **Rodar `npx vite build` no clone.** Descoberto em 07/09/2026. O build
+   dispara o plugin `@lovable.dev/mcp-js`, que **reescreve**
+   `supabase/functions/mcp/index.ts` a partir de `src/lib/mcp/`. Fora do
+   ambiente da Lovable ele não resolve as dependências e grava um toco: o
+   arquivo caiu de **235 linhas para 2**, apagando a edge function inteira.
+   Não apareceu em nenhum diff de correção porque o arquivo não era tocado por
+   ela; apareceu no `git status` depois.
+   **Para checar sintaxe de CSS ou tipo, use só `npx tsc --noEmit -p
+   tsconfig.app.json`.** Se precisar mesmo do build, confira o `git status`
+   depois e desfaça o que ele mexeu.
+   **Foi o `git add` com caminho explícito que impediu o estrago de virar
+   commit.** É a alínea (i) e o `guarda-ponte.mjs` funcionando: com `git add
+   -A`, o toco teria ido para o `main` da plataforma no ar, e o Publish do
+   front ainda deixaria a function velha rodando, que é o pior dos dois mundos
+   descrito na seção de edge function acima.
 4. **Conferir `/login` logado.** Rebate para `/` e você conclui que não publicou.
 5. **Cache do navegador.** Sempre janela anônima, ou use o `conferir`.
