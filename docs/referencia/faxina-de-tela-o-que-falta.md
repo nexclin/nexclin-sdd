@@ -32,20 +32,35 @@ compartilhado, e nao antes.
 
 ## O que falta, medido e nao estimado
 
-Contagem de numero grande dentro de cartao, por tela, em 07/09:
+**Correcao do proprio documento, no mesmo dia.** A primeira versao listava
+`Precificacao` com 10 ocorrencias como "a maior sobra que restou". **Estava
+errada, e o erro foi de metodo:** eu contei o codigo e nao conferi o menu.
+`Precificacao`, `Insumos` e `Salas` estao com **`oculto: true`** em
+`NxSidebar.tsx`, ou seja **nenhum usuario as alcanca**. Limpar pixel de tela que
+ninguem abre e trabalho de faixa C sem nem o beneficio de faixa C.
+
+A licao vale alem daqui: **contagem em `src/` nao e medida de tela vista.**
+Antes de priorizar por arquivo, confira se o item existe na navegacao.
+
+Contagem de numero grande dentro de cartao, em 07/09, **so do que o usuario
+alcanca**:
 
 | Tela | Ocorrencias | Vale a pena? |
 |---|---|---|
-| `Precificacao.tsx` | 10 | **e a maior sobra que restou** |
-| `Salas.tsx` | 3 | secundaria |
-| `Insumos.tsx` | 2 | secundaria |
-| `Informativos.tsx` | 2 | secundaria |
+| `Informativos.tsx` | 2 | sim, e o que sobrou de maior |
 | `Funil2.tsx` | 1 | quase nada |
 | `Recall.tsx` | 1 | quase nada |
 | `AnamnesePublica.tsx` | 2 | **nao mexer**: e a tela que o paciente ve |
 
-`Signup`, `ResetPassword` e `ForgotPassword` tem um cada, e sao telas de acesso,
-fora do fluxo diario. Nao entram.
+Fora da fila, e cada uma com a sua razao:
+
+| Tela | Por que nao entra |
+|---|---|
+| `Precificacao.tsx`, `Insumos.tsx`, `Salas.tsx` | `oculto: true` no menu |
+| `Signup`, `ResetPassword`, `ForgotPassword` | telas de acesso, fora do fluxo diario |
+
+**Sobrou pouco, e isso e um resultado.** Depois de Consultas, a faxina esta
+essencialmente feita nas telas que o medico abre todo dia.
 
 ## O que isto e, pela §2.5
 
