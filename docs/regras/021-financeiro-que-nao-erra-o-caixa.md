@@ -73,6 +73,29 @@ gravado?*. A coluna **alvo** diz onde o requisito precisa existir.
   **Quando não há taxa cadastrada**, a antecipação não desconta nada e a tela
   diz onde cadastrar, em vez de convidar a inventar um número.
 
+- **FR-002c** · faixa **B** · alvo **Lovable + stack nova** · **ATENDIDO EM
+  07/09/2026**
+  Toda tela de caixa **MUST** separar **realizado** de **previsto**, e **MUST**
+  abrir no realizado. O rótulo de cada número **MUST** dizer em qual dos dois
+  ele está.
+  *Porquê:* decisão do Arthur em 07/09: *"se for algo que o cliente ainda não
+  realizou o pagamento, mas agendou, o paciente pode não comparecer. Não é o
+  que a gente pode contar"*. Consulta agendada e não paga é promessa, e
+  promessa somada ao caixa vira um número que a clínica não pode usar para
+  decidir.
+  **O defeito que isto corrigiu não era somar promessa, era somar META DELA.**
+  O Fluxo de Caixa contava o pendente que vencia **dentro** do período e
+  ignorava o pendente vencido **antes** dele. Essa fronteira não era regra
+  nenhuma: era o acaso da janela da consulta, que filtrava por `due_date` ou
+  `paid_at` dentro do período. O número não era realizado nem previsto, e por
+  isso **não tinha explicação possível**.
+  **Medida que sustenta isto**, clínica NexClin, setembro de 2026: a tela
+  exibia R$ 39.584,30 de entradas; a regra `dataDeCaixa` pedia R$ 201.569,20; a
+  diferença, R$ 161.984,90, era **idêntica** ao total de 91 recebíveis
+  pendentes vencidos antes de setembro.
+  **Efeito de produto, e ele é intencional:** o realizado só sobe quando alguém
+  dá baixa, então a tela passa a premiar a equipe que fecha pendência.
+
 - **FR-003** · faixa **A** · alvo **Lovable + stack nova**
   A baixa **MUST** gravar **quem** a fez e **quando**, com a hora e não só a
   data.
