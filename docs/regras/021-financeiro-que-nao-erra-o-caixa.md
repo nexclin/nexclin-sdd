@@ -305,6 +305,45 @@ prova 3 da seção 6 feita antes de 08/09**. Se as 28 linhas vierem daí, a
 resposta muda e vale reabrir. Mexer em duas tabelas de dinheiro a três dias do
 lançamento é o tipo de conserto que a §2.5 não pede.
 
+### A prova 3 foi feita em 06/09, e a hipótese caiu
+
+O censo rodou no banco ao vivo. O registro está em
+[`docs/historico/2026-09-06-censo-executado.md`](../historico/2026-09-06-censo-executado.md).
+
+| Medida | Valor |
+|---|---|
+| `receivables` da Clínica Teste Final | 280 |
+| `revenues` da mesma clínica | 280 |
+| referência esperada | 280 |
+| diferença contra a referência | **0** |
+| vencimentos em 2026 | **280 de 280**, somando R$ 507.360,00 |
+| linhas de `revenues`, todas com paciente | 280, de 01/07 a 29/08 |
+
+**O FR-016 previa que a convivência das duas tabelas explicasse as 28 linhas
+entre as 252 da tela de Vendas e as 280 da base. Não explica.** `receivables`
+tem exatamente as 280 esperadas, e a diferença é zero. Nenhum filtro por ano
+tira 28 linhas, porque as 280 vencem no mesmo ano.
+
+**O que isso reclassifica:** as 28 linhas deixam de ser suspeita de dado e
+passam a ser conta de tela. Pela régua fina do `CLAUDE.md`, o que está gravado
+está certo e quem soma errado é a tela, então **é faixa B**, e a stack nova
+calcula certo desde o começo. Sai da frente do lançamento.
+
+**O que isso não prova, e a diferença importa:** `revenues` não está vazia, tem
+280 linhas, o mesmo número de `receivables`. Contagem igual **não** é conteúdo
+igual. Que as 280 de uma sejam as 280 da outra continua **código lido, não
+comportamento provado**, e exige comparação linha a linha.
+
+**Uma divergência interna a resolver antes do portão 1 (#60):** a tabela acima
+diz que há **seis** caminhos de escrita em `revenues`. A fila de prioridade de
+06/09 diz que **nenhum** caminho do app escreve nela. As duas não podem estar
+certas, e a decisão de aposentar ou congelar depende justamente disso. Contar
+os caminhos é pré-requisito do portão, não consequência dele.
+
+**A recomendação continua sendo a terceira saída**, e agora por outra razão: a
+hipótese que poderia justificar mexer caiu, então não sobrou motivo para tocar
+duas tabelas de dinheiro na véspera.
+
 **2. O FR-011 entra antes de 08/09 ou é requisito da stack nova?** É faixa A e é
 violação da alínea (c), o que puxa para agora. Contra: trocar policy de quatro
 tabelas financeiras na véspera, e no dia 8 quem opera são clínicas fundadoras em

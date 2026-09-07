@@ -173,6 +173,55 @@ Faixa pela pergunta da §2.5, *o que fica gravado?*.
 | policy de `tasks` | `FOR ALL TO authenticated` por `clinic_id`, **sem `my_permission`** |
 | recorrência, subtarefa, comentário, template | **não existem** |
 
+### O que o censo de 06/09 mediu, e o que ele corrigiu
+
+O censo rodou no banco ao vivo em 06/09. O registro completo está em
+[`docs/historico/2026-09-06-censo-executado.md`](../historico/2026-09-06-censo-executado.md).
+Três resultados mudam esta regra.
+
+**1. A tabela acima está certa, com uma linha a acrescentar.** As 15 colunas
+conferem uma a uma. As chaves estrangeiras de `tasks` são três, `clinic_id`,
+`lead_id` e `patient_id`, e **`created_by` também não tem nenhuma**, ao
+contrário do que a linha da tabela afirma. Ela referencia `auth.users` na
+intenção, não na definição.
+
+**2. `responsible` aponta para setor em 73% das tarefas.**
+
+| Valor | Tarefas | O que é |
+|---|---|---|
+| `Recepcao` | 62 | setor |
+| `Financeiro` | 60 | setor |
+| `Comercial` | 59 | setor |
+| `Sra. Bruna` | 13 | pessoa que não é usuário |
+| `Dra. Maria` | 1 | pessoa que não é usuário |
+
+Somam 195 de 247 tarefas. Um único valor casa com usuário, e leva 52 tarefas.
+
+**A consequência para o FR-005:** converter texto em usuário não é migrar
+formato, é **descartar a informação de 195 tarefas**, porque setor não vira
+pessoa por conversão. A conversão do FR-005 só é segura depois que a clínica
+tiver os usuários que os três setores representam, e o #50 é o primeiro deles.
+
+**3. O alicerce do FR-013 está de pé e ninguém sobe nele.** A coluna `origem`
+existe, e o `CHECK` aceita `'manual'` e `'automatica'`, conferido pela
+definição da constraint `tasks_origem_check`. Mas **as 247 tarefas têm
+`origem = 'manual'`, e nenhuma tem `'automatica'`**.
+
+O controle positivo é a própria consulta: ela agrupa por `origem`, então outro
+valor apareceria como linha, e a soma fecha em 247, que é o total medido à
+parte.
+
+A causa está no front, e foi lida linha a linha: existem **onze** pontos que
+inserem em `tasks`, dez deles automáticos, e **nenhum dos dez grava `origem`**.
+O único que grava é o formulário de Nova Tarefa, em `pages/Tarefas.tsx`, que
+escreve `origem: "manual"` corretamente. Os dez caem no default da coluna, que
+também é `'manual'`.
+
+Então o motor **escreve**, ao contrário do que o número sozinho sugere, e o que
+está errado é o rótulo. A afirmação do FR-013 de que "o alicerce está de pé"
+continua verdadeira; o que ela não previa é que a coluna que distingue as duas
+origens **hoje não distingue nada**.
+
 ### O que precisa nascer
 
 | Objeto | Mudança | FR |
@@ -275,6 +324,35 @@ que diferencia, e diferenciação feita em três dias vira demonstração ruim.
 **O FR-005 é a dobradiça, e por isso ele está na Entrega 1.** Sem responsável
 como referência a usuário não há foto a buscar (FR-011), e não há para onde o
 papel resolver (FR-004). Ele é a única coluna que as duas entregas precisam.
+
+**1b. REABERTA e REDECIDIDA em 06/09: o FR-005 sai da Entrega 1.** O censo de
+06/09 mediu o que a decisão de 05/09 não tinha: **195 das 247 tarefas, 79%,
+apontam para algo que não é usuário, e 181 delas apontam para setor.**
+
+A partição de 05/09 supunha que converter texto em usuário fosse mudança de
+formato, barata e sem perda. Não é. Com este dado a conversão descarta a
+atribuição de 195 tarefas de uma clínica que já opera, ou inventa usuário para
+representar setor, dois dias antes de abrir para o fundador.
+
+**O que fica decidido:**
+
+- A migração de `responsible` **não roda na Lovable**. Ela roda na stack nova,
+  em outubro, junto com o port, com os usuários já criados e sem clínica
+  operando em cima.
+- O texto que está gravado hoje **não está errado**. `Comercial` é o registro
+  verdadeiro de quem cuida daquela tarefa numa clínica que se organiza por
+  setor. Não há erro de dado a corrigir, há um modelo a ampliar.
+- O artefato que esta sessão entrega é **esta regra**, não a migração. É a
+  faixa B do `CLAUDE.md` aplicada ao pé da letra: o que atravessa é a decisão
+  de como o sistema deve se comportar, e o front da Lovable será reescrito.
+
+**A pergunta que a stack nova precisa responder, e que este censo levanta:**
+responsável é sempre pessoa, ou pode ser setor? Três setores respondem por 181
+tarefas, o que diz que a clínica atribui por setor **por escolha**, não por
+falta de cadastro. Um modelo que só aceita pessoa obriga a clínica a mudar como
+trabalha para caber no software, e o critério do `CLAUDE.md` é o inverso disso.
+A decisão fica para a regra do módulo na stack nova, com o dado deste censo
+como base.
 
 **2. Papel: entidade nova, ou o `app_role` que já existe?** O banco tem o enum
 `app_role` com `admin`, `medico`, `secretaria` e `user`. Reusar custa quase nada
