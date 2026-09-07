@@ -53,6 +53,26 @@ gravado?*. A coluna **alvo** diz onde o requisito precisa existir.
   divergência de caixa**, que é exatamente o que a reunião apontou como o erro
   que não pode acontecer.
 
+- **FR-002b** · faixa **A** · alvo **Lovable + stack nova** · **ATENDIDO EM
+  07/09/2026**
+  Toda **taxa** aplicada na baixa **MUST** vir de cadastro em Configurações. A
+  tela da baixa **MUST NOT** aceitar percentual digitado no momento.
+  *Porquê:* decisão do Arthur em 07/09, nas palavras dele: *"sem descontos
+  agregados que ele mesmo adicione, a não ser que ele configure previamente na
+  janela de configurações"*. A taxa de antecipação era um campo numérico livre,
+  preenchido na hora da baixa. Percentual digitado no momento não é taxa, é
+  desconto sem origem: ninguém sabe depois de onde saiu, e ele entra no caixa
+  com a mesma cara de um dado configurado.
+  **A distinção que sustenta isto, e ela é fina:** a *taxa* é regra da clínica,
+  então mora em Configurações. O *valor recebido* é fato do banco, e por isso o
+  FR-002 continua valendo e o campo continua editável. Pagamento parcial,
+  tarifa fora da taxa e arredondamento são coisas que acontecem, e uma tela que
+  não as aceita não impede o erro, apenas impede o registro dele, e aí o caixa
+  passa a mostrar o previsto como se fosse o realizado, que é exatamente o que
+  o FR-002 existe para evitar.
+  **Quando não há taxa cadastrada**, a antecipação não desconta nada e a tela
+  diz onde cadastrar, em vez de convidar a inventar um número.
+
 - **FR-003** · faixa **A** · alvo **Lovable + stack nova**
   A baixa **MUST** gravar **quem** a fez e **quando**, com a hora e não só a
   data.
