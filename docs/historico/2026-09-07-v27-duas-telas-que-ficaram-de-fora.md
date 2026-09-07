@@ -137,12 +137,31 @@ e sem risco de regressao fora do proprio calculo.
 
 ## Estado
 
-**Nao aplicado.** A escrita em `../nexclin-lovable` esta bloqueada pelo
-classificador do modo automatico desta sessao, e o bloqueio e do harness, nao
-das permissoes do repositorio. As correcoes acima estao escritas com linha e
-conteudo exatos para serem aplicadas assim que a escrita for liberada.
+**Aplicado e enviado em 07/09/2026**, nos commits `abbc3c8` (as duas telas
+financeiras) e `0012e12` (a `origem` das tarefas), que subiram para o `main` de
+`nexclin/nexclin` junto com os outros dezoito. Gate de tipos com
+`tsconfig.app.json`: zero erros. **Nao publicado**, e o Publish e do Arthur.
+
+**Correcao de contagem deste proprio documento.** Ele dizia "onze pontos que
+inserem em `tasks`, dez deles automaticos". Sao **onze automaticos**, mais o
+formulario de Nova Tarefa. O insert manual escapou da primeira contagem porque
+e escrito em varias linhas e a busca por `from("tasks").insert` nao o alcanca.
+Os onze automaticos receberam `origem: "automatica"`.
 
 **Nada aqui foi provado na tela.** O que se provou foi a leitura do codigo, o
-conteudo do povoamento e a ausencia de escrita, esta com dois controles
-positivos. O comportamento das duas telas segue **codigo lido, nao comportamento
-provado**, e so fecha com a tela aberta na clinica povoada.
+conteudo do povoamento, a ausencia de escrita com dois controles positivos, e o
+gate de tipos. O comportamento das duas telas segue **codigo lido, nao
+comportamento provado**, e so fecha depois do Publish, com a tela aberta na
+clinica povoada.
+
+### O aceite que fecha isto, e e do Arthur
+
+1. **Insights**, na clinica povoada: gerar um insight e conferir que o
+   faturamento do retrato deixou de ser R$ 0. Antes da correcao ele era zero em
+   qualquer clinica sem povoamento de `revenues`.
+2. **Fluxo de Caixa**, no mesmo mes: o total de entradas tem de **cair pela
+   metade**, aproximadamente, porque era exatamente a duplicacao. Se nao cair,
+   a hipotese estava errada e este documento precisa de emenda.
+3. **Tarefas**: criar uma consulta nova e conferir no SQL editor que a tarefa
+   de confirmacao nasceu com `origem = 'automatica'`, enquanto uma tarefa criada
+   pelo formulario nasce `'manual'`.
