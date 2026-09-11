@@ -191,6 +191,19 @@ O hook só passa a valer quando o Claude Code recarregar as configurações —
 reinicie a sessão, ou abra o menu `/hooks` num terminal interativo. Até lá os
 arquivos existem mas não disparam.
 
+## O que está instalado fora do repositório
+
+O harness usa skills de terceiros que **vivem no Claude do Arthur**, em
+`~/.claude/skills`, e não aqui: é a regra de 25/08, e nada de terceiro é
+copiado para dentro do git. O registro do que está instalado, de onde veio, e
+como cada peça entra na fase final:
+
+- [`importacoes-2026-08-25.md`](importacoes-2026-08-25.md), a pesquisa e a
+  regra de referência em vez de cópia.
+- [`importacoes-2026-09-11.md`](importacoes-2026-09-11.md), as 65 skills, o
+  codegraph e o headroom instalados a partir da aula de SDD, com o passo a
+  passo de oito etapas mapeado no que já existe aqui.
+
 ## Fontes
 
 Pesquisa de referência para a estrutura, agosto de 2026:
