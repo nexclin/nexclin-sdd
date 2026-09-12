@@ -24,9 +24,12 @@ agosto. Regra nova continua a partir de 017.
 | [017](017-superadmin-e-impersonacao.md) | Superadmin e impersonação | FR-005 **fechado e provado**, demais em execução |
 | [018](018-funil-de-atendimentos.md) | Funil de atendimentos | especificada · requisito da stack nova |
 | [019](019-conformidade-lgpd-do-painel.md) | Conformidade LGPD do painel | 1 de 3 lacunas auditada, **nenhuma implementada** |
-| [020](020-avisos-internos-e-o-dia-do-medico.md) | Avisos internos e o dia do médico | especificada, nada implementado · **só o sininho espera emenda** |
+| [020](020-avisos-internos-e-o-dia-do-medico.md) | Avisos internos e o dia do médico | especificada, nada implementado · FR-007 revogado e seção 7 fechada em 12/09 |
 | [021](021-financeiro-que-nao-erra-o-caixa.md) | Financeiro que não erra o caixa | especificada, nada implementado · **3 decisões abertas** |
 | [022](022-motor-de-rotina-da-clinica.md) | Motor de rotina da clínica | especificada, nada implementado · **4 decisões abertas** |
+| [023](023-avisos-e-recados-da-equipe.md) | Avisos e recados da equipe, e a mensagem interna (seção 8, 12/09) | sino e recado na tarefa entregues · **mensagem interna especificada, nada implementado** |
+| [024](024-perfil-operacional.md) | Perfil operacional: a secretária opera a clínica | especificada em 12/09, nada implementado · sem decisão aberta |
+| [025](025-importacao-e-exportacao.md) | Importação e exportação de dados da clínica | especificada em 12/09, nada implementado · sem decisão aberta |
 
 Os números 007 a 012, 014 e 015 seguem reservados à fila em
 [`fila-de-regras.md`](fila-de-regras.md), que ordena as próximas regras da
