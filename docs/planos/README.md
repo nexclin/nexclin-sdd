@@ -55,15 +55,20 @@ seguintes o encontram sozinhas.
 | `speckit-checklist` | checklist de qualidade sobre o plano |
 | `speckit-taskstoissues` | abre issue a partir do `tasks.md`, **preservando a ordem de dependência** |
 
-As quatro que ficaram de fora, porque este projeto já tem substituto e ter as
-duas causaria escolha por acaso:
+As quatro que tinham ficado de fora **entraram em 12/09/2026**, por pedido do
+Arthur, para usar o SDD no projeto inteiro. Cada uma convive com um substituto
+que já existia, e a divisão de trabalho é esta:
 
-| Skill do Spec Kit | O que este projeto usa no lugar |
+| Skill do Spec Kit | O que este projeto usa junto, e como se dividem |
 |---|---|
-| `speckit-specify` | `nx-regra`, que escreve nas sete seções em `docs/regras/` |
-| `speckit-constitution` | `docs/constituicao.md`, emendada à mão com versão |
-| `speckit-implement` | `implement`, que já para por fase |
-| `speckit-converge` | não tem equivalente, e não foi pedido |
+| `speckit-specify` | rascunha a spec no formato do Spec Kit. **A regra continua sendo `docs/regras/NNN-nome.md`**, nas sete seções da `nx-regra`. Se a `speckit-specify` escrever `spec.md` na pasta do plano, o arquivo é rascunho: o conteúdo vai para a regra e o `spec.md` volta a ser link |
+| `speckit-constitution` | só lê. `.specify/memory/constitution.md` continua sendo ponteiro para `docs/constituicao.md`, que é emendada à mão, com versão. A skill não cria segunda lei |
+| `speckit-implement` | executa o `tasks.md`. **Não tem a parada humana por fase da regra (h).** Use com a parada dita no argumento, ou use a `implement` local |
+| `speckit-converge` | sem equivalente. Nova no upstream 1.0.6 |
+
+As seis de 04/09 estão na versão 1.0.4 do Spec Kit; as quatro de 12/09, na
+1.0.6, com `create-new-feature.sh`, `spec-template.md` e
+`constitution-template.md` que faltavam em `.specify/`.
 
 > **`to-tickets` e `speckit-taskstoissues` convivem, e a divisão é clara.** O
 > `to-tickets` quebra um **documento** em issues. O `speckit-taskstoissues` lê o

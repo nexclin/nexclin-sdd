@@ -59,6 +59,14 @@ upstream**. É ele que a decisão abaixo contorna.
    >   degrau da cadeia canônica não sobrevivia a um checkout, e a constituição o
    >   citava pelo nome. Achado de 05/09, ao tentar rodar `/grill-with-docs`
    >   nesta sessão.
+   > **Emenda de 12/09/2026.** As quatro que ficavam de fora entraram, por
+   > pedido do Arthur: `speckit-specify`, `speckit-constitution`,
+   > `speckit-implement` e `speckit-converge`, na versão 1.0.6 do upstream. O
+   > motivo dele: usar o SDD no projeto inteiro, com a cadeia completa à mão.
+   > O desenho não muda: a regra continua em `docs/regras/`, a constituição
+   > continua sendo `docs/constituicao.md`, e a parada humana por fase da
+   > regra (h) continua obrigatória. A divisão de trabalho entre cada uma e o
+   > substituto que já existia está em [`../planos/README.md`](../planos/README.md).
 2. **A regra viva continua em `docs/regras/`, um arquivo por regra, nas sete
    seções.** Isto é o que a 0004 decidiu e não é revertido.
 3. **Plano e tarefas passam a viver em `docs/planos/NNN-nome/`**, com o `spec.md`
@@ -146,7 +154,7 @@ da mesma regra, e a regra (l) da constituição existe para impedir isso.
 
 ## Como reverter
 
-Apagar `.specify/`, as seis skills `speckit-*` e `docs/planos/`. As regras em
+Apagar `.specify/`, as dez skills `speckit-*` e `docs/planos/`. As regras em
 `docs/regras/` não são tocadas por nada disto, então a reversão não perde
 requisito nenhum. O que se perde são os `plan.md` e `tasks.md` já gerados, e eles
 ficam no histórico do git.
