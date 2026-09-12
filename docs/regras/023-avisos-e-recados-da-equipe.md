@@ -97,6 +97,11 @@ clínica de teste tem um usuário só. Ver `docs/ponte/50-segundo-usuario-passo-
 
 ## 7. Aberto
 
-- **A escolha da seção 4 é do Arthur.** Comentário na tarefa, ou caixa de
-  mensagens com emenda.
-- Se for a caixa, **a emenda vem antes do código**, e não depois.
+> **Fechado em 12/09/2026.** O comentário na tarefa foi entregue (FR-005,
+> `task_comments`). A caixa de mensagens **também entra**, e sem emenda à
+> alínea (f): ela não é módulo, é infraestrutura de todo membro com login,
+> como o sino. A decisão e os requisitos dela estão na seção 8 desta regra.
+
+- ~~A escolha da seção 4 é do Arthur.~~ Fechada: as duas.
+- ~~Se for a caixa, a emenda vem antes do código.~~ Não há emenda à (f); a
+  emenda que houve foi ao FR-007 da regra 020, revogado no mesmo commit.

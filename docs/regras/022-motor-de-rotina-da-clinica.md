@@ -339,6 +339,10 @@ representar setor, dois dias antes de abrir para o fundador.
 - A migração de `responsible` **não roda na Lovable**. Ela roda na stack nova,
   em outubro, junto com o port, com os usuários já criados e sem clínica
   operando em cima.
+  *Precisão de 12/09/2026:* o que entra na Lovable é uma **coluna nova**,
+  `tasks.responsible_member_id`, anulável, referência a `team_members`, gravada
+  pelo botão de assumir tarefa da regra 024. O texto não é migrado nem apagado.
+  A migração de verdade continua sendo da stack nova, como está escrito acima.
 - O texto que está gravado hoje **não está errado**. `Comercial` é o registro
   verdadeiro de quem cuida daquela tarefa numa clínica que se organiza por
   setor. Não há erro de dado a corrigir, há um modelo a ampliar.

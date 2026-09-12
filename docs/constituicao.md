@@ -1,6 +1,32 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.0.3 → 2.1.0
+Data: 2026-09-12
+
+MINOR: dois princípios ganham cláusula. Nenhum é removido nem redefinido.
+
+Princípios modificados:
+  - II.  Privacidade e Auditoria: a senha inicial passa a poder ser definida
+         pelo dono da clínica ao criar o acesso de um membro, com auditoria.
+         A regra de 28/08 dizia o contrário e a plataforma no ar já fazia
+         isso desde 09/09 (commits ebf8965 e cc3bf25 do clone). Lei que
+         contradiz o que está no ar seria "corrigida" pela próxima sessão,
+         desfazendo o que funciona. Decisão do Arthur, reafirmada em 11/09.
+  - IV.  SDD com Parada Humana: a cláusula "só bug, conserto mínimo" da
+         plataforma ao vivo ganha uma exceção nomeada e datada, o lote
+         operacional de setembro de 2026, com a razão certa por escrito.
+
+Princípios adicionados: nenhum
+Templates a revisar: nenhum. `.specify/memory/constitution.md` é ponteiro.
+TODOs adiados: troca obrigatória de senha no primeiro acesso foi recusada
+  em 12/09; se um vazamento de senha inicial acontecer, esta é a primeira
+  cláusula a rever.
+
+--- histórico ---
+
+SYNC IMPACT REPORT
+==================
 Version change: 2.0.2 → 2.0.3
 Data: 2026-09-05
 
@@ -195,6 +221,18 @@ lei, é sobre pessoas que confiaram um dado de saúde a uma clínica.
   conhecida por quem faz a implantação. É risco de processo, e não de
   arquitetura, e se mitiga escolhendo quem implanta, que foi exatamente a
   ressalva do Arthur ao decidir.
+
+  **Emendada de novo em 12/09/2026, e no mesmo sentido.** O dono da clínica
+  (admin) **MAY** criar o acesso de um membro da própria clínica definindo a
+  senha inicial dele, com auditoria de quem criou, para quem e quando. É o
+  mesmo modelo de implantação, um degrau abaixo: a clínica recebe a
+  plataforma pronta e o dono entrega o acesso pronto à secretária. A
+  plataforma no ar faz isso desde 09/09/2026, por decisão do Arthur,
+  reafirmada depois de objeção. O que continua proibido: definir ou trocar a
+  senha de um usuário **que já existe**, por quem quer que seja além do
+  próprio; para isso, só o reset por e-mail. Troca obrigatória no primeiro
+  acesso foi proposta e **recusada** em 12/09: o dono avisa a senha e a
+  pessoa troca quando quiser, pelo fluxo normal.
 - Dado pessoal **MUST NOT** trafegar em query string, log, mensagem de erro ou
   título de commit.
 - **Minimização:** um endpoint devolve o mínimo necessário. Endpoint público de
@@ -257,6 +295,16 @@ Nenhuma feature nasce de código; nasce de spec aprovada.
   procedimento — só bug, conserto mínimo, `git pull` antes, `main` sempre, nunca
   `--force`, e **function antes do Publish do front**. Fonte:
   `docs/ponte/ponte-inversa.md`.
+- **Exceção nomeada: o lote operacional de setembro de 2026.** Emenda de
+  12/09/2026. As regras 023 (mensagens internas), 024 (perfil operacional) e
+  025 (importação e exportação) sobem para a plataforma ao vivo como
+  **funcionalidade**, e não como bug. A razão, que é a única aceita pela
+  §2.5: as clínicas fundadoras só dão feedback válido sobre o que está no ar,
+  e sem o feedback a stack nova nasce com o mesmo perfil operacional que hoje
+  não serve. A mecânica da ponte **não muda**: `git pull` antes, `main`
+  sempre, nunca `--force`, function antes do Publish, `tsc` e nunca
+  `vite build`. O que é de banco nessas regras é faixa A e atravessa; o que é
+  de tela é declarado como tal em cada uma.
 
 **Rationale:** o MVP anterior provou que velocidade sem especificação e sem gate
 humano gera retrabalho caro. A parada por fase mantém o humano no controle das
@@ -408,4 +456,4 @@ chama essa implementação.
   mundo, **a constituição MUST ser corrigida** — foi assim que a cláusula de
   somente leitura sobreviveu seis dias além da sua validade.
 
-**Version**: 2.0.3 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-09-05
+**Version**: 2.1.0 | **Ratified**: 2026-08-02 | **Last Amended**: 2026-09-12
