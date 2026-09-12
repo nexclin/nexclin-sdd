@@ -44,7 +44,7 @@ export SPECIFY_FEATURE_DIRECTORY=docs/planos/021-financeiro
 A primeira skill que rodar grava o valor em `.specify/feature.json`, e as
 seguintes o encontram sozinhas.
 
-## Seis skills estão instaladas, e quatro ficaram de fora
+## As dez skills estão instaladas, desde 12/09/2026
 
 | Skill do Spec Kit | Por que ela está aqui |
 |---|---|
