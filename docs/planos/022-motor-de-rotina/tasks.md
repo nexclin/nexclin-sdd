@@ -101,20 +101,20 @@ continua recuperável.
 
 Bloqueia a Fase 4.
 
-- [ ] T126 Levar ao Arthur os dois lados: `app_role` custa quase nada e resolve as rotinas de hoje; entidade nova permite papel por clínica e custa uma tabela mais RLS. **Registrar que papel não é ModuleKey**, para não repetir a confusão que a regra 019 achou nos quatro papéis do painel
+- [ ] T126 (#282) Levar ao Arthur os dois lados: `app_role` custa quase nada e resolve as rotinas de hoje; entidade nova permite papel por clínica e custa uma tabela mais RLS. **Registrar que papel não é ModuleKey**, para não repetir a confusão que a regra 019 achou nos quatro papéis do painel
 
 ## PORTÃO 2 · A janela de cumprimento é instante ou intervalo?
 
 Bloqueia a Fase 3.
 
-- [ ] T127 Levar ao Arthur o caso de cada lado: "ligar para o lead no dia 3" é um dia, "conferir o caixa toda segunda" é uma janela. **Se for intervalo, a tabela de rotina precisa de início e fim**, e isso muda a Fase 3 antes de ela começar
+- [ ] T127 (#283) Levar ao Arthur o caso de cada lado: "ligar para o lead no dia 3" é um dia, "conferir o caixa toda segunda" é uma janela. **Se for intervalo, a tabela de rotina precisa de início e fim**, e isso muda a Fase 3 antes de ela começar
 
 ## PORTÃO 3 · O checklist de rotinas do Vinícius
 
 Bloqueia a Fase 5. **É insumo, não decisão.**
 
-- [ ] T128 Cobrar o checklist, e perguntar junto **quantas rotinas são**: cinco cabem na tela de configuração, cinquenta exigem importação, que é outra tarefa
-- [ ] T129 Registrar em qual dia chegou, e o que ele mudou na modelagem da rotina
+- [ ] T128 (#284) Cobrar o checklist, e perguntar junto **quantas rotinas são**: cinco cabem na tela de configuração, cinquenta exigem importação, que é outra tarefa
+- [ ] T129 (#285) Registrar em qual dia chegou, e o que ele mudou na modelagem da rotina
 
 ---
 
@@ -127,17 +127,17 @@ Bloqueia a Fase 5. **É insumo, não decisão.**
 **Aceite independente:** provas 3, 4 e 6. A prova 3 é a que separa este produto
 do mercado.
 
-- [ ] T130 [F3] Modelar a tabela de **rotina** e escrever a migração: título, tipo, periodicidade, janela, papel responsável e ativa. **Entidade própria**, e não campo dentro da tarefa, com RLS por `clinic_id` e default deny
-- [ ] T131 [F3] **FR-001**: acrescentar a `tasks` a coluna que aponta para a rotina que gerou a instância, indexada, e nula para tarefa manual
-- [ ] T132 [F3] **FR-002 e FR-003**: acrescentar a `tasks` a coluna de **competência**, o dia da rotina a que a instância se refere, distinta de `due_date`
-- [ ] T133 [F3] Criar o **índice único por rotina mais competência**. A idempotência mora no banco: trava no banco não depende de quem chama, e o job vai rodar mais de uma vez por dia
-- [ ] T134 [F3] Escrever o teste do gerador de instâncias em `lib/`, **antes** do gerador, e vê-lo falhar
-- [ ] T135 [F3] Escrever o gerador, materializando **na data, por agenda**, e nunca ao concluir a anterior
-- [ ] T136 [F3] Decidir e implementar o disparo periódico. **A PRECISAR DE ESCLARECIMENTO no plano:** `pg_cron`, Edge Function agendada, ou geração sob demanda na leitura. Registrar a escolha e o porquê
-- [ ] T137 [F3] **FR-009**: garantir que mudar a rotina não altera instância já gerada. Instância que muda depois do fato torna o cumprimento infalsificável
-- [ ] T138 [F3] **Prova 3**: criar rotina diária, **não cumprir por três dias**, e conferir que existem **três** instâncias vencidas. Se existir zero, o motor está materializando ao concluir e o requisito falhou
-- [ ] T139 [F3] **Prova 4**: rodar o job duas vezes no mesmo dia. A segunda não cria instância
-- [ ] T140 [F3] **Prova 6**: mudar o título da rotina e conferir que a instância já gerada não muda
+- [ ] T130 (#255) [F3] Modelar a tabela de **rotina** e escrever a migração: título, tipo, periodicidade, janela, papel responsável e ativa. **Entidade própria**, e não campo dentro da tarefa, com RLS por `clinic_id` e default deny
+- [ ] T131 (#256) [F3] **FR-001**: acrescentar a `tasks` a coluna que aponta para a rotina que gerou a instância, indexada, e nula para tarefa manual
+- [ ] T132 (#257) [F3] **FR-002 e FR-003**: acrescentar a `tasks` a coluna de **competência**, o dia da rotina a que a instância se refere, distinta de `due_date`
+- [ ] T133 (#258) [F3] Criar o **índice único por rotina mais competência**. A idempotência mora no banco: trava no banco não depende de quem chama, e o job vai rodar mais de uma vez por dia
+- [ ] T134 (#259) [F3] Escrever o teste do gerador de instâncias em `lib/`, **antes** do gerador, e vê-lo falhar
+- [ ] T135 (#260) [F3] Escrever o gerador, materializando **na data, por agenda**, e nunca ao concluir a anterior
+- [ ] T136 (#261) [F3] Decidir e implementar o disparo periódico. **A PRECISAR DE ESCLARECIMENTO no plano:** `pg_cron`, Edge Function agendada, ou geração sob demanda na leitura. Registrar a escolha e o porquê
+- [ ] T137 (#262) [F3] **FR-009**: garantir que mudar a rotina não altera instância já gerada. Instância que muda depois do fato torna o cumprimento infalsificável
+- [ ] T138 (#263) [F3] **Prova 3**: criar rotina diária, **não cumprir por três dias**, e conferir que existem **três** instâncias vencidas. Se existir zero, o motor está materializando ao concluir e o requisito falhou
+- [ ] T139 (#264) [F3] **Prova 4**: rodar o job duas vezes no mesmo dia. A segunda não cria instância
+- [ ] T140 (#265) [F3] **Prova 6**: mudar o título da rotina e conferir que a instância já gerada não muda
 
 **Ponto de conferência:** rotina não cumprida deixa rastro, e é isso que torna
 cumprimento mensurável.
@@ -146,35 +146,35 @@ cumprimento mensurável.
 
 **Depende do portão 1 e da Fase 3.**
 
-- [ ] T141 [F4] Implementar a atribuição da rotina a papel, conforme a decisão do portão 1
-- [ ] T142 [F4] Resolver o papel para pessoa **no momento em que a instância é gerada**, e gravar o resultado na instância
-- [ ] T143 [F4] **Prova 5**: trocar a pessoa do papel e gerar a instância seguinte. A nova aponta para a pessoa nova, **e a antiga continua apontando para a antiga**
+- [ ] T141 (#266) [F4] Implementar a atribuição da rotina a papel, conforme a decisão do portão 1
+- [ ] T142 (#267) [F4] Resolver o papel para pessoa **no momento em que a instância é gerada**, e gravar o resultado na instância
+- [ ] T143 (#268) [F4] **Prova 5**: trocar a pessoa do papel e gerar a instância seguinte. A nova aponta para a pessoa nova, **e a antiga continua apontando para a antiga**
 
 ## Fase 5 · A tela da manhã · FR-012
 
 **Depende das fases 3 e 4, e do portão 3 para ter o que mostrar.**
 
-- [ ] T144 [F5] Construir a tela que **abre na rotina do dia**, e não num quadro vazio à espera de que alguém escreva card
-- [ ] T145 [P] [F5] Exibir a taxa de cumprimento por rotina, sobre as instâncias que deveriam existir. **O denominador vem do FR-003**, e não da contagem de linhas existentes
-- [ ] T146 [F5] Aceite pela ótica de quem usa: uma pessoa que nunca viu o sistema abre a tela e sabe o que fazer primeiro
+- [ ] T144 (#269) [F5] Construir a tela que **abre na rotina do dia**, e não num quadro vazio à espera de que alguém escreva card
+- [ ] T145 (#270) [P] [F5] Exibir a taxa de cumprimento por rotina, sobre as instâncias que deveriam existir. **O denominador vem do FR-003**, e não da contagem de linhas existentes
+- [ ] T146 (#271) [F5] Aceite pela ótica de quem usa: uma pessoa que nunca viu o sistema abre a tela e sabe o que fazer primeiro
 
 ## Fase 6 · Comentário, subtarefa e permissão · FR-006, FR-007, FR-008
 
 Independentes entre si e do motor.
 
-- [ ] T147 [P] [F6] **FR-006**: modelar a tabela de comentário de tarefa, com autor, texto e hora, com RLS e default deny
-- [ ] T148 [P] [F6] **FR-007**: acrescentar a `tasks` a coluna de tarefa pai, para subtarefa
-- [ ] T149 [F6] **FR-008**: trocar as policies de `tasks` por policies separadas por operação, consultando `my_permission('tarefas')`
-- [ ] T150 [F6] Escrever a reversão palavra por palavra abaixo de cada bloco de policy
-- [ ] T151 [F6] Rodar o agente `auditor-multitenant` sobre a migração, **tentando furar a cascata** e não só lendo
-- [ ] T152 [F6] Achado de nível alto do auditor vira issue própria antes de a fase fechar
-- [ ] T153 [F6] **Prova 2** completa, com as duas metades: módulo negado volta zero linha, módulo liberado volta linha
+- [ ] T147 (#272) [P] [F6] **FR-006**: modelar a tabela de comentário de tarefa, com autor, texto e hora, com RLS e default deny
+- [ ] T148 (#273) [P] [F6] **FR-007**: acrescentar a `tasks` a coluna de tarefa pai, para subtarefa
+- [ ] T149 (#274) [F6] **FR-008**: trocar as policies de `tasks` por policies separadas por operação, consultando `my_permission('tarefas')`
+- [ ] T150 (#275) [F6] Escrever a reversão palavra por palavra abaixo de cada bloco de policy
+- [ ] T151 (#276) [F6] Rodar o agente `auditor-multitenant` sobre a migração, **tentando furar a cascata** e não só lendo
+- [ ] T152 (#277) [F6] Achado de nível alto do auditor vira issue própria antes de a fase fechar
+- [ ] T153 (#278) [F6] **Prova 2** completa, com as duas metades: módulo negado volta zero linha, módulo liberado volta linha
 
 ## Fase 7 · Fechamento
 
-- [ ] T154 [P] [F7] Atualizar `docs/regras/README.md` com o estado real da regra 022
-- [ ] T155 [P] [F7] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver o que ele apontar
-- [ ] T156 [F7] Escrever o handoff do dia, com o que ficou aberto dito em voz alta
+- [ ] T154 (#279) [P] [F7] Atualizar `docs/regras/README.md` com o estado real da regra 022
+- [ ] T155 (#280) [P] [F7] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver o que ele apontar
+- [ ] T156 (#281) [F7] Escrever o handoff do dia, com o que ficou aberto dito em voz alta
 
 ---
 

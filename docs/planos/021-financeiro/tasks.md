@@ -106,7 +106,7 @@ e não como estava previsto.
 **Abre com T003, que já mediu o buraco.** A decisão é da seção 7, item 2, e é do
 Arthur.
 
-- [ ] T021 [F1] Levar o número de T003 ao Arthur, com os dois lados escritos: é violação da alínea (c) e puxa para agora; no dia 8 quem opera são clínicas em que a mesma pessoa é dona e secretária, com o módulo liberado de qualquer jeito
+- [ ] T021 (#228) [F1] Levar o número de T003 ao Arthur, com os dois lados escritos: é violação da alínea (c) e puxa para agora; no dia 8 quem opera são clínicas em que a mesma pessoa é dona e secretária, com o módulo liberado de qualquer jeito
 
 ---
 
@@ -120,12 +120,12 @@ primeira metade passa por vacuidade, que é o que quase deixou o **FR-005 da
 regra 017**, a trilha de leitura, fechar por engano. `FR-005` sem o número da
 regra é ambíguo: nesta frente ele é a transferência entre contas.
 
-- [ ] T022 [F2] Escrever a migração que troca as policies de `receivables`, `expenses`, `revenues` e `fixed_expenses`: separadas por operação e consultando `my_permission` do módulo correspondente, em vez de `FOR ALL` só por `clinic_id`
-- [ ] T023 [P] [F2] Escrever no mesmo arquivo a mudança de `expenses.payment_method` para referência a `payment_methods`, com a conversão dos valores em texto que existirem
-- [ ] T024 [F2] Escrever a reversão palavra por palavra logo abaixo de cada bloco. Policy de tabela financeira é onde erro tranca a clínica inteira
-- [ ] T025 [F2] Rodar o agente `auditor-multitenant` sobre a migração, **tentando furar a cascata** e não só lendo
-- [ ] T026 [F2] Achado de nível alto do auditor vira issue própria antes de a fase fechar
-- [ ] T027 [F2] Aplicar e rodar a prova 2 completa, com controle positivo
+- [ ] T022 (#229) [F2] Escrever a migração que troca as policies de `receivables`, `expenses`, `revenues` e `fixed_expenses`: separadas por operação e consultando `my_permission` do módulo correspondente, em vez de `FOR ALL` só por `clinic_id`
+- [ ] T023 (#230) [P] [F2] Escrever no mesmo arquivo a mudança de `expenses.payment_method` para referência a `payment_methods`, com a conversão dos valores em texto que existirem
+- [ ] T024 (#231) [F2] Escrever a reversão palavra por palavra logo abaixo de cada bloco. Policy de tabela financeira é onde erro tranca a clínica inteira
+- [ ] T025 (#232) [F2] Rodar o agente `auditor-multitenant` sobre a migração, **tentando furar a cascata** e não só lendo
+- [ ] T026 (#233) [F2] Achado de nível alto do auditor vira issue própria antes de a fase fechar
+- [ ] T027 (#234) [F2] Aplicar e rodar a prova 2 completa, com controle positivo
 
 **Ponto de conferência:** módulo negado passa a negar no banco, e não só no menu.
 
@@ -136,7 +136,7 @@ regra é ambíguo: nesta frente ele é a transferência entre contas.
 **Sem o acesso à conta ou o vídeo, este plano para aqui.** Foi a condição sob a
 qual o escopo do financeiro dispensou aprovação de escopo.
 
-- [ ] T028 [F2] Cobrar do Erick o acesso ou o vídeo, e registrar em qual dia chegou
+- [ ] T028 (#235) [F2] Cobrar do Erick o acesso ou o vídeo, e registrar em qual dia chegou
 
 ---
 
@@ -146,16 +146,16 @@ qual o escopo do financeiro dispensou aprovação de escopo.
 
 **Aceite independente:** provas 7 e 8.
 
-- [ ] T029 [F3] Modelar a tabela de **linha de extrato** e escrever a migração em `supabase/migrations/`: conta, identificador da transação no banco, data, valor, descrição, com RLS por `clinic_id` e default deny
-- [ ] T030 [F3] Criar o **índice único por conta mais identificador da transação**. A idempotência do FR-008 mora no banco, não no código: trava no banco não depende de quem chama
-- [ ] T031 [P] [F3] Modelar a tabela de **vínculo de conciliação**, ligando linha de extrato a recebível ou despesa, com RLS e default deny
-- [ ] T032 [P] [F3] Modelar a tabela de **transferência entre contas** (FR-005): origem, destino, valor, data e autor, com RLS e default deny
-- [ ] T033 [F3] **FR-007**: fazer `receivables.conciliated` derivar do vínculo em vez de ser booleano que qualquer escrita liga
-- [ ] T034 [F3] Escrever o leitor de OFX na stack nova, gravando linha de extrato e **nada além disso**
-- [ ] T035 [F3] **FR-009 e FR-015**: ligar a baixa automática ao **mesmo caminho da Fase 1**. Não abrir o sétimo caminho de escrita em `receivables`: são seis hoje, e é assim que o mesmo fato entra em formatos distintos
-- [ ] T036 [F3] Teste de unidade do leitor de OFX em `lib/`, antes do leitor, e **ver falhar**
-- [ ] T037 [F3] **Prova 7**: importar o mesmo OFX duas vezes. A segunda não cria linha nem baixa
-- [ ] T038 [F3] **Prova 8**: desfazer uma conciliação. A marca de conciliado cai junto, porque deriva do vínculo
+- [ ] T029 (#236) [F3] Modelar a tabela de **linha de extrato** e escrever a migração em `supabase/migrations/`: conta, identificador da transação no banco, data, valor, descrição, com RLS por `clinic_id` e default deny
+- [ ] T030 (#237) [F3] Criar o **índice único por conta mais identificador da transação**. A idempotência do FR-008 mora no banco, não no código: trava no banco não depende de quem chama
+- [ ] T031 (#238) [P] [F3] Modelar a tabela de **vínculo de conciliação**, ligando linha de extrato a recebível ou despesa, com RLS e default deny
+- [ ] T032 (#239) [P] [F3] Modelar a tabela de **transferência entre contas** (FR-005): origem, destino, valor, data e autor, com RLS e default deny
+- [ ] T033 (#240) [F3] **FR-007**: fazer `receivables.conciliated` derivar do vínculo em vez de ser booleano que qualquer escrita liga
+- [ ] T034 (#241) [F3] Escrever o leitor de OFX na stack nova, gravando linha de extrato e **nada além disso**
+- [ ] T035 (#242) [F3] **FR-009 e FR-015**: ligar a baixa automática ao **mesmo caminho da Fase 1**. Não abrir o sétimo caminho de escrita em `receivables`: são seis hoje, e é assim que o mesmo fato entra em formatos distintos
+- [ ] T036 (#243) [F3] Teste de unidade do leitor de OFX em `lib/`, antes do leitor, e **ver falhar**
+- [ ] T037 (#244) [F3] **Prova 7**: importar o mesmo OFX duas vezes. A segunda não cria linha nem baixa
+- [ ] T038 (#245) [F3] **Prova 8**: desfazer uma conciliação. A marca de conciliado cai junto, porque deriva do vínculo
 
 **Ponto de conferência:** conciliar passa a casar duas listas, e não a marcar uma
 caixinha.
@@ -166,9 +166,9 @@ caixinha.
 
 **Objetivo:** FR-010.
 
-- [ ] T039 [F4] Ler o desenho de recorrência de `fixed_expenses` (`recurrence`, `start_date`, `end_date`, de `20260322185846`) antes de escrever qualquer coisa
-- [ ] T040 [F4] Escrever a migração que dá as mesmas colunas a `receivables`, **copiando o desenho que existe** em vez de inventar outro
-- [ ] T041 [F4] Aceite na tela: cadastrar uma receita mensal e conferir as linhas geradas, inclusive a última antes do fim
+- [ ] T039 (#246) [F4] Ler o desenho de recorrência de `fixed_expenses` (`recurrence`, `start_date`, `end_date`, de `20260322185846`) antes de escrever qualquer coisa
+- [ ] T040 (#247) [F4] Escrever a migração que dá as mesmas colunas a `receivables`, **copiando o desenho que existe** em vez de inventar outro
+- [ ] T041 (#248) [F4] Aceite na tela: cadastrar uma receita mensal e conferir as linhas geradas, inclusive a última antes do fim
 
 ---
 
@@ -177,17 +177,17 @@ caixinha.
 **Objetivo:** FR-013 e FR-014. Por último de propósito: é a camada que só vale
 depois dos dados certos, que foi o acordo da reunião.
 
-- [ ] T042 [F5] Destacar o **saldo de hoje** no fluxo de caixa, e deixar de apresentar o saldo do fim do período com rótulo que sugira o de hoje. **Depende de T007**, porque sem saldo inicial a conta não fecha
-- [ ] T043 [P] [F5] Apresentar a régua de cobrança em Kanban por faixa de atraso, com a mensagem pré-cadastrada por faixa
-- [ ] T044 [F5] Aceite na tela pela ótica de quem usa, e não pela do backend. **A régua dos 200% é o que fecha esta fase**
+- [ ] T042 (#249) [F5] Destacar o **saldo de hoje** no fluxo de caixa, e deixar de apresentar o saldo do fim do período com rótulo que sugira o de hoje. **Depende de T007**, porque sem saldo inicial a conta não fecha
+- [ ] T043 (#250) [P] [F5] Apresentar a régua de cobrança em Kanban por faixa de atraso, com a mensagem pré-cadastrada por faixa
+- [ ] T044 (#251) [F5] Aceite na tela pela ótica de quem usa, e não pela do backend. **A régua dos 200% é o que fecha esta fase**
 
 ---
 
 ## Fase 6 · Fechamento
 
-- [ ] T045 [P] [F6] Atualizar a tabela de `docs/regras/README.md` com o estado real da regra 021
-- [ ] T046 [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
-- [ ] T047 [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
+- [ ] T045 (#252) [P] [F6] Atualizar a tabela de `docs/regras/README.md` com o estado real da regra 021
+- [ ] T046 (#253) [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
+- [ ] T047 (#254) [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 
 ---
 
