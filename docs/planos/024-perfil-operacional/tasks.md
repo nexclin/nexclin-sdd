@@ -112,13 +112,13 @@ nova.
 
 ### A função, com o teste na frente
 
-- [ ] T322 (nexclin#71) [F2] Escrever `../nexclin-lovable/src/lib/__tests__/escopo.test.ts` para `camposEditaveisDaConsulta(consulta, quemOlha)`: responsável e master editam `date`, `time`, `doctor_member_id`, `status` e fechamento; médico da consulta edita só `status` e fechamento; qualquer outro edita nada. **Ver falhar**
-- [ ] T323 (nexclin#72) [P] [F2] No mesmo arquivo, `podeEditarTarefa(tarefa, quemOlha)`: responsável, master ou gerencial editam; tarefa automática ninguém edita (herda de `ehAutomatica`); tarefa **sem responsável** não é editável por terceiro, é assumível. **Ver falhar**
+- [x] T322 (nexclin#71, fechada 14/09) [F2] Escrever `../nexclin-lovable/src/lib/__tests__/escopo.test.ts` para `camposEditaveisDaConsulta(consulta, quemOlha)`: responsável e master editam `date`, `time`, `doctor_member_id`, `status` e fechamento; médico da consulta edita só `status` e fechamento; qualquer outro edita nada. **Ver falhar**
+- [x] T323 (nexclin#72, fechada 14/09) [P] [F2] No mesmo arquivo, `podeEditarTarefa(tarefa, quemOlha)`: responsável, master ou gerencial editam; tarefa automática ninguém edita (herda de `ehAutomatica`); tarefa **sem responsável** não é editável por terceiro, é assumível. **Ver falhar**
 - [ ] T324 (nexclin#73) [F2] Escrever `../nexclin-lovable/src/lib/escopo.ts` até T322 e T323 passarem. `quemPodeEditar` de `tiposDeTarefa.ts` sai, e quem a chamava passa a chamar `podeEditarTarefa`. Rodar `npx vitest run` inteiro: os 20 arquivos existentes continuam verdes
 
 ### O padrão do perfil
 
-- [ ] T325 (nexclin#74) [F2] Em `../nexclin-lovable/src/hooks/usePermissions.ts`, `DEFAULT_PERMISSIONS_BY_LEVEL.operacional` passa a `leads: "all"`, `anamnese: "full"`, `tarefas: "own"`, `acompanhamento: "own"`. Só o padrão muda; membro existente mantém o que o dono gravou em `team_members.permissions`
+- [x] T325 (nexclin#74, fechada 14/09) [F2] Em `../nexclin-lovable/src/hooks/usePermissions.ts`, `DEFAULT_PERMISSIONS_BY_LEVEL.operacional` passa a `leads: "all"`, `anamnese: "full"`, `tarefas: "own"`, `acompanhamento: "own"`. Só o padrão muda; membro existente mantém o que o dono gravou em `team_members.permissions`
 
 ### As telas
 
