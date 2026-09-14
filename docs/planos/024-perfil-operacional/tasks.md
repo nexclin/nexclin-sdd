@@ -73,15 +73,15 @@ controle positivo**: o `UPDATE` de `status` na mesma tarefa passa.
 
 ### Banco, e ele vem primeiro
 
-- [ ] T308 (nexclin#57) [F1] Escrever a migração `supabase/migrations/20260913010000_perfil_operacional_colunas_e_auditoria.sql`, bloco 1: `tasks.responsible_member_id uuid` anulável, `REFERENCES team_members(id) ON DELETE SET NULL`, com `COMMENT` dizendo que o texto `responsible` fica e as duas gravam juntas
-- [ ] T309 (nexclin#58) [P] [F1] No mesmo arquivo, bloco 2: `appointments.responsible_member_id` e `appointments.doctor_member_id`, na mesma forma, com `COMMENT` dizendo que responsável é quem agendou e médico é o delegado
-- [ ] T310 (nexclin#59) [P] [F1] No mesmo arquivo, bloco 3: `CREATE TRIGGER tasks_audita_mudanca` e `appointments_audita_mudanca`, `AFTER UPDATE`, chamando `audita_mudanca_de_dado`, na forma exata dos de `20260827030000_auditoria_nas_tabelas_de_configuracao.sql`. **Nenhuma tabela nova de histórico**
-- [ ] T311 (nexclin#60) [P] [F1] No mesmo arquivo, bloco 4: `business_rules.task_type_weights jsonb NOT NULL DEFAULT '{}'`, na forma de `patient_required_fields` (`20260324033818`), com `COMMENT` dizendo que tipo ausente lê como 1
-- [ ] T312 (nexclin#61) [F1] No mesmo arquivo, bloco 5, **só se T303 mostrou `CHECK`**: `recall_paciente` entra na lista aceita de `tasks.type`. Se não há `CHECK`, o bloco fica como comentário dizendo por quê
-- [ ] T313 (nexclin#62) [F1] No mesmo arquivo, bloco 6: `DROP POLICY "Users can manage tasks in their clinic"` e três policies novas em `tasks`, `SELECT`, `INSERT` e `UPDATE`, com o **mesmo predicado de clínica** da policy de 22/03. **Sem `DELETE`.** Cancelar é `UPDATE` de `status`
-- [ ] T314 (nexclin#63) [F1] Escrever a reversão, bloco a bloco, logo abaixo de cada um, em comentário. Policy de `tasks` é onde erro tranca a lista de tarefas da clínica inteira
-- [ ] T315 (nexclin#64) [F1] Copiar a migração para `docs/ponte/aplicacao-024-fase1/b1-colunas-triggers-pesos-policies.sql`, com a conferência de cada bloco em arquivo separado, na forma de `docs/ponte/aplicacao-021-fase1/`
-- [ ] T316 (nexclin#65) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
+- [x] T308 (nexclin#57, fechada 14/09) [F1] Escrever a migração `supabase/migrations/20260913010000_perfil_operacional_colunas_e_auditoria.sql`, bloco 1: `tasks.responsible_member_id uuid` anulável, `REFERENCES team_members(id) ON DELETE SET NULL`, com `COMMENT` dizendo que o texto `responsible` fica e as duas gravam juntas
+- [x] T309 (nexclin#58, fechada 14/09) [P] [F1] No mesmo arquivo, bloco 2: `appointments.responsible_member_id` e `appointments.doctor_member_id`, na mesma forma, com `COMMENT` dizendo que responsável é quem agendou e médico é o delegado
+- [x] T310 (nexclin#59, fechada 14/09) [P] [F1] No mesmo arquivo, bloco 3: `CREATE TRIGGER tasks_audita_mudanca` e `appointments_audita_mudanca`, `AFTER UPDATE`, chamando `audita_mudanca_de_dado`, na forma exata dos de `20260827030000_auditoria_nas_tabelas_de_configuracao.sql`. **Nenhuma tabela nova de histórico**
+- [x] T311 (nexclin#60, fechada 14/09) [P] [F1] No mesmo arquivo, bloco 4: `business_rules.task_type_weights jsonb NOT NULL DEFAULT '{}'`, na forma de `patient_required_fields` (`20260324033818`), com `COMMENT` dizendo que tipo ausente lê como 1
+- [x] T312 (nexclin#61, fechada 14/09) [F1] No mesmo arquivo, bloco 5, **só se T303 mostrou `CHECK`**: `recall_paciente` entra na lista aceita de `tasks.type`. Se não há `CHECK`, o bloco fica como comentário dizendo por quê
+- [x] T313 (nexclin#62, fechada 14/09) [F1] No mesmo arquivo, bloco 6: `DROP POLICY "Users can manage tasks in their clinic"` e três policies novas em `tasks`, `SELECT`, `INSERT` e `UPDATE`, com o **mesmo predicado de clínica** da policy de 22/03. **Sem `DELETE`.** Cancelar é `UPDATE` de `status`
+- [x] T314 (nexclin#63, fechada 14/09) [F1] Escrever a reversão, bloco a bloco, logo abaixo de cada um, em comentário. Policy de `tasks` é onde erro tranca a lista de tarefas da clínica inteira
+- [x] T315 (nexclin#64, fechada 14/09) [F1] Copiar a migração para `docs/ponte/aplicacao-024-fase1/b1-colunas-triggers-pesos-policies.sql`, com a conferência de cada bloco em arquivo separado, na forma de `docs/ponte/aplicacao-021-fase1/`
+- [x] T316 (nexclin#65, fechada 14/09) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
 - [ ] T317 (nexclin#66) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`, antes de aplicar
 - [ ] T318 (nexclin#67) [F1] Aplicar os blocos no editor de SQL e conferir cada um. O Arthur clica `Run`
 
