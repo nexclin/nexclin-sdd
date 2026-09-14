@@ -29,7 +29,7 @@ constituição 2.1.0, como a 024 e a 025. A mecânica da ponte não muda.
 
 **Uma coisa esta frente entrega para outra:** o bloco 4 do painel operacional
 (regra 024, FR-014) e o botão "falar com" na tarefa e na consulta leem a caixa
-daqui. A tarefa T063 da 024 confere se esta frente entregou.
+daqui. A tarefa T363 da 024 confere se esta frente entregou.
 
 ---
 
@@ -228,8 +228,8 @@ FR-008, FR-010 na tela, FR-011, FR-012, FR-013 na tela.
 
 ### Portão 2 · A regra 024 precisa desta
 
-Não é portão desta frente; é o inverso. Quando a Fase 2 fechar, a tarefa T063
-da 024 muda de resposta, e o bloco 4 do painel operacional (T067 da 024) pode
+Não é portão desta frente; é o inverso. Quando a Fase 2 fechar, a tarefa T363
+da 024 muda de resposta, e o bloco 4 do painel operacional (T367 da 024) pode
 entrar. **Este plano avisa; não executa a 024.**
 
 ### Fase 3 · Tempo real · faixa C · Lovable

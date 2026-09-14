@@ -1,0 +1,1 @@
+../../regras/006-modelagem-ini.md

@@ -1,0 +1,1 @@
+../../regras/017-superadmin-e-impersonacao.md

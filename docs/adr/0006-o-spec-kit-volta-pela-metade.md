@@ -122,6 +122,15 @@ O Arthur decidiu o contrário, e as razões que a recomendação não pesava:
 Se em um mês as pastas de `docs/planos/` estiverem abertas sem frente ativa, a
 hipótese a testar primeiro é que a 0004 estava certa e que o contorno não segurou.
 
+> **Emenda de 13/09/2026.** Por decisão do Arthur, `docs/planos/` passa a ter
+> **uma pasta por regra**, na ordem dos números, e não só por frente em execução.
+> Frente sem plano tem `spec.md` (link) e um `README.md` de ponteiros para onde a
+> execução está registrada. O motivo: ler a lista de funcionalidades em ordem
+> cronológica de uma vez, com a documentação de cada uma a um clique. O risco que
+> a 0004 apontou continua vigiado, com o nome trocado: pasta com `plan.md` e sem
+> frente ativa. A tabela e a numeração por centena das tarefas estão em
+> [`../planos/README.md`](../planos/README.md).
+
 ## Consequências assumidas
 
 - **Volta a haver dois lugares para olhar** quando uma frente está em execução, a

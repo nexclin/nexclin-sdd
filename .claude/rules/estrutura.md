@@ -57,6 +57,10 @@ Nenhuma das três? Consulte a tabela da seção 3 de
 
 ## Estado de execução não é arquivo
 
+> **Emendada pela ADR 0006 (04/09) e pela decisão de 13/09:** `tasks.md` existe,
+> e só em `docs/planos/NNN-nome/`, gerado pelo Spec Kit e espelhado em issue pelo
+> `speckit-taskstoissues`. Fora dali, o parágrafo abaixo continua valendo.
+
 Tarefa pendente vive em **issue do GitHub**, em `nexclin/nexclin-sdd`. Não crie
 `tasks.md`, nem lista de pendências dentro de uma regra, nem arquivo de estado
 paralelo ao handoff. Foi exatamente isso que a reorganização desfez: 28 issues

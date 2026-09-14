@@ -1,0 +1,1 @@
+../../regras/005-configuracoes-clinica.md
