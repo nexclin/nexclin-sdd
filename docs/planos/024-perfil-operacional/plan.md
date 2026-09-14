@@ -62,9 +62,10 @@ na tela" como "recusada no banco".
    Remover o `DELETE` do FR-009 exige **quebrar essa policy em três**, e não
    apagar uma quarta que não existe.
 4. O trigger `audita_mudanca_de_dado` da migração de 25/08 deste repositório
-   cobre `patients` e, desde 27/08, as cinco tabelas de configuração. **Não
-   está no clone da Lovable**: chegou ao banco ao vivo por bloco de SQL. A Fase
-   0 confere se ele está lá.
+   cobre `patients`. **Só `patients`**: a migração de 27/08, das cinco tabelas
+   de configuração, não está no banco ao vivo (censo de 14/09). O trigger
+   chegou ao banco por bloco de SQL, não pelo clone da Lovable, e existe: a
+   Fase 1 o estende.
 5. `quemPodeEditar` em `src/lib/tiposDeTarefa.ts` já decide edição de tarefa
    por `created_by` e libera tudo que nasceu sem autor. O FR-003 troca o
    critério de autor para responsável, e o `escopo.ts` novo absorve essa

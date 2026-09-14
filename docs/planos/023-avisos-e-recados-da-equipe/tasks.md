@@ -39,11 +39,11 @@ foram entregues antes do plano existir.
 `task_comments` não estiver no banco, a seção 2 está errada ao dizer
 "entregue", e isso se corrige antes de T207.
 
-- [ ] T201 (nexclin#4) [F0] Escrever o bloco de conferência em `docs/ponte/023-censo-mensagem-interna.sql`: `pg_policies` de `task_comments`, esperando as duas policies do bloco b1 (`SELECT` por clínica, `INSERT` com `author_id = auth.uid()`)
-- [ ] T202 (nexclin#5) [P] [F0] No mesmo arquivo, `pg_publication` e `pg_publication_tables` para `supabase_realtime`. Esperado: publicação existe e nenhuma tabela nossa está nela. Decide se T241 é `ALTER` ou `CREATE`
-- [ ] T203 (nexclin#6) [P] [F0] No mesmo arquivo, e **só se a Fase 0 da 024 ainda não rodou**: `team_members` com login e sem `user_id`, por clínica. Se a 024 já rodou, este trecho vira um comentário apontando para `docs/historico/2026-09-NN-censo-operacional.md`
-- [ ] T204 (nexclin#7) [F0] Rodar o bloco no editor de SQL da plataforma, um trecho por vez. O Arthur clica `Run`
-- [ ] T205 (nexclin#8) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-mensagem-interna.md`, e corrigir a seção 2 ou a 8.3 da regra no mesmo commit se houver divergência
+- [x] T201 (nexclin#4, fechada 14/09) [F0] Escrever o bloco de conferência em `docs/ponte/023-censo-mensagem-interna.sql`: `pg_policies` de `task_comments`, esperando as duas policies do bloco b1 (`SELECT` por clínica, `INSERT` com `author_id = auth.uid()`)
+- [x] T202 (nexclin#5, fechada 14/09) [P] [F0] No mesmo arquivo, `pg_publication` e `pg_publication_tables` para `supabase_realtime`. Esperado: publicação existe e nenhuma tabela nossa está nela. Decide se T241 é `ALTER` ou `CREATE`
+- [x] T203 (nexclin#6, fechada 14/09) [P] [F0] No mesmo arquivo, e **só se a Fase 0 da 024 ainda não rodou**: `team_members` com login e sem `user_id`, por clínica. Se a 024 já rodou, este trecho vira um comentário apontando para `docs/historico/2026-09-NN-censo-operacional.md`
+- [x] T204 (nexclin#7, fechada 14/09) [F0] Rodar o bloco no editor de SQL da plataforma, um trecho por vez. O Arthur clica `Run`
+- [x] T205 (nexclin#8, fechada 14/09) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-mensagem-interna.md`, e corrigir a seção 2 ou a 8.3 da regra no mesmo commit se houver divergência
 
 **Ponto de conferência:** `task_comments` confirmado no ar, publicação
 conhecida, premissa do `user_id` com número.

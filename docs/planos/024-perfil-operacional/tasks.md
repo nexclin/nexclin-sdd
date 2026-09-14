@@ -45,8 +45,8 @@ divergência é o achado** e a regra se corrige antes de T306.
 - [ ] T302 (#152) [P] [F0] Escrever no mesmo arquivo a consulta a `pg_trigger` que lista em quais tabelas o trigger `audita_mudanca_de_dado` está ligado no banco ao vivo. Esperado: `patients` e as cinco de configuração. **Ele não está no clone da Lovable**: chegou por bloco de SQL, e a Fase 1 só o estende se ele existir
 - [ ] T303 (#153) [P] [F0] Escrever no mesmo arquivo a consulta a `information_schema.check_constraints` e `pg_constraint` sobre `tasks.type`. Decide se `recall_paciente` exige `ALTER` (T312) ou só entra na lista do front (T343)
 - [ ] T304 (#154) [P] [F0] Escrever no mesmo arquivo a listagem de `pg_policies` para `tasks` e `appointments`. Esperado em `tasks`: uma policy só, `FOR ALL TO authenticated`, de 22/03
-- [ ] T305 (nexclin#54) [F0] Rodar o bloco no editor de SQL da plataforma, um trecho por vez. O Arthur clica `Run`; o agente para na barreira
-- [ ] T306 (nexclin#55) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-operacional.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
+- [x] T305 (nexclin#54, fechada 14/09) [F0] Rodar o bloco no editor de SQL da plataforma, um trecho por vez. O Arthur clica `Run`; o agente para na barreira
+- [x] T306 (nexclin#55, fechada 14/09) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-operacional.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 
 **Ponto de conferência:** premissa 1 confirmada ou derrubada, trigger localizado,
 `CHECK` conhecido, policies listadas.
