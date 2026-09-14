@@ -1,0 +1,1 @@
+../../regras/023-avisos-e-recados-da-equipe.md
