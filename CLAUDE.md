@@ -15,7 +15,7 @@
 | # | Onde | Para quê |
 |---|---|---|
 | 1 | o handoff mais recente em [`docs/historico/`](docs/historico/) | **o estado real.** Os nomes começam com a data: pegue o maior |
-| 2 | as issues abertas em `nexclin/nexclin-sdd` | o trabalho pendente, tarefa a tarefa |
+| 2 | as issues abertas em **`nexclin/nexclin`**, o repositório da plataforma | o trabalho pendente, tarefa a tarefa. Desde 14/09 a issue mora onde o código muda; `gh -R nexclin/nexclin` |
 | 3 | [`docs/regras/README.md`](docs/regras/README.md) | o que o sistema deve fazer, e o que falta decidir |
 | 4 | [`docs/ponte/ponte-inversa.md`](docs/ponte/ponte-inversa.md) | **obrigatório** antes de tocar a plataforma ao vivo |
 | 5 | [`docs/constituicao.md`](docs/constituicao.md) | a lei, vence qualquer preferência |
@@ -243,8 +243,9 @@ numa re-execução, em vez de criar bloco duplicado.
 
 ### Issue tracker
 
-As issues vivem no GitHub, em `nexclin/nexclin-sdd`, que é este mesmo
-repositório, então o `gh` infere sozinho. Ver
+As issues vivem no GitHub, em **`nexclin/nexclin`**, o repositório da plataforma
+ao vivo, e não neste. Decisão do Arthur em 14/09/2026: a issue mora onde o
+código muda. Todo `gh issue` leva `-R nexclin/nexclin`. Ver
 [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md).
 
 ### Domain docs

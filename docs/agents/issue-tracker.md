@@ -1,21 +1,26 @@
 # Issue tracker: GitHub
 
-As issues e specs deste repositório vivem como **issues do GitHub**, em
-`nexclin/nexclin-sdd`, que é este mesmo repositório. Use o `gh` para tudo. Como
-o clone aponta para lá, o `gh` infere o repositório sozinho e não é preciso
-passar `--repo`.
+As issues deste projeto vivem como **issues do GitHub**, em **`nexclin/nexclin`**,
+o repositório da plataforma Lovable, e não neste. Decisão do Arthur em
+14/09/2026: a issue mora onde o código muda, para que quem implementa no clone
+da Lovable a veja sem trocar de repositório. Como o clone deste repositório
+aponta para `nexclin-sdd`, **todo comando `gh issue` abaixo leva
+`-R nexclin/nexclin`**. As 185 issues dos planos 021 a 024 foram transferidas
+em 14/09 com `gh issue transfer`; o número antigo, do `nexclin-sdd`, aparece em
+`docs/planos/*/tasks.md` como `(#N)` só nas tarefas fechadas antes da
+transferência, e as vivas aparecem como `(nexclin#N)`.
 
 ## Convenções
 
-- **Criar issue**: `gh issue create --title "..." --body "..."`. Use heredoc
+- **Criar issue**: `gh issue create -R nexclin/nexclin --title "..." --body "..."`. Use heredoc
   para corpo de várias linhas.
-- **Ler issue**: `gh issue view <número> --comments`, filtrando comentários com
+- **Ler issue**: `gh issue view <número> -R nexclin/nexclin --comments`, filtrando comentários com
   `jq` e buscando também os rótulos.
-- **Listar issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`,
+- **Listar issues**: `gh issue list -R nexclin/nexclin --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'`,
   com os filtros `--label` e `--state` que couberem.
 - **Comentar**: `gh issue comment <número> --body "..."`
 - **Rótulos**: `gh issue edit <número> --add-label "..."` e `--remove-label "..."`
-- **Fechar**: `gh issue close <número> --comment "..."`
+- **Fechar**: `gh issue close <número> -R nexclin/nexclin --comment "..."`
 
 ## Pull request como superfície de pedido
 
