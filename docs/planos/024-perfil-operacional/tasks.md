@@ -152,15 +152,15 @@ edita o que é dela.
 
 ### A função, com o teste na frente
 
-- [ ] T338 (nexclin#87) [F3] Em `../nexclin-lovable/src/lib/__tests__/escopo.test.ts`, `podeAssumir(tarefa, quemOlha)`: verdadeiro só quando `responsible_member_id` é nulo e quem olha tem `team_members.id`; falso para tarefa com dono, mesmo para master. E `podeDevolver(tarefa, quemOlha)`: verdadeiro só para o responsável. **Ver falhar**
-- [ ] T339 (nexclin#88) [P] [F3] No mesmo arquivo, `podeReatribuir(quemOlha)`: master e gerencial. **Ver falhar**
-- [ ] T340 (nexclin#89) [F3] Estender `../nexclin-lovable/src/lib/escopo.ts` até T338 e T339 passarem
+- [x] T338 (nexclin#87, fechada 14/09) [F3] Em `../nexclin-lovable/src/lib/__tests__/escopo.test.ts`, `podeAssumir(tarefa, quemOlha)`: verdadeiro só quando `responsible_member_id` é nulo e quem olha tem `team_members.id`; falso para tarefa com dono, mesmo para master. E `podeDevolver(tarefa, quemOlha)`: verdadeiro só para o responsável. **Ver falhar**
+- [x] T339 (nexclin#88, fechada 14/09) [P] [F3] No mesmo arquivo, `podeReatribuir(quemOlha)`: master e gerencial. **Ver falhar**
+- [x] T340 (nexclin#89, fechada 14/09) [F3] Estender `../nexclin-lovable/src/lib/escopo.ts` até T338 e T339 passarem
 
 ### As telas
 
 - [ ] T341 (nexclin#90) [F3] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: botão **assumir** em tarefa sem dono, gravando `responsible_member_id` e `responsible` (o nome) de uma vez; botão **devolver** para o responsável, zerando os dois; **reatribuir** só para quem `podeReatribuir`. O trigger da F1 registra sozinho
 - [ ] T342 (nexclin#91) [F3] Na mesma tela: **nenhum caminho chama `DELETE`**. O que apagava passa a `UPDATE` de `status` para cancelada. Buscar por `.delete(` no arquivo e nos componentes de tarefa que ele importa; cada ocorrência sai
-- [ ] T343 (nexclin#92) [P] [F3] Em `../nexclin-lovable/src/lib/tiposDeTarefa.ts`: `recall_paciente` entra em `TIPOS_MANUAIS` e em `ROTULOS_DE_TIPO` como "Recall de paciente", separado de `recall` (automático) e de `recaptacao_*` (funil)
+- [x] T343 (nexclin#92, fechada 14/09) [P] [F3] Em `../nexclin-lovable/src/lib/tiposDeTarefa.ts`: `recall_paciente` entra em `TIPOS_MANUAIS` e em `ROTULOS_DE_TIPO` como "Recall de paciente", separado de `recall` (automático) e de `recaptacao_*` (funil)
 - [ ] T344 (nexclin#93) [F3] Em `../nexclin-lovable/src/pages/Recall.tsx`: botão assumir no item vencido cria uma tarefa `type = 'recall_paciente'`, `patient_id` do item, `responsible_member_id` e `responsible` de quem assumiu, `due_date` hoje. A linha do recall mostra "com dono" quando existe tarefa aberta desse tipo para esse paciente
 - [ ] T345 (nexclin#94) [F3] Gate de tipos, `npx tsc --noEmit -p tsconfig.app.json`, e `npx vitest run` inteiro verde
 - [ ] T346 (nexclin#95) [F3] Publicar pelo procedimento da ponte, com `scripts/ponte.sh conferir` e o marcador no bundle
@@ -197,9 +197,9 @@ próxima leitura, sem tocar em tarefa nenhuma.
 
 ### A função, com o teste na frente
 
-- [ ] T353 (nexclin#102) [F4] Escrever `../nexclin-lovable/src/lib/__tests__/produtividade.test.ts` para `pontuacao(tarefas, pesos, periodo)`: só tarefa concluída conta; "no prazo" é `completed_at` em data local menor ou igual a `due_date`, pelo `dataLocal.ts`; cada uma vale o peso do seu tipo; tipo ausente em `pesos` vale 1; concluída fora do prazo vale 0. **Ver falhar**
-- [ ] T354 (nexclin#103) [P] [F4] No mesmo arquivo, `ranking(membros, tarefas, assumidas, consultas, leadsConvertidos, pesos, periodo, filtroDeFuncao?)`: as quatro medidas por membro, ordenado por pontuação, médicos incluídos, filtrável por `team_members.role`. **Ver falhar**
-- [ ] T355 (nexclin#104) [F4] Escrever `../nexclin-lovable/src/lib/produtividade.ts` até T353 e T354 passarem. As fontes são as da regra: `tasks`, `data_audit_log` para assumidas, `appointments.responsible_member_id`, `lead_history`
+- [x] T353 (nexclin#102, fechada 14/09) [F4] Escrever `../nexclin-lovable/src/lib/__tests__/produtividade.test.ts` para `pontuacao(tarefas, pesos, periodo)`: só tarefa concluída conta; "no prazo" é `completed_at` em data local menor ou igual a `due_date`, pelo `dataLocal.ts`; cada uma vale o peso do seu tipo; tipo ausente em `pesos` vale 1; concluída fora do prazo vale 0. **Ver falhar**
+- [x] T354 (nexclin#103, fechada 14/09) [P] [F4] No mesmo arquivo, `ranking(membros, tarefas, assumidas, consultas, leadsConvertidos, pesos, periodo, filtroDeFuncao?)`: as quatro medidas por membro, ordenado por pontuação, médicos incluídos, filtrável por `team_members.role`. **Ver falhar**
+- [x] T355 (nexclin#104, fechada 14/09) [F4] Escrever `../nexclin-lovable/src/lib/produtividade.ts` até T353 e T354 passarem. As fontes são as da regra: `tasks`, `data_audit_log` para assumidas, `appointments.responsible_member_id`, `lead_history`
 
 ### As telas
 
@@ -239,8 +239,8 @@ clínica tem dois.
 
 ### A função, com o teste na frente
 
-- [ ] T364 (nexclin#113) [F5] Escrever `../nexclin-lovable/src/lib/__tests__/painelOperacional.test.ts` para `montaPainel(entrada)`: devolve os blocos **na ordem exata do FR-014** (fila do dia, minhas tarefas vencidas e de hoje, leads com cadência vencida, mensagens não lidas, tarefas sem dono, recalls vencidos); a fila do dia vem por horário com médico e estado da anamnese; **nenhum bloco carrega campo em reais**, e o teste percorre cada bloco afirmando isso. **Ver falhar**
-- [ ] T365 (nexclin#114) [F5] Escrever `../nexclin-lovable/src/lib/painelOperacional.ts` até T364 passar. A cadência vencida vem do FR-001 da regra 018; o recall, de `recall.ts`; tarefa sem dono, de `podeAssumir`
+- [x] T364 (nexclin#113, fechada 14/09) [F5] Escrever `../nexclin-lovable/src/lib/__tests__/painelOperacional.test.ts` para `montaPainel(entrada)`: devolve os blocos **na ordem exata do FR-014** (fila do dia, minhas tarefas vencidas e de hoje, leads com cadência vencida, mensagens não lidas, tarefas sem dono, recalls vencidos); a fila do dia vem por horário com médico e estado da anamnese; **nenhum bloco carrega campo em reais**, e o teste percorre cada bloco afirmando isso. **Ver falhar**
+- [x] T365 (nexclin#114, fechada 14/09) [F5] Escrever `../nexclin-lovable/src/lib/painelOperacional.ts` até T364 passar. A cadência vencida vem do FR-001 da regra 018; o recall, de `recall.ts`; tarefa sem dono, de `podeAssumir`
 
 ### A tela
 

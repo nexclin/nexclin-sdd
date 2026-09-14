@@ -111,10 +111,10 @@ médico logados.
 
 ### A função, com o teste na frente
 
-- [ ] T225 (nexclin#28) [F2] Escrever `../nexclin-lovable/src/lib/__tests__/conversas.test.ts` para `destinatarios(membros, eu)`: ativo, com `user_id`, menos eu; membro inativo fora; membro sem `user_id` fora. **Ver falhar**
-- [ ] T226 (nexclin#29) [P] [F2] No mesmo arquivo, `agruparEmConversas(mensagens, eu)`: uma conversa por par, ordenada pela mensagem mais recente, com a outra pessoa nomeada; e `naoLidas(mensagens, eu)`: conta só onde `recipient_id` é eu e `read_at` é nulo, por conversa e no total. **Ver falhar**
-- [ ] T227 (nexclin#30) [P] [F2] No mesmo arquivo, `cartaoDaReferencia(ref_type, ref_id, item)`: rótulo e rota para `task`, `appointment`, `lead` e `patient`; item ausente devolve cartão "item não encontrado" e **não** quebra. **Ver falhar**
-- [ ] T228 (nexclin#31) [F2] Escrever `../nexclin-lovable/src/lib/conversas.ts` até T225, T226 e T227 passarem. `npx vitest run` inteiro verde
+- [x] T225 (nexclin#28, fechada 14/09) [F2] Escrever `../nexclin-lovable/src/lib/__tests__/conversas.test.ts` para `destinatarios(membros, eu)`: ativo, com `user_id`, menos eu; membro inativo fora; membro sem `user_id` fora. **Ver falhar**
+- [x] T226 (nexclin#29, fechada 14/09) [P] [F2] No mesmo arquivo, `agruparEmConversas(mensagens, eu)`: uma conversa por par, ordenada pela mensagem mais recente, com a outra pessoa nomeada; e `naoLidas(mensagens, eu)`: conta só onde `recipient_id` é eu e `read_at` é nulo, por conversa e no total. **Ver falhar**
+- [x] T227 (nexclin#30, fechada 14/09) [P] [F2] No mesmo arquivo, `cartaoDaReferencia(ref_type, ref_id, item)`: rótulo e rota para `task`, `appointment`, `lead` e `patient`; item ausente devolve cartão "item não encontrado" e **não** quebra. **Ver falhar**
+- [x] T228 (nexclin#31, fechada 14/09) [F2] Escrever `../nexclin-lovable/src/lib/conversas.ts` até T225, T226 e T227 passarem. `npx vitest run` inteiro verde
 
 ### A tela
 
