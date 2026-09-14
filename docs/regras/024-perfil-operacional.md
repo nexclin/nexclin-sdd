@@ -74,8 +74,11 @@ recepção está produzindo.
   aparecer só para quem tem `relatorios_vendas` em `all`. O valor por linha
   **MUST** continuar visível para quem lança.
   *Porquê:* a secretária digita o valor da venda e precisa vê-lo. A soma da
-  clínica é outra coisa, e hoje aparece para financeiro `none` (visto na tela
-  em 12/09). Mesma lógica do dashboard Simplificado.
+  clínica é outra coisa, e aparecia para financeiro `none` (visto na tela em
+  12/09). Mesma lógica do dashboard Simplificado.
+  *Onde:* a tela é `src/pages/Acompanhamento.tsx`, rota `/acompanhamento`,
+  módulo `acompanhamento`; `Consultas.tsx` existe e não tem os totais
+  (conferido em 13/09). **Entregue em 14/09**, commit `a7f488e` da Lovable.
 
 - **FR-006** · faixa **B**
   O perfil operacional **MUST** nascer com anamnese `full`: vê o conteúdo das
@@ -83,7 +86,10 @@ recepção está produzindo.
   *Porquê:* a secretária cobra a anamnese e confere se foi preenchida direito,
   para alertar o paciente sobre pontos antes da consulta. O rótulo "Apenas
   status" continua disponível para o dono que quiser restringir, e passa a
-  ser aplicado de fato (hoje é só rótulo, não filtra nada).
+  ser aplicado de fato. Era só rótulo até 14/09; desde o commit `a7f488e` da
+  Lovable, `useCanViewAnamnesis` lê a permissão de módulo: `full` vê o
+  conteúdo, `status_only` só o estado, `responsible_only` mantém a regra do
+  profissional responsável.
 
 ### Assumir tarefa
 

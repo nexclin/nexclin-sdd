@@ -124,9 +124,9 @@ nova.
 
 - [ ] T326 (nexclin#75) [F2] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: a lista mostra a clínica inteira para quem tem `tarefas: own`, e o botão de editar obedece `podeEditarTarefa`. Nenhum filtro por "meu" na consulta ao banco
 - [ ] T327 (nexclin#76) [F2] Em `../nexclin-lovable/src/pages/Acompanhamento.tsx`: ao criar consulta, gravar `responsible_member_id` com o `team_members.id` do usuário logado, além do texto; ao delegar, gravar `doctor_member_id` além do texto. Os campos editáveis vêm de `camposEditaveisDaConsulta`
-- [ ] T328 (nexclin#77) [F2] Na mesma tela, linhas 1965 a 1970: os totais "Orçado" e "Vendas" só aparecem com `relatorios_vendas: "all"`. O valor por linha continua para quem lança
-- [ ] T329 (nexclin#78) [P] [F2] Anamnese: `status_only` passa a esconder o conteúdo das respostas e mostrar só o estado, em `../nexclin-lovable/src/pages/Anamnese.tsx` e onde mais a resposta for lida. Hoje é rótulo que não filtra
-- [ ] T330 (nexclin#79) [F2] Na regra, pela alínea (l) e no mesmo commit de T328: o FR-005 de `docs/regras/024-perfil-operacional.md` nomeia `src/pages/Acompanhamento.tsx`, rota `/acompanhamento`, como a tela dos totais. `Consultas.tsx` existe e não os tem
+- [x] T328 (nexclin#77, fechada 14/09) [F2] Na mesma tela, linhas 1965 a 1970: os totais "Orçado" e "Vendas" só aparecem com `relatorios_vendas: "all"`. O valor por linha continua para quem lança
+- [x] T329 (nexclin#78, fechada 14/09) [P] [F2] Anamnese: `status_only` passa a esconder o conteúdo das respostas e mostrar só o estado, em `../nexclin-lovable/src/pages/Anamnese.tsx` e onde mais a resposta for lida. Hoje é rótulo que não filtra
+- [x] T330 (nexclin#79, fechada 14/09) [F2] Na regra, pela alínea (l) e no mesmo commit de T328: o FR-005 de `docs/regras/024-perfil-operacional.md` nomeia `src/pages/Acompanhamento.tsx`, rota `/acompanhamento`, como a tela dos totais. `Consultas.tsx` existe e não os tem
 - [ ] T331 (nexclin#80) [F2] Gate de tipos: `npx tsc --noEmit -p tsconfig.app.json` limpo. `npm run build` **não** confere tipos
 - [ ] T332 (nexclin#81) [F2] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md`: commit com caminho explícito, push no mesmo comando, `scripts/ponte.sh conferir`, e o Arthur faz o Publish
 - [ ] T333 (nexclin#82) [F2] Procurar um marcador de texto das telas novas dentro do bundle publicado, porque o `conferir` sozinho não prova que o código subiu
