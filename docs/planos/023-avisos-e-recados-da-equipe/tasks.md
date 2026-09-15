@@ -165,7 +165,7 @@ terceira.
 - [x] T247 (nexclin#50, fechada 15/09) [P] [F4] Atualizar a seção 2 de `docs/regras/023-avisos-e-recados-da-equipe.md` com o que está no ar da seção 8, e a seção 5 com a linha de `internal_messages` e a nota de que a migração de `task_comments` passou a existir em T213
 - [x] T248 (nexclin#51, fechada 15/09) [P] [F4] Atualizar a linha da 023 em `docs/regras/README.md` com o estado real
 - [x] T249 (nexclin#52, fechada 15/09) [P] [F4] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
-- [ ] T250 (nexclin#53) [F4] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
+- [x] T250 (nexclin#53, fechada 15/09) [F4] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 
 ---
 

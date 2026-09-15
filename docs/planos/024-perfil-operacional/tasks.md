@@ -266,7 +266,7 @@ que ele acontece.
 - [x] T374 (nexclin#123, fechada 15/09, achado médio virou #185) [P] [F6] Rodar o agente `auditor-multitenant` sobre a migração de T308 a T313 e sobre `escopo.ts`, com a pergunta certa: a policy de escopo declarada e não construída está **declarada em todo lugar onde alguém poderia lê-la como construída**?
 - [x] T375 (nexclin#124, fechada 15/09) [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
 - [x] T376 (nexclin#125, fechada 15/09, virou #184) [F6] Abrir a issue da policy de escopo na stack nova, ligada ao FR-011 da 021, com o texto da seção 3 da regra 024: `UPDATE` em `tasks` só quando `responsible_member_id` é o meu ou sou master; `UPDATE` de `date` e `doctor_member_id` em `appointments` só pelo responsável ou master
-- [ ] T377 (nexclin#126) [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
+- [x] T377 (nexclin#126, fechada 15/09) [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 
 ---
 
