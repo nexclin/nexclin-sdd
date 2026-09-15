@@ -134,13 +134,14 @@ recepção está produzindo.
   `due_date`, o registro do FR-008, `appointments.responsible`,
   `lead_history`). "Nota de feedback" e "eficiência" não têm fonte em tabela
   nenhuma e ficam para regra própria quando existir a nota.
-  *Precisão de 15/09:* a medida "tarefas assumidas" vem de `data_audit_log`,
-  cuja policy de leitura (25/08) abre a trilha só para admin. Para o ranking
-  valer para todo membro (FR-013), a contagem sai pela função
-  `tarefas_assumidas_por_membro(de, até)`, `SECURITY DEFINER`, que devolve
-  só (membro, instante) da clínica de quem chama, sem `previous_state` nem
-  `actor` (migração `20260915020000`, bloco 2). Enquanto o bloco não roda no
-  banco ao vivo, a coluna aparece como "indisponível", e não como zero.
+  *Precisão de 15/09, decisão do Arthur na tela:* a medida "tarefas
+  assumidas" **só o dono vê** (admin da clínica ou `master`). Para os demais
+  a coluna diz "só o dono vê", e nunca zero. Para o dono, a contagem sai pela
+  função `tarefas_assumidas_por_membro(de, até)`, `SECURITY DEFINER`, que
+  devolve só (membro, instante) da clínica de quem chama, sem
+  `previous_state` nem `actor` (migração `20260915020000`, bloco 2, no ar
+  desde 15/09). As outras três medidas continuam visíveis a todo membro
+  (FR-013).
 
 - **FR-012** · faixa **A**
   Cada tarefa concluída no prazo **MUST** valer o **peso do seu tipo**,
