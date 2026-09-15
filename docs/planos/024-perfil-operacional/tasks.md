@@ -42,9 +42,9 @@ confirmar a premissa 1 da regra.
 divergência é o achado** e a regra se corrige antes de T306.
 
 - [x] T301 (#151, fechada 14/09) [F0] Escrever o bloco de conferência em `docs/ponte/024-censo-operacional.sql`, contando por clínica os `team_members` com `user_id` nulo e os `profiles` que logam sem linha em `team_members`. É a **premissa 1** da regra e decide o Portão 3
-- [ ] T302 (#152) [P] [F0] Escrever no mesmo arquivo a consulta a `pg_trigger` que lista em quais tabelas o trigger `audita_mudanca_de_dado` está ligado no banco ao vivo. Esperado: `patients` e as cinco de configuração. **Ele não está no clone da Lovable**: chegou por bloco de SQL, e a Fase 1 só o estende se ele existir
-- [ ] T303 (#153) [P] [F0] Escrever no mesmo arquivo a consulta a `information_schema.check_constraints` e `pg_constraint` sobre `tasks.type`. Decide se `recall_paciente` exige `ALTER` (T312) ou só entra na lista do front (T343)
-- [ ] T304 (#154) [P] [F0] Escrever no mesmo arquivo a listagem de `pg_policies` para `tasks` e `appointments`. Esperado em `tasks`: uma policy só, `FOR ALL TO authenticated`, de 22/03
+- [x] T302 (#152, fechada 14/09) [P] [F0] Escrever no mesmo arquivo a consulta a `pg_trigger` que lista em quais tabelas o trigger `audita_mudanca_de_dado` está ligado no banco ao vivo. Esperado: `patients` e as cinco de configuração. **Ele não está no clone da Lovable**: chegou por bloco de SQL, e a Fase 1 só o estende se ele existir
+- [x] T303 (#153, fechada 14/09) [P] [F0] Escrever no mesmo arquivo a consulta a `information_schema.check_constraints` e `pg_constraint` sobre `tasks.type`. Decide se `recall_paciente` exige `ALTER` (T312) ou só entra na lista do front (T343)
+- [x] T304 (#154, fechada 14/09) [P] [F0] Escrever no mesmo arquivo a listagem de `pg_policies` para `tasks` e `appointments`. Esperado em `tasks`: uma policy só, `FOR ALL TO authenticated`, de 22/03
 - [x] T305 (nexclin#54, fechada 14/09) [F0] Rodar o bloco no editor de SQL da plataforma, um trecho por vez. O Arthur clica `Run`; o agente para na barreira
 - [x] T306 (nexclin#55, fechada 14/09) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-operacional.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 
