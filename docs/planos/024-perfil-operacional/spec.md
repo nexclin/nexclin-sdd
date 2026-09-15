@@ -1,0 +1,1 @@
+../../regras/024-perfil-operacional.md

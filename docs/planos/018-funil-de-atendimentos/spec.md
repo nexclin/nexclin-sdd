@@ -1,0 +1,1 @@
+../../regras/018-funil-de-atendimentos.md

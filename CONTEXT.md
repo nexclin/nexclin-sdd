@@ -3,6 +3,13 @@
 Glossário, e nada além. Só termo que **já causou confusão real** aqui. Termo que
 nunca foi mal-entendido custa token e não evita nada. Teto: 60 linhas.
 
+> **Estourado em 05/09/2026: 67 linhas.** "Área inútil" e "motor de rotina"
+> entraram e nada saiu, porque apagar termo alheio não é decisão de quem
+> acrescenta. **Alguém precisa cortar dois termos ou subir o teto**, e a decisão
+> é do Arthur. Em 12/09 ele cortou "Esqueleto da clínica" e entrou
+> "Atendimento e Consulta", que confundiu em 11/09. Segue acima do teto: falta
+> cortar mais ou subir o teto, e continua sendo decisão dele.
+
 **Regra viva.** Documento que nasce antes da execução, guia a execução, e é
 corrigido no mesmo commit em que a execução o contradiz. Vive em `docs/regras/`.
 *Errado:* escrever a regra depois e chamar de documentação. Isso é histórico.
@@ -48,11 +55,21 @@ e percentual definidos em `team_members`.
 *Errado:* somar repasse como despesa da clínica em relatório de resultado sem
 dizer que o imposto está fixado em zero, porque hoje ele está.
 
-**Esqueleto da clínica.** O app em `app/app/` com layout, menu e rotas de pé, e
-sem módulo de negócio dentro. Foi o que a regra 001 entregou.
-*Errado:* chamar de MVP. Ele navega e não opera nada.
+**Área inútil.** A altura acima da primeira linha de conteúdo que o operador não
+usa. Teto em `docs/referencia/marca-tokens.md`: 180px, 280px com mini dash.
+*Errado:* tratar como "deixar mais bonito". É orçamento de pixel, e se mede.
+
+**Motor de rotina.** O módulo `tarefas` lido como a rotina que a clínica cumpre,
+não como quadro de cards. A tarefa nasce de evento ou de checklist, e o que se
+mede é cumprimento no prazo.
+*Errado:* chamar de gerenciador de tarefas. Card à mão é o caso menor.
 
 **Apontamento.** Um item relatado por sócio testando a plataforma, no formato da
 base do Notion. Vira bug ou requisito depois da triagem, nunca antes.
 *Errado:* corrigir apontamento antes de triar. Metade não é bug, e parte do que
 é bug não atravessa.
+
+**Atendimento e Consulta.** Atendimento é o lead no funil (`leads`, regra 018).
+Consulta é o compromisso na agenda (`appointments`). A **fila do dia** é a lista
+de consultas de hoje, por horário e por médico, que a secretária opera.
+*Errado:* dizer "fila de atendimento" para a agenda. Confundiu em 11/09/2026.

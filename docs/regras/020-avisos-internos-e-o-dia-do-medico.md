@@ -78,8 +78,13 @@ produziu recebível sem `macro_category` caindo no balde errado, registrado em
 números que se contradizem. Evento novo em tabela nova repetiria o erro na
 véspera de ele ser consertado.
 
-**FR-002**: `tasks.responsible` **MUST** referenciar o usuário, e **MUST NOT**
-continuar sendo texto livre.
+**FR-002**: `tasks.responsible` **MUST** ganhar referência ao **membro da
+equipe** (`team_members`), e o aviso **MUST** ser entregue por essa referência.
+*Emendado em 12/09/2026:* dizia "usuário"; membro sem login existe (médico que
+não loga) e é delegado de consulta, então a referência é ao membro, e o membro
+com login é quem recebe. O texto livre **não é apagado**: o censo de 05/09
+(regra 022) mostrou que 73% das tarefas apontam para setor, e setor é escolha
+da clínica. A referência entra em coluna nova, anulável, ao lado do texto.
 *Porquê:* hoje a coluna é `TEXT DEFAULT ''`. Não se entrega aviso a uma string.
 É o mesmo defeito da especialidade no provisionamento, que virou `Input` livre e
 por isso não casa com template nenhum: vocabulário não controlado quebra toda
@@ -108,11 +113,13 @@ com mensagens padronizadas e a possibilidade de escrever uma específica.
 *Porquê:* é o pedido literal, e o motivo é operacional: a cobrança hoje sai do
 sistema e vai para o WhatsApp, onde ela some e não vira registro.
 
-**FR-007**: O canal entre médico e secretária **MUST NOT** virar chat.
-*Porquê:* chat exige presença, histórico, busca e notificação em tempo real, e
-nada disso foi pedido. O que foi pedido é recado curto preso a um paciente ou a
-uma tarefa. Chat solto também tira o recado do contexto em que ele significa
-alguma coisa.
+**FR-007**: *Revogado em 12/09/2026.* Dizia que o canal entre médico e
+secretária **MUST NOT** virar chat, porque chat não tinha sido pedido. Em 11/09
+foi pedido, com o caso de uso: o recado preso à tarefa (entregue pela 023)
+resolve a cobrança, e não resolve a conversa que a cobrança gera, que hoje
+sai para o WhatsApp e some. A mensagem interna, entre membros da mesma
+clínica, com referência opcional à tarefa, consulta, lead ou paciente, passa a
+ser requisito da **regra 023**, FR-007 em diante. O recado na tarefa continua.
 
 **FR-008**: Nenhum aviso **MUST** atravessar clínica.
 *Porquê:* regra (a) e (b) da constituição. O aviso carrega nome de paciente, e
@@ -129,7 +136,7 @@ titular, que é assunto da 019.
 
 | Objeto | Mudança |
 |---|---|
-| `tasks.responsible` | de `TEXT` para referência ao usuário, com migração de dados do que já está escrito em texto |
+| `tasks.responsible` | **fica como está.** Entra `tasks.responsible_member_id`, anulável, referência a `team_members`, sem migração do texto (emenda de 12/09, ver FR-002 e a regra 022) |
 | `profiles` | coluna nova, carimbo de quando o usuário viu os avisos pela última vez. Segue o padrão da `20260828020000`, que fez o mesmo para a apresentação inicial, pelas mesmas razões: é um fato por usuário, do tamanho de uma coluna, e `profiles` já tem policy de escrita do próprio dono |
 | tabela nova, recado interno | `clinic_id`, autor, destinatário, texto, referência opcional a `task_id` ou `patient_id`, carimbo de leitura. RLS por `clinic_id`, e leitura restrita a autor e destinatário |
 | `tasks` | **nada**. Os nove tipos já existem e continuam sendo gerados pelos caminhos atuais |
@@ -199,6 +206,14 @@ a bateria com o Vinícius responde, e é o que decide se a regra serviu.
 ---
 
 ## 7. A decisão que falta, e precisa do Arthur
+
+> **Fechadas em 12/09/2026, as três.** (1) Nem sino nem mensagem viram
+> ModuleKey: são infraestrutura de todo membro com login, sem plano nem
+> permissão, e por isso não há emenda à alínea (f). (2) O recado na tarefa
+> já foi entregue pela 023, e a mensagem interna entra na primeira versão do
+> lote operacional, também pela 023. (3) O alvo passou a ser Lovable e stack
+> nova, pela exceção nomeada no Princípio IV da constituição, emenda 2.1.0.
+> O texto abaixo fica como registro do que estava aberto.
 
 **1. A emenda à constituição, para o sininho e o recado interno.** Sem ela,
 metade desta regra não pode ser construída. O que pesa de cada lado: uma

@@ -1,0 +1,1 @@
+../../regras/019-conformidade-lgpd-do-painel.md

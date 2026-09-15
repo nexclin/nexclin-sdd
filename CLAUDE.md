@@ -15,7 +15,7 @@
 | # | Onde | Para quê |
 |---|---|---|
 | 1 | o handoff mais recente em [`docs/historico/`](docs/historico/) | **o estado real.** Os nomes começam com a data: pegue o maior |
-| 2 | as issues abertas em `nexclin/nexclin-sdd` | o trabalho pendente, tarefa a tarefa |
+| 2 | as issues abertas em **`nexclin/nexclin`**, o repositório da plataforma | o trabalho pendente, tarefa a tarefa. Desde 14/09 a issue mora onde o código muda; `gh -R nexclin/nexclin` |
 | 3 | [`docs/regras/README.md`](docs/regras/README.md) | o que o sistema deve fazer, e o que falta decidir |
 | 4 | [`docs/ponte/ponte-inversa.md`](docs/ponte/ponte-inversa.md) | **obrigatório** antes de tocar a plataforma ao vivo |
 | 5 | [`docs/constituicao.md`](docs/constituicao.md) | a lei, vence qualquer preferência |
@@ -153,10 +153,12 @@ Valem para todo código e todo texto deste repositório.
 pode existir só no frontend.
 **(d)** Toda ação administrativa sobre dado de cliente gera auditoria: quem, o
 quê, quando, `old→new`.
-**(e)** Senha é definida **só pelo superadmin, e só ao provisionar clínica
-nova**, com auditoria. Admin ou membro de clínica **jamais** define senha de
-outro usuário: para esses, só reset por e-mail, com o próprio dono digitando.
-Emendada em 28/08/2026; o porquê está na Seção II da constituição.
+**(e)** Senha inicial é definida por quem **cria** o acesso: o superadmin ao
+provisionar a clínica, e o dono da clínica ao criar um membro da própria
+clínica, sempre com auditoria. Senha de usuário **que já existe** ninguém
+define além do próprio: só reset por e-mail. Sem troca obrigatória no primeiro
+acesso. Emendada em 28/08 e em 12/09/2026; o porquê está na Seção II da
+constituição. A plataforma no ar faz isto desde 09/09: **não "corrija"**.
 **(f)** As **15 ModuleKeys** são o contrato único de módulos, e planos,
 permissões e telas usam as mesmas strings:
 `dashboard · leads · pacientes · anamnese · consultas · acompanhamento · tarefas
@@ -171,7 +173,9 @@ gera plano por fases e PARA para aprovação humana antes de cada fase.
 **(i)** `../nexclin-lovable` é editável **só sob procedimento**: bug apenas,
 conserto mínimo, `git pull` antes, `main` sempre, nunca `--force`, e a ordem
 obrigatória **function antes do Publish do front**. Procedimento em
-[`docs/ponte/ponte-inversa.md`](docs/ponte/ponte-inversa.md).
+[`docs/ponte/ponte-inversa.md`](docs/ponte/ponte-inversa.md). **Exceção nomeada
+em 12/09/2026:** as regras 023, 024 e 025, o lote operacional de setembro,
+sobem como funcionalidade, pela mesma mecânica; a razão está no Princípio IV.
 **(j)** "Implementado ≠ funciona": toda fase fecha com critérios de aceite
 executados manualmente pelo Arthur. Quando não der para provar o comportamento na
 tela, registre literalmente *"código lido, não comportamento provado"* e deixe o
@@ -205,16 +209,29 @@ Cada peça rastreia a uma falha real (princípio da catraca). Leia
   projeto:** travessão proibido, barra como conector proibida, superlativo exige
   conta atrás. Vale para a resposta na tela também.
 - **skills** são procedimentos longos. As nossas: `nx-regra`, `nx-modulo`,
-  `nx-ponte`, `nx-paralelo`, `nx-apontamento`.
+  `nx-ponte`, `nx-paralelo`, `nx-apontamento`. De terceiros, seis do Spec Kit:
+  `speckit-clarify`, `speckit-plan`, `speckit-tasks`, `speckit-taskstoissues`,
+  `speckit-analyze` e `speckit-checklist`.
 - **agents**: auditor-multitenant, triador-apontamentos, consultor-vertical,
   relator-semanal.
 
 "Toda vez que X" vira hook; restrição de área vira rule; procedimento longo vira
 skill; trabalho paralelo vira agente. A constituição vence qualquer uma delas.
 
-**A cadeia canônica de trabalho:** `grill-with-docs` para interrogar a ideia,
-`nx-regra` para escrever a regra em `docs/regras/`, `to-tickets` para abrir as
-issues, `implement` para executar por fases.
+**A cadeia canônica de trabalho:** `speckit-clarify` para interrogar a ideia,
+`nx-regra` para escrever a regra em `docs/regras/`, `speckit-plan` e
+`speckit-tasks` para o plano e as tarefas em `docs/planos/`,
+`speckit-taskstoissues` para abrir as issues na ordem de dependência, e
+`implement` para executar por fases.
+
+**Não use `grill-with-docs`.** Ele delega a uma skill `grilling` que está em
+`.claude/skills-fora/`, fora do git: existe só na máquina do Arthur e falha em
+qualquer clone. Saiu da cadeia em 05/09/2026.
+
+**O Spec Kit voltou pela metade em 04/09**, com quatro skills e a regra
+continuando em `docs/regras/`. O porquê está na
+[ADR 0006](docs/adr/0006-o-spec-kit-volta-pela-metade.md), e como se aponta o
+diretório da frente está em [`docs/planos/README.md`](docs/planos/README.md).
 
 ---
 
@@ -226,8 +243,9 @@ numa re-execução, em vez de criar bloco duplicado.
 
 ### Issue tracker
 
-As issues vivem no GitHub, em `nexclin/nexclin-sdd`, que é este mesmo
-repositório, então o `gh` infere sozinho. Ver
+As issues vivem no GitHub, em **`nexclin/nexclin`**, o repositório da plataforma
+ao vivo, e não neste. Decisão do Arthur em 14/09/2026: a issue mora onde o
+código muda. Todo `gh issue` leva `-R nexclin/nexclin`. Ver
 [`docs/agents/issue-tracker.md`](docs/agents/issue-tracker.md).
 
 ### Domain docs

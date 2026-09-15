@@ -1,0 +1,1 @@
+../../regras/001-fundacao-superadmin.md

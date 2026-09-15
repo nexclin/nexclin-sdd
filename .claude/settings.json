@@ -45,12 +45,14 @@
       }
     ]
   },
-  "permissions": {
+    "permissions": {
     "deny": [
-      "Edit(../nexclin-lovable/**)",
-      "Write(../nexclin-lovable/**)",
       "Read(./.env.local)",
       "Read(./.env)"
+    ],
+    "allow": [
+      "Edit(../nexclin-lovable/**)",
+      "Write(../nexclin-lovable/**)"
     ],
     "ask": [
       "Bash(supabase db push*)",

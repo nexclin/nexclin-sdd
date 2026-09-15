@@ -83,8 +83,9 @@ Valem porque o projeto tem três sócios e nem sempre os três estão na convers
 | [0001](./0001-consultas-sai-do-contrato-de-modulos.md) | A ModuleKey `consultas` sai do contrato | Proposta, **preparada e não aplicada** |
 | [0002](./0002-sem-cifra-em-coluna-por-enquanto.md) | Nenhuma coluna de dado de saúde é cifrada na aplicação | Proposta |
 | [0003](./0003-onde-o-nexclin-roda.md) | Ficar em Supabase e Vercel, não migrar de provedor | Aceita |
-| [0004](./0004-o-spec-kit-sai.md) | O Spec Kit sai do projeto, contra a recomendação | Aceita |
+| [0004](./0004-o-spec-kit-sai.md) | O Spec Kit sai do projeto, contra a recomendação | **Substituída em parte pela 0006** |
 | [0005](./0005-bifurcar-o-to-spec.md) | O `to-spec` é bifurcado em `nx-regra` | Aceita |
+| [0006](./0006-o-spec-kit-volta-pela-metade.md) | O Spec Kit volta pela metade, contra a recomendação | Aceita |
 
 **As duas primeiras foram decididas pelo executor em 25/08, sob delegação
 explícita do Arthur**, que pediu para decidir pela documentação em vez de
@@ -95,7 +96,11 @@ constituição ou código.
 `docs/arquitetura/` e virou ADR na reorganização de 27/08, sem mudar uma palavra
 do corpo. **A 0004 e a 0005 nasceram na própria reorganização.**
 
-**Estado desta pasta:** cinco arquivos; as decisões da tabela de cima ainda não
+**A 0006 é de 04/09** e reverte em parte a 0004, mantendo a regra viva onde ela
+está e trazendo de volta apenas o plano e a lista de tarefas. Como a conduta 1
+manda, a 0004 não foi reescrita: ganhou aviso no topo.
+
+**Estado desta pasta:** seis arquivos; as decisões da tabela de cima ainda não
 foram migradas, e a numeração delas não conversa com a dos arquivos.
 Migrar o texto de cada linha para o seu próprio ADR é a tarefa OC-4 da análise
 do OpenClinic, e ela é trabalho de depois do lançamento. Até lá, esta tabela é
