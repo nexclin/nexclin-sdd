@@ -132,7 +132,7 @@ médico logados.
 - [ ] T237 (nexclin#40) [F2] **Prova 4**, na tela: o médico abre a conversa; no editor, `read_at` gravou; o balão dele zera; o de Maria não muda
 - [ ] T238 (nexclin#41) [F2] **Prova 5**, na tela: mensagem com referência a uma tarefa mostra o cartão e o cartão leva à tarefa; cancelar a tarefa (não se apaga, regra 024 FR-009) mantém a mensagem e o cartão
 - [ ] T239 (nexclin#42) [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
-- [ ] T240 (nexclin#43) [F2] Avisar a frente 024: a T363 de `docs/planos/024-perfil-operacional/tasks.md` passa a responder "entregue", e o bloco 4 do painel (T367 de lá) pode entrar. **Este plano avisa; não executa a 024**
+- [x] T240 (nexclin#43, fechada 15/09) [F2] Avisar a frente 024: a T363 de `docs/planos/024-perfil-operacional/tasks.md` passa a responder "entregue", e o bloco 4 do painel (T367 de lá) pode entrar. **Este plano avisa; não executa a 024**
 
 **Ponto de conferência:** a conversa sai do WhatsApp e volta para dentro do
 sistema, com o item anexado.
@@ -146,9 +146,9 @@ sistema, com o item anexado.
 **Aceite independente:** prova 6, duas abas, **com controle negativo** numa
 terceira.
 
-- [ ] T241 (nexclin#44) [F3] Escrever `supabase/migrations/20260913030000_realtime_mensagem_interna.sql`: `ALTER PUBLICATION supabase_realtime ADD TABLE public.internal_messages`, ou `CREATE PUBLICATION` se T202 mostrou que não existe. Copiar para `docs/ponte/aplicacao-023/b6-realtime.sql`
+- [x] T241 (nexclin#44, fechada 15/09) [F3] Escrever `supabase/migrations/20260913030000_realtime_mensagem_interna.sql`: `ALTER PUBLICATION supabase_realtime ADD TABLE public.internal_messages`, ou `CREATE PUBLICATION` se T202 mostrou que não existe. Copiar para `docs/ponte/aplicacao-023/b6-realtime.sql`
 - [ ] T242 (nexclin#45) [F3] Aplicar `b6` no editor. O Arthur clica `Run`
-- [ ] T243 (nexclin#46) [F3] Em `../nexclin-lovable/src/components/layout/NxConversas.tsx`: assinar `postgres_changes` em `internal_messages` enquanto o painel está aberto, e cancelar a assinatura ao fechar. Sem assinatura com o painel fechado; o balão continua lendo por consulta
+- [x] T243 (nexclin#46, fechada 15/09) [F3] Em `../nexclin-lovable/src/components/layout/NxConversas.tsx`: assinar `postgres_changes` em `internal_messages` enquanto o painel está aberto, e cancelar a assinatura ao fechar. Sem assinatura com o painel fechado; o balão continua lendo por consulta
 - [ ] T244 (nexclin#47) [F3] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
 
 ### Aceite, e é onde a fase fecha

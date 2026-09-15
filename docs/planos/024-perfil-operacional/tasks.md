@@ -225,7 +225,7 @@ número.
 seção 8 da 023 especifica e que ainda não existe. A regra 024 já decidiu: o
 painel nasce com cinco blocos, e o sexto entra quando a 023 entregar.
 
-- [ ] T363 (nexclin#112) [F5] Conferir em `docs/planos/023-avisos-e-recados-da-equipe/tasks.md` se a caixa da seção 8 já está entregue. Se sim, T367 entra na mesma passada de T366; se não, o aceite da F5 escreve "cinco blocos, o quarto espera a 023"
+- [x] T363 (nexclin#112, fechada 15/09) [F5] Conferir em `docs/planos/023-avisos-e-recados-da-equipe/tasks.md` se a caixa da seção 8 já está entregue. Se sim, T367 entra na mesma passada de T366; se não, o aceite da F5 escreve "cinco blocos, o quarto espera a 023"
 
 ---
 
