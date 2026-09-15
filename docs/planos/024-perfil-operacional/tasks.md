@@ -127,9 +127,9 @@ nova.
 - [x] T328 (nexclin#77, fechada 14/09) [F2] Na mesma tela, linhas 1965 a 1970: os totais "Orçado" e "Vendas" só aparecem com `relatorios_vendas: "all"`. O valor por linha continua para quem lança
 - [x] T329 (nexclin#78, fechada 14/09) [P] [F2] Anamnese: `status_only` passa a esconder o conteúdo das respostas e mostrar só o estado, em `../nexclin-lovable/src/pages/Anamnese.tsx` e onde mais a resposta for lida. Hoje é rótulo que não filtra
 - [x] T330 (nexclin#79, fechada 14/09) [F2] Na regra, pela alínea (l) e no mesmo commit de T328: o FR-005 de `docs/regras/024-perfil-operacional.md` nomeia `src/pages/Acompanhamento.tsx`, rota `/acompanhamento`, como a tela dos totais. `Consultas.tsx` existe e não os tem
-- [ ] T331 (nexclin#80) [F2] Gate de tipos: `npx tsc --noEmit -p tsconfig.app.json` limpo. `npm run build` **não** confere tipos
-- [ ] T332 (nexclin#81) [F2] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md`: commit com caminho explícito, push no mesmo comando, `scripts/ponte.sh conferir`, e o Arthur faz o Publish
-- [ ] T333 (nexclin#82) [F2] Procurar um marcador de texto das telas novas dentro do bundle publicado, porque o `conferir` sozinho não prova que o código subiu
+- [x] T331 (nexclin#80, fechada 15/09) [F2] Gate de tipos: `npx tsc --noEmit -p tsconfig.app.json` limpo. `npm run build` **não** confere tipos
+- [x] T332 (nexclin#81, fechada 15/09) [F2] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md`: commit com caminho explícito, push no mesmo comando, `scripts/ponte.sh conferir`, e o Arthur faz o Publish
+- [x] T333 (nexclin#82, fechada 15/09) [F2] Procurar um marcador de texto das telas novas dentro do bundle publicado, porque o `conferir` sozinho não prova que o código subiu
 
 ### Aceite, e é onde a fase fecha
 
@@ -162,8 +162,8 @@ edita o que é dela.
 - [x] T342 (nexclin#91, fechada 15/09) [F3] Na mesma tela: **nenhum caminho chama `DELETE`**. O que apagava passa a `UPDATE` de `status` para cancelada. Buscar por `.delete(` no arquivo e nos componentes de tarefa que ele importa; cada ocorrência sai
 - [x] T343 (nexclin#92, fechada 14/09) [P] [F3] Em `../nexclin-lovable/src/lib/tiposDeTarefa.ts`: `recall_paciente` entra em `TIPOS_MANUAIS` e em `ROTULOS_DE_TIPO` como "Recall de paciente", separado de `recall` (automático) e de `recaptacao_*` (funil)
 - [x] T344 (nexclin#93, fechada 15/09) [F3] Em `../nexclin-lovable/src/pages/Recall.tsx`: botão assumir no item vencido cria uma tarefa `type = 'recall_paciente'`, `patient_id` do item, `responsible_member_id` e `responsible` de quem assumiu, `due_date` hoje. A linha do recall mostra "com dono" quando existe tarefa aberta desse tipo para esse paciente
-- [ ] T345 (nexclin#94) [F3] Gate de tipos, `npx tsc --noEmit -p tsconfig.app.json`, e `npx vitest run` inteiro verde
-- [ ] T346 (nexclin#95) [F3] Publicar pelo procedimento da ponte, com `scripts/ponte.sh conferir` e o marcador no bundle
+- [x] T345 (nexclin#94, fechada 15/09) [F3] Gate de tipos, `npx tsc --noEmit -p tsconfig.app.json`, e `npx vitest run` inteiro verde
+- [x] T346 (nexclin#95, fechada 15/09) [F3] Publicar pelo procedimento da ponte, com `scripts/ponte.sh conferir` e o marcador no bundle
 
 ### Aceite, e é onde a fase fecha
 
@@ -206,7 +206,7 @@ próxima leitura, sem tocar em tarefa nenhuma.
 - [x] T356 (nexclin#105, fechada 15/09) [F4] Em `../nexclin-lovable/src/pages/Configuracoes.tsx`: a tabela de pesos por tipo, um número por tipo de `ROTULOS_DE_TIPO`, gravando em `business_rules.task_type_weights`. Padrão visível: 1
 - [x] T357 (nexclin#106, fechada 15/09) [P] [F4] Ranking no painel do dono, em `../nexclin-lovable/src/pages/Dashboard.tsx`, lendo `produtividade.ts`, com filtro por função
 - [x] T358 (nexclin#107, fechada 15/09) [P] [F4] Ranking no relatório de produtividade, em `../nexclin-lovable/src/pages/relatorios/`, visível a todo membro, com o mesmo filtro. Relatório é por onde o Vinícius opera, e não pode nascer diferente do painel
-- [ ] T359 (nexclin#108) [F4] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
+- [x] T359 (nexclin#108, fechada 15/09) [F4] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
 
 ### Aceite, e é onde a fase fecha
 
@@ -247,7 +247,7 @@ clínica tem dois.
 - [x] T366 (nexclin#115, fechada 15/09) [F5] Em `../nexclin-lovable/src/pages/DashboardOperational.tsx`: os três cartões vazios ("Minhas tarefas do dia", "Meus leads ativos", "Consultas de hoje") saem; entram os blocos de `montaPainel`, com seletor de médico quando `team_members` da clínica tem mais de um médico, e o botão assumir do bloco 5 chamando o mesmo caminho de T341
 - [x] T367 (nexclin#116, fechada 15/09) [F5] Bloco 4, mensagens não lidas, **só se T363 disse que a 023 entregou**: lê a caixa da seção 8 e mostra a contagem com link
 - [ ] T368 (nexclin#117) [P] [F5] Em `../nexclin-lovable/src/components/config/ConfigTeamDialog.tsx`: conferir que Completo, Simplificado e Sem acesso continuam por pessoa, e que Simplificado leva ao painel de T366. Hoje é "código lido, não provado na tela"; esta tarefa prova
-- [ ] T369 (nexclin#118) [F5] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
+- [x] T369 (nexclin#118, fechada 15/09) [F5] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
 
 ### Aceite, e é onde a fase fecha
 
@@ -262,10 +262,10 @@ que ele acontece.
 
 ## Fase 6 · Fechamento
 
-- [ ] T373 (nexclin#122) [P] [F6] Atualizar a linha da 024 em `docs/regras/README.md` com o estado real: o que está no ar, o que ficou "escopo só no front", o que espera a 023
-- [ ] T374 (nexclin#123) [P] [F6] Rodar o agente `auditor-multitenant` sobre a migração de T308 a T313 e sobre `escopo.ts`, com a pergunta certa: a policy de escopo declarada e não construída está **declarada em todo lugar onde alguém poderia lê-la como construída**?
+- [x] T373 (nexclin#122, fechada 15/09) [P] [F6] Atualizar a linha da 024 em `docs/regras/README.md` com o estado real: o que está no ar, o que ficou "escopo só no front", o que espera a 023
+- [x] T374 (nexclin#123, fechada 15/09, achado médio virou #185) [P] [F6] Rodar o agente `auditor-multitenant` sobre a migração de T308 a T313 e sobre `escopo.ts`, com a pergunta certa: a policy de escopo declarada e não construída está **declarada em todo lugar onde alguém poderia lê-la como construída**?
 - [ ] T375 (nexclin#124) [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
-- [ ] T376 (nexclin#125) [F6] Abrir a issue da policy de escopo na stack nova, ligada ao FR-011 da 021, com o texto da seção 3 da regra 024: `UPDATE` em `tasks` só quando `responsible_member_id` é o meu ou sou master; `UPDATE` de `date` e `doctor_member_id` em `appointments` só pelo responsável ou master
+- [x] T376 (nexclin#125, fechada 15/09, virou #184) [F6] Abrir a issue da policy de escopo na stack nova, ligada ao FR-011 da 021, com o texto da seção 3 da regra 024: `UPDATE` em `tasks` só quando `responsible_member_id` é o meu ou sou master; `UPDATE` de `date` e `doctor_member_id` em `appointments` só pelo responsável ou master
 - [ ] T377 (nexclin#126) [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 
 ---

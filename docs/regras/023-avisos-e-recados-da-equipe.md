@@ -1,7 +1,7 @@
 # 023 · Avisos e recados da equipe
 
 **Data:** 06/09/2026 · **Origem:** pedido do Arthur, áudio de 06/09 ·
-**Estado:** parte entregue, parte **aguardando aprovação e emenda**
+**Estado:** sino e comentário na tarefa entregues; mensagem interna no banco e publicada em 15/09, **sem prova de tela** (seção 2.1)
 
 ## 1. O problema
 
@@ -43,12 +43,32 @@ ninguém precisa e uma caixa de mensagens que ninguém confia.
   22/03 que não chamam `my_permission`. Some quando aquele for corrigido no
   banco, e não vale um remendo de tela antes disso.
 
+### 2.1 O que a seção 8 entregou, estado em 15/09/2026
+
+A caixa de mensagem interna saiu do papel entre 12 e 15/09. O que está no ar,
+e o que ainda não é:
+
+| FR | O que | Estado |
+|---|---|---|
+| FR-007, FR-009, FR-010, FR-013, FR-014 | `internal_messages` com RLS por participante, `sender_id` de `auth.uid()`, sem `DELETE`, `read_at` por destinatário, sem ModuleKey | **no banco ao vivo** desde 14/09 (`20260914020000_mensagem_interna.sql`, aplicada como `b5`) |
+| FR-008, FR-011, FR-012 | painel lateral `NxConversas`, balão ao lado do sino, foto do membro em tarefa, consulta e lead, cartão da referência, contagem no sino | **publicado** em 15/09 (`05edccd` na Lovable) |
+| FR-015 | assinatura `postgres_changes` enquanto o painel está aberto | **publicado** em 15/09 (`c26d645`). **Só funciona depois** do `ALTER PUBLICATION` de `b6-realtime.sql`, que em 15/09 ainda esperava o `Run` do Arthur |
+
+**Provado no editor:** as policies existem com a forma esperada (censo de
+14/09). **Não provado:** nenhuma prova de tela da seção 8.6, e as provas 2 e
+3 do editor esperam o bloco `b1-prova-t320-t221.sql` da 024. Tudo que é tela
+está como *código lido, não comportamento provado*.
+
 ## 3. O que NÃO foi feito, e o que ele exige antes
 
-- **FR-005** · faixa **A** · alvo **stack nova** · **NÃO IMPLEMENTADO**
+- **FR-005** · faixa **A** · alvo **Lovable e stack nova** · **ENTREGUE em
+  12/09** como comentário na tarefa (`task_comments`, migração
+  `20260907000000_task_comments.sql`, no ar pelo bloco `b1` da 023, confirmado
+  no censo de 14/09). O texto abaixo é o de 06/09, e fica como registro de por
+  que a caixa de mensagens **não** entrou antes do lançamento.
   Recado entre funcionários da mesma clínica **MUST** ser gravado, com autor,
   destinatário, texto, instante e estado de leitura por pessoa.
-  *Porquê não foi feito agora, e a razão não é preguiça:* é uma feature de
+  *Porquê não foi feito antes de 08/09, e a razão não é preguiça:* é uma feature de
   persistência. Ela precisa de tabela, de RLS por clínica **e** por
   destinatário, de índice para não ler tudo, e de um estado de leitura que é
   por par de pessoa e mensagem. Nada disso se prova em dois dias, e mensagem
@@ -77,10 +97,11 @@ da §2.5 para o que entra antes do lançamento.
 
 ## 5. O que o banco vai precisar, quando for a hora
 
-| Tabela | Colunas mínimas | FR |
-|---|---|---|
-| comentário de tarefa | `task_id`, `clinic_id`, autor, texto, instante | FR-005 |
-| leitura | quem leu, o quê, quando | FR-005 |
+| Tabela | Colunas mínimas | FR | Estado |
+|---|---|---|---|
+| `task_comments` | `task_id`, `clinic_id`, `author_id` de `auth.uid()`, texto, instante | FR-005 | **no ar.** Migração `20260907000000_task_comments.sql`, escrita em T213 copiando o `b1` que já estava aplicado |
+| `internal_messages` | `clinic_id`, `sender_id`, `recipient_id`, `body`, `ref_type`, `ref_id`, `read_at` (seção 8.3) | FR-007 a FR-010, FR-014 | **no ar** desde 14/09, `20260914020000_mensagem_interna.sql` |
+| leitura de comentário | quem leu, o quê, quando | FR-005 | **não existe.** O comentário na tarefa não tem estado de leitura; só a mensagem interna tem, por `read_at` |
 
 RLS por `clinic_id` como toda tabela do sistema, alínea (a), e **default deny**,
 alínea (b). O autor sai de `auth.uid()`, nunca do cliente.
@@ -92,8 +113,11 @@ alínea (b). O autor sai de `auth.uid()`, nunca do cliente.
    que o front mandou.
 3. Marcar como lido não marca para os outros.
 
-**Nenhuma dessas provas pode rodar hoje**, pelo mesmo motivo de sempre: a
-clínica de teste tem um usuário só. Ver `docs/ponte/50-segundo-usuario-passo-a-passo.md`.
+**Até 14/09 nenhuma dessas provas podia rodar**, porque a clínica de teste
+tinha um usuário só. Desde o censo de 14/09 a Clínica Lançamento tem dois
+membros com login (Dr. Lançamento, `master`; Sra. Maria, `operacional`), e as
+provas passam a depender só de duas abas. A prova 3 não se aplica ao
+comentário (ver seção 5). Ver `docs/ponte/50-segundo-usuario-passo-a-passo.md`.
 
 ## 7. Aberto
 
@@ -110,7 +134,9 @@ clínica de teste tem um usuário só. Ver `docs/ponte/50-segundo-usuario-passo-
 
 ## 8. Mensagem interna, a caixa que entrou em 12/09/2026
 
-> **Estado em 12/09/2026:** especificada, nada implementado. Alvo: **Lovable e
+> **Estado em 15/09/2026:** banco no ar desde 14/09, telas publicadas em
+> 15/09, Realtime publicado e à espera do `ALTER PUBLICATION`. Nada de tela
+> provado. O detalhe está na seção 2.1. Alvo: **Lovable e
 > stack nova**, pela exceção nomeada no Princípio IV da constituição (2.1.0).
 > **Origem:** ditado pelo Arthur em 11/09 e interrogado em 4 rodadas; a mesma
 > conversa revogou o FR-007 da regra 020.

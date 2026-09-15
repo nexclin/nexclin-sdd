@@ -3,7 +3,9 @@
 > **Regra viva.** Nasce antes da execução, guia a execução, e é corrigida no
 > mesmo commit em que a execução a contradiz.
 >
-> **Estado em 12/09/2026:** especificada, nada implementado. Alvo: **Lovable e
+> **Estado em 15/09/2026:** banco no ar desde 14/09 (migração
+> `20260914010000`), telas publicadas em 15/09 (`05edccd` na Lovable). Nada
+> de tela provado; escopo do FR-003 e FR-004 só no front (seção 3). Alvo: **Lovable e
 > stack nova**, pela exceção nomeada no Princípio IV da constituição (2.1.0).
 > O que é de tela está marcado como faixa C e sobe pela mesma exceção.
 >

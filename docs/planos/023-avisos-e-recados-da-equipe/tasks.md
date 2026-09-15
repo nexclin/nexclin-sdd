@@ -124,7 +124,7 @@ médico logados.
 - [x] T232 (nexclin#35, fechada 15/09) [F2] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: a foto (ou o nome) do responsável abre `NxConversas` na conversa com aquela pessoa, com `ref_type = 'task'` e `ref_id` da tarefa preenchidos. Sem botão para membro sem login
 - [x] T233 (nexclin#36, fechada 15/09) [P] [F2] O mesmo em `../nexclin-lovable/src/pages/Acompanhamento.tsx` (`ref_type = 'appointment'`) e em `../nexclin-lovable/src/pages/Atendimentos.tsx` (`ref_type = 'lead'`). **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às irmãs**
 - [x] T234 (nexclin#37, fechada 15/09) [F2] Conferir em `../nexclin-lovable/src/lib/__tests__/rotas.test.ts` e em `App.tsx` que a caixa **não** entrou como rota protegida por `RequirePermission`, e que nada em `usePermissions.ts`, `plans` ou `ConfigTeamDialog.tsx` a menciona. FR-013
-- [ ] T235 (nexclin#38) [F2] Gate de tipos, `npx tsc --noEmit -p tsconfig.app.json`, `npx vitest run` verde, e publicar pela ponte com `scripts/ponte.sh conferir` e o marcador no bundle
+- [x] T235 (nexclin#38, fechada 15/09) [F2] Gate de tipos, `npx tsc --noEmit -p tsconfig.app.json`, `npx vitest run` verde, e publicar pela ponte com `scripts/ponte.sh conferir` e o marcador no bundle
 
 ### Aceite, e é onde a fase fecha
 
@@ -149,7 +149,7 @@ terceira.
 - [x] T241 (nexclin#44, fechada 15/09) [F3] Escrever `supabase/migrations/20260913030000_realtime_mensagem_interna.sql`: `ALTER PUBLICATION supabase_realtime ADD TABLE public.internal_messages`, ou `CREATE PUBLICATION` se T202 mostrou que não existe. Copiar para `docs/ponte/aplicacao-023/b6-realtime.sql`
 - [ ] T242 (nexclin#45) [F3] Aplicar `b6` no editor. O Arthur clica `Run`
 - [x] T243 (nexclin#46, fechada 15/09) [F3] Em `../nexclin-lovable/src/components/layout/NxConversas.tsx`: assinar `postgres_changes` em `internal_messages` enquanto o painel está aberto, e cancelar a assinatura ao fechar. Sem assinatura com o painel fechado; o balão continua lendo por consulta
-- [ ] T244 (nexclin#47) [F3] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
+- [x] T244 (nexclin#47, fechada 15/09) [F3] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
 
 ### Aceite, e é onde a fase fecha
 
@@ -162,8 +162,8 @@ terceira.
 
 ## Fase 4 · Fechamento
 
-- [ ] T247 (nexclin#50) [P] [F4] Atualizar a seção 2 de `docs/regras/023-avisos-e-recados-da-equipe.md` com o que está no ar da seção 8, e a seção 5 com a linha de `internal_messages` e a nota de que a migração de `task_comments` passou a existir em T213
-- [ ] T248 (nexclin#51) [P] [F4] Atualizar a linha da 023 em `docs/regras/README.md` com o estado real
+- [x] T247 (nexclin#50, fechada 15/09) [P] [F4] Atualizar a seção 2 de `docs/regras/023-avisos-e-recados-da-equipe.md` com o que está no ar da seção 8, e a seção 5 com a linha de `internal_messages` e a nota de que a migração de `task_comments` passou a existir em T213
+- [x] T248 (nexclin#51, fechada 15/09) [P] [F4] Atualizar a linha da 023 em `docs/regras/README.md` com o estado real
 - [ ] T249 (nexclin#52) [P] [F4] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
 - [ ] T250 (nexclin#53) [F4] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 

@@ -27,8 +27,8 @@ agosto. Regra nova continua a partir de 017.
 | [020](020-avisos-internos-e-o-dia-do-medico.md) | Avisos internos e o dia do médico | especificada, nada implementado · FR-007 revogado e seção 7 fechada em 12/09 |
 | [021](021-financeiro-que-nao-erra-o-caixa.md) | Financeiro que não erra o caixa | especificada, nada implementado · **3 decisões abertas** |
 | [022](022-motor-de-rotina-da-clinica.md) | Motor de rotina da clínica | especificada, nada implementado · **4 decisões abertas** |
-| [023](023-avisos-e-recados-da-equipe.md) | Avisos e recados da equipe, e a mensagem interna (seção 8, 12/09) | sino e recado na tarefa entregues · **mensagem interna especificada, nada implementado** |
-| [024](024-perfil-operacional.md) | Perfil operacional: a secretária opera a clínica | especificada em 12/09, nada implementado · sem decisão aberta |
+| [023](023-avisos-e-recados-da-equipe.md) | Avisos e recados da equipe, e a mensagem interna (seção 8, 12/09) | sino e recado na tarefa entregues · **mensagem interna no banco (14/09) e publicada (15/09)** · Realtime espera o `ALTER PUBLICATION` (b6) · nada de tela provado, ver seção 2.1 |
+| [024](024-perfil-operacional.md) | Perfil operacional: a secretária opera a clínica | **banco no ar (14/09):** colunas, auditoria, pesos, `tasks` sem `DELETE` · **telas publicadas (15/09):** delegação, assumir e devolver, cancelar, ranking, painel operacional, perfil Simplificado · **escopo só no front** (seção 3), policy vai para a stack nova · nada de tela provado · abertas: T352 (dono sem `team_members`) e T307 (registro do segundo usuário) |
 | [025](025-importacao-e-exportacao.md) | Importação e exportação de dados da clínica | especificada em 12/09, nada implementado · sem decisão aberta |
 
 Os números 007 a 012, 014 e 015 seguem reservados à fila em
