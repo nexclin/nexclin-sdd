@@ -82,8 +82,8 @@ cada uma**. Só a metade negativa passa por vacuidade.
 - [x] T216 (nexclin#19, fechada 14/09) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre as duas migrações: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
 - [x] T217 (nexclin#20, fechada 14/09) [F1] Rodar o agente `auditor-multitenant` sobre `b5`, **tentando furar e não só lendo**: ler mensagem de terceiro da mesma clínica; inserir com `sender_id` de outro; mudar `body` por `UPDATE`; enviar para membro sem `user_id`; enviar para membro de outra clínica; enviar para si mesmo
 - [x] T218 (nexclin#21, fechada 14/09) [F1] Achado de nível alto do auditor vira correção em `b5` antes de aplicar, e a seção 8.3 da regra se corrige no mesmo commit se a forma da policy mudou
-- [ ] T219 (nexclin#22) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`, antes de aplicar
-- [ ] T220 (nexclin#23) [F1] Aplicar `b5` no editor de SQL e conferir cada bloco. O Arthur clica `Run`
+- [x] T219 (nexclin#22, fechada 15/09) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`, antes de aplicar
+- [x] T220 (nexclin#23, fechada 15/09) [F1] Aplicar `b5` no editor de SQL e conferir cada bloco. O Arthur clica `Run`
 
 ### Aceite, e é onde a fase fecha
 
@@ -118,12 +118,12 @@ médico logados.
 
 ### A tela
 
-- [ ] T229 (nexclin#32) [F2] Criar `../nexclin-lovable/src/components/layout/NxConversas.tsx` sobre `src/components/ui/sheet.tsx`: lista de conversas com contagem, conversa aberta, campo de envio (`INSERT` sem `sender_id`, que o `DEFAULT auth.uid()` preenche), cartão da referência quando houver. Abrir a conversa faz `UPDATE read_at = now()` nas mensagens em que sou destinatário e `read_at` é nulo, e é o único `UPDATE` do componente
-- [ ] T230 (nexclin#33) [F2] Em `../nexclin-lovable/src/components/layout/NxTopHeader.tsx`: o balão ao lado de `NxSino`, com a contagem total de `naoLidas`, abrindo `NxConversas`
-- [ ] T231 (nexclin#34) [P] [F2] Em `../nexclin-lovable/src/components/layout/NxSino.tsx`: a contagem de não lidas entra como linha do sino, com o comentário de que é a única contagem que vem de tabela própria (seção 8.4 da regra)
-- [ ] T232 (nexclin#35) [F2] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: a foto (ou o nome) do responsável abre `NxConversas` na conversa com aquela pessoa, com `ref_type = 'task'` e `ref_id` da tarefa preenchidos. Sem botão para membro sem login
-- [ ] T233 (nexclin#36) [P] [F2] O mesmo em `../nexclin-lovable/src/pages/Acompanhamento.tsx` (`ref_type = 'appointment'`) e em `../nexclin-lovable/src/pages/Atendimentos.tsx` (`ref_type = 'lead'`). **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às irmãs**
-- [ ] T234 (nexclin#37) [F2] Conferir em `../nexclin-lovable/src/lib/__tests__/rotas.test.ts` e em `App.tsx` que a caixa **não** entrou como rota protegida por `RequirePermission`, e que nada em `usePermissions.ts`, `plans` ou `ConfigTeamDialog.tsx` a menciona. FR-013
+- [x] T229 (nexclin#32, fechada 15/09) [F2] Criar `../nexclin-lovable/src/components/layout/NxConversas.tsx` sobre `src/components/ui/sheet.tsx`: lista de conversas com contagem, conversa aberta, campo de envio (`INSERT` sem `sender_id`, que o `DEFAULT auth.uid()` preenche), cartão da referência quando houver. Abrir a conversa faz `UPDATE read_at = now()` nas mensagens em que sou destinatário e `read_at` é nulo, e é o único `UPDATE` do componente
+- [x] T230 (nexclin#33, fechada 15/09) [F2] Em `../nexclin-lovable/src/components/layout/NxTopHeader.tsx`: o balão ao lado de `NxSino`, com a contagem total de `naoLidas`, abrindo `NxConversas`
+- [x] T231 (nexclin#34, fechada 15/09) [P] [F2] Em `../nexclin-lovable/src/components/layout/NxSino.tsx`: a contagem de não lidas entra como linha do sino, com o comentário de que é a única contagem que vem de tabela própria (seção 8.4 da regra)
+- [x] T232 (nexclin#35, fechada 15/09) [F2] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: a foto (ou o nome) do responsável abre `NxConversas` na conversa com aquela pessoa, com `ref_type = 'task'` e `ref_id` da tarefa preenchidos. Sem botão para membro sem login
+- [x] T233 (nexclin#36, fechada 15/09) [P] [F2] O mesmo em `../nexclin-lovable/src/pages/Acompanhamento.tsx` (`ref_type = 'appointment'`) e em `../nexclin-lovable/src/pages/Atendimentos.tsx` (`ref_type = 'lead'`). **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às irmãs**
+- [x] T234 (nexclin#37, fechada 15/09) [F2] Conferir em `../nexclin-lovable/src/lib/__tests__/rotas.test.ts` e em `App.tsx` que a caixa **não** entrou como rota protegida por `RequirePermission`, e que nada em `usePermissions.ts`, `plans` ou `ConfigTeamDialog.tsx` a menciona. FR-013
 - [ ] T235 (nexclin#38) [F2] Gate de tipos, `npx tsc --noEmit -p tsconfig.app.json`, `npx vitest run` verde, e publicar pela ponte com `scripts/ponte.sh conferir` e o marcador no bundle
 
 ### Aceite, e é onde a fase fecha

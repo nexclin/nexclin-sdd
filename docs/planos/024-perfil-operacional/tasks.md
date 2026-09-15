@@ -82,12 +82,12 @@ controle positivo**: o `UPDATE` de `status` na mesma tarefa passa.
 - [x] T314 (nexclin#63, fechada 14/09) [F1] Escrever a reversão, bloco a bloco, logo abaixo de cada um, em comentário. Policy de `tasks` é onde erro tranca a lista de tarefas da clínica inteira
 - [x] T315 (nexclin#64, fechada 14/09) [F1] Copiar a migração para `docs/ponte/aplicacao-024-fase1/b1-colunas-triggers-pesos-policies.sql`, com a conferência de cada bloco em arquivo separado, na forma de `docs/ponte/aplicacao-021-fase1/`
 - [x] T316 (nexclin#65, fechada 14/09) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
-- [ ] T317 (nexclin#66) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`, antes de aplicar
-- [ ] T318 (nexclin#67) [F1] Aplicar os blocos no editor de SQL e conferir cada um. O Arthur clica `Run`
+- [x] T317 (nexclin#66, fechada 15/09) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`, antes de aplicar
+- [x] T318 (nexclin#67, fechada 15/09) [F1] Aplicar os blocos no editor de SQL e conferir cada um. O Arthur clica `Run`
 
 ### Aceite, e é onde a fase fecha
 
-- [ ] T319 (nexclin#68) [F1] Rodar de novo o bloco de T301 a T304 e conferir: três colunas novas, dois triggers novos, três policies em `tasks` e nenhuma `DELETE`
+- [x] T319 (nexclin#68, fechada 15/09) [F1] Rodar de novo o bloco de T301 a T304 e conferir: três colunas novas, dois triggers novos, três policies em `tasks` e nenhuma `DELETE`
 - [ ] T320 (nexclin#69) [F1] Rodar no editor, em `BEGIN` e `ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims` de Maria: `DELETE FROM tasks WHERE id = <uma da clínica>` devolve zero linha. **Controle positivo no mesmo bloco:** `UPDATE tasks SET status = 'cancelada'` na mesma linha devolve uma
 - [ ] T321 (nexclin#70) [F1] Item que não deu para provar fecha como **"código lido, não comportamento provado"** e continua aberto
 
@@ -114,7 +114,7 @@ nova.
 
 - [x] T322 (nexclin#71, fechada 14/09) [F2] Escrever `../nexclin-lovable/src/lib/__tests__/escopo.test.ts` para `camposEditaveisDaConsulta(consulta, quemOlha)`: responsável e master editam `date`, `time`, `doctor_member_id`, `status` e fechamento; médico da consulta edita só `status` e fechamento; qualquer outro edita nada. **Ver falhar**
 - [x] T323 (nexclin#72, fechada 14/09) [P] [F2] No mesmo arquivo, `podeEditarTarefa(tarefa, quemOlha)`: responsável, master ou gerencial editam; tarefa automática ninguém edita (herda de `ehAutomatica`); tarefa **sem responsável** não é editável por terceiro, é assumível. **Ver falhar**
-- [ ] T324 (nexclin#73) [F2] Escrever `../nexclin-lovable/src/lib/escopo.ts` até T322 e T323 passarem. `quemPodeEditar` de `tiposDeTarefa.ts` sai, e quem a chamava passa a chamar `podeEditarTarefa`. Rodar `npx vitest run` inteiro: os 20 arquivos existentes continuam verdes
+- [x] T324 (nexclin#73, fechada 15/09) [F2] Escrever `../nexclin-lovable/src/lib/escopo.ts` até T322 e T323 passarem. `quemPodeEditar` de `tiposDeTarefa.ts` sai, e quem a chamava passa a chamar `podeEditarTarefa`. Rodar `npx vitest run` inteiro: os 20 arquivos existentes continuam verdes
 
 ### O padrão do perfil
 
@@ -122,8 +122,8 @@ nova.
 
 ### As telas
 
-- [ ] T326 (nexclin#75) [F2] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: a lista mostra a clínica inteira para quem tem `tarefas: own`, e o botão de editar obedece `podeEditarTarefa`. Nenhum filtro por "meu" na consulta ao banco
-- [ ] T327 (nexclin#76) [F2] Em `../nexclin-lovable/src/pages/Acompanhamento.tsx`: ao criar consulta, gravar `responsible_member_id` com o `team_members.id` do usuário logado, além do texto; ao delegar, gravar `doctor_member_id` além do texto. Os campos editáveis vêm de `camposEditaveisDaConsulta`
+- [x] T326 (nexclin#75, fechada 15/09) [F2] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: a lista mostra a clínica inteira para quem tem `tarefas: own`, e o botão de editar obedece `podeEditarTarefa`. Nenhum filtro por "meu" na consulta ao banco
+- [x] T327 (nexclin#76, fechada 15/09) [F2] Em `../nexclin-lovable/src/pages/Acompanhamento.tsx`: ao criar consulta, gravar `responsible_member_id` com o `team_members.id` do usuário logado, além do texto; ao delegar, gravar `doctor_member_id` além do texto. Os campos editáveis vêm de `camposEditaveisDaConsulta`
 - [x] T328 (nexclin#77, fechada 14/09) [F2] Na mesma tela, linhas 1965 a 1970: os totais "Orçado" e "Vendas" só aparecem com `relatorios_vendas: "all"`. O valor por linha continua para quem lança
 - [x] T329 (nexclin#78, fechada 14/09) [P] [F2] Anamnese: `status_only` passa a esconder o conteúdo das respostas e mostrar só o estado, em `../nexclin-lovable/src/pages/Anamnese.tsx` e onde mais a resposta for lida. Hoje é rótulo que não filtra
 - [x] T330 (nexclin#79, fechada 14/09) [F2] Na regra, pela alínea (l) e no mesmo commit de T328: o FR-005 de `docs/regras/024-perfil-operacional.md` nomeia `src/pages/Acompanhamento.tsx`, rota `/acompanhamento`, como a tela dos totais. `Consultas.tsx` existe e não os tem
@@ -158,10 +158,10 @@ edita o que é dela.
 
 ### As telas
 
-- [ ] T341 (nexclin#90) [F3] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: botão **assumir** em tarefa sem dono, gravando `responsible_member_id` e `responsible` (o nome) de uma vez; botão **devolver** para o responsável, zerando os dois; **reatribuir** só para quem `podeReatribuir`. O trigger da F1 registra sozinho
-- [ ] T342 (nexclin#91) [F3] Na mesma tela: **nenhum caminho chama `DELETE`**. O que apagava passa a `UPDATE` de `status` para cancelada. Buscar por `.delete(` no arquivo e nos componentes de tarefa que ele importa; cada ocorrência sai
+- [x] T341 (nexclin#90, fechada 15/09) [F3] Em `../nexclin-lovable/src/pages/Tarefas.tsx`: botão **assumir** em tarefa sem dono, gravando `responsible_member_id` e `responsible` (o nome) de uma vez; botão **devolver** para o responsável, zerando os dois; **reatribuir** só para quem `podeReatribuir`. O trigger da F1 registra sozinho
+- [x] T342 (nexclin#91, fechada 15/09) [F3] Na mesma tela: **nenhum caminho chama `DELETE`**. O que apagava passa a `UPDATE` de `status` para cancelada. Buscar por `.delete(` no arquivo e nos componentes de tarefa que ele importa; cada ocorrência sai
 - [x] T343 (nexclin#92, fechada 14/09) [P] [F3] Em `../nexclin-lovable/src/lib/tiposDeTarefa.ts`: `recall_paciente` entra em `TIPOS_MANUAIS` e em `ROTULOS_DE_TIPO` como "Recall de paciente", separado de `recall` (automático) e de `recaptacao_*` (funil)
-- [ ] T344 (nexclin#93) [F3] Em `../nexclin-lovable/src/pages/Recall.tsx`: botão assumir no item vencido cria uma tarefa `type = 'recall_paciente'`, `patient_id` do item, `responsible_member_id` e `responsible` de quem assumiu, `due_date` hoje. A linha do recall mostra "com dono" quando existe tarefa aberta desse tipo para esse paciente
+- [x] T344 (nexclin#93, fechada 15/09) [F3] Em `../nexclin-lovable/src/pages/Recall.tsx`: botão assumir no item vencido cria uma tarefa `type = 'recall_paciente'`, `patient_id` do item, `responsible_member_id` e `responsible` de quem assumiu, `due_date` hoje. A linha do recall mostra "com dono" quando existe tarefa aberta desse tipo para esse paciente
 - [ ] T345 (nexclin#94) [F3] Gate de tipos, `npx tsc --noEmit -p tsconfig.app.json`, e `npx vitest run` inteiro verde
 - [ ] T346 (nexclin#95) [F3] Publicar pelo procedimento da ponte, com `scripts/ponte.sh conferir` e o marcador no bundle
 
@@ -203,9 +203,9 @@ próxima leitura, sem tocar em tarefa nenhuma.
 
 ### As telas
 
-- [ ] T356 (nexclin#105) [F4] Em `../nexclin-lovable/src/pages/Configuracoes.tsx`: a tabela de pesos por tipo, um número por tipo de `ROTULOS_DE_TIPO`, gravando em `business_rules.task_type_weights`. Padrão visível: 1
-- [ ] T357 (nexclin#106) [P] [F4] Ranking no painel do dono, em `../nexclin-lovable/src/pages/Dashboard.tsx`, lendo `produtividade.ts`, com filtro por função
-- [ ] T358 (nexclin#107) [P] [F4] Ranking no relatório de produtividade, em `../nexclin-lovable/src/pages/relatorios/`, visível a todo membro, com o mesmo filtro. Relatório é por onde o Vinícius opera, e não pode nascer diferente do painel
+- [x] T356 (nexclin#105, fechada 15/09) [F4] Em `../nexclin-lovable/src/pages/Configuracoes.tsx`: a tabela de pesos por tipo, um número por tipo de `ROTULOS_DE_TIPO`, gravando em `business_rules.task_type_weights`. Padrão visível: 1
+- [x] T357 (nexclin#106, fechada 15/09) [P] [F4] Ranking no painel do dono, em `../nexclin-lovable/src/pages/Dashboard.tsx`, lendo `produtividade.ts`, com filtro por função
+- [x] T358 (nexclin#107, fechada 15/09) [P] [F4] Ranking no relatório de produtividade, em `../nexclin-lovable/src/pages/relatorios/`, visível a todo membro, com o mesmo filtro. Relatório é por onde o Vinícius opera, e não pode nascer diferente do painel
 - [ ] T359 (nexclin#108) [F4] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
 
 ### Aceite, e é onde a fase fecha
@@ -244,8 +244,8 @@ clínica tem dois.
 
 ### A tela
 
-- [ ] T366 (nexclin#115) [F5] Em `../nexclin-lovable/src/pages/DashboardOperational.tsx`: os três cartões vazios ("Minhas tarefas do dia", "Meus leads ativos", "Consultas de hoje") saem; entram os blocos de `montaPainel`, com seletor de médico quando `team_members` da clínica tem mais de um médico, e o botão assumir do bloco 5 chamando o mesmo caminho de T341
-- [ ] T367 (nexclin#116) [F5] Bloco 4, mensagens não lidas, **só se T363 disse que a 023 entregou**: lê a caixa da seção 8 e mostra a contagem com link
+- [x] T366 (nexclin#115, fechada 15/09) [F5] Em `../nexclin-lovable/src/pages/DashboardOperational.tsx`: os três cartões vazios ("Minhas tarefas do dia", "Meus leads ativos", "Consultas de hoje") saem; entram os blocos de `montaPainel`, com seletor de médico quando `team_members` da clínica tem mais de um médico, e o botão assumir do bloco 5 chamando o mesmo caminho de T341
+- [x] T367 (nexclin#116, fechada 15/09) [F5] Bloco 4, mensagens não lidas, **só se T363 disse que a 023 entregou**: lê a caixa da seção 8 e mostra a contagem com link
 - [ ] T368 (nexclin#117) [P] [F5] Em `../nexclin-lovable/src/components/config/ConfigTeamDialog.tsx`: conferir que Completo, Simplificado e Sem acesso continuam por pessoa, e que Simplificado leva ao painel de T366. Hoje é "código lido, não provado na tela"; esta tarefa prova
 - [ ] T369 (nexclin#118) [F5] Gate de tipos e `npx vitest run` verde, e publicar pela ponte
 
