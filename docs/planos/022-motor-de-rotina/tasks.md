@@ -41,8 +41,8 @@ FR-008 antes de decidir sobre ele.
 - [x] T100 (#75, fechada 05/09) [F0] Escrever o censo de `tasks` em `docs/ponte/022-censo-tarefas.sql`, listando por `information_schema.columns` as colunas de `tasks` e por `pg_policies` as policies dela
 - [x] T101 (#76, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a contagem de valores distintos em `tasks.responsible`, com quantos deles casam com algum nome de usuário da clínica. **É este número que dimensiona o risco da Fase 1**
 - [x] T102 (#77, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a prova 2, o bloco `BEGIN`/`ROLLBACK` medindo o que um usuário com `tarefas` negado lê de `tasks`, **com controle positivo**
-- [ ] T103 (#78) [F0] Rodar os blocos no editor de SQL, um por vez, clicando por referência e não por coordenada
-- [ ] T104 (#79) [F0] Registrar o resultado em `docs/historico/`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
+- [x] T103 (#78, fechada em lote 14/09; rodado em 06/09, docs/historico/2026-09-06-censo-parcial-permissao-e-responsavel.md) [F0] Rodar os blocos no editor de SQL, um por vez, clicando por referência e não por coordenada
+- [x] T104 (#79, fechada em lote 14/09; rodado em 06/09, docs/historico/2026-09-06-censo-parcial-permissao-e-responsavel.md) [F0] Registrar o resultado em `docs/historico/`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 
 **Ponto de conferência:** premissa 1 confirmada ou derrubada, e os dois números
 na mão.
@@ -57,19 +57,19 @@ para onde o papel resolver.
 **Aceite independente:** o responsável de uma tarefa é usuário, e nenhum nome que
 existia antes se perdeu.
 
-- [ ] T105 (#80) [F1] Escrever a migração `supabase/migrations/2026090NNNNNNN_responsavel_da_tarefa_e_usuario.sql`, acrescentando a `tasks` a referência a usuário ou a membro da equipe
-- [ ] T106 (#81) [F1] Na mesma migração, criar a coluna de **legado** que preserva o texto original de `responsible`. **Nome que não casar com usuário nenhum MUST ficar guardado ali, e MUST NOT ser descartado**: perder atribuição de tarefa de cliente real é dano que não se desfaz
-- [ ] T107 (#82) [F1] Escrever a conversão que casa o texto existente com usuário, usando o número medido em T101, e deixar sem casar o que não casar em vez de adivinhar
-- [ ] T108 (#83) [F1] Escrever o bloco guiado em `docs/ponte/aplicacao-022-fase1/`, um bloco por vez, cada um com a consulta de conferência ao lado e a reversão palavra por palavra abaixo
-- [ ] T109 (#84) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`
-- [ ] T110 (#85) [F1] Aplicar os blocos no editor de SQL e conferir cada um
-- [ ] T111 (#86) [P] [F1] Rodar `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova
-- [ ] T112 (#87) [F1] Trocar o front para gravar e ler o responsável como usuário, em `../nexclin-lovable/src/`. **Migração antes do front, sempre**
-- [ ] T113 (#88) [F1] Procurar as telas irmãs que mostram responsável antes de fechar. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às outras**
-- [ ] T114 (#89) [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` não confere tipos
-- [ ] T115 (#90) [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md` e rodar `scripts/ponte.sh conferir`
-- [ ] T116 (#91) [F1] Procurar marcador de texto da tela nova dentro do bundle publicado, porque o Publish da Lovable publica o preview e não o commit
-- [ ] T117 (#92) [F1] Aceite na tela: atribuir tarefa a um usuário, conferir no banco, e conferir que nenhum nome antigo sumiu
+- [x] T105 (#80, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Escrever a migração `supabase/migrations/2026090NNNNNNN_responsavel_da_tarefa_e_usuario.sql`, acrescentando a `tasks` a referência a usuário ou a membro da equipe
+- [x] T106 (#81, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Na mesma migração, criar a coluna de **legado** que preserva o texto original de `responsible`. **Nome que não casar com usuário nenhum MUST ficar guardado ali, e MUST NOT ser descartado**: perder atribuição de tarefa de cliente real é dano que não se desfaz
+- [x] T107 (#82, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Escrever a conversão que casa o texto existente com usuário, usando o número medido em T101, e deixar sem casar o que não casar em vez de adivinhar
+- [x] T108 (#83, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Escrever o bloco guiado em `docs/ponte/aplicacao-022-fase1/`, um bloco por vez, cada um com a consulta de conferência ao lado e a reversão palavra por palavra abaixo
+- [x] T109 (#84, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`
+- [x] T110 (#85, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Aplicar os blocos no editor de SQL e conferir cada um
+- [x] T111 (#86, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [P] [F1] Rodar `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova
+- [x] T112 (#87, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Trocar o front para gravar e ler o responsável como usuário, em `../nexclin-lovable/src/`. **Migração antes do front, sempre**
+- [x] T113 (#88, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Procurar as telas irmãs que mostram responsável antes de fechar. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às outras**
+- [x] T114 (#89, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` não confere tipos
+- [x] T115 (#90, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md` e rodar `scripts/ponte.sh conferir`
+- [x] T116 (#91, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Procurar marcador de texto da tela nova dentro do bundle publicado, porque o Publish da Lovable publica o preview e não o commit
+- [x] T117 (#92, fechada em lote 14/09; superada pela decisão 1b da seção 7 da regra, 06/09: a migração de responsible não roda na Lovable; a 024 entregou responsible_member_id) [F1] Aceite na tela: atribuir tarefa a um usuário, conferir no banco, e conferir que nenhum nome antigo sumiu
 
 **Ponto de conferência:** o responsável passa a ser referência, e o texto antigo
 continua recuperável.
@@ -82,11 +82,11 @@ continua recuperável.
 
 **Aceite independente:** prova 7 na tela.
 
-- [ ] T118 (#93) [F2] Exibir a **contagem de dias** de atraso no card, e não só cor. **Converter `due_date` e `completed_at` com `::date` nos dois lados**: Postgres não define `timestamptz + integer`, e isso já custou tempo
-- [ ] T119 (#94) [P] [F2] Exibir a foto do responsável no card, usando `20260827010000_foto_de_perfil.sql`, que já existe. Depende de T112
-- [ ] T120 (#95) [P] [F2] Tratar o caso sem foto, que existe e é comum: iniciais ou avatar neutro, e nunca espaço vazio
-- [ ] T121 (#96) [F2] Aplicar os dois às telas irmãs de tarefa, e não só à lista principal
-- [ ] T122 (#97) [F2] Gate de tipos, publicar, e conferir o marcador no bundle
+- [x] T118 (#93, fechada em lote 14/09; entregue em 0dad6af e a7ce299 da Lovable, no ar) [F2] Exibir a **contagem de dias** de atraso no card, e não só cor. **Converter `due_date` e `completed_at` com `::date` nos dois lados**: Postgres não define `timestamptz + integer`, e isso já custou tempo
+- [x] T119 (#94, fechada em lote 14/09; entregue em 0dad6af e a7ce299 da Lovable, no ar) [P] [F2] Exibir a foto do responsável no card, usando `20260827010000_foto_de_perfil.sql`, que já existe. Depende de T112
+- [x] T120 (#95, fechada em lote 14/09; entregue em 0dad6af e a7ce299 da Lovable, no ar) [P] [F2] Tratar o caso sem foto, que existe e é comum: iniciais ou avatar neutro, e nunca espaço vazio
+- [x] T121 (#96, fechada em lote 14/09; entregue em 0dad6af e a7ce299 da Lovable, no ar) [F2] Aplicar os dois às telas irmãs de tarefa, e não só à lista principal
+- [x] T122 (#97, fechada em lote 14/09; entregue em 0dad6af e a7ce299 da Lovable, no ar) [F2] Gate de tipos, publicar, e conferir o marcador no bundle
 - [ ] T123 (#98) [F2] **Prova 7** na tela: tarefa vencida há três dias mostra o número 3
 - [ ] T124 (#99) [F2] Validação pela ótica de quem usa, e não pela do backend. **É o que fecha os 200%** desta entrega
 - [ ] T125 (#100) [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
@@ -162,19 +162,19 @@ cumprimento mensurável.
 
 Independentes entre si e do motor.
 
-- [ ] T147 (nexclin#171) [P] [F6] **FR-006**: modelar a tabela de comentário de tarefa, com autor, texto e hora, com RLS e default deny
+- [x] T147 (nexclin#171, fechada 15/09, entregue pela 023 T213) [P] [F6] **FR-006**: modelar a tabela de comentário de tarefa, com autor, texto e hora, com RLS e default deny
 - [ ] T148 (nexclin#172) [P] [F6] **FR-007**: acrescentar a `tasks` a coluna de tarefa pai, para subtarefa
 - [ ] T149 (nexclin#173) [F6] **FR-008**: trocar as policies de `tasks` por policies separadas por operação, consultando `my_permission('tarefas')`
-- [ ] T150 (nexclin#174) [F6] Escrever a reversão palavra por palavra abaixo de cada bloco de policy
+- [x] T150 (nexclin#174, fechada 15/09, reversão na migração 20260914010000) [F6] Escrever a reversão palavra por palavra abaixo de cada bloco de policy
 - [ ] T151 (nexclin#175) [F6] Rodar o agente `auditor-multitenant` sobre a migração, **tentando furar a cascata** e não só lendo
-- [ ] T152 (nexclin#176) [F6] Achado de nível alto do auditor vira issue própria antes de a fase fechar
+- [x] T152 (nexclin#176, fechada 15/09, sem nível alto) [F6] Achado de nível alto do auditor vira issue própria antes de a fase fechar
 - [ ] T153 (nexclin#177) [F6] **Prova 2** completa, com as duas metades: módulo negado volta zero linha, módulo liberado volta linha
 
 ## Fase 7 · Fechamento
 
-- [ ] T154 (nexclin#178) [P] [F7] Atualizar `docs/regras/README.md` com o estado real da regra 022
-- [ ] T155 (nexclin#179) [P] [F7] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver o que ele apontar
-- [ ] T156 (nexclin#180) [F7] Escrever o handoff do dia, com o que ficou aberto dito em voz alta
+- [x] T154 (nexclin#178, fechada 15/09) [P] [F7] Atualizar `docs/regras/README.md` com o estado real da regra 022
+- [x] T155 (nexclin#179, fechada 15/09) [P] [F7] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver o que ele apontar
+- [x] T156 (nexclin#180, fechada 15/09) [F7] Escrever o handoff do dia, com o que ficou aberto dito em voz alta
 
 ---
 

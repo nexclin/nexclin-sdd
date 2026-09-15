@@ -3,9 +3,11 @@
 > **Regra viva.** Nasce antes da execução, guia a execução, e é corrigida no
 > mesmo commit em que a execução a contradiz.
 >
-> **Estado em 05/09/2026:** especificada, nada implementado. Os achados da seção
-> 3 foram **lidos nas migrações deste repositório**, e não conferidos no banco ao
-> vivo. Alvo: **Lovable até 08/09 no que é faixa A**, stack nova no resto.
+> **Estado em 15/09/2026:** Fase 1 entregue e no ar (FR-001 a FR-003, baixa em
+> duas etapas: `settled_value`, `settled_by`, `settled_at` aplicados em 06/09,
+> front em `9d39c06`); censo de 06/09 conferido no banco ao vivo. FR-011 espera
+> a decisão de nexclin#127 (T021); FR-005 a FR-010 e FR-013 a FR-015 são da
+> stack nova. Alvo: **Lovable no que é faixa A**, stack nova no resto.
 >
 > **Lei:** `docs/constituicao.md` · **Contexto:** `CLAUDE.md` §2.5 ·
 > **Origem:** reunião de 03/09/2026, apurada em
@@ -182,6 +184,14 @@ gravado?*. A coluna **alvo** diz onde o requisito precisa existir.
   menu. Isso é a alínea (c) da constituição ao contrário, *"nenhuma regra de
   acesso pode existir só no frontend"*, e é o mesmo defeito que a auditoria de
   29/08 achou nos quatro papéis do painel.
+  *Precisão de 15/09, pendente de decisão (nexclin#127):* a medida de 07/09
+  mostrou que **nenhuma das 75 policies** do schema chama `my_permission`; o
+  buraco é geral, e este FR nomeia só as quatro que guardam dinheiro. E há um
+  cruzamento com a regra 024 (FR-004 e FR-005): a tela de Acompanhamento, sob
+  o módulo `acompanhamento`, insere, lê e apaga `receivables` ao fechar a
+  venda da consulta. Policy presa só a `contas_receber` faria a venda da
+  secretária gravar a consulta e falhar no recebível. A forma proposta está
+  na issue; a emenda a este FR entra no mesmo commit da decisão.
 
 - **FR-012** · faixa **A** · alvo **stack nova**
   `expenses.payment_method` **MUST** virar referência à tabela

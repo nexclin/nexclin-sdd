@@ -42,8 +42,8 @@ Se divergir, **a divergência é o achado** e a regra se corrige antes de T006.
 - [x] T001 (#55, fechada 05/09) [F0] Escrever o bloco de censo de schema em `docs/ponte/021-censo-financeiro.sql`, listando por `information_schema.columns` as colunas de `receivables`, `expenses` e `bank_accounts`, e por `pg_policies` as policies de `receivables`, `expenses`, `revenues` e `fixed_expenses`
 - [x] T002 (#56, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a **prova 3**, contando `receivables` e `revenues` da Clínica Teste Final (`d51ce6c7-582b-469b-a01b-608bd9b38885`) e cruzando com os 280 recebíveis da base de referência
 - [x] T003 (#57, fechada 05/09) [P] [F0] Escrever no mesmo arquivo a **prova 2**, o bloco `BEGIN`/`ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims`, medindo o que um usuário com `contas_receber` negado consegue ler de `receivables`. **Com controle positivo**: o mesmo bloco para um usuário com o módulo liberado
-- [ ] T004 (#58) [F0] Rodar os três blocos no editor de SQL da plataforma, um por vez. **Clicar por referência e não por coordenada**: o botão Run muda de altura conforme o painel do chat rola
-- [ ] T005 (#59) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-financeiro.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
+- [x] T004 (#58, fechada em lote 14/09; rodado e registrado em 06/09, docs/historico/2026-09-06-censo-executado.md) [F0] Rodar os três blocos no editor de SQL da plataforma, um por vez. **Clicar por referência e não por coordenada**: o botão Run muda de altura conforme o painel do chat rola
+- [x] T005 (#59, fechada em lote 14/09; rodado e registrado em 06/09, docs/historico/2026-09-06-censo-executado.md) [F0] Registrar o resultado em `docs/historico/2026-09-NN-censo-financeiro.md`, inclusive o que não deu para conferir, e corrigir a seção 3 da regra no mesmo commit se houver divergência
 
 **Ponto de conferência:** premissa 1 confirmada ou derrubada, e o tamanho do
 buraco do FR-011 medido em número.
@@ -74,20 +74,20 @@ impede erro de virar importação em outubro.
 
 - [x] T007 (#61) [F1] Escrever a migração da baixa em duas etapas: valor recebido, autor e hora em `timestamptz`, em `receivables` e `expenses`. **O saldo inicial saiu do escopo**: `bank_accounts.opening_balance` e `opening_date` já existem desde `20260427222514`, e o FR-004 foi corrigido de faixa A para faixa B na regra. Escrita em `docs/ponte/aplicacao-021-fase1/b1-baixa-em-duas-etapas.sql`
 - [x] T008 (#62) [F1] Bloco guiado em `docs/ponte/aplicacao-021-fase1/`, com conferência e reversão separadas por arquivo
-- [ ] T009 (#63) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`. **Cuidado com a tela:** logo abaixo do `Export data` ficam `Pause` e `Remove`, os dois em vermelho, num espaço de cerca de 200 pixels
-- [ ] T010 (#64) [F1] Aplicar os blocos no editor de SQL e conferir cada um
-- [ ] T011 (#65) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
+- [x] T009 (#63, fechada em lote 14/09; bloco 1 aplicado pelo Arthur em 06/09, conferência 604 e 157 intactas) [F1] Conferir que o export do banco está feito e com cópia em nuvem, por `docs/seguranca/registro-exports-banco.md`. **Cuidado com a tela:** logo abaixo do `Export data` ficam `Pause` e `Remove`, os dois em vermelho, num espaço de cerca de 200 pixels
+- [x] T010 (#64, fechada em lote 14/09; bloco 1 aplicado pelo Arthur em 06/09, conferência 604 e 157 intactas) [F1] Aplicar os blocos no editor de SQL e conferir cada um
+- [x] T011 (#65, fechada em lote 14/09; bloco 1 aplicado pelo Arthur em 06/09, conferência 604 e 157 intactas) [P] [F1] Rodar o hook `.claude/hooks/guarda-constituicao.mjs` sobre a migração nova: sem RLS ausente, sem `USING(true)`, sem caminho que define senha, sem segredo versionado
 
 ### Front, e só depois do banco
 
 > **Ordem obrigatória.** Front novo com a coluna inexistente quebra a tela de
 > dinheiro. E o Publish da Lovable publica o **preview**, não o commit.
 
-- [ ] T012 (#66) [F1] Trocar a baixa de contas a receber por duas etapas em `../nexclin-lovable/src/`, registrando pagamento com apontamentos e depois confirmando, e parar de escrever `status` direto
-- [ ] T013 (#67) [F1] Fazer a mesma troca em contas a **pagar**. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às irmãs**
-- [ ] T014 (#68) [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` **não** confere tipos, porque Vite usa esbuild, e foi isso que derrubou o app por 1h35 em 20/08
-- [ ] T015 (#69) [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md`, e rodar `scripts/ponte.sh conferir`
-- [ ] T016 (#70) [F1] Procurar um marcador de texto das telas novas dentro do bundle publicado, porque o `conferir` sozinho não prova que o código subiu
+- [x] T012 (#66, fechada em lote 14/09; entregue em 9d39c06 da Lovable, no ar) [F1] Trocar a baixa de contas a receber por duas etapas em `../nexclin-lovable/src/`, registrando pagamento com apontamentos e depois confirmando, e parar de escrever `status` direto
+- [x] T013 (#67, fechada em lote 14/09; entregue em 9d39c06 da Lovable, no ar) [F1] Fazer a mesma troca em contas a **pagar**. **O padrão que se repetiu cinco vezes nesta base é conserto aplicado a uma tela e não às irmãs**
+- [x] T014 (#68, fechada em lote 14/09; entregue em 9d39c06 da Lovable, no ar) [F1] Gate de tipos com `npx tsc --noEmit -p tsconfig.app.json`. `npm run build` **não** confere tipos, porque Vite usa esbuild, e foi isso que derrubou o app por 1h35 em 20/08
+- [x] T015 (#69, fechada em lote 14/09; entregue em 9d39c06 da Lovable, no ar) [F1] Publicar pelo procedimento de `docs/ponte/ponte-inversa.md`, e rodar `scripts/ponte.sh conferir`
+- [x] T016 (#70, fechada em lote 14/09; entregue em 9d39c06 da Lovable, no ar) [F1] Procurar um marcador de texto das telas novas dentro do bundle publicado, porque o `conferir` sozinho não prova que o código subiu
 
 ### Aceite, e é onde a fase fecha
 
@@ -185,9 +185,9 @@ depois dos dados certos, que foi o acordo da reunião.
 
 ## Fase 6 · Fechamento
 
-- [ ] T045 (nexclin#151) [P] [F6] Atualizar a tabela de `docs/regras/README.md` com o estado real da regra 021
-- [ ] T046 (nexclin#152) [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
-- [ ] T047 (nexclin#153) [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
+- [x] T045 (nexclin#151, fechada 15/09) [P] [F6] Atualizar a tabela de `docs/regras/README.md` com o estado real da regra 021
+- [x] T046 (nexclin#152, fechada 15/09) [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
+- [x] T047 (nexclin#153, fechada 15/09) [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 
 ---
 

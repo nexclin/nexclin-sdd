@@ -3,9 +3,12 @@
 > **Regra viva.** Nasce antes da execução, guia a execução, e é corrigida no
 > mesmo commit em que a execução a contradiz.
 >
-> **Estado em 05/09/2026:** especificada, nada implementado. O schema de `tasks`
-> foi **lido nas migrações deste repositório**, e não conferido no banco ao vivo.
-> Alvo: **a metade barata na Lovable até 08/09**, o motor na stack nova.
+> **Estado em 15/09/2026:** Entrega 1 no ar (FR-010 e FR-011, `0dad6af` e
+> `a7ce299`); FR-005 redecidido em 06/09 (seção 7, 1b) e coberto pela 024 com
+> `responsible_member_id`; FR-006 entregue pela 023 (`task_comments`); FR-008
+> metade entregue pela 024 (policies por operação, sem `DELETE`) e metade à
+> espera do FR-011 da 021. O motor (FR-001 a FR-004, FR-009, FR-012) é da stack
+> nova e espera as decisões 2 e 3 da seção 7 e o checklist do Vinícius.
 >
 > **Lei:** `docs/constituicao.md` · **Contexto:** `CLAUDE.md` §2.5 ·
 > **Origem:** reunião de 03/09, apurada em
@@ -87,7 +90,8 @@ Faixa pela pergunta da §2.5, *o que fica gravado?*.
   existe referência a usuário ali**. É o mesmo defeito de
   `expenses.payment_method`, registrado no FR-012 da regra 021.
 
-- **FR-006** · faixa **A** · alvo **stack nova**
+- **FR-006** · faixa **A** · alvo **stack nova** · **ENTREGUE em 12/09 pela
+  regra 023** (`task_comments`, migração `20260907000000`, no ar)
   A tarefa **MUST** aceitar comentário, com autor e hora, em tabela própria.
   *Porquê:* pedido na reunião, e é dado novo que passa a existir. É também o que
   registra a cobrança do gestor sem ela virar conversa de WhatsApp que ninguém
@@ -100,7 +104,9 @@ Faixa pela pergunta da §2.5, *o que fica gravado?*.
   próprios ao item de checklist. Subtarefa que é tarefa resolve os dois casos com
   uma estrutura só.
 
-- **FR-008** · faixa **A** · alvo **stack nova**
+- **FR-008** · faixa **A** · alvo **stack nova** · **metade entregue em 14/09
+  pela 024** (três policies por operação em `tasks`, sem `DELETE`); a consulta a
+  `my_permission('tarefas')` espera nexclin#127
   As policies de `tasks` **MUST** consultar `my_permission('tarefas')`, e **MUST
   NOT** conceder `FOR ALL` apenas por pertencer à clínica.
   *Porquê:* mesmo buraco que o FR-011 da regra 021, e a policy é a original de
