@@ -134,6 +134,13 @@ recepção está produzindo.
   `due_date`, o registro do FR-008, `appointments.responsible`,
   `lead_history`). "Nota de feedback" e "eficiência" não têm fonte em tabela
   nenhuma e ficam para regra própria quando existir a nota.
+  *Precisão de 15/09:* a medida "tarefas assumidas" vem de `data_audit_log`,
+  cuja policy de leitura (25/08) abre a trilha só para admin. Para o ranking
+  valer para todo membro (FR-013), a contagem sai pela função
+  `tarefas_assumidas_por_membro(de, até)`, `SECURITY DEFINER`, que devolve
+  só (membro, instante) da clínica de quem chama, sem `previous_state` nem
+  `actor` (migração `20260915020000`, bloco 2). Enquanto o bloco não roda no
+  banco ao vivo, a coluna aparece como "indisponível", e não como zero.
 
 - **FR-012** · faixa **A**
   Cada tarefa concluída no prazo **MUST** valer o **peso do seu tipo**,
@@ -147,7 +154,10 @@ recepção está produzindo.
 - **FR-013** · faixa **C**
   O ranking **MUST** listar todo membro da clínica, médicos inclusive, ser
   visível a todo membro, e ser filtrável por função (`team_members.role`).
-  Aparece no painel do dono e no relatório de produtividade.
+  Aparece no painel do dono, no relatório de produtividade **e abaixo dos
+  seis blocos do painel operacional (FR-014), fora da ordem deles**. Precisão
+  de 15/09, alínea (l): sem o terceiro lugar, "visível a todo membro" não
+  valia para a secretária, que não tem `relatorios_demais`.
   *Porquê:* as quatro medidas contam para quem executa, e médico que assume
   tarefa conta igual. Se a comparação entre funções ficar injusta, o dono
   filtra. Ver o próprio número é o que faz a medida mover comportamento.
@@ -159,7 +169,9 @@ recepção está produzindo.
   banco, sem nenhum valor financeiro, com estes blocos nesta ordem: (1) fila
   do dia, todas as consultas de hoje por horário, com médico e estado da
   anamnese, com seletor de médico quando houver mais de um; (2) minhas tarefas
-  vencidas e de hoje; (3) leads com cadência vencida (FR-001 da 018); (4)
+  vencidas e de hoje; (3) leads com cadência vencida (FR-001 da 018; na
+  Lovable é aproximação, lead ativo sem mudança há mais dias que
+  `followup_days`, até a 018 entregar a cadência por `lead_history`); (4)
   mensagens não lidas (regra 023, seção 8); (5) tarefas sem dono, com botão
   assumir; (6) recalls vencidos, contagem com link.
   *Porquê:* a ordem é a prioridade de quem abre a tela às 8h, ditada em
@@ -182,8 +194,9 @@ recepção está produzindo.
 | `tasks.responsible_member_id` | coluna nova, `uuid` anulável, referência a `team_members(id) ON DELETE SET NULL`. O texto `responsible` fica. Assumir grava as duas (id e nome); devolver zera o id e o nome. Já registrada como emenda na 020 (FR-002) e na 022 |
 | `appointments.responsible_member_id`, `appointments.doctor_member_id` | mesma forma. A tela de consulta grava as duas colunas ao criar e ao trocar médico; o texto fica para compatibilidade com o que já existe |
 | auditoria de `tasks` e `appointments` | o trigger de `data_audit_log` da migração de 25/08, que hoje cobre `patients`, passa a cobrir `tasks` e `appointments`. É o que registra assumir, devolver, reatribuir, mudar data e trocar médico, com `previous_state`. **Nenhuma tabela nova de histórico** |
-| `tasks` tipo novo | `recall_paciente` entra na lista de tipos aceitos (`src/lib/tiposDeTarefa.ts` na Lovable; `CHECK` ou enum onde houver) |
-| `business_rules.task_type_weights` | `jsonb` novo, `{tipo: peso}`, padrão `{}` lido como 1 para todo tipo ausente. Mesma forma de `patient_required_fields` |
+| `tasks` tipo novo | `recall_paciente` entra na lista de tipos aceitos (`src/lib/tiposDeTarefa.ts` na Lovable; `CHECK` ou enum onde houver; o censo de 14/09 mostrou que `tasks.type` é texto sem `CHECK`, então o tipo vive só no front) |
+| `business_rules.task_type_weights` | `jsonb` novo, `{tipo: peso}`, padrão `{}` lido como 1 para todo tipo ausente. Mesma forma de `patient_required_fields`. **Escrita só de quem manda**, desde a migração `20260915020000` (bloco 1): `SELECT` para todo membro da clínica; `INSERT` e `UPDATE` só para superadmin, admin da clínica ou `team_members` ativo com `permission_level = master`; sem `DELETE`. Antes dela a policy de 22/03 deixava qualquer membro gravar o peso pela API (nexclin#185) |
+| função `tarefas_assumidas_por_membro(de, até)` | nova, `SECURITY DEFINER`, devolve (membro, instante) das tarefas assumidas na clínica de quem chama, para a medida 2 do FR-011 valer para todo membro sem abrir `data_audit_log` (migração `20260915020000`, bloco 2) |
 | `tasks` `DELETE` | policy de `DELETE` removida para `authenticated`; cancelar é `UPDATE` de `status` |
 | policies de escopo | **declaradas aqui e não construídas na Lovable.** O "edito só o meu" do FR-003 e o FR-004 são checados no front; a policy correspondente (`UPDATE` em `tasks` só quando `responsible_member_id` é o meu ou sou master; `UPDATE` de `date` e `doctor_member_id` em `appointments` só pelo responsável ou master) é escrita na stack nova junto com o FR-011 da regra 021. Na Lovable fica declarado "escopo só no front" |
 | `team_members.permissions` padrão | `operacional` passa a `leads: all`, `anamnese: full`, `tarefas: own`, `acompanhamento: own`, com `own` no sentido do FR-003 |

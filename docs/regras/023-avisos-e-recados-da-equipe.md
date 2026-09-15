@@ -229,7 +229,10 @@ mesma clínica, com o item de que se fala anexado.
 - `team_members.user_id` está preenchido para todo membro que já fez login.
   Se houver membro com login e sem `user_id` (o dono das clínicas de agosto
   entrou em `team_members` sem ele, apontado na migração de 25/08), esse membro
-  não aparece como destinatário até a correção.
+  não aparece como destinatário até a correção. **O censo de 14/09 mostrou o
+  caso inverso na Clínica Lançamento:** Joana e Lancinha logam e não têm linha
+  em `team_members`, então não aparecem como destinatárias nem conseguem
+  assumir tarefa. A correção é a T352 da 024, e não é desta regra.
 - A contagem do sino (FR-001) continua derivada, e a de mensagens é a única
   que vem de tabela própria. Isso não fere o FR-001: mensagem não é aviso
   derivado, é dado novo.
@@ -252,9 +255,10 @@ mesma clínica, com o item de que se fala anexado.
    lista da tela.
 4. O destinatário abre a conversa: `read_at` grava, o balão zera para ele e
    não para o remetente.
-5. Mensagem com referência a uma tarefa: o cartão leva à tarefa; apagar a
-   tarefa não apaga a mensagem (referência sem chave estrangeira, de propósito,
-   pelo mesmo motivo do FR-005 da 017).
+5. Mensagem com referência a uma tarefa: o cartão leva à tarefa; cancelar a
+   tarefa (tarefa não se apaga, regra 024 FR-009) mantém a mensagem e o
+   cartão (referência sem chave estrangeira, de propósito, pelo mesmo motivo
+   do FR-005 da 017). Corrigido em 15/09: dizia "apagar".
 6. Duas abas, uma por pessoa: a resposta aparece sem recarregar.
 7. Automatizado, em `src/lib/conversas.ts` na Lovable: quem pode ser
    destinatário (membro ativo, com login, menos eu); agrupar mensagens em

@@ -77,3 +77,15 @@ gravam (`ConfigBusinessRulesDialog`, `ConfigPatientFieldsDialog`,
 Rota, cron ou integração fora de `src/` e `supabase/` que grave com credencial
 de serviço. Não há nenhuma versionada; se existir fora do git, está fora
 desta leitura.
+
+## Correção, no mesmo dia
+
+A pedido do Arthur, o crítico e o alto do `speckit-analyze` foram corrigidos
+antes de seguir com as issues: migração
+`supabase/migrations/20260915020000_business_rules_escrita_so_dono_e_assumidas_por_membro.sql`
+(bloco 1, a policy de `business_rules`; bloco 2, a função
+`tarefas_assumidas_por_membro`), copiada para
+`docs/ponte/aplicacao-024-fase1/b2-*.sql` com conferência, prova e reversão.
+O front que chama a função está em `b44a164` da Lovable. **Ordem:** o `b2`
+roda no banco antes do Publish, senão o ranking mostra "indisponível" até o
+`Run`. Nada disso está provado no banco: é código lido.

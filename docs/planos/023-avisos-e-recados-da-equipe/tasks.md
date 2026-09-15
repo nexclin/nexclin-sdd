@@ -90,7 +90,7 @@ cada uma**. Só a metade negativa passa por vacuidade.
 - [ ] T221 (nexclin#24) [F1] **Prova 2** no editor, em `BEGIN` e `ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims` de Maria: `INSERT` com `sender_id` do médico é recusado. **Controle positivo no mesmo bloco:** o mesmo `INSERT` com `sender_id` de Maria passa
 - [ ] T222 (nexclin#25) [F1] **Prova 3** no editor, como Maria: `INSERT` para um `team_members` sem `user_id` é recusado. **Controle positivo:** o mesmo `INSERT` para o médico, com `user_id`, passa
 - [ ] T223 (nexclin#26) [F1] No mesmo bloco, como o médico: `SELECT` devolve a mensagem de Maria para ele; como um terceiro membro da clínica, o mesmo `SELECT` devolve zero linha. `UPDATE` de `body` como o médico levanta a exceção do trigger; `UPDATE` de `read_at` passa
-- [ ] T224 (nexclin#27) [F1] Item que não deu para provar fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T224 (nexclin#27, fechada 15/09) [F1] Item que não deu para provar fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **Ponto de conferência:** a mensagem existe no banco, e só quem a escreveu ou
 recebeu a lê, provado com as duas metades.
@@ -131,7 +131,7 @@ médico logados.
 - [ ] T236 (nexclin#39) [F2] **Prova 1**, na tela: Maria manda mensagem ao médico; ele vê; um terceiro membro da clínica não vê. Se houver segunda clínica com dois usuários, uma mensagem lá, e nenhuma clínica lê a da outra; se não houver, o aceite escreve "prova 1 pela metade: só dentro da clínica"
 - [ ] T237 (nexclin#40) [F2] **Prova 4**, na tela: o médico abre a conversa; no editor, `read_at` gravou; o balão dele zera; o de Maria não muda
 - [ ] T238 (nexclin#41) [F2] **Prova 5**, na tela: mensagem com referência a uma tarefa mostra o cartão e o cartão leva à tarefa; cancelar a tarefa (não se apaga, regra 024 FR-009) mantém a mensagem e o cartão
-- [ ] T239 (nexclin#42) [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T239 (nexclin#42, fechada 15/09) [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
 - [x] T240 (nexclin#43, fechada 15/09) [F2] Avisar a frente 024: a T363 de `docs/planos/024-perfil-operacional/tasks.md` passa a responder "entregue", e o bloco 4 do painel (T367 de lá) pode entrar. **Este plano avisa; não executa a 024**
 
 **Ponto de conferência:** a conversa sai do WhatsApp e volta para dentro do
@@ -154,7 +154,7 @@ terceira.
 ### Aceite, e é onde a fase fecha
 
 - [ ] T245 (nexclin#48) [F3] **Prova 6**: duas abas, Maria e o médico; a resposta aparece sem recarregar. **Controle negativo:** uma terceira aba, logada como um terceiro membro da clínica, com o painel aberto, **não** recebe o evento. É a policy da F1 valendo na assinatura, provada e não assumida
-- [ ] T246 (nexclin#49) [F3] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T246 (nexclin#49, fechada 15/09) [F3] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **Ponto de conferência:** a pessoa não recarrega a tela para ver a resposta.
 
@@ -164,7 +164,7 @@ terceira.
 
 - [x] T247 (nexclin#50, fechada 15/09) [P] [F4] Atualizar a seção 2 de `docs/regras/023-avisos-e-recados-da-equipe.md` com o que está no ar da seção 8, e a seção 5 com a linha de `internal_messages` e a nota de que a migração de `task_comments` passou a existir em T213
 - [x] T248 (nexclin#51, fechada 15/09) [P] [F4] Atualizar a linha da 023 em `docs/regras/README.md` com o estado real
-- [ ] T249 (nexclin#52) [P] [F4] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
+- [x] T249 (nexclin#52, fechada 15/09) [P] [F4] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
 - [ ] T250 (nexclin#53) [F4] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 
 ---

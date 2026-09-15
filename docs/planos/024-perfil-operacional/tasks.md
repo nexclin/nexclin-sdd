@@ -89,7 +89,7 @@ controle positivo**: o `UPDATE` de `status` na mesma tarefa passa.
 
 - [x] T319 (nexclin#68, fechada 15/09) [F1] Rodar de novo o bloco de T301 a T304 e conferir: três colunas novas, dois triggers novos, três policies em `tasks` e nenhuma `DELETE`
 - [ ] T320 (nexclin#69) [F1] Rodar no editor, em `BEGIN` e `ROLLBACK` com `SET LOCAL ROLE authenticated` e `request.jwt.claims` de Maria: `DELETE FROM tasks WHERE id = <uma da clínica>` devolve zero linha. **Controle positivo no mesmo bloco:** `UPDATE tasks SET status = 'cancelada'` na mesma linha devolve uma
-- [ ] T321 (nexclin#70) [F1] Item que não deu para provar fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T321 (nexclin#70, fechada 15/09) [F1] Item que não deu para provar fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **Ponto de conferência:** "quem fez" passa a ser dado gravado, e tarefa deixa de
 poder sumir.
@@ -136,7 +136,7 @@ nova.
 - [ ] T334 (nexclin#83) [F2] **Prova 1**, na tela: Maria cria uma consulta e delega ao médico; ele a vê na fila do dia e não consegue mudar data nem médico; consegue marcar "realizada" e lançar a venda. Print do Vinícius
 - [ ] T335 (nexclin#84) [F2] **Prova 2**, na tela: Maria vê todas as tarefas da clínica; edita as suas; tenta editar a do médico e a tela recusa. No editor, o mesmo `UPDATE` como Maria **passa**, e o aceite grava a frase literal **"escopo só no front"**
 - [ ] T336 (nexclin#85) [F2] **Prova 8**, na tela: Maria abre a tela de Consultas; "Orçado" e "Vendas" não aparecem; o valor da linha aparece
-- [ ] T337 (nexclin#86) [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T337 (nexclin#86, fechada 15/09) [F2] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **Ponto de conferência:** a secretária opera a fila e o funil inteiros, e só
 edita o que é dela.
@@ -171,7 +171,7 @@ edita o que é dela.
 - [ ] T348 (nexclin#97) [F3] **Prova 4**: tarefa com dono não mostra assumir para o médico; master reatribui
 - [ ] T349 (nexclin#98) [F3] **Prova 5**: nenhum botão apaga tarefa; cancelar grava `status` e a linha de auditoria. No editor, `SELECT count(*) FROM tasks` da clínica antes e depois é o mesmo número
 - [ ] T350 (nexclin#99) [F3] **Prova 6**: recall vencido assumido cria tarefa `recall_paciente` com paciente ligado e Maria como responsável; a tela de recall mostra que tem dono
-- [ ] T351 (nexclin#100) [F3] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T351 (nexclin#100, fechada 15/09) [F3] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **Ponto de conferência:** prontificar-se vira dado, e dado que se devolve fica
 registrado.
@@ -212,7 +212,7 @@ próxima leitura, sem tocar em tarefa nenhuma.
 
 - [ ] T360 (nexclin#109) [F4] **Prova 9**: dono muda o peso de `recall_paciente` para 3; a pontuação de Maria muda na próxima leitura e o ranking reordena. No editor, nenhuma linha de `tasks` mudou, e `data_audit_log` de `business_rules` tem a mudança
 - [ ] T361 (nexclin#110) [F4] **Prova 10**: Maria vê o ranking com médicos na lista, e o filtro por função funciona
-- [ ] T362 (nexclin#111) [F4] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T362 (nexclin#111, fechada 15/09) [F4] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **Ponto de conferência:** o dono sabe quem na recepção está produzindo, com
 número.
@@ -253,7 +253,7 @@ clínica tem dois.
 
 - [ ] T370 (nexclin#119) [F5] **Prova 7**, na tela, pela ótica de Maria às 8h: os blocos na ordem do FR-014, nenhum valor em reais em bloco nenhum, seletor de médico presente na clínica de dois médicos e ausente na de um. **A régua dos 200% é o que fecha esta fase**
 - [ ] T371 (nexclin#120) [F5] Dono troca Maria de Simplificado para Completo e de volta; o painel muda de acordo, e Simplificado não mostra dinheiro em bloco nenhum
-- [ ] T372 (nexclin#121) [F5] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
+- [x] T372 (nexclin#121, fechada 15/09) [F5] Item que não deu para provar na tela fecha como **"código lido, não comportamento provado"** e continua aberto
 
 **Ponto de conferência:** a secretária abre a tela e vê o dia dela, na ordem em
 que ele acontece.
@@ -264,7 +264,7 @@ que ele acontece.
 
 - [x] T373 (nexclin#122, fechada 15/09) [P] [F6] Atualizar a linha da 024 em `docs/regras/README.md` com o estado real: o que está no ar, o que ficou "escopo só no front", o que espera a 023
 - [x] T374 (nexclin#123, fechada 15/09, achado médio virou #185) [P] [F6] Rodar o agente `auditor-multitenant` sobre a migração de T308 a T313 e sobre `escopo.ts`, com a pergunta certa: a policy de escopo declarada e não construída está **declarada em todo lugar onde alguém poderia lê-la como construída**?
-- [ ] T375 (nexclin#124) [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
+- [x] T375 (nexclin#124, fechada 15/09) [P] [F6] Rodar `/speckit-analyze` sobre regra, plano e tarefas, e resolver a inconsistência que ele apontar
 - [x] T376 (nexclin#125, fechada 15/09, virou #184) [F6] Abrir a issue da policy de escopo na stack nova, ligada ao FR-011 da 021, com o texto da seção 3 da regra 024: `UPDATE` em `tasks` só quando `responsible_member_id` é o meu ou sou master; `UPDATE` de `date` e `doctor_member_id` em `appointments` só pelo responsável ou master
 - [ ] T377 (nexclin#126) [F6] Escrever o handoff do dia em `docs/historico/`, com o que ficou aberto dito em voz alta
 

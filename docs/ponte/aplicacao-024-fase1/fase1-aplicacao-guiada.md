@@ -48,3 +48,26 @@ rollback;
    `responsible_member_id` com `as never`, que é o remendo que `NxSino.tsx`
    já carrega para `task_comments`.
 3. A Fase 2 (T324 restante, T326 a T337) pode subir.
+
+## Bloco 2, escrito em 15/09: `business_rules` só para quem manda, e a contagem de assumidas
+
+Nasce de dois achados do mesmo dia: o auditor (T374) confirmou que a policy de
+`business_rules` deixa qualquer membro gravar `task_type_weights` pela API
+(nexclin#185), e o `speckit-analyze` apontou que "tarefas assumidas" não
+aparece para a secretária, porque a trilha só abre para admin.
+
+**Ordem, e ela importa:** o bloco 2 vai ao banco **antes** do Publish do front
+que o chama (`RankingDeProdutividade.tsx` passa a usar
+`tarefas_assumidas_por_membro`). É a mesma regra da constituição para edge
+function: função antes do front. Publicar o front antes deixa o ranking sem a
+coluna até o `Run`.
+
+1. Editor de SQL, `Clear`, colar `b2-business-rules-e-assumidas.sql`, `Run`.
+   Um bloco por vez se preferir; o bloco 1 não pode parar entre o `DROP` e o
+   primeiro `CREATE`.
+2. Colar `b2-conferencia.sql`, `Run`. Esperado em cada consulta está no
+   arquivo.
+3. Colar `b2-prova.sql`, `Run`. Cinco linhas: Maria lê (1), não grava (0),
+   chama a função sem erro, não lê a trilha (0); o Dr grava (1).
+4. Se algo sair diferente do esperado, `b2-reversao.sql` volta tudo, palavra
+   por palavra, e a issue #185 fica aberta com o resultado colado.
